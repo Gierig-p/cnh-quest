@@ -1284,6 +1284,7 @@ export const WORLD1: World = {
       icon: 'star',
       masteryThreshold: 0.8,
       xp: 15,
+      rounds: 2,
       referenceModule: 1,
       steps: [
         c(CONCEPTS.tiposSinais),
@@ -1310,6 +1311,7 @@ export const WORLD1: World = {
       icon: 'shield',
       masteryThreshold: 0.8,
       xp: 15,
+      rounds: 2,
       referenceModule: 3,
       steps: [
         c(CONCEPTS.preferencia),
@@ -1332,11 +1334,32 @@ export const WORLD1: World = {
       ],
     },
     {
+      id: 'w1-mid',
+      title: 'Revisão da metade',
+      icon: 'review',
+      masteryThreshold: 0.8,
+      xp: 20,
+      referenceModule: 1,
+      steps: [
+        q('w1-l1-q1'),
+        q('w1-l2-q1'),
+        q('w1-l1-q6'),
+        q('w1-l2-q4'),
+        q('w1-l1-q5'),
+        q('w1-l2-q8'),
+        q('w1-l1-q4'),
+        q('w1-l2-q14'),
+        q('w1-l1-q12'),
+        q('w1-l2-q7'),
+      ],
+    },
+    {
       id: 'w1-l3',
       title: 'Primeiras placas',
       icon: 'sign',
       masteryThreshold: 0.8,
       xp: 15,
+      rounds: 2,
       referenceModule: 1,
       steps: [
         c(CONCEPTS.formasPlacas),
@@ -1359,6 +1382,7 @@ export const WORLD1: World = {
       icon: 'sign',
       masteryThreshold: 0.8,
       xp: 15,
+      rounds: 2,
       referenceModule: 1,
       steps: [
         c(CONCEPTS.proibicoes),

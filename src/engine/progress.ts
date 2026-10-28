@@ -6,6 +6,8 @@ export interface LessonProgress {
   mastered: boolean;
   bestAccuracy: number;
   attempts: number;
+  /** Rodadas já concluídas. Ausente no progresso salvo antes das rodadas existirem. */
+  roundsDone?: number;
 }
 
 export interface QuestionStat {
@@ -142,6 +144,60 @@ export function topicReport(s: ProgressState): TopicReport[] {
     .sort((a, b) => a.accuracy - b.accuracy);
 }
 
+/* ---------- rodadas de uma lição ---------- */
+
+/** Tamanho da rodada de prática (rodada 2 em diante). */
+export const PRACTICE_ROUND_SIZE = 8;
+
+export function lessonRounds(lesson: Lesson): number {
+  return lesson.rounds ?? 1;
+}
+
+/** Rodadas feitas. No progresso antigo, a lição concluída conta como 1 rodada. */
+export function roundsDone(s: ProgressState, lesson: Lesson): number {
+  const p = s.lessons[lesson.id];
+  if (!p) return 0;
+  return Math.min(lessonRounds(lesson), p.roundsDone ?? (p.completed ? 1 : 0));
+}
+
+export function lessonFinished(s: ProgressState, lesson: Lesson): boolean {
+  return roundsDone(s, lesson) >= lessonRounds(lesson);
+}
+
+/** Rodada que começa ao abrir a lição. Lição já terminada recomeça pela rodada 1 (com explicações). */
+export function nextRound(s: ProgressState, lesson: Lesson): number {
+  return lessonFinished(s, lesson) ? 1 : roundsDone(s, lesson) + 1;
+}
+
+/** XP de uma rodada de prática: menor que o da rodada com explicações. */
+export function practiceXp(lesson: Lesson): number {
+  return Math.round((lesson.xp * 2) / 3);
+}
+
+/**
+ * Questões da rodada de prática: as da própria lição, sem cartões.
+ * Primeiro as que o aluno já errou (as mais fracas antes); o resto completa a rodada. A ordem é embaralhada.
+ */
+export function practiceRoundIds(s: ProgressState, lesson: Lesson, rnd: () => number = Math.random, size = PRACTICE_ROUND_SIZE): string[] {
+  const shuffle = <T,>(xs: T[]) => {
+    const a = [...xs];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+  const ids = [...new Set(lesson.steps.flatMap((st) => (st.kind === 'question' ? [st.questionId] : [])))];
+  const score = (id: string) => {
+    const q = s.questions[id];
+    return q && q.wrong > 0 ? q.box : 9;
+  };
+  const picked = shuffle(ids)
+    .sort((a, b) => score(a) - score(b))
+    .slice(0, size);
+  return shuffle(picked);
+}
+
 /* ---------- desbloqueio ---------- */
 
 export type NodeState = 'locked' | 'available' | 'completed' | 'mastered';
@@ -152,17 +208,18 @@ export type NodeState = 'locked' | 'available' | 'completed' | 'mastered';
  */
 export function lessonState(s: ProgressState, world: World, lesson: Lesson, prevWorld?: World): NodeState {
   const p = s.lessons[lesson.id];
-  if (p?.mastered) return 'mastered';
-  if (p?.completed) return 'completed';
+  if (lessonFinished(s, lesson)) return p?.mastered ? 'mastered' : 'completed';
+  // lição já começada (rodada 1 feita) continua aberta
+  if (roundsDone(s, lesson) > 0) return 'available';
   const i = world.lessons.findIndex((l) => l.id === lesson.id);
-  if (i > 0 && !s.lessons[world.lessons[i - 1].id]?.completed) return 'locked';
+  if (i > 0 && !lessonFinished(s, world.lessons[i - 1])) return 'locked';
   if (i === 0 && prevWorld && !worldCompleted(s, prevWorld)) return 'locked';
   return 'available';
 }
 
 export function worldCompleted(s: ProgressState, world: World): boolean {
   const last = world.lessons[world.lessons.length - 1];
-  return Boolean(s.lessons[last.id]?.mastered);
+  return Boolean(s.lessons[last.id]?.mastered) && lessonFinished(s, last);
 }
 
 export function nextLesson(s: ProgressState, worlds: World[]): { world: World; lesson: Lesson } | null {
@@ -183,6 +240,11 @@ export interface CompletionOutcome {
   goalReachedNow: boolean;
   newAchievements: string[];
   mastered: boolean;
+  /** rodada que acabou de ser feita e total de rodadas da lição */
+  round: number;
+  rounds: number;
+  /** rodadas concluídas depois desta sessão */
+  roundsDone: number;
 }
 
 export const ACHIEVEMENTS: Record<string, { title: string; description: string }> = {
@@ -212,11 +274,17 @@ export function addXp(s: ProgressState, amount: number, now: Date) {
 
 export function completeLesson(s: ProgressState, lesson: Lesson, result: SessionResult, now: Date): CompletionOutcome {
   const perfect = result.total > 0 && result.correctFirstTry === result.total;
-  const xpGained = result.completed ? lesson.xp + (perfect ? 5 : 0) : Math.round(lesson.xp / 3);
+  const rounds = lessonRounds(lesson);
+  const round = nextRound(s, lesson);
+  const before = roundsDone(s, lesson);
+  const done = result.completed ? Math.max(before, round) : before;
+  const baseXp = round > 1 ? practiceXp(lesson) : lesson.xp;
+  const xpGained = result.completed ? baseXp + (perfect ? 5 : 0) : Math.round(baseXp / 3);
   const prev = s.lessons[lesson.id] ?? { completed: false, mastered: false, bestAccuracy: 0, attempts: 0 };
   const mastered = result.completed && result.accuracy >= lesson.masteryThreshold;
   const lp: LessonProgress = {
-    completed: prev.completed || result.completed,
+    completed: done >= rounds,
+    roundsDone: done,
     mastered: prev.mastered || mastered,
     bestAccuracy: Math.max(prev.bestAccuracy, result.accuracy),
     attempts: prev.attempts + 1,
@@ -227,7 +295,7 @@ export function completeLesson(s: ProgressState, lesson: Lesson, result: Session
   const grant = (id: string) => {
     if (!state.achievements.includes(id) && !unlocked.includes(id)) unlocked.push(id);
   };
-  if (lp.completed) grant('primeira-licao');
+  if (done > 0) grant('primeira-licao');
   if (perfect && result.completed) grant('perfeita');
   if (x.goalReachedNow) grant('meta-diaria');
   if (state.streak.count >= 3) grant('ofensiva-3');
@@ -240,6 +308,9 @@ export function completeLesson(s: ProgressState, lesson: Lesson, result: Session
     goalReachedNow: x.goalReachedNow,
     newAchievements: unlocked,
     mastered,
+    round,
+    rounds,
+    roundsDone: done,
   };
 }
 

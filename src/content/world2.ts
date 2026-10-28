@@ -1376,6 +1376,7 @@ export const WORLD2: World = {
       icon: 'sign',
       masteryThreshold: 0.8,
       xp: 15,
+      rounds: 2,
       referenceModule: 1,
       steps: [
         c(CONCEPTS2.mandamMovimento),
@@ -1397,6 +1398,7 @@ export const WORLD2: World = {
       icon: 'sign',
       masteryThreshold: 0.8,
       xp: 15,
+      rounds: 2,
       referenceModule: 1,
       steps: [
         c(CONCEPTS2.advertenciaFuncao),
@@ -1418,6 +1420,7 @@ export const WORLD2: World = {
       icon: 'star',
       masteryThreshold: 0.8,
       xp: 15,
+      rounds: 2,
       referenceModule: 1,
       steps: [
         c(CONCEPTS2.indicacaoFuncao),
@@ -1435,11 +1438,32 @@ export const WORLD2: World = {
       ],
     },
     {
+      id: 'w2-mid',
+      title: 'Revisão da metade',
+      icon: 'review',
+      masteryThreshold: 0.8,
+      xp: 20,
+      referenceModule: 1,
+      steps: [
+        q('w2-l1-q3'),
+        q('w2-l2-q1'),
+        q('w2-l3-q1'),
+        q('w2-l1-q9'),
+        q('w2-l2-q7'),
+        q('w2-l3-q8'),
+        q('w2-l1-q6'),
+        q('w2-l2-q8'),
+        q('w2-l3-q9'),
+        q('w2-l2-q3'),
+      ],
+    },
+    {
       id: 'w2-l4',
       title: 'Pinturas no chão',
       icon: 'shield',
       masteryThreshold: 0.8,
       xp: 15,
+      rounds: 2,
       referenceModule: 1,
       steps: [
         c(CONCEPTS2.marcasCores),
@@ -1465,6 +1489,7 @@ export const WORLD2: World = {
       icon: 'star',
       masteryThreshold: 0.8,
       xp: 15,
+      rounds: 2,
       referenceModule: 1,
       steps: [
         c(CONCEPTS2.semaforoCores),

@@ -3,7 +3,7 @@ import { WORLDS } from './content';
 import type { Lesson } from './content/types';
 import { IconChart, IconClipboard, IconHome, IconReview } from './components/Icons';
 import { Lumi } from './components/Lumi';
-import { addXp, completeLesson, dueQuestions, nextLesson, type CompletionOutcome } from './engine/progress';
+import { addXp, completeLesson, dueQuestions, lessonFinished, nextLesson, nextRound, practiceRoundIds, type CompletionOutcome } from './engine/progress';
 import { startPractice, startSession, summarize, type SessionResult, type SessionState } from './engine/session';
 import { CompleteScreen } from './screens/CompleteScreen';
 import { ExamScreen } from './screens/ExamScreen';
@@ -19,8 +19,8 @@ import { useSound } from './ui/hooks';
 type Tab = 'home' | 'review' | 'exam' | 'progress';
 type Route =
   | { name: 'tab'; tab: Tab }
-  | { name: 'play'; session: SessionState; title: string; lesson?: Lesson; back: Tab }
-  | { name: 'done'; title: string; result: SessionResult; outcome: CompletionOutcome | null; lesson?: Lesson; back: Tab };
+  | { name: 'play'; session: SessionState; title: string; lesson?: Lesson; round?: number; back: Tab }
+  | { name: 'done'; title: string; result: SessionResult; outcome: CompletionOutcome | null; lesson?: Lesson; round?: number; back: Tab };
 
 const TABS: { id: Tab; label: string; icon: JSX.Element }[] = [
   { id: 'home', label: 'Trilha', icon: <IconHome /> },
@@ -35,25 +35,32 @@ export default function App() {
   const [onboarding, setOnboarding] = useState(!progress.onboarded);
   const dueCount = dueQuestions(progress, new Date()).length;
   const play = useSound();
+  // referência ao estado mais recente: o resultado da lição é calculado na hora, não dentro do updater
+  const latest = useRef(progress);
+  latest.current = progress;
 
   const go = (tab: Tab) => {
     setRoute({ name: 'tab', tab });
     window.scrollTo({ top: 0 });
   };
 
-  const startLesson = (lesson: Lesson, back: Tab = 'home') =>
-    setRoute({ name: 'play', session: startSession(lesson, { hearts: progress.prefs.hearts }), title: lesson.title, lesson, back });
+  /** Abre a lição na rodada indicada (ou na próxima que falta). Rodada 2 em diante: só prática, sem cartões. */
+  const startLesson = (lesson: Lesson, back: Tab = 'home', round = nextRound(latest.current, lesson)) => {
+    const hearts = { hearts: latest.current.prefs.hearts };
+    const session =
+      round > 1
+        ? startSession({ id: lesson.id, steps: practiceRoundIds(latest.current, lesson).map((questionId) => ({ kind: 'question' as const, questionId })) }, hearts)
+        : startSession(lesson, hearts);
+    setRoute({ name: 'play', session, title: lesson.title, lesson, round, back });
+  };
 
   const startPracticeSession = (title: string, ids: string[], back: Tab) => {
     if (ids.length) setRoute({ name: 'play', session: startPractice(`pratica:${title}`, ids), title, back });
   };
 
-  // referência ao estado mais recente: o resultado da lição é calculado na hora, não dentro do updater
-  const latest = useRef(progress);
-  latest.current = progress;
 
   const finish = useCallback(
-    (s: SessionState, lesson: Lesson | undefined, title: string, back: Tab) => {
+    (s: SessionState, lesson: Lesson | undefined, title: string, back: Tab, round?: number) => {
       const result = summarize(s);
       const now = new Date();
       let outcome: CompletionOutcome;
@@ -61,11 +68,11 @@ export default function App() {
       else {
         const gained = result.correctFirstTry * 2;
         const x = addXp(latest.current, gained, now);
-        outcome = { state: x.state, xpGained: gained, streakIncreased: x.streakIncreased, goalReachedNow: x.goalReachedNow, newAchievements: [], mastered: result.accuracy >= 0.8 };
+        outcome = { state: x.state, xpGained: gained, streakIncreased: x.streakIncreased, goalReachedNow: x.goalReachedNow, newAchievements: [], mastered: result.accuracy >= 0.8, round: 1, rounds: 1, roundsDone: 1 };
       }
       latest.current = outcome.state;
       update(() => outcome.state);
-      setRoute({ name: 'done', title, result, outcome, lesson, back });
+      setRoute({ name: 'done', title, result, outcome, lesson, round, back });
     },
     [update],
   );
@@ -75,10 +82,11 @@ export default function App() {
   if (route.name === 'play') {
     return (
       <LessonPlayer
-        key={route.session.lessonId + route.title}
+        key={route.session.lessonId + route.title + (route.round ?? '')}
         initial={route.session}
+        practice={(route.round ?? 1) > 1}
         onExit={() => go(route.back)}
-        onFinish={(s) => finish(s, route.lesson, route.title, route.back)}
+        onFinish={(s) => finish(s, route.lesson, route.title, route.back, route.round)}
       />
     );
   }
@@ -86,14 +94,17 @@ export default function App() {
   if (route.name === 'done') {
     const rec = nextLesson(progress, WORLDS);
     const nextIsSame = rec?.lesson.id === route.lesson?.id;
+    // falta outra rodada desta mesma lição: o botão principal já leva a ela
+    const nextRoundHere = route.lesson && route.result.completed && !lessonFinished(progress, route.lesson) ? nextRound(progress, route.lesson) : 0;
+    const nextLabel = nextRoundHere > 1 ? `Fazer a rodada ${nextRoundHere}` : route.lesson && rec && !nextIsSame ? `Próxima: ${rec.lesson.title}` : 'Continuar';
     return (
       <CompleteScreen
         title={route.title}
         result={route.result}
         outcome={route.outcome}
-        nextLabel={route.lesson && rec && !nextIsSame ? `Próxima: ${rec.lesson.title}` : 'Continuar'}
-        onContinue={() => (route.lesson && rec && !nextIsSame ? startLesson(rec.lesson) : go(route.back))}
-        onRetry={route.lesson ? () => startLesson(route.lesson!) : undefined}
+        nextLabel={nextLabel}
+        onContinue={() => (nextRoundHere > 1 ? startLesson(route.lesson!) : route.lesson && rec && !nextIsSame ? startLesson(rec.lesson) : go(route.back))}
+        onRetry={route.lesson ? () => startLesson(route.lesson!, route.back, route.round) : undefined}
       />
     );
   }

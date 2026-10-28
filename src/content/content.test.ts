@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { QUESTIONS, WORLDS } from './index';
 import { questionsBySource, validateContent } from './validate';
 import type { Question } from './types';
+import { PRACTICE_ROUND_SIZE } from '../engine/progress';
 import { PLANNED_WORLDS, REFERENCE_MODULES, worldReferenceModules } from './referenceModules';
 
 describe('conteúdo', () => {
@@ -28,6 +29,7 @@ describe('conteúdo', () => {
     expect(w1.lessons.map((l) => [l.id, l.referenceModule])).toEqual([
       ['w1-l1', 1],
       ['w1-l2', 3],
+      ['w1-mid', 1],
       ['w1-l3', 1],
       ['w1-l4', 1],
       ['w1-review', 1],
@@ -50,6 +52,20 @@ describe('conteúdo', () => {
           } else if (count >= 0) count++;
         }
       }
+    }
+  });
+
+  it('lições de 2 rodadas têm questões suficientes para a rodada de prática; revisões têm 1 rodada', () => {
+    for (const world of WORLDS) {
+      for (const lesson of world.lessons) {
+        const ids = new Set(lesson.steps.flatMap((st) => (st.kind === 'question' ? [st.questionId] : [])));
+        const hasCards = lesson.steps.some((st) => st.kind === 'concept');
+        expect(lesson.rounds ?? 1, lesson.id).toBe(hasCards ? 2 : 1);
+        if (hasCards) expect(ids.size, lesson.id).toBeGreaterThanOrEqual(PRACTICE_ROUND_SIZE);
+      }
+      // uma revisão no meio e a revisão do mundo no final
+      expect(world.lessons.filter((l) => l.id.endsWith('-mid'))).toHaveLength(1);
+      expect(world.lessons[world.lessons.length - 1].id).toBe(`${world.id}-review`);
     }
   });
 

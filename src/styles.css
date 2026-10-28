@@ -263,6 +263,14 @@ html[data-motion='reduce'] *, html[data-motion='reduce'] *::before, html[data-mo
   content: ''; position: absolute; inset: -12px -12px -18px; border-radius: 50%; border: 7px solid var(--green-soft); z-index: -1;
   animation: ring 2.2s ease-in-out infinite;
 }
+/* anel de rodadas (lição feita em 2 rodadas): substitui o anel pulsante do nó atual */
+.node-btn.has-rounds::after { display: none; }
+.node-rounds { position: absolute; left: 50%; top: 50%; width: 100px; height: 100px; margin: -47px 0 0 -50px; transform: rotate(-90deg); z-index: -1; overflow: visible; pointer-events: none; }
+.node-rounds circle { fill: none; stroke-width: 8; stroke-linecap: round; }
+.node-rounds .track { stroke: var(--green-soft); }
+.node-rounds .fill { stroke: var(--green); transition: stroke-dasharray var(--t-slow) var(--ease-out); }
+.node-btn.current.has-rounds .node-rounds { animation: ring-pulse 2.2s ease-in-out infinite; }
+@keyframes ring-pulse { 50% { scale: 1.05; } }
 @keyframes ring { 50% { transform: scale(1.06); border-color: #c4f0d4; } }
 @keyframes node-pop { from { opacity: 0; scale: .6; } }
 .node-check { position: absolute; right: -4px; bottom: -6px; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #fff; color: var(--green-dark); box-shadow: 0 2px 0 rgba(0, 0, 0, .12); }

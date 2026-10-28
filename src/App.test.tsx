@@ -94,6 +94,18 @@ describe('fluxo principal', () => {
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
+  it('com a rodada 1 feita, a lição abre direto na rodada de prática, sem cartões', async () => {
+    const storage = memoryStorage();
+    storage.setItem(
+      'cnhquest:progress:v1',
+      JSON.stringify({ version: 1, onboarded: true, lessons: { 'w1-l1': { completed: false, mastered: true, bestAccuracy: 1, attempts: 1, roundsDone: 1 } } }),
+    );
+    const { user } = setup(storage);
+    await user.click(screen.getByRole('button', { name: /Quem manda no trânsito\?, disponível, 1 de 2 rodadas feitas/ }));
+    expect(screen.queryByRole('heading', { name: 'O que é um sinal de trânsito?' })).not.toBeInTheDocument();
+    expect(screen.getByText(/^Prática · /)).toBeInTheDocument();
+  });
+
   it('simulado entregue em branco mostra o desempenho por módulo de referência', async () => {
     const storage = memoryStorage();
     storage.setItem('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true }));

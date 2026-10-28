@@ -161,6 +161,11 @@ export interface Lesson {
   /** Fração mínima de acertos na 1ª tentativa para contar como "dominada". */
   masteryThreshold: number;
   xp: number;
+  /**
+   * Quantas vezes a lição é feita antes de liberar a próxima (padrão 1).
+   * Rodada 1: explicações + exercícios. Rodadas seguintes: só prática, mais curta.
+   */
+  rounds?: number;
   /** Módulo de referência principal da lição (organização própria; deve aparecer entre os módulos das questões). */
   referenceModule: ReferenceModuleId;
 }

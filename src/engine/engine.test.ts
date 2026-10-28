@@ -9,7 +9,11 @@ import {
   dayKey,
   dueQuestions,
   initialProgress,
+  lessonRounds,
   lessonState,
+  practiceRoundIds,
+  PRACTICE_ROUND_SIZE,
+  roundsDone,
   recordAnswer,
   topicReport,
   worldCompleted,
@@ -93,15 +97,66 @@ describe('progresso', () => {
     let s = initialProgress();
     expect(lessonState(s, WORLD1, WORLD1.lessons[0])).toBe('available');
     expect(lessonState(s, WORLD1, WORLD1.lessons[1])).toBe('locked');
+    // rodada 1 de 2: a lição continua aberta e a seguinte ainda não abre
+    s = completeLesson(s, WORLD1.lessons[0], summarize(playLesson()), now).state;
+    expect(roundsDone(s, WORLD1.lessons[0])).toBe(1);
+    expect(lessonState(s, WORLD1, WORLD1.lessons[0])).toBe('available');
+    expect(lessonState(s, WORLD1, WORLD1.lessons[1])).toBe('locked');
+    // rodada 2 de 2
     s = completeLesson(s, WORLD1.lessons[0], summarize(playLesson()), now).state;
     expect(lessonState(s, WORLD1, WORLD1.lessons[0])).toBe('mastered');
     expect(lessonState(s, WORLD1, WORLD1.lessons[1])).toBe('available');
     expect(lessonState(s, WORLD1, WORLD1.lessons[3])).toBe('locked');
   });
 
+  it('rodada 2 vale menos XP, e a revisão da metade abre depois das lições anteriores', () => {
+    let s = initialProgress();
+    const o1 = completeLesson(s, L1, summarize(playLesson()), now);
+    const o2 = completeLesson(o1.state, L1, summarize(playLesson()), now);
+    expect([o1.round, o2.round, o2.roundsDone]).toEqual([1, 2, 2]);
+    expect(o2.xpGained).toBe(15); // 10 + 5 de bônus por rodada perfeita
+    s = o2.state;
+    const mid = WORLD1.lessons.findIndex((l) => l.id === 'w1-mid');
+    expect(mid).toBe(2);
+    expect(lessonRounds(WORLD1.lessons[mid])).toBe(1);
+    for (let r = 0; r < 2; r++) s = completeLesson(s, WORLD1.lessons[1], summarize(playLesson(WORLD1.lessons[1])), now).state;
+    expect(lessonState(s, WORLD1, WORLD1.lessons[mid])).toBe('available');
+    expect(lessonState(s, WORLD1, WORLD1.lessons[mid + 1])).toBe('locked');
+  });
+
+  it('progresso antigo: lição já concluída vira "1 de 2" e não bloqueia o que já foi feito', () => {
+    const old = { ...initialProgress(), lessons: {
+      'w1-l1': { completed: true, mastered: true, bestAccuracy: 1, attempts: 1 },
+      'w1-l2': { completed: true, mastered: true, bestAccuracy: 1, attempts: 1 },
+    } };
+    expect(roundsDone(old, WORLD1.lessons[0])).toBe(1);
+    expect(lessonState(old, WORLD1, WORLD1.lessons[0])).toBe('available');
+    expect(lessonState(old, WORLD1, WORLD1.lessons[1])).toBe('available');
+    const o = completeLesson(old, WORLD1.lessons[0], summarize(playLesson()), now);
+    expect(o.round).toBe(2);
+    expect(lessonState(o.state, WORLD1, WORLD1.lessons[0])).toBe('mastered');
+  });
+
+  it('rodada de prática: questões da própria lição, sem repetir, com as erradas primeiro', () => {
+    const ids = L1.steps.flatMap((st) => (st.kind === 'question' ? [st.questionId] : []));
+    let s = initialProgress();
+    const weak = ids[ids.length - 1];
+    s = recordAnswer(s, QUESTION_BY_ID[weak], false, now, true);
+    for (let seed = 0; seed < 5; seed++) {
+      let x = seed + 1;
+      const rnd = () => ((x = (x * 9301 + 49297) % 233280) / 233280);
+      const picked = practiceRoundIds(s, L1, rnd);
+      expect(picked).toHaveLength(PRACTICE_ROUND_SIZE);
+      expect(new Set(picked).size).toBe(picked.length);
+      expect(picked.every((id) => ids.includes(id))).toBe(true);
+      expect(picked).toContain(weak);
+    }
+  });
+
   it('o mundo só conclui com domínio na revisão', () => {
     let s = initialProgress();
-    for (const l of WORLD1.lessons.slice(0, -1)) s = completeLesson(s, l, summarize(playLesson(l)), now).state;
+    for (const l of WORLD1.lessons.slice(0, -1))
+      for (let r = 0; r < lessonRounds(l); r++) s = completeLesson(s, l, summarize(playLesson(l)), now).state;
     const review = WORLD1.lessons[WORLD1.lessons.length - 1];
     const ids = review.steps.flatMap((st) => (st.kind === 'question' ? [st.questionId] : []));
     const weak = summarize(playLesson(review, ids.slice(0, 4))); // 60%
@@ -212,7 +267,7 @@ describe('persistência', () => {
     store.save(s);
     const again = createLocalStore(fake).load();
     expect(again.xp).toBe(s.xp);
-    expect(again.lessons[L1.id].completed).toBe(true);
+    expect(again.lessons[L1.id].roundsDone).toBe(1);
   });
 
   it('ignora dados corrompidos', () => {

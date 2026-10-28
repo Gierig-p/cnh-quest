@@ -5,7 +5,7 @@ import type { Lesson, ReferenceModuleId, World } from '../content/types';
 import { Burst } from '../components/Fx';
 import { IconCheck, IconChest, IconCrown, IconLock, IconRoad, IconShield, IconSign, IconStar, IconTrophy } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
-import { lessonState, nextLesson, worldCompleted, type NodeState } from '../engine/progress';
+import { lessonFinished, lessonRounds, lessonState, nextLesson, roundsDone, worldCompleted, type NodeState } from '../engine/progress';
 import { useApp } from '../state/AppState';
 import { useSound } from '../ui/hooks';
 
@@ -92,7 +92,7 @@ function WorldPath({ world, index, prev, onStart }: { world: World; index: numbe
   const play = useSound();
   const rec = nextLesson(progress, WORLDS);
   const dir = index % 2 === 0 ? 1 : -1;
-  const done = world.lessons.filter((l) => progress.lessons[l.id]?.completed).length;
+  const done = world.lessons.filter((l) => lessonFinished(progress, l)).length;
   const states = world.lessons.map((l) => lessonState(progress, world, l, prev));
   const offsets = world.lessons.map((_, i) => OFFSETS[i % OFFSETS.length] * dir);
   const currentIdx = world.lessons.findIndex((l) => l.id === rec?.lesson.id);
@@ -153,22 +153,33 @@ function WorldPath({ world, index, prev, onStart }: { world: World; index: numbe
             const best = progress.lessons[l.id]?.bestAccuracy;
             const labelSide = off > 0 ? 'left' : 'right';
             const kind = l.icon === 'review' || l.icon === 'trophy' ? 'special' : 'lesson';
+            const rounds = lessonRounds(l);
+            const rDone = roundsDone(progress, l);
+            // anel de rodadas: só em lição aberta que ainda não terminou todas as rodadas
+            const showRounds = rounds > 1 && st === 'available';
+            const tip = st === 'completed' ? 'Refazer' : rounds > 1 && rDone > 0 ? `Rodada ${rDone + 1} de ${rounds}` : 'Começar';
             return (
               <li
                 key={l.id}
                 className={`path-node ${current ? 'has-tip' : ''} ${changes[i]}`}
                 style={{ ['--off' as string]: off, top: i * ROW, animationDelay: `${i * 55}ms` }}
               >
-                {current && <span className="node-tip" aria-hidden="true">{st === 'completed' ? 'Refazer' : 'Começar'}</span>}
+                {current && <span className="node-tip" aria-hidden="true">{tip}</span>}
                 <button
-                  className={`node-btn ${st} ${current ? 'current' : ''} kind-${kind}`}
+                  className={`node-btn ${st} ${current ? 'current' : ''} ${showRounds ? 'has-rounds' : ''} kind-${kind}`}
                   disabled={st === 'locked'}
                   onClick={() => {
                     play('tap');
                     onStart(l);
                   }}
-                  aria-label={`${l.title}, ${STATE_LABEL[st]}, módulo ${l.referenceModule}${best !== undefined ? `, melhor resultado ${Math.round(best * 100)}%` : ''}${current ? ', recomendada agora' : ''}`}
+                  aria-label={`${l.title}, ${STATE_LABEL[st]}${showRounds ? `, ${rDone} de ${rounds} rodadas feitas` : ''}, módulo ${l.referenceModule}${best !== undefined ? `, melhor resultado ${Math.round(best * 100)}%` : ''}${current ? ', recomendada agora' : ''}`}
                 >
+                  {showRounds && (
+                    <svg className="node-rounds" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                      <circle cx="50" cy="50" r="45" pathLength={100} className="track" />
+                      {rDone > 0 && <circle cx="50" cy="50" r="45" pathLength={100} className="fill" strokeDasharray={`${(rDone / rounds) * 100} 100`} />}
+                    </svg>
+                  )}
                   <span className="node-face">
                     <NodeIcon lesson={l} state={st} />
                   </span>

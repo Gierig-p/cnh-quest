@@ -60,7 +60,15 @@ export function CompleteScreen({
   }, []);
 
   const topics = [...new Set(result.missed.map((id) => QUESTION_BY_ID[id]?.topic).filter(Boolean))];
-  const heading = !result.completed ? 'As vidas acabaram' : good ? 'Lição concluída!' : 'Lição concluída — dá para melhorar';
+  // lição com várias rodadas: mostra em qual rodada o aluno está
+  const roundsLeft = Boolean(outcome && result.completed && outcome.roundsDone < outcome.rounds);
+  const showRound = outcome && outcome.rounds > 1 && (outcome.round > 1 || outcome.roundsDone < outcome.rounds);
+  const roundName = showRound ? `Rodada ${outcome.round} de ${outcome.rounds}` : 'Lição';
+  const heading = !result.completed
+    ? 'As vidas acabaram'
+    : good
+      ? `${roundName} concluída!`
+      : `${roundName} concluída — dá para melhorar`;
 
   return (
     <div className={`complete ${good ? 'is-good' : result.completed ? '' : 'is-out'}`}>
@@ -123,6 +131,11 @@ export function CompleteScreen({
           </div>
         ) : (
           result.completed && <p className="perfect">Nenhum erro. Excelente!</p>
+        )}
+        {roundsLeft && outcome && (
+          <p className="notice">
+            Falta a rodada {outcome.roundsDone + 1} de {outcome.rounds}: só prática, mais curta, sem explicação nova. Ela fixa o assunto antes da próxima lição.
+          </p>
         )}
         {outcome && !outcome.mastered && result.completed && (
           <p className="notice">Para dominar esta lição, acerte pelo menos 80% na primeira tentativa. Você pode refazê-la quando quiser.</p>

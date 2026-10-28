@@ -34,10 +34,13 @@ export function SourceList({ refs }: { refs: SourceRef[] }) {
 
 export function LessonPlayer({
   initial,
+  practice = false,
   onExit,
   onFinish,
 }: {
   initial: SessionState;
+  /** rodada só de prática (sem cartões): marca cada exercício como "Prática" */
+  practice?: boolean;
   onExit: () => void;
   onFinish: (s: SessionState) => void;
 }) {
@@ -204,7 +207,7 @@ export function LessonPlayer({
 
         {item.kind === 'question' && q && (
           <section aria-labelledby="q-title">
-            <div className={`q-tag ${item.retry ? 'retry' : ''}`}>{item.retry ? '↻ Revisão' : typeLabel(q)}</div>
+            <div className={`q-tag ${item.retry ? 'retry' : ''}`}>{item.retry ? '↻ Revisão' : practice ? `Prática · ${typeLabel(q)}` : typeLabel(q)}</div>
             <h1 id="q-title" className="q-title">{q.prompt}</h1>
             <Exercise q={q} seed={seed} answer={answer} onAnswer={onAnswer} checked={fb ? { correct: fb.correct } : null} />
           </section>
