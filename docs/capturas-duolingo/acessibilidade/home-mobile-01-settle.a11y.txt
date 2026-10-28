@@ -1,0 +1,257 @@
+- document:
+  - banner:
+    - navigation:
+      - link "Duolingo":
+        - /url: /
+        - img "Duolingo"
+    - heading "O jeito mais divertido de aprender idiomas, xadrez e muito mais!" [level=1]
+    - link "Comece agora":
+      - /url: /register
+    - button "JÁ TENHO UMA CONTA"
+  - main:
+    - heading "grátis. divertido. eficaz." [level=2]
+    - paragraph:
+      - text: Aprender com o Duolingo é divertido, e
+      - link "pesquisas comprovam que funciona mesmo":
+        - /url: /efficacy
+      - text: "! Com lições rápidas e curtinhas, você ganha pontos e desbloqueia novos níveis enquanto aprende como se comunicar na vida real."
+    - heading "baseado na ciência" [level=2]
+    - paragraph: Combinamos metodologias baseadas em pesquisas com um conteúdo encantador para criar cursos eficazes que ensinam leitura, escrita, escuta e fala!
+    - heading "mantenha a motivação" [level=2]
+    - paragraph: Fica fácil criar o hábito de aprender idiomas com recursos que parecem de jogo, desafios divertidos e lembretes do nosso mascote simpático, a coruja Duo.
+    - heading "aprendizado feito para você" [level=2]
+    - paragraph: As lições combinam o melhor da inteligência artificial e da ciência da linguagem e são feitas sob medida para ajudar você a aprender no nível e ritmo certos.
+    - heading "aprenda onde e quando quiser" [level=1]
+    - link "badge-app-store Baixe na App Store":
+      - /url: //itunes.apple.com/br/app/duolingo-learn-spanish-french/id570060128?mt=8&at=1010lwpr
+      - img "badge-app-store"
+      - text: Baixe na App Store
+    - link "badge-app-store DISPONÍVEL NO Google Play":
+      - /url: //play.google.com/store/apps/details?hl=pt&id=com.duolingo&referrer=utm_source%3Dduolingo.com%26utm_medium%3Dduolingo_web%26utm_content%3Ddownload_button%26utm_campaign%3Dsplash
+      - img "badge-app-store"
+      - text: DISPONÍVEL NO Google Play
+    - img
+    - img "Super Duolingo"
+    - button "Teste uma semana grátis"
+    - heading "duolingo english test" [level=2]
+    - paragraph: Nosso teste de inglês rápido, acessível e conveniente integra inteligência artificial e conhecimentos de ponta sobre avaliação, o que permite que todos façam o teste onde e quando se sentirem mais à vontade.
+    - link "Certifique o seu inglês":
+      - /url: https://englishtest.duolingo.com/pt
+    - heading "aprenda um idioma com o duolingo" [level=1]
+    - link "Comece agora":
+      - /url: /register
+    - img
+  - contentinfo:
+    - text: Quem somos
+    - list:
+      - listitem:
+        - link "Cursos":
+          - /url: /courses
+      - listitem:
+        - link "Missão":
+          - /url: https://about.duolingo.com
+      - listitem:
+        - link "Método":
+          - /url: https://about.duolingo.com
+      - listitem:
+        - link "Eficácia":
+          - /url: /efficacy
+      - listitem:
+        - link "Cultura Duolingo":
+          - /url: https://duolingo.com/handbook
+      - listitem:
+        - link "Pesquisa":
+          - /url: https://research.duolingo.com
+      - listitem:
+        - link "Carreiras":
+          - /url: https://careers.duolingo.com/#careers
+      - listitem:
+        - link "Loja":
+          - /url: https://store.duolingo.com/
+      - listitem:
+        - link "Imprensa":
+          - /url: https://press.duolingo.com
+      - listitem:
+        - link "Investidores":
+          - /url: https://investors.duolingo.com
+      - listitem:
+        - link "Entre em contato":
+          - /url: https://about.duolingo.com#contact
+    - text: Produtos
+    - list:
+      - listitem:
+        - link "Duolingo":
+          - /url: /
+      - listitem:
+        - link "Duolingo for Schools":
+          - /url: https://schools.duolingo.com
+      - listitem:
+        - link "Duolingo English Test":
+          - /url: https://englishtest.duolingo.com/pt
+      - listitem:
+        - link "Podcast":
+          - /url: https://podcast.duolingo.com
+      - listitem:
+        - link "Duolingo for Business":
+          - /url: /business
+      - listitem:
+        - link "Super Duolingo":
+          - /url: /super
+      - listitem:
+        - link "Dê o Super Duolingo de presente":
+          - /url: /gift
+      - listitem:
+        - link "Duolingo Max":
+          - /url: https://blog.duolingo.com/duolingo-max/
+    - text: Aplicativos
+    - list:
+      - listitem:
+        - link "Duolingo para Android":
+          - /url: //play.google.com/store/apps/details?hl=pt&id=com.duolingo&referrer=utm_source%3Dduolingo.com%26utm_medium%3Dduolingo_web%26utm_content%3Ddownload_button%26utm_campaign%3Dsite_map
+      - listitem:
+        - link "Duolingo para iOS":
+          - /url: //itunes.apple.com/br/app/duolingo-learn-spanish-french/id570060128?mt=8&at=1010lwpr
+    - text: Ajuda e suporte
+    - list:
+      - listitem:
+        - 'link "Dúvidas: Duolingo"':
+          - /url: /help
+      - listitem:
+        - 'link "Dúvidas: Escolas"':
+          - /url: https://duolingoschools.zendesk.com/hc/en-us
+      - listitem:
+        - 'link "Dúvidas: Duolingo English Test"':
+          - /url: https://englishtest.duolingo.com/faq
+      - listitem:
+        - link "Status":
+          - /url: https://status.duolingo.com/
+    - text: Termos e privacidade
+    - list:
+      - listitem:
+        - link "Normas da comunidade":
+          - /url: /guidelines
+      - listitem:
+        - link "Termos de uso":
+          - /url: /terms
+      - listitem:
+        - link "Privacidade":
+          - /url: /privacy
+    - text: Redes sociais
+    - list:
+      - listitem:
+        - link "Blog":
+          - /url: https://blog.duolingo.com/pt
+      - listitem:
+        - link "Instagram":
+          - /url: https://www.instagram.com/duolingobrasil
+      - listitem:
+        - link "TikTok":
+          - /url: https://www.tiktok.com/@duolingobrasil
+      - listitem:
+        - link "Twitter":
+          - /url: https://twitter.com/duolingobrasil
+      - listitem:
+        - link "YouTube":
+          - /url: https://www.youtube.com/user/duolingo
+      - listitem:
+        - link "LinkedIn":
+          - /url: https://www.linkedin.com/company/duolingo
+    - separator
+    - text: "Idioma do site:"
+    - list:
+      - listitem:
+        - link "العربية":
+          - /url: //ar.duolingo.com
+      - listitem:
+        - link "বাংলা":
+          - /url: //bn.duolingo.com
+      - listitem:
+        - link "Čeština":
+          - /url: //cs.duolingo.com
+      - listitem:
+        - link "Deutsch":
+          - /url: //de.duolingo.com
+      - listitem:
+        - link "Ελληνικά":
+          - /url: //el.duolingo.com
+      - listitem:
+        - link "English":
+          - /url: //en.duolingo.com
+      - listitem:
+        - link "Español":
+          - /url: //es.duolingo.com
+      - listitem:
+        - link "Français":
+          - /url: //fr.duolingo.com
+      - listitem:
+        - link "हिंदी":
+          - /url: //hi.duolingo.com
+      - listitem:
+        - link "Magyar":
+          - /url: //hu.duolingo.com
+      - listitem:
+        - link "Bahasa Indonesia":
+          - /url: //id.duolingo.com
+      - listitem:
+        - link "Italiano":
+          - /url: //it.duolingo.com
+      - listitem:
+        - link "日本語":
+          - /url: //ja.duolingo.com
+      - listitem:
+        - link "ಕನ್ನಡ":
+          - /url: //kn.duolingo.com
+      - listitem:
+        - link "한국어":
+          - /url: //ko.duolingo.com
+      - listitem:
+        - link "मराठी":
+          - /url: //mr.duolingo.com
+      - listitem:
+        - link "Nederlands":
+          - /url: //dn.duolingo.com
+      - listitem:
+        - link "ਪੰਜਾਬੀ":
+          - /url: //pa.duolingo.com
+      - listitem:
+        - link "Polski":
+          - /url: //pl.duolingo.com
+      - listitem:
+        - link "Português":
+          - /url: //pt.duolingo.com
+      - listitem:
+        - link "Română":
+          - /url: //ro.duolingo.com
+      - listitem:
+        - link "Русский":
+          - /url: //ru.duolingo.com
+      - listitem:
+        - link "svenska":
+          - /url: //sv.duolingo.com
+      - listitem:
+        - link "தமிழ்":
+          - /url: //ta.duolingo.com
+      - listitem:
+        - link "తెలుగు":
+          - /url: //te.duolingo.com
+      - listitem:
+        - link "ภาษาไทย":
+          - /url: //th.duolingo.com
+      - listitem:
+        - link "Tagalog":
+          - /url: //tl.duolingo.com
+      - listitem:
+        - link "Türkçe":
+          - /url: //tr.duolingo.com
+      - listitem:
+        - link "Українською":
+          - /url: //uk.duolingo.com
+      - listitem:
+        - link "اُردُو":
+          - /url: //ur.duolingo.com
+      - listitem:
+        - link "Tiếng Việt":
+          - /url: //vi.duolingo.com
+      - listitem:
+        - link "中文":
+          - /url: //zs.duolingo.com

@@ -1,0 +1,43 @@
+- document:
+  - navigation:
+    - link "Duolingo":
+      - /url: /
+      - img "Duolingo"
+    - 'button "Idioma do site: Português"'
+  - heading "Eu quero aprender..." [level=1]
+  - list:
+    - button "Inglês 23,4 mi alunos":
+      - img
+      - heading "Inglês" [level=2]
+      - text: 23,4 mi alunos
+    - button "Espanhol 7,68 mi alunos":
+      - img
+      - heading "Espanhol" [level=2]
+      - text: 7,68 mi alunos
+    - button "Xadrez":
+      - img
+      - heading "Xadrez" [level=2]
+    - button "Francês 3,3 mi alunos":
+      - img
+      - heading "Francês" [level=2]
+      - text: 3,3 mi alunos
+    - button "Italiano 2,58 mi alunos":
+      - img
+      - heading "Italiano" [level=2]
+      - text: 2,58 mi alunos
+    - button "Japonês 2,01 mi alunos":
+      - img
+      - heading "Japonês" [level=2]
+      - text: 2,01 mi alunos
+    - button "Coreano 1,53 mi alunos":
+      - img
+      - heading "Coreano" [level=2]
+      - text: 1,53 mi alunos
+    - button "Alemão 1,47 mi alunos":
+      - img
+      - heading "Alemão" [level=2]
+      - text: 1,47 mi alunos
+    - button "Chinês (simplificado) 694 mil alunos":
+      - img
+      - heading "Chinês (simplificado)" [level=2]
+      - text: 694 mil alunos

@@ -1,0 +1,138 @@
+- document:
+  - link:
+    - /url: /learn
+    - img
+  - link "Aprender":
+    - /url: /learn
+    - img
+    - text: Aprender
+  - link "Sons":
+    - /url: /characters
+    - img
+    - text: Sons
+  - link "Ligas":
+    - /url: /leaderboard
+    - img
+    - text: Ligas
+  - link "Missões":
+    - /url: /quests
+    - img
+    - text: Missões
+  - link "Loja":
+    - /url: /shop
+    - img
+    - text: Loja
+  - link "Perfil":
+    - /url: /learn?sign-up
+    - img
+    - text: Perfil
+  - button "Mais":
+    - img
+    - text: Mais
+  - img
+  - button:
+    - img
+  - button "0":
+    - img
+    - text: "0"
+  - button "500":
+    - img
+    - text: "500"
+  - button "5":
+    - img
+    - text: "5"
+  - heading "Desbloqueie as Ligas!" [level=2]
+  - img
+  - text: Complete mais 3 lições pra começar a competir.
+  - heading "Missões do dia" [level=2]
+  - link "Ver todas":
+    - /url: /quests
+  - img
+  - text: Ganhe 10 XP
+  - progressbar: 0 / 10 0 / 10
+  - img
+  - heading "Crie um perfil pra salvar o seu progresso!" [level=2]
+  - button "Criar um perfil"
+  - button "Entrar"
+  - list:
+    - listitem:
+      - link "Sobre":
+        - /url: https://about.duolingo.com
+    - listitem:
+      - link "Blog":
+        - /url: https://blog.duolingo.com/pt
+    - listitem:
+      - link "Loja":
+        - /url: https://store.duolingo.com/
+    - listitem:
+      - link "eficácia":
+        - /url: /efficacy
+    - listitem:
+      - link "Carreiras":
+        - /url: https://careers.duolingo.com
+    - listitem:
+      - link "INVESTIDORES":
+        - /url: https://investors.duolingo.com
+    - listitem:
+      - link "Termos de uso":
+        - /url: /terms
+    - listitem:
+      - link "Privacidade":
+        - /url: /privacy
+  - link "SEÇÃO 1, UNIDADE 1":
+    - /url: /sections
+    - img
+    - heading "SEÇÃO 1, UNIDADE 1" [level=1]
+  - text: Ofereça e aceite bebidas
+  - link "Abre o guia da unidade":
+    - /url: /guidebook/en/1
+    - img "Guia"
+    - text: Guia
+  - img
+  - button "Lesson 1 of 4":
+    - img
+    - button "Lesson 1 of 4"
+  - button "Lesson":
+    - button "Lesson"
+  - button "Baú" [disabled]:
+    - img
+  - button "Rádio":
+    - button "Rádio"
+  - button "Practice":
+    - button "Practice"
+  - button "Revisão da unidade":
+    - button "Revisão da unidade"
+  - separator
+  - heading "Diga de onde você é" [level=2]
+  - separator
+  - link "Pular pra unidade 2":
+    - /url: /lesson/unit/2/test
+  - button "Lesson":
+    - button "Lesson"
+  - button "Baú" [disabled]:
+    - img
+  - button "Rádio":
+    - button "Rádio"
+  - button "Practice":
+    - button "Practice"
+  - button "Revisão da unidade":
+    - button "Revisão da unidade"
+  - separator
+  - heading "Introduza a si e a sua família" [level=2]
+  - separator
+  - link "Pular pra unidade 3":
+    - /url: /lesson/unit/3/test
+  - button "Lesson":
+    - button "Lesson"
+  - button "Baú" [disabled]:
+    - img
+  - button "Rádio":
+    - button "Rádio"
+  - button "Practice":
+    - button "Practice"
+  - button "Revisão da unidade":
+    - button "Revisão da unidade"
+  - paragraph: A seguir
+  - heading "Seção 2" [level=2]
+  - paragraph: Aprenda palavras, expressões e conceitos gramaticais básicos para interagir.
+  - button "Pular pra cá?"

@@ -1,0 +1,36 @@
+- document:
+  - button:
+    - img
+  - progressbar
+  - img
+  - text: "5"
+  - img
+  - text: Palavra nova
+  - heading "Qual destas imagens é \"café\"?" [level=1]
+  - radiogroup "choice":
+    - radio "coffee 1" [disabled]:
+      - text: coffee 1
+      - img
+      - img
+    - radio "milk 2" [disabled]:
+      - text: milk 2
+      - img
+      - img
+    - radio "tea 3" [disabled]:
+      - text: tea 3
+      - img
+      - img
+  - heading "Resposta correta:" [level=2]
+  - text: coffee
+  - button "Muito fácil"
+  - button "Muito difícil"
+  - button "Reportar"
+  - button "Continuar"
+  - img
+  - img
+  - img
+  - img
+  - img
+  - img
+  - text: Cada erro tira 1 vida! Tenha foco e cuidado pra não perder suas vidas. Vai, você consegue!
+  - button "Continuar"

@@ -1,0 +1,25 @@
+- document:
+  - button:
+    - img
+  - progressbar:
+    - img
+  - img
+  - text: "5"
+  - img
+  - text: Palavra nova
+  - heading "Qual destas imagens é \"chá\"?" [level=1]
+  - radiogroup "choice":
+    - radio "coffee 1":
+      - text: coffee 1
+      - img
+      - img
+    - radio "tea 2":
+      - text: tea 2
+      - img
+      - img
+    - radio "sugar 3":
+      - text: sugar 3
+      - img
+      - img
+  - button "Pular"
+  - button "Verificar" [disabled]
