@@ -29,7 +29,10 @@ export interface SourceRef {
 /** Placas e ilustrações desenhadas pelo app (componente SignArt). */
 export type SignCode =
   | 'R-1' | 'R-2' | 'R-3' | 'R-6a' | 'R-6c' | 'R-7' | 'R-19'
-  | 'A-18' | 'A-32b';
+  | 'R-4a' | 'R-5a' | 'R-26' | 'R-33'
+  | 'A-12' | 'A-14' | 'A-18' | 'A-24' | 'A-32b' | 'A-41'
+  /** placa de orientação de destino (verde), exemplo didático sem código oficial */
+  | 'IND-destino';
 
 export interface Visual {
   kind: 'sign' | 'scene';
@@ -48,7 +51,11 @@ export type SceneId =
   | 'rodovia-via-local'
   | 'agente-semaforo'
   | 'pedestre-faixa'
-  | 'ambulancia';
+  | 'ambulancia'
+  | 'linha-amarela-continua'
+  | 'linha-amarela-tracejada'
+  | 'linha-retencao'
+  | 'semaforo-amarelo';
 
 interface QuestionBase {
   id: string;
@@ -128,7 +135,16 @@ export type Question =
 export interface ConceptCard {
   id: string;
   title: string;
+  /** Fala curta e acolhedora da Lumi que apresenta o assunto. */
   body: string;
+  /** Palavras que o aluno talvez não conheça, explicadas em linguagem simples. */
+  terms?: { term: string; meaning: string }[];
+  /** A explicação dividida em passos curtos. */
+  points?: string[];
+  /** Uma situação do dia a dia que mostra a regra. */
+  example?: string;
+  /** Frase curta para memorizar. */
+  remember?: string;
   visual?: Visual;
   sources: SourceRef[];
 }

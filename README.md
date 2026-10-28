@@ -2,6 +2,8 @@
 
 Aplicativo web para aprender o conteúdo da prova teórica do DETRAN (1ª habilitação, categorias A e B) em lições curtas e gamificadas.
 
+**Acesse:** https://gierig-p.github.io/cnh-quest/ · Estado atual e próximos passos: [`docs/ESTADO-DO-PROJETO.md`](docs/ESTADO-DO-PROJETO.md)
+
 ## Como rodar
 
 Requisitos: Node.js 20 ou mais recente (testado com Node 24.22 e npm 11.19).
@@ -54,6 +56,6 @@ As questões são originais. Não são as questões aplicadas pelo DETRAN.
 - Só o Mundo 1 tem conteúdo (23 questões). Os mundos 2 a 8 aparecem como "em construção".
 - O simulado tem 14 questões no formato oficial. Até o banco chegar a 30, ele usa todas, com nota mínima e tempo proporcionais, e avisa isso na tela.
 - A distribuição oficial das 30 questões por assunto não foi publicada; o simulado alterna os módulos.
-- Os sons são sintetizados e simples. Não há narração.
+- Os sons são efeitos sintetizados próprios (11 efeitos, com volume). Não há narração.
 - Progresso só no navegador atual (sem conta e sem sincronização).
 - Sair de uma lição no meio descarta a sessão (as respostas já dadas ficam no histórico).

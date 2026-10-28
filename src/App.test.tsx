@@ -46,7 +46,7 @@ describe('fluxo principal', () => {
     await user.click(screen.getByRole('button', { name: /Quem manda no trânsito\?, disponível/ }));
 
     // cartão de conceito
-    expect(screen.getByRole('heading', { name: 'Os sinais de trânsito' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'O que é um sinal de trânsito?' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Continuar' }));
 
     // 1ª questão: "Verificar" desabilitado até escolher
@@ -129,7 +129,7 @@ describe('fluxo principal', () => {
     expect(screen.getByRole('dialog', { name: 'Quer mesmo sair?' })).toBeInTheDocument();
     await user.keyboard('{Escape}');
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
-    expect(screen.getByRole('heading', { name: 'Os sinais de trânsito' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'O que é um sinal de trânsito?' })).toBeInTheDocument();
   });
 });
 

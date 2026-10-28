@@ -53,6 +53,27 @@ export const SOURCES: Record<string, Source> = {
     checkedAt: '2026-10-19',
     sha256: 'dc1608a7e1a2764ab04387f61e44542cdfc2014e3ed048af6b425d81a9e7a88d',
   },
+  mbst3: {
+    id: 'mbst3',
+    title: 'MBST Volume III — Sinalização Vertical de Indicação',
+    url: 'https://www.gov.br/transportes/pt-br/assuntos/transito/senatran/manuais-brasileiros-de-sinalizacao-de-transito',
+    checkedAt: '2026-10-28',
+    sha256: '3a0f591ca81f037f73f40610c6c3024f61f657f02c5709e8803c2ca8b062da2c',
+  },
+  mbst4: {
+    id: 'mbst4',
+    title: 'MBST Volume IV — Sinalização Horizontal',
+    url: 'https://www.gov.br/transportes/pt-br/assuntos/transito/senatran/manuais-brasileiros-de-sinalizacao-de-transito',
+    checkedAt: '2026-10-28',
+    sha256: 'c4c53740b46820527e995554861cbd598cdb07c4ab0ce3def6c49e643bc24c09',
+  },
+  mbst5: {
+    id: 'mbst5',
+    title: 'MBST Volume V — Sinalização Semafórica',
+    url: 'https://www.gov.br/transportes/pt-br/assuntos/transito/senatran/manuais-brasileiros-de-sinalizacao-de-transito',
+    checkedAt: '2026-10-28',
+    sha256: '491e8d87f482be63c396404dfe7d3b2cf9435de64cb0532c63d26ab34db1f80a',
+  },
   detranpe: {
     id: 'detranpe',
     title: 'DETRAN-PE — Prova Teórica/Reteste',

@@ -155,6 +155,41 @@ export function LessonPlayer({
                 <Visual v={item.card.visual} size={150} />
               </div>
             )}
+            {item.card.terms && item.card.terms.length > 0 && (
+              <div className="c-box c-terms">
+                <h2 className="c-head">📖 Palavras novas</h2>
+                <dl>
+                  {item.card.terms.map((t) => (
+                    <div key={t.term}>
+                      <dt>{t.term}</dt>
+                      <dd>{t.meaning}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            )}
+            {item.card.points && item.card.points.length > 0 && (
+              <div className="c-box c-points">
+                <h2 className="c-head">🧭 Passo a passo</h2>
+                <ol>
+                  {item.card.points.map((p, i) => (
+                    <li key={i}>{p}</li>
+                  ))}
+                </ol>
+              </div>
+            )}
+            {item.card.example && (
+              <div className="c-box c-example">
+                <h2 className="c-head">🚗 Na prática</h2>
+                <p>{item.card.example}</p>
+              </div>
+            )}
+            {item.card.remember && (
+              <div className="c-box c-remember">
+                <h2 className="c-head">💡 Para guardar</h2>
+                <p>{item.card.remember}</p>
+              </div>
+            )}
             <p className="source-line"><SourceList refs={item.card.sources} /></p>
           </section>
         )}

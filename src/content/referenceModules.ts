@@ -64,7 +64,6 @@ export function worldReferenceModules(world: World): ReferenceModuleId[] {
 
 /** Mundos ainda não escritos (docs/plano-tecnico.md), com o módulo de referência previsto. */
 export const PLANNED_WORLDS: { order: number; title: string; referenceModules: ReferenceModuleId[] }[] = [
-  { order: 2, title: 'A linguagem das placas', referenceModules: [1] },
   { order: 3, title: 'Regras para circular', referenceModules: [3] },
   { order: 4, title: 'Infrações e consequências', referenceModules: [2] },
   { order: 5, title: 'Motorista defensivo', referenceModules: [3] },

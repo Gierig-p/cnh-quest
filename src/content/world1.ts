@@ -5,63 +5,223 @@ const V = '2026-10-19';
 /* ---------------- Cartões de conceito ---------------- */
 
 export const CONCEPTS: Record<string, ConceptCard> = {
+  /* ---- Lição 1: Quem manda no trânsito? ---- */
   tiposSinais: {
     id: 'c-tipos-sinais',
-    title: 'Os sinais de trânsito',
+    title: 'O que é um sinal de trânsito?',
     body:
-      'O CTB classifica os sinais em seis tipos: verticais (placas), horizontais (marcas no pavimento), ' +
-      'dispositivos auxiliares, luminosos (semáforos), sonoros (apito do agente) e gestos do agente e do condutor.',
-    sources: [{ sourceId: 'ctb', locator: 'art. 87' }],
+      'Oi! Vamos começar do zero, sem pressa. Sinal de trânsito é qualquer coisa que dá um recado a quem dirige ou anda ' +
+      'na rua: "pare", "vá devagar", "cuidado". A lei de trânsito diz que existem só seis tipos de sinal.',
+    terms: [
+      { term: 'CTB', meaning: 'Código de Trânsito Brasileiro. É a lei principal do trânsito no Brasil (Lei nº 9.503/1997). Quase tudo o que a prova cobra vem dela.' },
+      { term: 'Agente de trânsito', meaning: 'A pessoa autorizada a fiscalizar e organizar o trânsito, como o agente de trânsito da cidade ou o policial rodoviário federal.' },
+    ],
+    points: [
+      'Sinais verticais: as placas, que ficam "em pé" em postes.',
+      'Sinais horizontais: as pinturas no chão, como a faixa de pedestres e as linhas da pista.',
+      'Sinais luminosos: os semáforos (sinaleiros).',
+      'Sinais sonoros: o apito do agente de trânsito.',
+      'Gestos: os movimentos de braço do agente e também os do próprio condutor.',
+      'Dispositivos auxiliares: peças que ajudam a sinalizar, como cones e tachões.',
+    ],
+    remember: 'Placa, pintura, luz, som, gesto e auxiliar: só isso é sinal. Em pé é placa; deitado no chão é pintura.',
+    sources: [
+      { sourceId: 'ctb', locator: 'art. 87' },
+      { sourceId: 'ctb', locator: 'Anexo I — agente da autoridade de trânsito' },
+    ],
   },
   hierarquia: {
     id: 'c-hierarquia',
     title: 'Quem manda mais?',
     body:
-      'Quando duas orientações conflitam, vale esta ordem: 1º as ordens do agente de trânsito; ' +
-      '2º o semáforo; 3º os demais sinais (placas e marcas); por último, as normas gerais de circulação.',
+      'Às vezes dois sinais parecem dizer coisas diferentes. Calma: a lei já definiu quem vale mais. Pense numa escada: ' +
+      'quem está no degrau de cima manda em quem está embaixo.',
+    points: [
+      '1º lugar, o agente de trânsito. O que ele mandar vale mais que tudo.',
+      '2º lugar, o semáforo. Ele vale mais que as placas e as pinturas no chão.',
+      '3º lugar, os outros sinais: placas e marcas no chão.',
+      '4º lugar, as regras gerais da lei (por exemplo, o limite de velocidade que vale quando não há placa).',
+    ],
+    example:
+      'O semáforo está vermelho, mas o agente faz sinal para você seguir: você segue, porque o agente manda mais. ' +
+      'Outro caso: a lei tem um limite geral de velocidade, mas a rua tem uma placa com outro número. Vale a placa.',
+    remember: 'Agente, Semáforo, Sinais, Normas: "A-S-S-N". Tem placa? Vale a placa.',
     visual: { kind: 'scene', scene: 'agente-semaforo', alt: 'Agente de trânsito ao lado de um semáforo' },
-    sources: [{ sourceId: 'ctb', locator: 'art. 89' }],
+    sources: [
+      { sourceId: 'ctb', locator: 'art. 89' },
+      { sourceId: 'ctb', locator: 'art. 61, §§ 1º e 2º' },
+    ],
   },
+  sinalizacaoFalha: {
+    id: 'c-sinalizacao-falha',
+    title: 'E se a placa estiver escondida?',
+    body:
+      'Pode acontecer de uma placa estar atrás de uma árvore, apagada ou colocada no lugar errado. A lei protege você nesse caso, ' +
+      'mas não libera tudo.',
+    points: [
+      'Se a sinalização é insuficiente ou incorreta, você não pode ser punido por não obedecer àquele sinal.',
+      'Quem responde pela placa é o órgão de trânsito responsável pela via, não o motorista nem o dono da casa em frente.',
+      'As regras gerais continuam valendo. Placa escondida não é "terra sem lei".',
+    ],
+    remember: 'Placa que não se vê não pune, mas a regra geral continua.',
+    sources: [{ sourceId: 'ctb', locator: 'art. 90 e § 1º' }],
+  },
+
+  /* ---- Lição 2: Quem passa primeiro? ---- */
   preferencia: {
     id: 'c-preferencia',
-    title: 'Cruzamento sem sinalização',
+    title: 'Cruzamento sem placa nem semáforo',
     body:
-      'Onde não há placa nem semáforo, a preferência é: de quem está na rodovia, se só um dos fluxos vier dela; ' +
-      'de quem já circula na rotatória; nos demais casos, de quem vem pela sua direita.',
+      'Ter "preferência" quer dizer ter o direito de passar primeiro. Quando o cruzamento tem placa ou semáforo, você obedece a eles. ' +
+      'Quando não tem nada, a lei responde com três perguntas, nesta ordem.',
+    terms: [
+      { term: 'Via', meaning: 'Todo lugar por onde passam veículos, pessoas e animais: a pista, a calçada, o acostamento e os canteiros.' },
+      { term: 'Rodovia', meaning: 'Via fora da cidade que é asfaltada (pavimentada).' },
+      { term: 'Estrada', meaning: 'Via fora da cidade que não é asfaltada.' },
+      { term: 'Rotatória', meaning: 'Uma praça redonda no meio do cruzamento, em volta da qual os carros giram.' },
+    ],
+    points: [
+      'Um dos carros está numa rodovia e o outro não? Passa quem está na rodovia.',
+      'É uma rotatória? Passa quem já está girando nela. Quem vai entrar espera.',
+      'Nenhum dos dois casos? Passa quem vem pela sua direita.',
+      'Tamanho do veículo, velocidade e quem chegou primeiro não contam.',
+      'Chegando a qualquer cruzamento, vá em velocidade moderada (devagar), para poder parar se for preciso.',
+    ],
+    example:
+      'Você chega a um cruzamento de duas ruas comuns, sem placa. Um carro vem pela sua direita. Ele passa primeiro, mesmo que você tenha chegado antes.',
+    remember: 'Rodovia > rotatória > direita. Tamanho não é documento.',
     visual: { kind: 'scene', scene: 'cruzamento-direita', alt: 'Cruzamento com um carro vindo pela direita' },
-    sources: [{ sourceId: 'ctb', locator: 'art. 29, III' }],
+    sources: [
+      { sourceId: 'ctb', locator: 'art. 29, III' },
+      { sourceId: 'ctb', locator: 'art. 44' },
+      { sourceId: 'ctb', locator: 'Anexo I — via, rodovia, estrada' },
+    ],
   },
   pedestre: {
     id: 'c-pedestre',
     title: 'Pedestre na faixa',
     body:
-      'Quem atravessa na faixa tem prioridade. Com semáforo, segue-se o semáforo — mas o pedestre que ainda não ' +
-      'terminou a travessia tem preferência, mesmo que o sinal abra para os veículos.',
+      'Pedestre é quem está a pé. Ele é a parte mais frágil do trânsito, por isso a lei o protege bastante na faixa de travessia.',
+    points: [
+      'Faixa sem semáforo: quem está atravessando na faixa passa primeiro. Você para e espera.',
+      'Faixa com semáforo: vale o semáforo.',
+      'Mas atenção: se o sinal abrir para você e ainda houver alguém atravessando, essa pessoa termina a travessia primeiro.',
+      'Não dar a preferência ao pedestre na faixa é infração gravíssima, o tipo mais sério de infração.',
+    ],
+    example:
+      'Você vai virar à direita e um pedestre já está no meio da faixa. Você para e espera ele chegar do outro lado.',
+    remember: 'Pé na faixa, pé no freio. Verde para você não apaga quem está na faixa.',
     visual: { kind: 'scene', scene: 'pedestre-faixa', alt: 'Pedestre atravessando na faixa' },
-    sources: [{ sourceId: 'ctb', locator: 'art. 70' }],
+    sources: [
+      { sourceId: 'ctb', locator: 'art. 70' },
+      { sourceId: 'ctb', locator: 'art. 214, I e II' },
+      { sourceId: 'ctb', locator: 'art. 258' },
+    ],
   },
+  emergencia: {
+    id: 'c-emergencia',
+    title: 'Ambulância chegando',
+    body:
+      'Ambulância, bombeiros e polícia em atendimento de urgência precisam chegar rápido. A lei diz como você ajuda.',
+    points: [
+      'Repare se a sirene e as luzes piscando estão ligadas. Esse é o sinal de que é urgência.',
+      'Deixe livre a faixa da esquerda.',
+      'Vá para a direita e pare, se for necessário.',
+    ],
+    remember: 'Sirene tocou: direita e calma.',
+    visual: { kind: 'scene', scene: 'ambulancia', alt: 'Ambulância com luzes ligadas' },
+    sources: [{ sourceId: 'ctb', locator: 'art. 29, VII, "a"' }],
+  },
+
+  /* ---- Lição 3: Primeiras placas ---- */
   formasPlacas: {
     id: 'c-formas',
-    title: 'A forma conta muito',
+    title: 'A forma da placa já diz muito',
     body:
-      'Placas de regulamentação (obrigações e proibições) são circulares, em vermelho, preto e branco — exceto ' +
-      '"Parada obrigatória" (octógono) e "Dê a preferência" (triângulo). Placas de advertência (perigos) são ' +
-      'quadradas, com uma diagonal na vertical, em amarelo e preto.',
+      'Antes de ler o desenho, olhe a forma e a cor da placa. Só isso já mostra se ela dá uma ordem ou um aviso.',
+    terms: [
+      { term: 'Placa de regulamentação', meaning: 'Dá uma ordem: algo que você é obrigado a fazer ou proibido de fazer.' },
+      { term: 'Placa de advertência', meaning: 'Dá um aviso: existe um perigo ou uma situação diferente logo à frente.' },
+    ],
+    points: [
+      'Regulamentação (ordem): redonda, em vermelho, preto e branco.',
+      'Duas exceções de regulamentação: "Parada obrigatória" tem 8 lados (octógono) e "Dê a preferência" é um triângulo.',
+      'Advertência (aviso): quadrada, virada como um losango, amarela com desenho preto.',
+    ],
+    example:
+      'Losango amarelo com uma lombada desenhada (A-18) avisa que há lombada à frente. Losango amarelo com uma pessoa ' +
+      'na faixa (A-32b) avisa que há faixa de pedestres adiante.',
+    remember: 'Redonda manda; amarela em losango avisa.',
     visual: { kind: 'sign', sign: 'R-1', alt: 'Placa octogonal vermelha com a palavra PARE' },
     sources: [
       { sourceId: 'mbst1', locator: 'item 3.6 — Formas e cores' },
-      { sourceId: 'mbst2', locator: 'item 3.5 — Formas e cores' },
+      { sourceId: 'mbst2', locator: 'item 3.5 — Formas e cores; A-18; A-32b' },
     ],
   },
   r1r2: {
     id: 'c-r1-r2',
     title: 'PARE × Dê a preferência',
     body:
-      'R-1 "Parada obrigatória": pare antes de entrar ou cruzar a via. R-2 "Dê a preferência": dê passagem a quem ' +
-      'circula na via em que você vai entrar — reduza a velocidade ou pare, se necessário. As duas podem alterar a ' +
-      'regra geral de quem vem pela direita.',
+      'Essas duas placas são muito cobradas e parecem parecidas, mas pedem coisas diferentes. Elas valem mais que a regra de quem vem pela direita.',
+    terms: [
+      { term: 'Infração', meaning: 'Desobedecer a uma regra de trânsito. Existem quatro níveis, do mais sério ao mais leve: gravíssima, grave, média e leve.' },
+    ],
+    points: [
+      'R-1 "Parada obrigatória" (PARE, 8 lados): pare sempre o veículo antes de entrar ou cruzar a via, mesmo sem ninguém vindo.',
+      'Depois de parar, olhe e só siga quando for seguro.',
+      'Passar direto pelo PARE (ou pelo sinal vermelho) é infração gravíssima.',
+      'R-2 "Dê a preferência" (triângulo de ponta para baixo): deixe passar quem já está na via em que você vai entrar. Reduza e pare, se precisar.',
+    ],
+    remember: 'Oito lados: PARE sempre. Triângulo de cabeça para baixo: eu cedo.',
     visual: { kind: 'sign', sign: 'R-2', alt: 'Placa triangular de vértice para baixo, branca com borda vermelha' },
-    sources: [{ sourceId: 'mbst1', locator: 'R-1 e R-2 — Significado e princípios de utilização' }],
+    sources: [
+      { sourceId: 'mbst1', locator: 'R-1 e R-2 — Significado e princípios de utilização' },
+      { sourceId: 'ctb', locator: 'arts. 208 e 258' },
+    ],
+  },
+  proibicoes: {
+    id: 'c-proibicoes',
+    title: 'Placas de proibição',
+    body:
+      'Muitas placas redondas mostram um desenho cortado por uma barra vermelha. A barra quer dizer "não pode".',
+    terms: [
+      { term: 'Parar', meaning: 'Ficar parado só o tempo de alguém entrar ou sair do carro.' },
+      { term: 'Estacionar', meaning: 'Deixar o carro parado por mais tempo do que isso.' },
+      { term: 'Ultrapassar', meaning: 'Sair da sua faixa para passar à frente de um veículo mais lento que vai no mesmo sentido, e depois voltar.' },
+    ],
+    points: [
+      'R-3 "Sentido proibido": círculo vermelho com uma faixa branca deitada. Não entre por ali.',
+      'R-6a "Proibido estacionar": letra "E" cortada por uma barra.',
+      'R-6c "Proibido parar e estacionar": letra "E" com duas barras em X.',
+      'R-7 "Proibido ultrapassar": dois carros lado a lado, cortados por uma barra.',
+    ],
+    remember: 'Uma barra: não estaciona. Um X: nem para.',
+    sources: [
+      { sourceId: 'mbst1', locator: 'R-3, R-6a, R-6c, R-7 — Significado' },
+      { sourceId: 'ctb', locator: 'Anexo I — parada, estacionamento, ultrapassagem' },
+    ],
+  },
+  velocidade: {
+    id: 'c-velocidade',
+    title: 'Limite de velocidade',
+    body:
+      'O limite de velocidade é o máximo que você pode andar. Às vezes ele está numa placa; às vezes não tem placa e vale o que a lei diz.',
+    terms: [
+      { term: 'Via local', meaning: 'Rua de bairro, sem semáforos, usada para chegar às casas e lugares próximos.' },
+    ],
+    points: [
+      'Placa R-19: círculo vermelho com um número. Esse número é a velocidade máxima a partir daquela placa.',
+      'Sem placa, na cidade, a lei define o limite pelo tipo de via:',
+      'Via de trânsito rápido: 80 km/h. Via arterial: 60 km/h. Via coletora: 40 km/h. Via local: 30 km/h.',
+      'Se houver placa, vale a placa, mesmo que o número seja diferente desses.',
+    ],
+    remember: '80-60-40-30: do mais rápido para a rua do bairro. Número no círculo = teto de velocidade.',
+    visual: { kind: 'sign', sign: 'R-19', speed: 40, alt: 'Placa circular de velocidade máxima de 40 km/h' },
+    sources: [
+      { sourceId: 'mbst1', locator: 'R-19 — Significado' },
+      { sourceId: 'ctb', locator: 'art. 61, § 1º, I' },
+      { sourceId: 'ctb', locator: 'Anexo I — via local' },
+    ],
   },
 };
 
@@ -621,6 +781,7 @@ export const WORLD1: World = {
         q('w1-l1-q2'),
         q('w1-l1-q5'),
         q('w1-l1-q4'),
+        c(CONCEPTS.sinalizacaoFalha),
         q('w1-l1-q7'),
       ],
     },
@@ -640,6 +801,7 @@ export const WORLD1: World = {
         c(CONCEPTS.pedestre),
         q('w1-l2-q5'),
         q('w1-l2-q6'),
+        c(CONCEPTS.emergencia),
         q('w1-l2-q7'),
         q('w1-l2-q8'),
       ],
@@ -657,7 +819,9 @@ export const WORLD1: World = {
         q('w1-l3-q2'),
         c(CONCEPTS.r1r2),
         q('w1-l3-q3'),
+        c(CONCEPTS.proibicoes),
         q('w1-l3-q4'),
+        c(CONCEPTS.velocidade),
         q('w1-l3-q5'),
         q('w1-l3-q8'),
         q('w1-l3-q6'),

@@ -41,7 +41,7 @@ describe('conteúdo', () => {
   it('a trilha planejada cobre os 4 módulos e cada módulo registra a origem do nome', () => {
     const covered = new Set(PLANNED_WORLDS.flatMap((w) => w.referenceModules));
     expect([...covered].sort()).toEqual([1, 2, 3, 4]);
-    expect(PLANNED_WORLDS.map((w) => w.order)).toEqual([2, 3, 4, 5, 6, 7, 8]);
+    expect(PLANNED_WORLDS.map((w) => w.order)).toEqual([3, 4, 5, 6, 7, 8]);
     for (const m of Object.values(REFERENCE_MODULES)) expect(m.origin.length).toBeGreaterThan(20);
   });
 });

@@ -397,6 +397,16 @@ html[data-motion='reduce'] *, html[data-motion='reduce'] *::before, html[data-mo
 .bubble { position: relative; padding: 16px 18px; border: 2px solid var(--border); border-radius: var(--radius); background: var(--surface); font-size: 18px; box-shadow: 0 3px 0 var(--border); animation: bubble-in 420ms var(--ease-spring) 80ms both; transform-origin: 0 100%; }
 .bubble::before { content: ''; position: absolute; left: -9px; bottom: 22px; width: 14px; height: 14px; background: var(--surface); border-left: 2px solid var(--border); border-bottom: 2px solid var(--border); transform: rotate(45deg); }
 @keyframes bubble-in { from { opacity: 0; transform: scale(.85) translateY(6px); } }
+.c-box { margin-top: 14px; padding: 14px 16px; border: 2px solid var(--border); border-radius: var(--radius); background: var(--surface); font-size: 17px; line-height: 1.5; }
+.c-head { margin: 0 0 8px; font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: .03em; color: var(--text-2); }
+.c-box p { margin: 0; }
+.c-terms dl { margin: 0; display: grid; gap: 10px; }
+.c-terms dt { font-weight: 900; }
+.c-terms dd { margin: 2px 0 0; }
+.c-points ol { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
+.c-points li::marker { font-weight: 900; color: var(--green-dark); }
+.c-example { border-color: var(--blue-line); background: var(--blue-soft); }
+.c-remember { border-color: var(--yellow-line); background: var(--yellow-soft); font-weight: 800; }
 .source-line { margin-top: 14px; font-size: 14px; color: var(--text-3); }
 .source-line a { color: inherit; }
 .review-intro { text-align: center; padding-top: 40px; }

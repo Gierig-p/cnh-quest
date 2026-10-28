@@ -134,4 +134,50 @@ const SCENES: Record<SceneId, React.ReactNode> = {
       <text x="232" y="168" fontSize="12" fontWeight="800" fill="#22313f">sirene</text>
     </>
   ),
+  'linha-amarela-continua': (
+    <>
+      <rect x="0" y="55" width="320" height="90" fill={ROAD} />
+      <line x1="0" y1="60" x2="320" y2="60" stroke={LINE} strokeWidth="3" />
+      <line x1="0" y1="140" x2="320" y2="140" stroke={LINE} strokeWidth="3" />
+      <line x1="0" y1="100" x2="320" y2="100" stroke="#f7c518" strokeWidth="4" />
+      <Car x={70} y={120} rot={90} label="Você" />
+      <Car x={150} y={120} rot={90} color="#7a8a99" />
+      <Car x={250} y={80} rot={-90} color="#e5484d" />
+    </>
+  ),
+  'linha-amarela-tracejada': (
+    <>
+      <rect x="0" y="55" width="320" height="90" fill={ROAD} />
+      <line x1="0" y1="60" x2="320" y2="60" stroke={LINE} strokeWidth="3" />
+      <line x1="0" y1="140" x2="320" y2="140" stroke={LINE} strokeWidth="3" />
+      <line x1="0" y1="100" x2="320" y2="100" stroke="#f7c518" strokeWidth="4" strokeDasharray="18 16" />
+      <Car x={70} y={120} rot={90} label="Você" />
+      <Car x={150} y={120} rot={90} color="#7a8a99" />
+    </>
+  ),
+  'linha-retencao': (
+    <>
+      <rect x="0" y="60" width="320" height="80" fill={ROAD} />
+      <rect x="196" y="60" width="7" height="80" fill={LINE} />
+      {Array.from({ length: 7 }, (_, i) => (
+        <rect key={i} x={212} y={64 + i * 11} width="40" height="6" fill={LINE} />
+      ))}
+      <rect x="282" y="10" width="20" height="46" rx="6" fill="#22313f" />
+      <circle cx="292" cy="22" r="6" fill="#ff4d4f" />
+      <circle cx="292" cy="44" r="6" fill="#3a4a3a" />
+      <Car x={150} y={118} rot={90} label="Você" />
+      <text x="168" y="158" fontSize="12" fontWeight="800" fill="#22313f">linha de retenção</text>
+    </>
+  ),
+  'semaforo-amarelo': (
+    <>
+      <rect x="0" y="130" width="320" height="70" fill={ROAD} />
+      <rect x="143" y="10" width="34" height="96" rx="10" fill="#22313f" />
+      <circle cx="160" cy="32" r="11" fill="#5a2b2b" />
+      <circle cx="160" cy="58" r="11" fill="#ffc83d" />
+      <circle cx="160" cy="84" r="11" fill="#1f3b2b" />
+      <rect x="157" y="106" width="6" height="26" fill="#22313f" />
+      <Car x={70} y={165} rot={90} label="Você" />
+    </>
+  ),
 };
