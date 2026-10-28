@@ -29,6 +29,7 @@ describe('conteúdo', () => {
       ['w1-l1', 1],
       ['w1-l2', 3],
       ['w1-l3', 1],
+      ['w1-l4', 1],
       ['w1-review', 1],
     ]);
     expect(worldReferenceModules(w1)).toEqual([1, 3]);
@@ -36,6 +37,20 @@ describe('conteúdo', () => {
     expect(validateContent(QUESTIONS, [wrong]).map((i) => i.message)).toContain(
       'módulo de referência não corresponde ao assunto de nenhuma questão da lição',
     );
+  });
+
+  it('cada cartão de conceito é seguido de pelo menos 4 exercícios antes do próximo', () => {
+    for (const world of WORLDS) {
+      for (const lesson of world.lessons) {
+        let count = -1;
+        for (const step of [...lesson.steps, { kind: 'concept' as const }]) {
+          if (step.kind === 'concept') {
+            if (count >= 0) expect(count, `${lesson.id}: cartão com só ${count} exercícios`).toBeGreaterThanOrEqual(4);
+            count = 0;
+          } else if (count >= 0) count++;
+        }
+      }
+    }
   });
 
   it('a trilha planejada cobre os 4 módulos e cada módulo registra a origem do nome', () => {

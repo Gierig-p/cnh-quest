@@ -101,8 +101,8 @@ describe('progresso', () => {
 
   it('o mundo só conclui com domínio na revisão', () => {
     let s = initialProgress();
-    for (const l of WORLD1.lessons.slice(0, 3)) s = completeLesson(s, l, summarize(playLesson(l)), now).state;
-    const review = WORLD1.lessons[3];
+    for (const l of WORLD1.lessons.slice(0, -1)) s = completeLesson(s, l, summarize(playLesson(l)), now).state;
+    const review = WORLD1.lessons[WORLD1.lessons.length - 1];
     const ids = review.steps.flatMap((st) => (st.kind === 'question' ? [st.questionId] : []));
     const weak = summarize(playLesson(review, ids.slice(0, 4))); // 60%
     s = completeLesson(s, review, weak, now).state;
