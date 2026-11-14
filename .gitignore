@@ -4,3 +4,4 @@ dist
 _tmp_*
 *.tsbuildinfo
 .codex/
+scripts/audio/cache/

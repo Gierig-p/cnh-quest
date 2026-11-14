@@ -78,3 +78,6 @@ export const IconRoad = ({ size = 22 }: P) => (
 export const IconWrong = ({ size = 30 }: P) => (
   <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" /></svg>
 );
+export const IconPause = ({ size = 22 }: P) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.2" height="14" rx="1.4" fill="currentColor" /><rect x="13.8" y="5" width="4.2" height="14" rx="1.4" fill="currentColor" /></svg>
+);

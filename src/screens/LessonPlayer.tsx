@@ -8,6 +8,7 @@ import { Exercise, isAnswerReady, typeLabel } from '../components/Exercises';
 import { Burst, Dialog, useDialogClose } from '../components/Fx';
 import { IconCheck, IconClose, IconHeart, IconSparkle, IconWrong } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
+import { NarrationButton } from '../components/NarrationButton';
 import { TermHintsContext, TermText, useHasNewTerm } from '../components/TermText';
 import { Visual } from '../components/Visual';
 import { grade, type Answer, type Feedback } from '../engine/grading';
@@ -249,6 +250,7 @@ export function LessonPlayer({
           <section className="concept" aria-labelledby="concept-title">
             <div className="q-tag new"><IconSparkle size={14} /> Conceito novo</div>
             <h1 id="concept-title" className="q-title" tabIndex={-1}>{item.card.title}</h1>
+            <NarrationButton cardId={item.card.id} />
             <div className="bubble-row">
               <Lumi mood="wave" size={92} />
               <p className="bubble">{item.card.body}</p>
