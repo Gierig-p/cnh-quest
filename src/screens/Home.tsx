@@ -240,6 +240,11 @@ export function Home({ onStart }: { onStart: (l: Lesson) => void }) {
           A divisão das lições pelos 4 módulos é uma organização própria do app, feita a partir dos temas do Banco
           Nacional de Questões. Não é uma classificação oficial.
         </p>
+        <p>
+          Imagens das placas: Wikimedia Commons. Placas R por Amateria1121 (CC BY-SA 3.0) e
+          มองโกเลีย๔๔ (CC BY-SA 4.0); placas A do DNIT (domínio público).{' '}
+          <a href={`${import.meta.env.BASE_URL}placas/CREDITOS.md`} target="_blank" rel="noreferrer">Ver créditos</a>
+        </p>
       </aside>
     </div>
   );

@@ -55,7 +55,22 @@ export type SceneId =
   | 'linha-amarela-continua'
   | 'linha-amarela-tracejada'
   | 'linha-retencao'
-  | 'semaforo-amarelo';
+  | 'semaforo-amarelo'
+  // cenas novas (14/11)
+  | 'cruzamento-caminhao'
+  | 'cruzamento-aproximacao'
+  | 'agente-apito'
+  | 'pedestre-semaforo'
+  | 'ambulancia-atras'
+  | 'bombeiros-atras'
+  | 'ambulancia-desligada'
+  | 'rua-local'
+  | 'linha-branca-continua'
+  | 'vaga-idoso'
+  | 'semaforo-amarelo-piscando'
+  | 'semaforo-pedestre-piscando'
+  | 'placa-escondida'
+  | 'placa-distancias';
 
 interface QuestionBase {
   id: string;
@@ -131,6 +146,19 @@ export type Question =
   | OrderQuestion
   | MatchQuestion;
 
+/** Palavra explicada num cartão. Vira dica (balão) nos exercícios depois de ensinada. */
+export interface TermDef {
+  term: string;
+  meaning: string;
+  /** Outras formas da mesma palavra a destacar nos exercícios (plural, variações). */
+  aliases?: string[];
+  /**
+   * Questões em que a palavra não vira dica: ela aparece com outro sentido
+   * ou o significado entregaria a resposta.
+   */
+  skipIn?: string[];
+}
+
 /** Cartão de conceito (não avaliado) que abre um assunto, como "Palavra nova". */
 export interface ConceptCard {
   id: string;
@@ -138,7 +166,7 @@ export interface ConceptCard {
   /** Fala curta e acolhedora da Lumi que apresenta o assunto. */
   body: string;
   /** Palavras que o aluno talvez não conheça, explicadas em linguagem simples. */
-  terms?: { term: string; meaning: string }[];
+  terms?: TermDef[];
   /** A explicação dividida em passos curtos. */
   points?: string[];
   /** Uma situação do dia a dia que mostra a regra. */
@@ -166,6 +194,11 @@ export interface Lesson {
    * Rodada 1: explicações + exercícios. Rodadas seguintes: só prática, mais curta.
    */
   rounds?: number;
+  /**
+   * Revisão sorteada: em vez de questões fixas, sorteia `size` questões já ensinadas no mundo
+   * (revisão da metade: lições antes dela; revisão do mundo: todas). Nesse caso `steps` fica vazio.
+   */
+  review?: { size: number };
   /** Módulo de referência principal da lição (organização própria; deve aparecer entre os módulos das questões). */
   referenceModule: ReferenceModuleId;
 }

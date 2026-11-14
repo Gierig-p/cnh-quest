@@ -65,3 +65,19 @@ export function useCountUp(target: number, { duration = 900, delay = 0, onTick }
   }, [target, duration, delay, reduce]);
   return value;
 }
+
+/** O tema escuro está valendo agora? (escolha do app ou, no automático, a do aparelho) */
+export function useDarkTheme(): boolean {
+  const { progress } = useApp();
+  const theme = progress.prefs.theme ?? 'system';
+  const query = '(prefers-color-scheme: dark)';
+  const [systemDark, setSystemDark] = useState(() => typeof window !== 'undefined' && Boolean(window.matchMedia?.(query).matches));
+  useEffect(() => {
+    const m = window.matchMedia?.(query);
+    if (!m) return;
+    const on = () => setSystemDark(m.matches);
+    m.addEventListener?.('change', on);
+    return () => m.removeEventListener?.('change', on);
+  }, []);
+  return theme === 'dark' || (theme === 'system' && systemDark);
+}

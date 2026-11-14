@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { EXAM_CONFIGS, QUESTION_BY_ID, QUESTIONS, WORLDS } from '../content';
+import { EXAM_CONFIGS, HINT_CARDS, QUESTION_BY_ID, QUESTIONS, WORLDS } from '../content';
+import { hintReveal } from '../content/hints';
 import { WORLD1 } from '../content/world1';
 import { buildExam, scoreExam } from './exam';
 import { grade } from './grading';
@@ -9,6 +10,7 @@ import {
   dayKey,
   dueQuestions,
   initialProgress,
+  lessonsWithCardsSeen,
   lessonRounds,
   lessonState,
   practiceRoundIds,
@@ -19,9 +21,11 @@ import {
   worldCompleted,
 } from './progress';
 import { advance, answerCurrent, currentItem, isFinished, startSession, summarize } from './session';
+import { drawKey, drawLessonSteps, mixTypes, rebuildLessonSteps, reviewPool, reviewRoundIds, sameTopicQuestions } from './review';
 import { createLocalStore } from '../storage/progressStore';
 
 const L1 = WORLD1.lessons[0];
+const typeOf = (id: string) => QUESTION_BY_ID[id].type;
 
 function playLesson(lesson = L1, wrongOnce: string[] = []) {
   let s = startSession(lesson);
@@ -52,6 +56,43 @@ describe('sessão de lição', () => {
     const r = summarize(s);
     expect(r.missed).toEqual(['w1-l1-q1']);
     expect(r.correctFirstTry).toBe(r.total - 1);
+  });
+
+  it('revisão de erros: 2 perguntas diferentes do mesmo assunto, sem contar na % de acerto', () => {
+    const qOf = (x: string) => QUESTION_BY_ID[x];
+    const alts = sameTopicQuestions('w1-l1-q1', HINT_CARDS, qOf, () => 0.3);
+    expect(alts.length).toBeGreaterThanOrEqual(2);
+    for (const x of alts) expect(HINT_CARDS[x].id).toBe(HINT_CARDS['w1-l1-q1'].id);
+    // mesmo objetivo vem antes (q8 e q14 ensinam a mesma ideia)
+    expect(sameTopicQuestions('w1-l1-q8', HINT_CARDS, qOf, () => 0.7)[0]).toBe('w1-l1-q14');
+
+    let s = startSession({ id: 't', steps: [{ kind: 'question', questionId: 'w1-l1-q1' }, { kind: 'question', questionId: 'w1-l1-q2' }] });
+    s = advance(answerCurrent(s, false, { alternatives: ['w1-l1-q2', ...alts] }));
+    const review = s.queue.filter((it) => it.kind === 'question' && it.retry);
+    expect(review).toHaveLength(2);
+    const ids = review.map((it) => (it.kind === 'question' ? it.questionId : ''));
+    expect(new Set(ids).size).toBe(2);
+    expect(ids).not.toContain('w1-l1-q1'); // há alternativas: não repete a mesma pergunta
+    expect(ids).not.toContain('w1-l1-q2'); // já está na sessão
+    expect(review.every((it) => it.kind === 'question' && it.origin === 'w1-l1-q1')).toBe(true);
+    // erra tudo na revisão: não agenda mais nada e não conta na % de acerto
+    while (!isFinished(s)) {
+      const it = currentItem(s)!;
+      if (it.kind === 'question') s = answerCurrent(s, it.questionId === 'w1-l1-q2', {});
+      s = advance(s);
+    }
+    expect(s.queue.filter((it) => it.kind === 'question' && it.retry)).toHaveLength(2);
+    const r = summarize(s);
+    expect(r.total).toBe(2);
+    expect(r.correctFirstTry).toBe(1);
+    expect(r.missed).toEqual(['w1-l1-q1']);
+  });
+
+  it('revisão de erros: com só uma alternativa, a própria questão completa as 2 perguntas', () => {
+    let s = startSession({ id: 't', steps: [{ kind: 'question', questionId: 'w1-l1-q1' }] });
+    s = answerCurrent(s, false, { alternatives: ['w1-l1-q14'] });
+    const ids = s.queue.flatMap((it) => (it.kind === 'question' && it.retry ? [it.questionId] : []));
+    expect(ids).toEqual(['w1-l1-q14', 'w1-l1-q1']);
   });
 
   it('não entra em laço infinito quando o aluno erra sempre', () => {
@@ -158,11 +199,12 @@ describe('progresso', () => {
     for (const l of WORLD1.lessons.slice(0, -1))
       for (let r = 0; r < lessonRounds(l); r++) s = completeLesson(s, l, summarize(playLesson(l)), now).state;
     const review = WORLD1.lessons[WORLD1.lessons.length - 1];
-    const ids = review.steps.flatMap((st) => (st.kind === 'question' ? [st.questionId] : []));
-    const weak = summarize(playLesson(review, ids.slice(0, 4))); // 60%
+    const ids = reviewRoundIds(s, reviewPool(WORLD1, review), review.review!.size, typeOf);
+    const drawn = { ...review, steps: ids.map((questionId) => ({ kind: 'question' as const, questionId })) };
+    const weak = summarize(playLesson(drawn, ids.slice(0, 6))); // 70%
     s = completeLesson(s, review, weak, now).state;
     expect(worldCompleted(s, WORLD1)).toBe(false);
-    s = completeLesson(s, review, summarize(playLesson(review)), now).state;
+    s = completeLesson(s, review, summarize(playLesson(drawn)), now).state;
     expect(worldCompleted(s, WORLD1)).toBe(true);
     expect(s.achievements).toContain('mundo-1');
   });
@@ -251,6 +293,146 @@ describe('simulado', () => {
     const ans = (n: number) => Object.fromEntries(paper.questionIds.map((id, i) => [id, i < n ? 'a' : 'b']));
     expect(scoreExam(paper, ans(20), byId).passed).toBe(true);
     expect(scoreExam(paper, ans(19), byId).passed).toBe(false);
+  });
+});
+
+describe('dicas de palavras', () => {
+  it('conta como ensinadas as palavras de lições com a rodada 1 feita, mesmo antes da rodada 2', () => {
+    const s = { ...initialProgress(), lessons: {
+      a: { completed: false, mastered: false, bestAccuracy: 1, attempts: 1, roundsDone: 1 },
+      b: { completed: true, mastered: false, bestAccuracy: 1, attempts: 1 },
+      c: { completed: false, mastered: false, bestAccuracy: 0.2, attempts: 1, roundsDone: 0 },
+    } };
+    expect(lessonsWithCardsSeen(s).sort()).toEqual(['a', 'b']);
+  });
+});
+
+describe('revisões sorteadas', () => {
+  // gerador previsível para o teste
+  const seeded = (n: number) => () => ((n = (n * 16807) % 2147483647) / 2147483647);
+
+  it('revisão da metade: 15 questões só das lições antes dela; revisão do mundo: 20 do mundo todo', () => {
+    for (const w of WORLDS) {
+      const mid = w.lessons.find((l) => l.id.endsWith('-mid'))!;
+      const before = new Set(w.lessons.slice(0, w.lessons.indexOf(mid)).flatMap((l) => l.steps.flatMap((st) => (st.kind === 'question' ? [st.questionId] : []))));
+      const midIds = reviewRoundIds(initialProgress(), reviewPool(w, mid), mid.review!.size, typeOf, seeded(7));
+      expect(midIds).toHaveLength(15);
+      expect(new Set(midIds).size).toBe(15);
+      for (const id of midIds) expect(before.has(id), id).toBe(true);
+      const end = w.lessons[w.lessons.length - 1];
+      expect(reviewRoundIds(initialProgress(), reviewPool(w, end), end.review!.size, typeOf, seeded(7))).toHaveLength(20);
+    }
+  });
+
+  it('cobre todos os cartões, muda de pessoa para pessoa e evita tipos repetidos em seguida', () => {
+    const end = WORLD1.lessons[WORLD1.lessons.length - 1];
+    const pool = reviewPool(WORLD1, end);
+    const a = reviewRoundIds(initialProgress(), pool, 20, typeOf, seeded(1));
+    const b = reviewRoundIds(initialProgress(), pool, 20, typeOf, seeded(99));
+    const cards = new Set(pool.map((p) => p.cardId));
+    const cardOf = new Map(pool.map((p) => [p.questionId, p.cardId]));
+    expect(new Set(a.map((id) => cardOf.get(id))).size).toBe(cards.size);
+    expect(a.slice().sort()).not.toEqual(b.slice().sort());
+    const repeats = a.filter((id, i) => i > 0 && typeOf(id) === typeOf(a[i - 1])).length;
+    expect(repeats).toBeLessThanOrEqual(2);
+    expect(mixTypes(['x1', 'x2', 'y1'], (id) => id[0])).toEqual(['x1', 'y1', 'x2']);
+  });
+
+  it('as questões erradas e ainda não fixadas entram primeiro', () => {
+    const mid = WORLD1.lessons.find((l) => l.id === 'w1-mid')!;
+    const pool = reviewPool(WORLD1, mid);
+    const weak = pool.slice(-3).map((p) => p.questionId);
+    let s = initialProgress();
+    for (const id of weak) s = recordAnswer(s, QUESTION_BY_ID[id], false, new Date(2026, 9, 19, 10), true);
+    for (let seed = 1; seed < 6; seed++) {
+      const ids = reviewRoundIds(s, pool, 15, typeOf, seeded(seed));
+      for (const id of weak) expect(ids).toContain(id);
+    }
+  });
+});
+
+describe('rodada 1 com banco de variações', () => {
+  const seeded = (n: number) => () => ((n = (n * 16807) % 2147483647) / 2147483647);
+  const qOf = (id: string) => QUESTION_BY_ID[id];
+  const ids = (steps: ReturnType<typeof drawLessonSteps>) => steps.flatMap((st) => (st.kind === 'question' ? [st.questionId] : []));
+
+  it('sorteia 1 questão por objetivo, mantendo os cartões e o tamanho da lição', () => {
+    for (const lesson of WORLD1.lessons.filter((l) => l.steps.length)) {
+      const steps = drawLessonSteps(initialProgress(), lesson, qOf, seeded(3));
+      expect(steps.filter((st) => st.kind === 'concept')).toEqual(lesson.steps.filter((st) => st.kind === 'concept'));
+      const objectives = new Set(ids(lesson.steps).map((id) => qOf(id).objective));
+      const drawn = ids(steps);
+      expect(drawn).toHaveLength(objectives.size);
+      expect(new Set(drawn.map((id) => qOf(id).objective)).size).toBe(objectives.size);
+    }
+    expect(drawLessonSteps(initialProgress(), L1, qOf)).toHaveLength(16);
+  });
+
+  it('muda de pessoa para pessoa, mas a 1ª questão da lição 1 é sempre a mesma', () => {
+    const a = ids(drawLessonSteps(initialProgress(), L1, qOf, seeded(1)));
+    const b = ids(drawLessonSteps(initialProgress(), L1, qOf, seeded(42)));
+    expect(a).not.toEqual(b);
+    expect(a[0]).toBe('w1-l1-q1');
+    expect(b[0]).toBe('w1-l1-q1');
+  });
+
+  it('o sorteio salvo remonta a mesma lição; salvo inválido pede novo sorteio', () => {
+    for (const lesson of WORLD1.lessons.filter((l) => l.steps.length)) {
+      const steps = drawLessonSteps(initialProgress(), lesson, qOf, seeded(9));
+      expect(rebuildLessonSteps(lesson, ids(steps))).toEqual(steps);
+    }
+    const drawn = ids(drawLessonSteps(initialProgress(), L1, qOf, seeded(9)));
+    expect(rebuildLessonSteps(L1, [...drawn, 'nao-existe'])).toBeNull();
+    expect(rebuildLessonSteps(L1, drawn.slice(-1))).toBeNull(); // só a última questão: os outros cartões ficariam sem questão
+    expect(rebuildLessonSteps(L1, [])).toBeNull();
+    expect(drawKey('w1-l1', 2, false)).toBe('w1-l1:r2');
+    expect(drawKey('w1-rev', 1, true)).toBe('w1-rev:revisao');
+  });
+
+  it('prefere as versões que a pessoa ainda não viu', () => {
+    let s = initialProgress();
+    const first = ids(drawLessonSteps(s, L1, qOf, seeded(5)));
+    for (const id of first) s = recordAnswer(s, QUESTION_BY_ID[id], true, new Date(2026, 9, 19, 10), true);
+    const second = ids(drawLessonSteps(s, L1, qOf, seeded(5)));
+    const singles = new Set(first.filter((id) => ids(L1.steps).filter((x) => qOf(x).objective === qOf(id).objective).length === 1));
+    for (const id of second) if (!singles.has(id)) expect(first).not.toContain(id);
+  });
+});
+
+describe('botão Dica', () => {
+  it('acerto com dica não conta como acerto de primeira', () => {
+    let s = startSession({ id: 't', steps: [{ kind: 'question', questionId: 'w1-l1-q1' }, { kind: 'question', questionId: 'w1-l1-q2' }] });
+    s = advance(answerCurrent(s, true, { hinted: true }));
+    s = answerCurrent(s, true);
+    const r = summarize(s);
+    expect(r.correctFirstTry).toBe(1);
+    expect(r.accuracy).toBe(0.5);
+  });
+
+  it('toda questão das lições com cartões tem um cartão com "Para guardar"; revisões não', () => {
+    for (const w of WORLDS)
+      for (const l of w.lessons) {
+        if (!l.steps.some((st) => st.kind === 'concept')) continue;
+        for (const st of l.steps) if (st.kind === 'question') expect(HINT_CARDS[st.questionId]?.remember, st.questionId).toBeTruthy();
+      }
+  });
+
+  it('o 2º degrau nunca elimina a resposta certa e sempre traz a explicação', () => {
+    for (const q of QUESTIONS) {
+      const r = hintReveal(q, 'x');
+      if (q.type === 'choice') {
+        expect(r?.kind).toBe('eliminate-option');
+        if (r?.kind === 'eliminate-option') {
+          expect(r.optionId).not.toBe(q.correct);
+          expect(r.why).toBeTruthy();
+        }
+      }
+      if (q.type === 'fill' && r?.kind === 'eliminate-word') {
+        expect(r.word).not.toBe(q.answer);
+        expect(r.why).toBeTruthy();
+      }
+      if (q.type === 'truefalse') expect(r).toBeNull();
+    }
   });
 });
 

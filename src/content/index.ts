@@ -1,3 +1,5 @@
+import { buildGlossary } from './glossary';
+import { buildHintCards } from './hints';
 import type { ExamConfig, Question, World } from './types';
 import { WORLD1, WORLD1_QUESTIONS } from './world1';
 import { WORLD2, WORLD2_QUESTIONS } from './world2';
@@ -9,6 +11,12 @@ export const QUESTIONS: Question[] = [...WORLD1_QUESTIONS, ...WORLD2_QUESTIONS];
 export const QUESTION_BY_ID: Record<string, Question> = Object.fromEntries(
   QUESTIONS.map((q) => [q.id, q]),
 );
+
+/** Palavras explicadas nos cartões, usadas como dica nos exercícios. */
+export const GLOSSARY = buildGlossary(WORLDS);
+
+/** Cartão que ensina cada questão (1º degrau do botão "Dica"). */
+export const HINT_CARDS = buildHintCards(WORLDS);
 
 export const ALL_LESSONS = WORLDS.flatMap((w) => w.lessons.map((l) => ({ ...l, worldId: w.id })));
 

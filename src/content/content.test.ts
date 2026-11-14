@@ -41,16 +41,30 @@ describe('conteúdo', () => {
     );
   });
 
-  it('cada cartão de conceito é seguido de pelo menos 4 exercícios antes do próximo', () => {
+  it('cada cartão de conceito ensina pelo menos 4 objetivos (a rodada 1 sorteia 1 questão por objetivo)', () => {
+    const byId = new Map(QUESTIONS.map((q) => [q.id, q]));
     for (const world of WORLDS) {
       for (const lesson of world.lessons) {
-        let count = -1;
+        let objectives: Set<string> | null = null;
         for (const step of [...lesson.steps, { kind: 'concept' as const }]) {
           if (step.kind === 'concept') {
-            if (count >= 0) expect(count, `${lesson.id}: cartão com só ${count} exercícios`).toBeGreaterThanOrEqual(4);
-            count = 0;
-          } else if (count >= 0) count++;
+            if (objectives) expect(objectives.size, `${lesson.id}: cartão com só ${objectives.size} objetivos`).toBeGreaterThanOrEqual(4);
+            objectives = new Set();
+          } else if (objectives) objectives.add(byId.get(step.questionId)!.objective);
         }
+      }
+    }
+  });
+
+  it('Mundo 1: cada cartão tem um banco de pelo menos 8 questões', () => {
+    const w1 = WORLDS.find((w) => w.id === 'w1')!;
+    for (const lesson of w1.lessons) {
+      let count = -1;
+      for (const step of [...lesson.steps, { kind: 'concept' as const }]) {
+        if (step.kind === 'concept') {
+          if (count >= 0) expect(count, `${lesson.id}: banco com só ${count} questões`).toBeGreaterThanOrEqual(8);
+          count = 0;
+        } else if (count >= 0) count++;
       }
     }
   });

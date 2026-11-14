@@ -13,9 +13,9 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       'No Mundo 1 você viu que a placa redonda dá uma ordem. Agora vamos ler o desenho de dentro. Quando a placa ' +
       'proíbe alguma coisa, ela mostra o movimento proibido e uma faixa vermelha em diagonal por cima.',
     terms: [
-      { term: 'Tarja', meaning: 'A faixa vermelha em diagonal que "risca" o desenho. Ela aparece nas placas que proíbem.' },
-      { term: 'Conversão', meaning: 'Virar para entrar em outra rua, à esquerda ou à direita.' },
-      { term: 'Retorno', meaning: 'Dar a volta para seguir no sentido contrário, como um "U".' },
+      { term: 'Tarja', meaning: 'A faixa vermelha em diagonal que "risca" o desenho. Ela aparece nas placas que proíbem.', aliases: ['tarjas'] },
+      { term: 'Conversão', meaning: 'Virar para entrar em outra rua, à esquerda ou à direita.', aliases: ['conversões'] },
+      { term: 'Retorno', meaning: 'Dar a volta para seguir no sentido contrário, como um "U".', aliases: ['retornos'] },
     ],
     points: [
       'R-4a: seta virando à esquerda, riscada. Proíbe virar (fazer a conversão) à esquerda.',
@@ -41,8 +41,8 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       'Algumas placas redondas não proíbem: elas mandam fazer um movimento. Nelas, o desenho aparece sem a faixa ' +
       'vermelha em diagonal.',
     terms: [
-      { term: 'Rotatória', meaning: 'Cruzamento em forma de círculo, em que os carros andam em volta de uma ilha central.' },
-      { term: 'Sentido anti-horário', meaning: 'O contrário do ponteiro do relógio. Na rotatória, é dar a volta deixando a ilha do lado esquerdo.' },
+      { term: 'Rotatória', meaning: 'Cruzamento em forma de círculo, em que os carros andam em volta de uma ilha central.', aliases: ['rotatórias'] },
+      { term: 'Sentido anti-horário', meaning: 'O contrário do ponteiro do relógio. Na rotatória, é dar a volta deixando a ilha do lado esquerdo.', aliases: ['anti-horário'] },
     ],
     points: [
       'R-26 "Siga em frente": seta reta para cima. Você é obrigado a fazer o movimento indicado, seguir em frente.',
@@ -68,8 +68,8 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       'A placa amarela em losango é a placa de advertência. Ela não dá ordem: ela avisa que existe um perigo ou uma ' +
       'situação diferente logo à frente, para você se preparar com calma.',
     terms: [
-      { term: 'Advertência', meaning: 'Aviso. A placa alerta sobre perigo, obstáculo ou mudança na via à frente.' },
-      { term: 'Orla', meaning: 'A borda da placa.' },
+      { term: 'Advertência', meaning: 'Aviso. A placa alerta sobre perigo, obstáculo ou mudança na via à frente.', aliases: ['advertências'] },
+      { term: 'Orla', meaning: 'A borda da placa.', aliases: ['orlas'] },
     ],
     points: [
       'Ela é usada quando o perigo não é fácil de perceber sozinho.',
@@ -94,7 +94,7 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       'Muitas placas de aviso existem para preparar você para outra coisa que vem logo depois: um semáforo, uma placa ' +
       'de PARE, uma rotatória ou um trilho de trem.',
     terms: [
-      { term: 'Linha férrea em nível', meaning: 'Trilho de trem que cruza a rua no mesmo plano, sem ponte nem túnel.' },
+      { term: 'Linha férrea em nível', meaning: 'Trilho de trem que cruza a rua no mesmo plano, sem ponte nem túnel.', aliases: ['linha férrea', 'linhas férreas'] },
     ],
     points: [
       'A-14 "Semáforo à frente": tem um semáforo adiante.',
@@ -122,8 +122,8 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       'Existe um terceiro tipo de placa: a de indicação. Ela não manda e não avisa de perigo. Ela informa: para onde ' +
       'ir, quanto falta, onde você está e onde encontrar serviços.',
     terms: [
-      { term: 'Indicação', meaning: 'Placa de informação. Tem caráter informativo ou educativo.' },
-      { term: 'Atrativo turístico', meaning: 'Lugar de passeio, como parque, praia ou museu, definido pelo órgão de turismo.' },
+      { term: 'Indicação', meaning: 'Placa de informação. Tem caráter informativo ou educativo.', aliases: ['indicações'], skipIn: ['w2-l3-q1'] },
+      { term: 'Atrativo turístico', meaning: 'Lugar de passeio, como parque, praia ou museu, definido pelo órgão de turismo.', aliases: ['atrativos turísticos'] },
     ],
     points: [
       'Quase todas são retangulares.',
@@ -163,7 +163,7 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     body:
       'As pinturas no asfalto também são sinais: é a sinalização horizontal. E cada cor tem um trabalho diferente.',
     terms: [
-      { term: 'Fluxos opostos', meaning: 'Carros andando em sentidos contrários, uns indo e outros vindo.' },
+      { term: 'Fluxos opostos', meaning: 'Carros andando em sentidos contrários, uns indo e outros vindo.', aliases: ['fluxo oposto'] },
       { term: 'Mesmo sentido', meaning: 'Carros andando todos para o mesmo lado, em faixas lado a lado.' },
     ],
     points: [
@@ -183,9 +183,9 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       'O desenho da linha muda tudo. Pense assim: linha cheia é um muro pintado; linha tracejada é uma porta que ' +
       'pode ser usada com cuidado.',
     terms: [
-      { term: 'Linha contínua', meaning: 'Linha inteira, sem falhas.' },
-      { term: 'Linha seccionada (tracejada)', meaning: 'Linha feita de traços, com espaços entre eles.' },
-      { term: 'Transposição', meaning: 'Passar de uma faixa para a outra, cruzando a linha.' },
+      { term: 'Linha contínua', meaning: 'Linha inteira, sem falhas.', aliases: ['linhas contínuas', 'linha amarela contínua', 'linha branca contínua'] },
+      { term: 'Linha seccionada (tracejada)', meaning: 'Linha feita de traços, com espaços entre eles.', aliases: ['linha seccionada', 'linha tracejada', 'linhas seccionadas', 'linhas tracejadas', 'linha amarela tracejada', 'linha branca tracejada'] },
+      { term: 'Transposição', meaning: 'Passar de uma faixa para a outra, cruzando a linha.', aliases: ['transpor'] },
     ],
     points: [
       'Amarela contínua (simples ou dupla): proíbe ultrapassar e mudar de lado. Só pode cruzar para entrar ou sair de um imóvel à beira da via.',
@@ -207,8 +207,8 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     body:
       'Algumas pinturas atravessam a pista de um lado ao outro. Elas mostram onde parar e por onde as pessoas passam.',
     terms: [
-      { term: 'Linha de retenção', meaning: 'Linha branca larga, de lado a lado da faixa. É o limite onde o carro deve parar.' },
-      { term: 'Vaga reservada', meaning: 'Vaga marcada para um grupo de pessoas, com símbolo branco sobre fundo azul.' },
+      { term: 'Linha de retenção', meaning: 'Linha branca larga, de lado a lado da faixa. É o limite onde o carro deve parar.', aliases: ['linhas de retenção'], skipIn: ['w2-l4-q4', 'w2-l4-q11'] },
+      { term: 'Vaga reservada', meaning: 'Vaga marcada para um grupo de pessoas, com símbolo branco sobre fundo azul.', aliases: ['vagas reservadas'] },
     ],
     points: [
       'Linha de retenção (LRE): o local limite em que você deve parar, por exemplo no semáforo vermelho ou na placa PARE.',
@@ -233,7 +233,7 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       'O semáforo (ou sinaleiro) conversa com você por cores. Cada cor tem um significado e uma atitude esperada.',
     terms: [
       { term: 'Direito de passagem', meaning: 'A permissão para seguir em frente com o seu veículo.' },
-      { term: 'Imobilizar', meaning: 'Parar o veículo por completo.' },
+      { term: 'Imobilizar', meaning: 'Parar o veículo por completo.', aliases: ['imobilizado', 'imobilizada'] },
     ],
     points: [
       'Verde: você tem permissão para seguir, respeitando as regras de circulação.',
@@ -257,7 +257,7 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     body:
       'Às vezes a luz fica piscando. Isso também é um recado, e ele é diferente da luz acesa direto.',
     terms: [
-      { term: 'Intermitente', meaning: 'Que acende e apaga sem parar: pisca-pisca.' },
+      { term: 'Intermitente', meaning: 'Que acende e apaga sem parar: pisca-pisca.', aliases: ['intermitentes'] },
     ],
     points: [
       'Amarelo piscando (para carros): existe perigo ou obstáculo. Reduza a velocidade e siga as regras de circulação.',
@@ -394,6 +394,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l1-q6',
+    visual: { kind: 'sign', sign: 'R-26', alt: 'Placa Siga em frente' },
     type: 'truefalse',
     module: 'sinalizacao',
     topic: 'Placas de regulamentação',
@@ -413,6 +414,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   /* ---- Lição 2 ---- */
   {
     id: 'w2-l2-q1',
+    visual: { kind: 'sign', sign: 'A-18', alt: 'Placa amarela de advertência em losango' },
     type: 'choice',
     module: 'sinalizacao',
     topic: 'Placas de advertência',
@@ -562,6 +564,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l2-q7',
+    visual: { kind: 'sign', sign: 'A-24', alt: 'Placa de advertência de obras' },
     type: 'truefalse',
     module: 'sinalizacao',
     topic: 'Placas de advertência',
@@ -603,6 +606,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   /* ---- Lição 3 ---- */
   {
     id: 'w2-l3-q1',
+    visual: { kind: 'sign', sign: 'IND-destino', alt: 'Placa verde mostrando o caminho para destinos' },
     type: 'choice',
     module: 'sinalizacao',
     topic: 'Placas de indicação',
@@ -890,6 +894,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l4-q6',
+    visual: { kind: 'scene', scene: 'vaga-idoso', alt: 'Vaga de estacionamento com a marca de pessoa idosa pintada no chão' },
     type: 'choice',
     module: 'sinalizacao',
     topic: 'Sinalização horizontal',
@@ -914,6 +919,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l4-q7',
+    visual: { kind: 'scene', scene: 'linha-branca-continua', alt: 'Duas faixas no mesmo sentido separadas por uma linha branca contínua' },
     type: 'truefalse',
     module: 'sinalizacao',
     topic: 'Sinalização horizontal',
@@ -958,6 +964,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l5-q2',
+    visual: { kind: 'scene', scene: 'semaforo-amarelo-piscando', alt: 'Semáforo com a luz amarela piscando' },
     type: 'choice',
     module: 'sinalizacao',
     topic: 'Semáforo',
@@ -1006,6 +1013,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l5-q4',
+    visual: { kind: 'scene', scene: 'semaforo-pedestre-piscando', alt: 'Semáforo de pedestres com a luz vermelha piscando' },
     type: 'choice',
     module: 'sinalizacao',
     topic: 'Semáforo',
@@ -1096,6 +1104,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l1-q8',
+    visual: { kind: 'sign', sign: 'R-4a', alt: 'Placa Proibido virar à esquerda' },
     type: 'truefalse',
     module: 'sinalizacao',
     topic: 'Placas de regulamentação',
@@ -1113,6 +1122,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l1-q9',
+    visual: { kind: 'sign', sign: 'R-4a', alt: 'Placa Proibido virar à esquerda' },
     type: 'fill',
     module: 'sinalizacao',
     topic: 'Placas de regulamentação',
@@ -1174,6 +1184,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l3-q9',
+    visual: { kind: 'scene', scene: 'placa-distancias', alt: 'Placa verde de distâncias: Vila Nova 15 km, Santa Rita 40 km, Porto Alto 72 km' },
     type: 'choice',
     module: 'sinalizacao',
     topic: 'Placas de indicação',
@@ -1256,6 +1267,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l4-q10',
+    visual: { kind: 'scene', scene: 'linha-amarela-continua', alt: 'Pista com linha amarela contínua no centro' },
     type: 'choice',
     module: 'sinalizacao',
     topic: 'Sinalização horizontal',
@@ -1279,6 +1291,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l4-q11',
+    visual: { kind: 'scene', scene: 'linha-retencao', alt: 'Semáforo vermelho, linha de retenção e faixa de pedestres' },
     type: 'truefalse',
     module: 'sinalizacao',
     topic: 'Sinalização horizontal',
@@ -1341,6 +1354,7 @@ export const WORLD2_QUESTIONS: Question[] = [
   },
   {
     id: 'w2-l5-q8',
+    visual: { kind: 'scene', scene: 'semaforo-amarelo-piscando', alt: 'Semáforo com a luz amarela piscando' },
     type: 'truefalse',
     module: 'sinalizacao',
     topic: 'Semáforo',
@@ -1444,18 +1458,8 @@ export const WORLD2: World = {
       masteryThreshold: 0.8,
       xp: 20,
       referenceModule: 1,
-      steps: [
-        q('w2-l1-q3'),
-        q('w2-l2-q1'),
-        q('w2-l3-q1'),
-        q('w2-l1-q9'),
-        q('w2-l2-q7'),
-        q('w2-l3-q8'),
-        q('w2-l1-q6'),
-        q('w2-l2-q8'),
-        q('w2-l3-q9'),
-        q('w2-l2-q3'),
-      ],
+      review: { size: 15 },
+      steps: [],
     },
     {
       id: 'w2-l4',
@@ -1511,18 +1515,8 @@ export const WORLD2: World = {
       masteryThreshold: 0.8,
       xp: 25,
       referenceModule: 1,
-      steps: [
-        q('w2-l1-q2'),
-        q('w2-l2-q4'),
-        q('w2-l3-q5'),
-        q('w2-l4-q2'),
-        q('w2-l5-q1'),
-        q('w2-l1-q5'),
-        q('w2-l2-q5'),
-        q('w2-l4-q7'),
-        q('w2-l3-q7'),
-        q('w2-l5-q4'),
-      ],
+      review: { size: 20 },
+      steps: [],
     },
   ],
 };

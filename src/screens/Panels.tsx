@@ -1,8 +1,9 @@
 import { QUESTIONS } from '../content';
-import { IconBolt, IconClipboard, IconFire, IconMedal, IconReview, IconSound, IconSoundOff, IconTarget } from '../components/Icons';
+import { IconBolt, IconClipboard, IconFire, IconMedal, IconMoon, IconReview, IconSound, IconSoundOff, IconSun, IconTarget } from '../components/Icons';
 import { playSound } from '../ui/sound';
 import { ACHIEVEMENTS, dayKey, dueQuestions, levelFromXp, topicReport } from '../engine/progress';
 import { useApp } from '../state/AppState';
+import { useDarkTheme } from '../ui/hooks';
 
 export function TopStats() {
   const { progress, update } = useApp();
@@ -13,10 +14,15 @@ export function TopStats() {
     update((p) => ({ ...p, prefs: { ...p.prefs, sound: !sound } }));
     if (!sound) playSound('tap', true);
   };
+  const dark = useDarkTheme();
+  const toggleTheme = () => update((p) => ({ ...p, prefs: { ...p.prefs, theme: dark ? 'light' : 'dark' } }));
   return (
     <div className="topstats">
       <button type="button" className={`stat sound-toggle ${sound ? 'on' : ''}`} aria-pressed={sound} aria-label="Efeitos sonoros" title={sound ? 'Desativar efeitos sonoros' : 'Ativar efeitos sonoros'} onClick={toggleSound}>
         {sound ? <IconSound /> : <IconSoundOff />}
+      </button>
+      <button type="button" className={`stat sound-toggle theme-toggle ${dark ? 'on' : ''}`} aria-pressed={dark} aria-label="Modo escuro" title={dark ? 'Mudar para o modo claro' : 'Mudar para o modo escuro'} onClick={toggleTheme}>
+        {dark ? <IconSun /> : <IconMoon />}
       </button>
       <span className={`stat streak ${studiedToday ? 'on' : ''}`} title="Ofensiva: dias seguidos de estudo" aria-label={`Ofensiva de ${progress.streak.count} dias${studiedToday ? '' : ', ainda não estudou hoje'}`}>
         <IconFire /> {progress.streak.count}

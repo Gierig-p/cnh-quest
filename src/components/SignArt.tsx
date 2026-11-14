@@ -1,10 +1,41 @@
+import { useState } from 'react';
 import type { SignCode } from '../content/types';
 
 /**
- * Placas desenhadas pelo app, seguindo forma e cores do MBST (Res. CONTRAN 973/2022, Vols. I e II).
- * São representações didáticas, não arquivos oficiais de produção de placas.
+ * Placas reais do CTB: arquivos SVG do Wikimedia Commons em public/placas/
+ * (créditos e licenças em public/placas/CREDITOS.md).
+ * Sem arquivo (ex.: IND-destino, exemplo didático sem código oficial), a placa é desenhada
+ * pelo app seguindo forma e cores do MBST (Res. CONTRAN 973/2022, Vols. I e II).
  */
+const OFFICIAL: Partial<Record<SignCode, string>> = {
+  'R-1': 'R-1', 'R-2': 'R-2', 'R-3': 'R-3', 'R-4a': 'R-4a', 'R-5a': 'R-5a', 'R-6a': 'R-6a', 'R-6c': 'R-6c',
+  'R-7': 'R-7', 'R-26': 'R-26', 'R-33': 'R-33',
+  'A-12': 'A-12', 'A-14': 'A-14', 'A-18': 'A-18', 'A-24': 'A-24', 'A-32b': 'A-32b', 'A-41': 'A-41',
+};
+const SPEEDS = [20, 40, 50, 60, 80];
+
+function officialFile(code: SignCode, speed: number): string | undefined {
+  if (code === 'R-19') return SPEEDS.includes(speed) ? `R-19-${speed}` : undefined;
+  return OFFICIAL[code];
+}
+
 export function SignArt({ code, speed = 60, size = 120, title }: { code: SignCode; speed?: number; size?: number; title?: string }) {
+  const file = officialFile(code, speed);
+  const [failed, setFailed] = useState<string | null>(null);
+  if (file && failed !== file) {
+    return (
+      <img
+        src={`${import.meta.env.BASE_URL}placas/${file}.svg`}
+        width={size}
+        height={size}
+        alt={title ?? code}
+        title={title}
+        draggable={false}
+        onError={() => setFailed(file)}
+        style={{ objectFit: 'contain', display: 'inline-block' }}
+      />
+    );
+  }
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" role="img" aria-label={title ?? code}>
       {title && <title>{title}</title>}

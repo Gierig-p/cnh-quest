@@ -1,6 +1,6 @@
 # CNH Quest — estado do projeto
 
-> Última atualização: **28/10/2026**. Leia este arquivo primeiro ao retomar o trabalho.
+> Última atualização: **01/11/2026**. Leia este arquivo primeiro ao retomar o trabalho.
 > Atualize a seção "Diário" e "Próximos passos" sempre que fechar uma etapa.
 
 ---
@@ -21,7 +21,7 @@ App web (estilo Duolingo, identidade própria) para estudar a **prova teórica d
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm test           # 29 testes (conteúdo, motor, interface, áudio)
+npm test           # 61 testes (conteúdo, motor, interface, áudio, dicas de palavras, botão Dica, revisões sorteadas, banco de variações, pares, tema, ordenar arrastando, revisão de erros, sorteio salvo)
 npm run build      # dist/
 ```
 - Node 24.22 / npm 11.19 na máquina do usuário (Windows 11). CI usa Node 20.
@@ -40,14 +40,17 @@ React 18 + TypeScript + Vite + Vitest/Testing Library. Sem backend, sem login. S
 src/
   content/    DADOS (não mexer sem verificar a fonte)
     types.ts            tipos de questão, lição, mundo, fontes
-    world1.ts           Mundo 1: 6 lições, 47 questões, 10 cartões de conceito
+    world1.ts           Mundo 1: 6 lições, 80 questões (banco de 8 por cartão), 10 cartões de conceito
     world2.ts           Mundo 2: 7 lições, 48 questões, 10 cartões de conceito
     sources.ts          fontes oficiais (CTB, MBST, Res. CONTRAN 1.020/2025…)
     referenceModules.ts os 4 módulos de referência + mundos planejados 3–8
     validate.ts         validador (rodado em content.test.ts)
+    glossary.ts         dicas de palavras: junta os `terms` dos cartões e acha as palavras nos exercícios
+    hints.ts            botão "Dica": cartão que ensina cada questão + o que a dica elimina/revela (HINT_DELAY_S = 60)
     index.ts            WORLDS, QUESTIONS, EXAM_CONFIGS
   engine/     REGRAS PURAS (testadas em engine.test.ts)
-    session.ts   sessão de lição, revisão de erros no fim (cada erro volta até 2×)
+    session.ts   sessão de lição, revisão de erros no fim (cada erro → até 2 perguntas diferentes do mesmo assunto)
+    review.ts    revisões sorteadas: banco do mundo (`reviewPool`) e sorteio (`reviewRoundIds`); rodada 1 das lições: 1 versão por objetivo (`drawLessonSteps`); sorteio salvo (`drawKey`, `rebuildLessonSteps`)
     grading.ts   correção + embaralhamento com semente
     progress.ts  XP, nível, ofensiva, meta diária, conquistas, Leitner, desbloqueio
     exam.ts      montagem e nota do simulado, resultado por módulo
@@ -55,7 +58,7 @@ src/
   state/AppState.tsx        contexto React (progress, update, reset)
   ui/sound.ts               áudio sintetizado (Web Audio), volume em 'cnhquest:audio:v1'
   ui/hooks.ts               useSound, useReducedMotion, useCountUp
-  components/  Lumi (mascote), Icons, Fx (Confetti/Burst/Dialog), Exercises, SignArt, SceneArt, Visual
+  components/  TermText (palavra com balão de significado), Lumi (mascote), Icons, Fx (Confetti/Burst/Dialog), Exercises, SignArt, SceneArt, Visual
   screens/     Home (trilha), LessonPlayer, CompleteScreen, ReviewScreen, ExamScreen, ProgressScreen, Panels, Onboarding
   styles.css   sistema de design inteiro (tokens no :root)
 ```
@@ -64,18 +67,26 @@ src/
 - **Lição:** XP da lição (+5 se perfeita); se as vidas acabarem, recebe 1/3. **Dominada** quando acerto na 1ª tentativa ≥ `masteryThreshold` (80%).
 - **Vidas:** opcionais (Progresso → "Modo desafio"), 5 por lição. Desligadas por padrão.
 - **Rodadas (estilo "Lição 1 de 4" do Duolingo, versão mais leve):** cada lição comum (com cartões) tem `rounds: 2`. Rodada 1 = cartões + exercícios (XP da lição). Rodada 2 = só prática, **8 questões** da própria lição, embaralhadas, com as já erradas primeiro (XP = 2/3 da lição). A trilha mostra um anel de progresso e a dica "Rodada 2 de 2". Revisões têm 1 rodada. Progresso salvo antes das rodadas: lição concluída conta como "1 de 2" (`roundsDone` ausente → 1) e não bloqueia o que já foi feito.
-- **Revisões:** uma **"Revisão da metade"** no meio de cada mundo (10 questões das lições anteriores, sem cartões) e a **revisão do mundo** no final. Mundo 1: L1, L2, metade, L3, L4, revisão do mundo. Mundo 2: L1–L3, metade, L4, L5, revisão do mundo.
+- **Revisões:** uma **"Revisão da metade"** no meio de cada mundo (**15 questões sorteadas** das lições anteriores do mundo, sem cartões) e a **revisão do mundo** no final. Mundo 1: L1, L2, metade, L3, L4, revisão do mundo. Mundo 2: L1–L3, metade, L4, L5, revisão do mundo.
 - **Desbloqueio:** lições em sequência (a próxima abre só depois de todas as rodadas da anterior); mundo seguinte após o anterior.
 - **Revisão espaçada (Leitner):** errou → volta no mesmo dia; acertou → 1, 2, 4, 8, 16 dias.
 - **Prática avulsa** (revisão/treino): XP = acertos de 1ª × 2.
 - **Nível:** 50 XP para o nível 2, cada nível pede 25% a mais.
 - **Metas diárias:** 10/20/30/50 XP (5/10/15/20 min).
 - **Conquistas (7):** primeira-licao, perfeita, meta-diaria, ofensiva-3, mundo-1, primeiro-simulado, aprovado.
+- **Dicas de palavras (estilo "palavra nova" do Duolingo):** nos exercícios das lições e revisões, as palavras já explicadas nos cartões ("Palavras novas") ficam com sublinhado pontilhado; tocar ou passar o mouse mostra o significado. As ensinadas na lição atual ficam em roxo e a questão ganha a etiqueta "Palavra nova". Só aparecem palavras já ensinadas (cartões vistos nesta sessão + lições com a rodada 1 feita). Vale para o enunciado, a frase do V/F e a frase de completar; não para as alternativas. **Nunca no simulado.** Abrir a dica não muda nota nem XP. Cada termo pode ter `aliases` (plural/variações) e `skipIn` (questões onde a palavra tem outro sentido ou a dica entregaria a resposta).
+- **Revisões sorteadas (decisão do usuário, 01/11):** as revisões não têm mais questões fixas (`review: { size }` na lição, `steps` vazio). Revisão da metade: 15 questões das lições antes dela; revisão do mundo: 20 de todas as lições do mundo. O sorteio pega 1 questão de cada cartão (todos os assuntos aparecem), completa espalhando entre os cartões (limite por cartão), põe primeiro as que a pessoa errou e ainda não fixou (caixa baixa), depois as nunca vistas, e evita dois exercícios do mesmo tipo seguidos. Cada pessoa (e cada tentativa) recebe uma seleção diferente. XP das revisões não mudou (20 e 25). O validador confere se o banco tem questões suficientes.
+- **Banco de variações (decisão do usuário, 01/11):** a rodada 1 de cada lição mantém os cartões e sorteia **1 questão por objetivo** (campo `objective`) dentro de cada cartão. Questões com o mesmo `objective` são versões da mesma ideia (de preferência de tipos diferentes); o objetivo com uma só questão aparece sempre. Prefere versões que a pessoa ainda não viu e um tipo diferente do anterior. O tamanho da lição não muda. A 1ª questão da w1-l1 ("Reconhecer os tipos de sinais previstos no CTB") fica sem variação (os testes da interface dependem dela). A rodada 2 e as revisões sorteiam do banco inteiro. Variações não entram no simulado. Teste: cada cartão ensina ≥4 objetivos; no Mundo 1, banco ≥8 por cartão.
+- **Sorteio salvo (pedido do usuário, 01/11):** o sorteio de cada lição é feito na primeira vez que ela abre e fica guardado em `progress.draws` (chave `lição:r1`, `lição:r2`… ou `lição:revisao`). Sair e entrar, ou "Tentar de novo", repete as mesmas questões — vale para rodada 1, rodada de prática e revisões, e continua depois de concluir. Se o conteúdo mudar e o salvo ficar inválido (questão removida, cartão sem questão), sorteia de novo. "Recomeçar progresso" apaga tudo, inclusive os sorteios. Campo opcional: progresso antigo funciona sem migração.
+- **Revisão de erros com perguntas diferentes (pedido do usuário, 01/11):** ao errar, entram no fim até **2 perguntas diferentes do mesmo assunto** (mesmo cartão; primeiro as de mesmo objetivo, depois tipo de exercício diferente; nunca uma que já está na sessão) — `sameTopicQuestions` em `review.ts`. Se só houver 1 alternativa, a própria questão completa as 2; sem nenhuma, vale a regra antiga (volta até 2×). Errar na revisão não agenda mais perguntas. As perguntas da revisão não entram na % de acerto de primeira nem em "missed"; no Leitner contam como tentativa normal (sem "de primeira"). Sem dica nelas, como antes.
+- **Ordenar arrastando (pedido do usuário, 01/11):** os itens do exercício de ordenar podem ser arrastados (dedo ou mouse, eventos de ponteiro, sem biblioteca); as setas continuam para teclado e leitor de tela. Um toque sem movimento (< 6 px) não mexe em nada.
+- **Pares com correção na hora (pedido do usuário, 01/11):** no exercício de associar, cada par é conferido ao ser formado (pode começar por qualquer coluna). Certo: pisca verde e trava esmaecido. Errado: pisca vermelho, treme, som de erro e solta os dois. Ao formar o último par a questão é verificada sozinha (450 ms). Qualquer par errado no caminho faz a questão **não** contar como acerto de primeira (`mistakes` na resposta), como antes, quando um par errado tornava a questão errada.
+- **Botão "Dica" (decisão do usuário, 01/11):** só nas lições com cartões (rodadas 1 e 2). **Nunca** no simulado, nas lições de revisão ("Revisão da metade" e revisão do mundo), na prática da aba Revisão nem nas questões "↻ Revisão" (repetição das erradas). Libera só após **60 s** na questão (contagem visível "Dica em Ns"). O 1º toque abre uma confirmação avisando que a pontuação cai. Degrau 1: "Para guardar" do cartão que ensina a questão. Degrau 2 (sem nova confirmação): escolha → risca uma alternativa errada e mostra o "por que não"; lacuna → risca uma palavra errada com a explicação; associar → mostra um par; ordenar → mostra o 1º item; V/F → só o degrau 1. Sem limite de usos. **Consequência:** a questão não conta como acerto de primeira (cai a % de acertos, perde o bônus de lição perfeita, pode não dominar; no Leitner a caixa não sobe e o tópico não é contado). Nenhum texto novo: só `remember` e `whyWrong` já verificados.
 - **Simulado:** regra nacional (Res. CONTRAN 1.020/2025: 30 questões, 20 acertos, 60 min) ou regra da página do DETRAN-PE (21 acertos). Banco atual: **40** questões no formato oficial (14 do Mundo 1 + 26 do Mundo 2) → simulado completo de 30. Como só existem os Mundos 1 e 2, o sorteio fica concentrado em Sinalização (módulo 1) e Direção defensiva (módulo 3) até os Mundos 3–7 existirem. Resultado por módulo de referência (1–4) com erros explicados.
 
 ### Conteúdo
-- **Mundo 1 "Começando no trânsito"** (módulos 1 e 3): 4 lições (2 rodadas cada) + revisão da metade + revisão do mundo, **47 questões verificadas** (14 no formato do simulado).
-- **Mundo 2 "A linguagem das placas"** (módulo 1): 5 lições (placas que mandam, avisam e indicam, pinturas no chão, semáforo; 2 rodadas cada) + revisão da metade + revisão do mundo, **48 questões verificadas** (26 no formato do simulado). Fontes: MBST Vols. I a V. Os desenhos das placas são didáticos (inspirados nos manuais, que só trazem os símbolos como imagem), não cópias oficiais.
+- **Mundo 1 "Começando no trânsito"** (módulos 1 e 3): 4 lições (2 rodadas cada) + revisão da metade + revisão do mundo, **80 questões verificadas** (14 no formato do simulado; 33 são variações de 01/11).
+- **Mundo 2 "A linguagem das placas"** (módulo 1): 5 lições (placas que mandam, avisam e indicam, pinturas no chão, semáforo; 2 rodadas cada) + revisão da metade + revisão do mundo, **48 questões verificadas** (26 no formato do simulado). Fontes: MBST Vols. I a V. As placas usam os SVG reais do Wikimedia Commons (`public/placas/`, créditos em `public/placas/CREDITOS.md` e no rodapé da tela inicial; R por Amateria1121 e มองโกเลีย๔๔, CC BY-SA; A do DNIT, domínio público). Sem arquivo, o app cai no desenho próprio de `SignArt.tsx` (a placa verde de destino é sempre desenhada, pois não tem código oficial).
 - **Mundos 3–8**: só planejados (aparecem "em construção"): 3 Regras para circular · 4 Infrações · 5 Motorista defensivo · 6 Emergências e primeiros socorros · 7 Veículo, meio ambiente e cidadania · 8 Preparação para a prova.
 - **4 módulos de referência** (organização própria, espelha o curso oficial CNH do Brasil): 1 Sinalização · 2 Escolhas e consequências · 3 Direção defensiva · 4 Cuidado com a vida e o meio ambiente.
 - Toda questão tem fonte + dispositivo exato + data de verificação. O validador barra: id duplicado, sem resposta correta, alternativa errada sem explicação, fonte inexistente, módulo incoerente.
@@ -90,6 +101,7 @@ Detalhes completos: `docs/repaginacao-visual-duolingo.md`.
 - **Tokens** em `:root` de `styles.css`: verde marca `#22b357`, verde botão `#12883f` (contraste AA com branco), asfalto `#2b3a48`, amarelo `#ffc83d`, ouro `#ffb800`, laranja, vermelho, azul, roxo; cada um com `-dark` (lábio), `-soft`, `-line`. Nunito 700–900. Raios 20/16/12. Lábio 4 px. Movimento `--t-fast/med/slow`, `--ease-spring`.
 - **Botões 3D** (`.btn`, variantes `red blue yellow ghost sm wide`, `aria-busy` = carregando). Desabilitado sempre cinza.
 - **Áudio:** 11 efeitos sintetizados (tap, select, correct, wrong, combo, transition, complete, xp, celebrate, achievement, unlock). Só toca após gesto do usuário; dedup de 90 ms; liga/desliga em `prefs.sound` (botão de alto-falante no topo); volume em Ajustes.
+- **Tema escuro (01/11):** botão lua/sol no topo (`TopStats`, nome acessível "Modo escuro") alterna claro/escuro; em celular ≤400 px o nome "CNH Quest" do topo some (fica a Lumi) para caber. Também em Progresso → "Tema": Automático (do aparelho) / Claro / Escuro (`prefs.theme`, opcional; ausente = automático). `AppState` põe `data-theme` no `<html>` e troca a `theme-color`; um script curto no `index.html` aplica o tema salvo antes do 1º desenho. No CSS, as cores de superfície/estado viraram variáveis (`--track`, `--disabled-*`, `--locked-*`, `--road-*`…) e textos coloridos usam as "tintas" `--X-ink` (no escuro ficam mais claras). Placas, cenas, ícones e Lumi mantêm as cores. Cor nova: usar sempre uma variável, nunca hex direto.
 - **Movimento reduzido:** regra CSS global + `useReducedMotion()` (desliga confete, partículas e contagens).
 - Nada do Duolingo foi copiado (mascote, ilustrações, sons, Lottie, CSS).
 
@@ -105,7 +117,7 @@ Detalhes completos: `docs/repaginacao-visual-duolingo.md`.
 6. Manter os nomes acessíveis usados nos testes (`Vamos lá`, `Começar a trilha`, `Verificar`, `Continuar`, `Sair da lição`, `Efeitos sonoros`, etc.).
 7. Comunicação com o usuário em português, simples e direta.
 8. **Fixação estilo Duolingo:** depois de cada cartão de conceito vêm **no mínimo 4 exercícios variados** sobre ele (escolha, V/F, completar, associar, ordenar), antes do próximo cartão. O teste `content.test.ts` garante isso. Se a lição passar de ~16 passos, dividir em duas. Exercícios de fixação **não entram no simulado** (sem `examEligible`), para o simulado não repetir o mesmo fato.
-9. **Estrutura de cada mundo:** lições comuns com 2 rodadas (cada uma com pelo menos 8 questões), uma "Revisão da metade" no meio e a revisão do mundo no final. O teste `content.test.ts` garante isso.
+9. **Estrutura de cada mundo:** lições comuns com 2 rodadas (cada uma com pelo menos 8 questões), uma "Revisão da metade" no meio e a revisão do mundo no final (ambas sorteadas: 15 e 20 questões). O teste `content.test.ts` garante isso.
 
 ---
 
@@ -133,11 +145,21 @@ Detalhes completos: `docs/repaginacao-visual-duolingo.md`.
 | 28/10 | **Exercícios de fixação (estilo Duolingo)**: cada cartão de conceito agora tem no mínimo 4 exercícios variados antes do próximo. +24 questões no Mundo 1 (23 → 47) e +13 no Mundo 2 (35 → 48), todas com fonte conferida (CTB, MBST I–V) e só sobre o que o cartão ensina. A lição "Primeiras placas" foi dividida e surgiu a lição **w1-l4 "Proibições e velocidade"**. Exercícios de fixação ficam fora do simulado (banco continua com 40). Teste novo garante o mínimo de 4 por cartão. Testes 30/30 e build ok | `world1.ts`, `world2.ts`, `content.test.ts`, `engine.test.ts` |
 | 28/10 | **Rodadas e revisão da metade (pedido do usuário, inspirado no "Lição 2 de 4" do Duolingo, com 2 em vez de 4)**: cada lição comum agora tem 2 rodadas (a 2ª só prática, 8 questões, erradas primeiro, 2/3 do XP); anel de progresso e dica "Rodada 2 de 2" na trilha; tela final mostra "Rodada 1 de 2 concluída" e o botão "Fazer a rodada 2". Nova lição "Revisão da metade" em cada mundo (10 questões já verificadas, sem conteúdo novo); revisão do mundo mantida no final. Progresso antigo conta como 1 de 2. Campo opcional `rounds` em `Lesson` e `roundsDone` em `LessonProgress`. Conferido por captura de tela. Testes 35/35 e build ok | `engine/progress.ts`, `App.tsx`, `Home.tsx`, `CompleteScreen.tsx`, `LessonPlayer.tsx`, `world1.ts`, `world2.ts` |
 
+| 01/11 | **Dicas de palavras (pedido do usuário, inspirado no "palavra nova" do Duolingo)**: palavras dos cartões viram dica clicável nos exercícios (roxo = ensinada nesta lição, cinza pontilhado = lição anterior). Sem conteúdo novo: o texto vem dos `terms` já verificados. Campos opcionais `aliases` e `skipIn` em `TermDef` (29 termos com plural/variações; dica desligada em w1-l4-q3, w2-l3-q1, w2-l4-q4 e w2-l4-q11, onde entregaria a resposta, e "Parar" em w2-l4-q11, onde tem outro sentido). Validador confere `skipIn`. Conferido por captura no celular. Testes 42/42 e build ok | `glossary.ts`, `TermText.tsx`, `LessonPlayer.tsx`, `Exercises.tsx`, `styles.css`, `world1.ts`, `world2.ts` |
+| 01/11 | **Botão "Dica" (pedido do usuário)**: libera após 60 s, pede confirmação avisando que a pontuação cai, 2 degraus ("Para guardar" do cartão → elimina uma alternativa/palavra errada com a explicação, ou mostra um par / o 1º item). Acerto com dica não conta como de primeira (`answerCurrent(..., { hinted })`). Sem dica no simulado, nas revisões e nas questões "↻ Revisão". Conferido por captura no celular. Testes 46/46 e build ok | `hints.ts`, `LessonPlayer.tsx`, `Exercises.tsx`, `session.ts`, `App.tsx`, `styles.css` |
+| 01/11 | **Mais variedade, parte 1: revisões sorteadas (pedido do usuário)**: revisão da metade 10 → 15 e revisão do mundo 10 → 20 questões, sorteadas a cada vez do banco já verificado (cobre todos os cartões, erradas primeiro, tipos misturados). Nenhuma questão nova. Campo opcional `review` em `Lesson`. Testes 49/49 e build ok | `engine/review.ts`, `App.tsx`, `validate.ts`, `types.ts`, `world1.ts`, `world2.ts` |
+| 01/11 | **Mais variedade, parte 2 — Mundo 1 (pedido do usuário)**: +33 variações (47 → 80, 8 por cartão), com o mesmo `objective` de uma questão existente e outro tipo de exercício. A rodada 1 sorteia 1 versão por objetivo (`drawLessonSteps`); lições continuam do mesmo tamanho. Textos legais conferidos hoje no CTB (planalto: arts. 29, 61, 70, 87, 89, 90, 208, 214); fatos do MBST só os já verificados, com os mesmos locais. Nenhuma no simulado. "Parar" sem dica em w1-l1-q17, w1-l3-q17 e w1-l3-q19 (sentido de parar o carro). Testes 53/53 e build ok. **Aguardando teste do usuário** | `engine/review.ts`, `App.tsx`, `world1.ts`, `content.test.ts`, `engine.test.ts` |
+| 01/11 | **Pares com correção na hora + tema escuro (pedido do usuário)**: associar confere cada par na hora (verde trava, vermelho solta) e verifica sozinho no fim; erro no caminho não conta como acerto de primeira. Tema Automático/Claro/Escuro em Progresso; cores fixas do CSS viraram variáveis. Conferido no navegador (trilha, cartão, correção no escuro). Testes 55/55 e build ok. **Aguardando teste do usuário** | `Exercises.tsx`, `grading.ts`, `LessonPlayer.tsx`, `styles.css`, `progress.ts`, `AppState.tsx`, `ProgressScreen.tsx`, `index.html`, `match.test.tsx`, `App.test.tsx` |
+| 01/11 | **Botão de tema no topo + ordenar arrastando + revisão de erros com perguntas diferentes (pedido do usuário)**: lua/sol no topo alterna claro/escuro; itens de ordenar podem ser arrastados (setas mantidas); cada erro é revisado no fim com até 2 perguntas diferentes do mesmo cartão (nenhum texto novo, só questões já verificadas). Topo do celular conferido em 360 px. Testes 59/59 e build ok. **Aguardando teste do usuário** (arrastar não dá para testar na ferramenta de captura) | `Panels.tsx`, `Icons.tsx`, `ui/hooks.ts`, `App.tsx`, `Exercises.tsx`, `session.ts`, `review.ts`, `LessonPlayer.tsx`, `styles.css`, testes |
+| 01/11 | **Sorteio salvo (pedido do usuário)**: a lição não troca mais de questões a cada vez que se sai e entra; o sorteio fica em `progress.draws` por lição/rodada/revisão. Testes 61/61 e build ok. **Aguardando teste do usuário** | `progress.ts`, `review.ts`, `App.tsx`, `engine.test.ts`, `App.test.tsx` |
+| 14/11 | **Plano de melhorias com o Codex**: 5 especialistas (simplicidade, engajamento, animações, acessibilidade, técnico) e uma crítica do plano, tudo em `docs/codex/`. Plano final: `docs/codex/PLANO-v2.md` (Entregas 1–4). **Decisões do dono:** combo com marcos 3, 5 e 10; a prática (aba Revisar) que bate a meta concede "meta-diaria" e conta para a ofensiva, sem mudar XP; o simulado **não** conta como dia estudado. Antes da Entrega 1, o Claude melhora as imagens das questões | `docs/codex/*`, `.gitignore` |
+| 14/11 | **Imagens das questões (pedido do usuário)**: 46 questões ganharam imagem (87 de 128 têm visual; a imagem da w2-l3-q8 saiu porque entregava a resposta); imagem também em completar, ordenar e associar. 14 cenas novas e as 24 cenas redesenhadas com detalhe (asfalto, calçada, árvores, casas, carros com vidros e faróis, ambulância e bombeiros com giroflex); agente de trânsito com uniforme completo (quepe, colete refletivo, luvas, apito com cordão, gesto de pare). **Placas reais** do Wikimedia Commons em `public/placas/` com créditos (CC BY-SA e domínio público); placa sem arquivo cai no desenho próprio. Cenas aprovadas pelo usuário. Testes 61/61 | `SceneArt.tsx`, `SignArt.tsx`, `types.ts`, `Exercises.tsx`, `world1.ts`, `world2.ts`, `Home.tsx`, `public/placas/`, `vite-env.d.ts` |
+
 ---
 
 ## 8. Problemas conhecidos
 
-- Só os Mundos 1 e 2 têm conteúdo (95 questões). O simulado já tem 40 questões no formato oficial, mas quase só de Sinalização e Direção defensiva; faltam Infrações, Primeiros socorros e Meio ambiente.
+- Só os Mundos 1 e 2 têm conteúdo (128 questões: 80 + 48). O simulado já tem 40 questões no formato oficial, mas quase só de Sinalização e Direção defensiva; faltam Infrações, Primeiros socorros e Meio ambiente.
 - Distribuição oficial das 30 questões por assunto não foi publicada.
 - Progresso só no navegador atual (sem conta/sincronização); aba anônima perde tudo.
 - Sair de uma lição no meio descarta a sessão (respostas já dadas ficam no histórico).
@@ -148,17 +170,32 @@ Detalhes completos: `docs/repaginacao-visual-duolingo.md`.
 
 ## 9. Próximos passos (ordem sugerida)
 
+**Novo plano (14/11, aprovado pelo dono), vem antes da lista abaixo:**
+- **A. Imagens das questões (o Claude faz):** levantar as questões sem `visual`, criar cenas e placas novas em SVG (`SceneArt.tsx`, `SignArt.tsx`) fiéis às fontes oficiais (MBST/CTB), melhorar as existentes, conferir por captura e mostrar uma galeria para o dono aprovar. Não muda respostas nem explicações.
+- **B. Entrega 1 do `docs/codex/PLANO-v2.md`:** commit do trabalho de 01/11 (com os arquivos novos), bugs confirmados, prática concede conquistas, foco, contraste, alça do arraste e movimento reduzido.
+- **C. Entregas 2–4 do `PLANO-v2.md`** (cartão "Hoje", combo 3/5/10, movimento mais calmo, cartões em partes, lição perfeita etc.).
+- **D. Áudio com ElevenLabs (próximo passo pedido pelo dono):**
+  - áudios explicativos das questões, para quem não quer ler as explicações (botão "Ouvir explicação");
+  - os sons do app (acerto, erro, combo, desbloqueio, conclusão) gerados pelo ElevenLabs.
+  - **Cuidado:** o repositório é **público**. A chave fica fora do repo (hoje em `psx-contos/.env`) e nunca vai para o código nem para o git. Os áudios são gerados antes, num script local, e entram no app como arquivos prontos (mp3/ogg), com cache pelo texto.
+
 1. **Feedback do usuário no celular** sobre a repaginação e os novos cartões de explicação (tamanho do texto, se ficou claro) e ajustes.
    - Regra nova: nos próximos mundos, todo assunto perguntado precisa ser ensinado antes num cartão no formato didático.
    - Regra nova: no mínimo 4 exercícios variados por cartão (§5, item 8).
-2. **Publicar** as rodadas e a revisão da metade (quando o usuário pedir) e o usuário testar no celular se o ritmo ficou bom.
-3. **Usuário testar o Mundo 2** no celular (desenhos novos e cartões) e ajustes.
-4. **Mundo 3 "Regras para circular"** (módulo 3) e **Mundo 4 "Infrações"** (módulo 2), para o simulado ficar equilibrado entre os módulos.
-5. Lição **"O caminho até a CNH"** (Mundo 8): CTB art. 148 + Res. 1.020/2025 art. 51 (`matriz` §3d).
-6. Mostrar **progresso por módulo** (1–4) na tela de Progresso.
-7. Mundos 3–8 conforme `matriz-conteudo-detran.md` §3c.
-8. Testes de acessibilidade automatizados (axe) e de interface do simulado.
-9. Opcional, quando o usuário pedir: PWA instalável, conta/sincronização, personagens secundários (cone, placa PARE, ambulância).
+2. **Usuário testar as dicas de palavras** no celular (tamanho do balão, se o roxo ajuda) e decidir se publica.
+   - Regra nova: ao criar termos nos próximos mundos, incluir `aliases` (plural/variações) e conferir, questão por questão, se alguma dica entrega a resposta (nesse caso, usar `skipIn`).
+3. **Usuário testar o botão "Dica"** no celular (se 60 s está bom, se o texto da confirmação ficou claro) e decidir se publica junto com as dicas de palavras.
+   - Regra nova: nos próximos mundos, todo cartão precisa de `remember` e toda alternativa errada de `whyWrong` (o teste do botão Dica confere).
+4. **Mais variedade, parte 2:** Mundo 1 feito (01/11, aguardando teste do usuário). Depois: Mundo 2 do mesmo jeito (variações com o mesmo `objective`, fonte oficial conferida, ~8 por cartão) e trocar o teste "banco ≥8" para valer em todos os mundos.
+5. **Usuário testar no celular:** pares com correção na hora, tema escuro (botão do topo), arrastar no ordenar (se a rolagem da página não atrapalha), a revisão de erros com perguntas diferentes e se a lição mantém as mesmas questões ao sair e entrar. Decidir se, ao **refazer uma lição já concluída**, ela deve sortear de novo (hoje repete o mesmo sorteio).
+6. **Publicar** as rodadas e a revisão da metade (quando o usuário pedir) e o usuário testar no celular se o ritmo ficou bom.
+7. **Usuário testar o Mundo 2** no celular (desenhos novos e cartões) e ajustes.
+8. **Mundo 3 "Regras para circular"** (módulo 3) e **Mundo 4 "Infrações"** (módulo 2), para o simulado ficar equilibrado entre os módulos.
+9. Lição **"O caminho até a CNH"** (Mundo 8): CTB art. 148 + Res. 1.020/2025 art. 51 (`matriz` §3d).
+10. Mostrar **progresso por módulo** (1–4) na tela de Progresso.
+11. Mundos 3–8 conforme `matriz-conteudo-detran.md` §3c.
+12. Testes de acessibilidade automatizados (axe) e de interface do simulado.
+13. Opcional, quando o usuário pedir: PWA instalável, conta/sincronização, personagens secundários (cone, placa PARE, ambulância).
 
 ---
 
@@ -168,6 +205,7 @@ Detalhes completos: `docs/repaginacao-visual-duolingo.md`.
 |---|---|
 | `README.md` | visão geral e como rodar |
 | `docs/ESTADO-DO-PROJETO.md` | **este arquivo** — estado atual e próximos passos |
+| `docs/relatorio-ate-2026-11-01.md` | relatório de 26/10 a 01/11 (repaginação, Mundo 2, fixação, rodadas, dicas, variedade, tema escuro, sorteio salvo) |
 | `docs/analise-duolingo.md` | mecânicas do Duolingo adaptadas (19/10) |
 | `docs/repaginacao-visual-duolingo.md` | investigação visual, sistema de design, animações e áudio (27/10) |
 | `docs/matriz-conteudo-detran.md` | regras da prova, eixos oficiais, módulos, mapa mundo→lição, processo de habilitação |

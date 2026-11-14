@@ -141,6 +141,14 @@ export function ProgressScreen() {
           <Switch on={progress.prefs.hearts} onChange={(v) => setPref('hearts', v)} label="Modo desafio com vidas" />
         </div>
         <div className="setting">
+          <span id="lbl-theme">Tema</span>
+          <select aria-labelledby="lbl-theme" value={progress.prefs.theme ?? 'system'} onChange={(e) => setPref('theme', e.target.value as Prefs['theme'])}>
+            <option value="system">Automático (do aparelho)</option>
+            <option value="light">Claro</option>
+            <option value="dark">Escuro</option>
+          </select>
+        </div>
+        <div className="setting">
           <span id="lbl-motion">Animações</span>
           <select aria-labelledby="lbl-motion" value={progress.prefs.motion} onChange={(e) => setPref('motion', e.target.value as Prefs['motion'])}>
             <option value="system">Seguir o sistema</option>

@@ -1,9 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
-import { WORLDS } from './content';
+import { QUESTION_BY_ID, WORLDS } from './content';
 import type { Lesson } from './content/types';
 import { IconChart, IconClipboard, IconHome, IconReview } from './components/Icons';
 import { Lumi } from './components/Lumi';
 import { addXp, completeLesson, dueQuestions, lessonFinished, nextLesson, nextRound, practiceRoundIds, type CompletionOutcome } from './engine/progress';
+import { drawKey, drawLessonSteps, rebuildLessonSteps, reviewPool, reviewRoundIds } from './engine/review';
 import { startPractice, startSession, summarize, type SessionResult, type SessionState } from './engine/session';
 import { CompleteScreen } from './screens/CompleteScreen';
 import { ExamScreen } from './screens/ExamScreen';
@@ -44,14 +45,33 @@ export default function App() {
     window.scrollTo({ top: 0 });
   };
 
-  /** Abre a lição na rodada indicada (ou na próxima que falta). Rodada 2 em diante: só prática, sem cartões. */
+  /**
+   * Abre a lição na rodada indicada (ou na próxima que falta). Rodada 1: cartões + 1 questão sorteada por objetivo.
+   * Rodada 2 em diante: só prática, sem cartões. O sorteio é feito na primeira vez e fica salvo no progresso
+   * (`draws`): sair e entrar de novo repete as mesmas questões.
+   */
   const startLesson = (lesson: Lesson, back: Tab = 'home', round = nextRound(latest.current, lesson)) => {
-    const hearts = { hearts: latest.current.prefs.hearts };
-    const session =
-      round > 1
-        ? startSession({ id: lesson.id, steps: practiceRoundIds(latest.current, lesson).map((questionId) => ({ kind: 'question' as const, questionId })) }, hearts)
-        : startSession(lesson, hearts);
-    setRoute({ name: 'play', session, title: lesson.title, lesson, round, back });
+    const p = latest.current;
+    const hearts = { hearts: p.prefs.hearts };
+    const world = WORLDS.find((w) => w.lessons.some((l) => l.id === lesson.id));
+    const asSteps = (ids: string[]) => ids.map((questionId) => ({ kind: 'question' as const, questionId }));
+    const isReview = !!(lesson.review && world);
+    const key = drawKey(lesson.id, round, isReview);
+    const saved = (p.draws?.[key] ?? []).filter((id) => QUESTION_BY_ID[id]);
+    let steps: Lesson['steps'] | null = null;
+    if (saved.length === (p.draws?.[key]?.length ?? -1)) steps = isReview || round > 1 ? asSteps(saved) : rebuildLessonSteps(lesson, saved);
+    if (!steps) {
+      steps =
+        isReview && world
+          ? asSteps(reviewRoundIds(p, reviewPool(world, lesson), lesson.review!.size, (id) => QUESTION_BY_ID[id].type))
+          : round > 1
+          ? asSteps(practiceRoundIds(p, lesson))
+          : drawLessonSteps(p, lesson, (id) => QUESTION_BY_ID[id]);
+      const ids = steps.flatMap((st) => (st.kind === 'question' ? [st.questionId] : []));
+      latest.current = { ...p, draws: { ...p.draws, [key]: ids } };
+      update((x) => ({ ...x, draws: { ...x.draws, [key]: ids } }));
+    }
+    setRoute({ name: 'play', session: startSession({ id: lesson.id, steps }, hearts), title: lesson.title, lesson, round, back });
   };
 
   const startPracticeSession = (title: string, ids: string[], back: Tab) => {
@@ -85,6 +105,7 @@ export default function App() {
         key={route.session.lessonId + route.title + (route.round ?? '')}
         initial={route.session}
         practice={(route.round ?? 1) > 1}
+        allowHints={Boolean(route.lesson?.steps.some((st) => st.kind === 'concept'))}
         onExit={() => go(route.back)}
         onFinish={(s) => finish(s, route.lesson, route.title, route.back, route.round)}
       />
@@ -129,7 +150,7 @@ export default function App() {
       <main className="main" id="conteudo">
         <div className="mobile-top mobile-only">
           <div className="row" style={{ justifyContent: 'space-between' }}>
-            <strong className="mobile-brand"><Lumi size={22} /> CNH Quest</strong>
+            <strong className="mobile-brand" aria-label="CNH Quest"><Lumi size={22} /> <span className="mobile-brand-text">CNH Quest</span></strong>
             <TopStats />
           </div>
         </div>

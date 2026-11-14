@@ -1,6 +1,6 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 import { AppStateProvider } from './state/AppState';
 import { createLocalStore } from './storage/progressStore';
@@ -17,9 +17,9 @@ function memoryStorage(): Storage {
   } as Storage;
 }
 
-function setup(storage = memoryStorage()) {
+function setup(storage = memoryStorage(), fakeTimers = false) {
   const store = createLocalStore(storage);
-  const user = userEvent.setup();
+  const user = userEvent.setup(fakeTimers ? { advanceTimers: vi.advanceTimersByTime } : {});
   const utils = render(
     <AppStateProvider store={store}>
       <App />
@@ -112,6 +112,7 @@ describe('fluxo principal', () => {
     const { user } = setup(storage);
     await user.click(screen.getAllByRole('button', { name: /Simulado/ })[0]);
     await user.click(screen.getByRole('button', { name: 'Começar simulado' }));
+    expect(screen.queryByRole('button', { name: /Dica/ })).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Entregar prova' }));
     await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Entregar' }));
 
@@ -132,6 +133,51 @@ describe('fluxo principal', () => {
     expect(screen.getAllByRole('button', { name: 'Efeitos sonoros' })[0]).toHaveAttribute('aria-pressed', 'false');
   });
 
+  it('tema escuro: escolhido em Progresso, aplicado na página e salvo', async () => {
+    const storage = memoryStorage();
+    storage.setItem('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true }));
+    const { user } = setup(storage);
+    expect(document.documentElement).not.toHaveAttribute('data-theme');
+    await user.click(screen.getAllByRole('button', { name: /Progresso/ })[0]);
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Tema' }), 'dark');
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+    expect(JSON.parse(storage.getItem('cnhquest:progress:v1')!).prefs.theme).toBe('dark');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Tema' }), 'system');
+    expect(document.documentElement).not.toHaveAttribute('data-theme');
+  });
+
+  it('botão de modo escuro no topo liga e desliga o tema', async () => {
+    const storage = memoryStorage();
+    storage.setItem('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true }));
+    const { user } = setup(storage);
+    const btn = () => screen.getAllByRole('button', { name: 'Modo escuro' })[0];
+    expect(btn()).toHaveAttribute('aria-pressed', 'false');
+    await user.click(btn());
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+    expect(btn()).toHaveAttribute('aria-pressed', 'true');
+    await user.click(btn());
+    expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+    expect(JSON.parse(storage.getItem('cnhquest:progress:v1')!).prefs.theme).toBe('light');
+    document.documentElement.removeAttribute('data-theme');
+  });
+
+  it('as questões sorteadas ficam salvas: sair e entrar de novo repete o mesmo sorteio', async () => {
+    const storage = memoryStorage();
+    storage.setItem('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true }));
+    const { user } = setup(storage);
+    const saved = () => JSON.parse(storage.getItem('cnhquest:progress:v1')!).draws?.['w1-l1:r1'];
+    const lesson = /Quem manda no trânsito\?/;
+    await user.click(screen.getByRole('button', { name: lesson }));
+    await waitFor(() => expect(saved()?.length).toBeGreaterThan(0));
+    const first = saved();
+    for (let i = 0; i < 3; i++) {
+      await user.click(screen.getByRole('button', { name: 'Sair da lição' }));
+      await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Sair da lição' }));
+      await user.click(screen.getByRole('button', { name: lesson }));
+    }
+    expect(saved()).toEqual(first);
+  });
+
   it('Esc fecha o diálogo de saída sem sair da lição', async () => {
     const storage = memoryStorage();
     storage.setItem('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true }));
@@ -143,5 +189,40 @@ describe('fluxo principal', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     expect(screen.getByRole('heading', { name: 'O que é um sinal de trânsito?' })).toBeInTheDocument();
   });
+
+  it('dica: só libera após 60 s, pede confirmação e não conta como acerto de primeira', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const storage = memoryStorage();
+    storage.setItem('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true }));
+    const { user } = setup(storage, true);
+    await user.click(screen.getByRole('button', { name: /Quem manda no trânsito\?/ }));
+    await user.click(screen.getByRole('button', { name: 'Continuar' }));
+
+    expect(screen.getByRole('button', { name: /Dica em 60s/ })).toBeDisabled();
+    for (let i = 0; i < 60; i++) await act(async () => void vi.advanceTimersByTime(1000));
+    await user.click(screen.getByRole('button', { name: /^💡 Dica$/ }));
+
+    // confirmação avisando que a pontuação cai
+    const dialog = screen.getByRole('dialog', { name: 'Usar a dica?' });
+    expect(dialog).toHaveTextContent(/não vai contar como acerto de primeira/);
+    expect(dialog).toHaveTextContent(/diminui a sua pontuação/);
+    await user.click(within(dialog).getByRole('button', { name: 'Usar a dica' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+    // 1º degrau: "Para guardar" do cartão; 2º: risca uma errada com a explicação
+    expect(screen.getByRole('note', { name: 'Dica' })).toHaveTextContent('Lembre do cartão');
+    await user.click(screen.getByRole('button', { name: /Mais uma dica/ }));
+    expect(screen.getByRole('radio', { name: /eliminada pela dica/ })).toBeDisabled();
+    expect(screen.getByRole('note', { name: 'Dica' })).toHaveTextContent('Pode riscar');
+    expect(screen.queryByRole('button', { name: /Dica/ })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('radio', { name: 'Anúncios publicitários à beira da via' }));
+    await user.click(screen.getByRole('button', { name: 'Verificar' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Acerto com dica');
+    expect(JSON.parse(storage.getItem('cnhquest:progress:v1')!).questions['w1-l1-q1'].box).toBe(1);
+  });
 });
 
+afterEach(() => {
+  vi.useRealTimers();
+});

@@ -5,7 +5,8 @@ export type Answer =
   | { type: 'truefalse'; value: boolean }
   | { type: 'fill'; word: string }
   | { type: 'order'; ids: string[] }
-  | { type: 'match'; pairs: Record<string, string> };
+  /** pairs: pares já formados; mistakes: tentativas erradas (cada par é corrigido na hora) */
+  | { type: 'match'; pairs: Record<string, string>; mistakes?: number };
 
 export interface Feedback {
   correct: boolean;
@@ -40,7 +41,8 @@ export function grade(q: Question, a: Answer): Feedback {
     }
     case 'match': {
       const pairs = a.type === 'match' ? a.pairs : {};
-      const correct = q.pairs.every((p) => pairs[p.id] === p.id);
+      // errou algum par no caminho: não conta como acerto
+      const correct = q.pairs.every((p) => pairs[p.id] === p.id) && !(a.type === 'match' && a.mistakes);
       return {
         correct,
         correctText: q.pairs.map((p) => `${p.left} → ${p.right}`).join(' · '),

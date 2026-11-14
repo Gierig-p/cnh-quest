@@ -1,6 +1,7 @@
 import type { Question, World } from './types';
 import { SOURCES } from './sources';
 import { referenceModulesOf } from './referenceModules';
+import { reviewPool } from '../engine/review';
 
 export interface ValidationIssue {
   where: string;
@@ -74,8 +75,14 @@ export function validateContent(questions: Question[], worlds: World[]): Validat
     for (const l of w.lessons) {
       if (lessonIds.has(l.id)) add(l.id, 'lição duplicada');
       lessonIds.add(l.id);
-      if (!l.steps.some((s) => s.kind === 'question')) add(l.id, 'lição sem questões');
-      const lessonQs = l.steps.flatMap((s) => (s.kind === 'question' ? questions.filter((q) => q.id === s.questionId) : []));
+      // revisão sorteada: confere o banco de onde ela sorteia
+      const qIds = l.review ? reviewPool(w, l).map((p) => p.questionId) : l.steps.flatMap((s) => (s.kind === 'question' ? [s.questionId] : []));
+      if (l.review) {
+        if (l.steps.length) add(l.id, 'revisão sorteada não deve ter questões fixas');
+        if (!(l.review.size > 0)) add(l.id, 'revisão sorteada com tamanho inválido');
+        else if (qIds.length < l.review.size) add(l.id, `revisão sorteada com banco pequeno (${qIds.length} < ${l.review.size})`);
+      } else if (!qIds.length) add(l.id, 'lição sem questões');
+      const lessonQs = qIds.flatMap((id) => questions.filter((q) => q.id === id));
       if (![1, 2, 3, 4].includes(l.referenceModule)) add(l.id, 'módulo de referência inválido');
       else if (lessonQs.length && !referenceModulesOf(lessonQs).includes(l.referenceModule))
         add(l.id, 'módulo de referência não corresponde ao assunto de nenhuma questão da lição');
@@ -83,6 +90,12 @@ export function validateContent(questions: Question[], worlds: World[]): Validat
         if (s.kind === 'question' && !ids.has(s.questionId)) add(l.id, `questão inexistente: ${s.questionId}`);
         if (s.kind === 'concept' && s.card.sources.some((r) => !SOURCES[r.sourceId]))
           add(l.id, `conceito ${s.card.id} com fonte desconhecida`);
+        if (s.kind === 'concept')
+          for (const t of s.card.terms ?? []) {
+            if (!t.term.trim() || !t.meaning.trim()) add(s.card.id, 'palavra nova sem termo ou significado');
+            if (t.aliases?.some((x) => !x.trim())) add(s.card.id, `palavra "${t.term}" com variação vazia`);
+            for (const qid of t.skipIn ?? []) if (!ids.has(qid)) add(s.card.id, `palavra "${t.term}": questão inexistente em skipIn (${qid})`);
+          }
       }
     }
   }

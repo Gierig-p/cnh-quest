@@ -1,15 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { QUESTION_BY_ID } from '../content';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { GLOSSARY, HINT_CARDS, QUESTION_BY_ID } from '../content';
+import { buildHintIndex } from '../content/glossary';
+import { HINT_DELAY_S, hintReveal, type HintReveal } from '../content/hints';
 import { SOURCES } from '../content/sources';
 import type { SourceRef } from '../content/types';
 import { Exercise, isAnswerReady, typeLabel } from '../components/Exercises';
 import { Burst, Dialog, useDialogClose } from '../components/Fx';
 import { IconCheck, IconClose, IconHeart, IconSparkle, IconWrong } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
+import { TermHintsContext, TermText, useHasNewTerm } from '../components/TermText';
 import { Visual } from '../components/Visual';
 import { grade, type Answer, type Feedback } from '../engine/grading';
-import { recordAnswer } from '../engine/progress';
+import { lessonsWithCardsSeen, recordAnswer } from '../engine/progress';
 import { advance, answerCurrent, currentItem, isFinished, progressRatio, type SessionState } from '../engine/session';
+import { sameTopicQuestions } from '../engine/review';
 import { useApp } from '../state/AppState';
 import { useSound } from '../ui/hooks';
 
@@ -32,24 +36,41 @@ export function SourceList({ refs }: { refs: SourceRef[] }) {
   );
 }
 
+/** Etiqueta "Palavra nova" quando a questão usa uma palavra ensinada nesta lição. */
+function NewWordTag({ texts }: { texts: string[] }) {
+  if (!useHasNewTerm(texts)) return null;
+  return (
+    <div className="q-tag new">
+      <IconSparkle size={14} /> Palavra nova
+    </div>
+  );
+}
+
 export function LessonPlayer({
   initial,
   practice = false,
+  allowHints = false,
   onExit,
   onFinish,
 }: {
   initial: SessionState;
   /** rodada só de prática (sem cartões): marca cada exercício como "Prática" */
   practice?: boolean;
+  /** botão "Dica" (só nas lições com cartões; nunca em revisões nem no simulado) */
+  allowHints?: boolean;
   onExit: () => void;
   onFinish: (s: SessionState) => void;
 }) {
-  const { update } = useApp();
+  const { update, progress } = useApp();
   const [s, setS] = useState(initial);
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [fb, setFb] = useState<Feedback | null>(null);
   const [confirmQuit, setConfirmQuit] = useState(false);
   const [heartHit, setHeartHit] = useState(false);
+  // botão "Dica": 0 = não usada, 1 = "Para guardar" do cartão, 2 = elimina/revela uma parte
+  const [hintStep, setHintStep] = useState(0);
+  const [confirmHint, setConfirmHint] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
   // sequência de acertos seguidos nesta sessão (só visual; não altera XP nem progresso)
   const [combo, setCombo] = useState(0);
   const footRef = useRef<HTMLDivElement>(null);
@@ -58,6 +79,34 @@ export function LessonPlayer({
 
   const item = currentItem(s);
   const q = item?.kind === 'question' ? QUESTION_BY_ID[item.questionId] : undefined;
+
+  // dicas de palavras: só as já ensinadas (lições concluídas + cartões já vistos nesta sessão)
+  const seenCards = s.queue.slice(0, s.index).flatMap((it) => (it.kind === 'concept' ? [it.card.id] : [])).join();
+  const doneLessons = lessonsWithCardsSeen(progress).join();
+  const hintIndex = useMemo(
+    () => buildHintIndex(GLOSSARY, { lessonId: s.lessonId, seenCardIds: seenCards ? seenCards.split(',') : [], completedLessonIds: doneLessons ? doneLessons.split(',') : [] }),
+    [s.lessonId, seenCards, doneLessons],
+  );
+  const hints = useMemo(() => ({ index: hintIndex, questionId: q?.id }), [hintIndex, q?.id]);
+
+  // dica da questão: cartão que a ensina + o que pode ser eliminado (sem dica nas questões de "↻ Revisão")
+  const hintCard = allowHints && q && item?.kind === 'question' && !item.retry ? HINT_CARDS[q.id] : undefined;
+  const seedForHint = `${q?.id ?? 'c'}-${s.index}`;
+  const reveal = useMemo(() => (hintCard && q ? hintReveal(q, seedForHint) : null), [hintCard, q, seedForHint]);
+  const hinted = hintStep > 0;
+
+  // cada questão começa sem dica e com o relógio zerado
+  useEffect(() => {
+    setHintStep(0);
+    setElapsed(0);
+  }, [s.index]);
+
+  // a dica só libera depois de HINT_DELAY_S segundos na questão
+  useEffect(() => {
+    if (!hintCard || fb || elapsed >= HINT_DELAY_S) return;
+    const t = setTimeout(() => setElapsed((e) => e + 1), 1000);
+    return () => clearTimeout(t);
+  }, [hintCard, fb, elapsed]);
 
   useEffect(() => {
     if (isFinished(s)) onFinish(s);
@@ -71,15 +120,37 @@ export function LessonPlayer({
     setCombo(nextCombo);
     play(f.correct ? 'correct' : 'wrong');
     if (f.correct && nextCombo >= 3 && nextCombo % 2 === 1) setTimeout(() => play('combo'), 260);
-    const firstTry = !(q.id in s.firstTry);
+    // com dica, não conta como acerto de primeira
+    const firstTry = !item.retry && !(q.id in s.firstTry) && !hinted;
     update((p) => recordAnswer(p, q, f.correct, new Date(), firstTry));
-    setS((prev) => answerCurrent(prev, f.correct));
+    // erro: a revisão do fim usa outras perguntas do mesmo assunto
+    const alternatives = f.correct || item.retry ? undefined : sameTopicQuestions(q.id, HINT_CARDS, (x) => QUESTION_BY_ID[x]);
+    setS((prev) => answerCurrent(prev, f.correct, { hinted, alternatives }));
     if (!f.correct && s.hearts !== null) {
       setHeartHit(true);
       setTimeout(() => setHeartHit(false), 450);
     }
     requestAnimationFrame(() => footRef.current?.querySelector<HTMLButtonElement>('.btn')?.focus());
-  }, [q, item, answer, play, combo, s, update]);
+  }, [q, item, answer, play, combo, s, update, hinted]);
+
+  // pares: cada par já é corrigido na hora; ao formar o último, verifica sozinho
+  useEffect(() => {
+    if (fb || !q || q.type !== 'match' || !isAnswerReady(q, answer)) return;
+    const t = setTimeout(check, 450);
+    return () => clearTimeout(t);
+  }, [fb, q, answer, check]);
+
+  const confirmUseHint = useCallback(() => {
+    setConfirmHint(false);
+    setHintStep(1);
+  }, []);
+
+  const moreHint = useCallback(() => {
+    setHintStep(2);
+    // se a resposta marcada foi a eliminada, ela sai
+    if (reveal?.kind === 'eliminate-option' && answer?.type === 'choice' && answer.optionId === reveal.optionId) setAnswer(null);
+    if (reveal?.kind === 'eliminate-word' && answer?.type === 'fill' && answer.word === reveal.word) setAnswer(null);
+  }, [reveal, answer]);
 
   const next = useCallback(() => {
     // evita avanço duplo (duplo clique / Enter repetido)
@@ -94,7 +165,8 @@ export function LessonPlayer({
   const onAnswer = useCallback(
     (a: Answer | null) => {
       // a ordenação preenche a resposta inicial sozinha: isso não é um gesto do aluno
-      if (a && !(a.type === 'order' && answer === null)) play('select');
+      // pares tocam o próprio som (certo/errado) a cada tentativa
+      if (a && a.type !== 'match' && !(a.type === 'order' && answer === null)) play('select');
       setAnswer(a);
     },
     [play, answer],
@@ -103,7 +175,7 @@ export function LessonPlayer({
   // Enter: verificar / continuar
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Enter' || confirmQuit) return;
+      if (e.key !== 'Enter' || confirmQuit || confirmHint) return;
       // botões comuns tratam o próprio Enter; numa alternativa (radio), Enter verifica
       if (e.target instanceof HTMLButtonElement && e.target.getAttribute('role') !== 'radio') return;
       e.preventDefault();
@@ -113,7 +185,7 @@ export function LessonPlayer({
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [item, fb, check, next, confirmQuit]);
+  }, [item, fb, check, next, confirmQuit, confirmHint]);
 
   if (!item) return null;
   const ratio = progressRatio(s);
@@ -206,11 +278,32 @@ export function LessonPlayer({
         )}
 
         {item.kind === 'question' && q && (
-          <section aria-labelledby="q-title">
-            <div className={`q-tag ${item.retry ? 'retry' : ''}`}>{item.retry ? '↻ Revisão' : practice ? `Prática · ${typeLabel(q)}` : typeLabel(q)}</div>
-            <h1 id="q-title" className="q-title">{q.prompt}</h1>
-            <Exercise q={q} seed={seed} answer={answer} onAnswer={onAnswer} checked={fb ? { correct: fb.correct } : null} />
-          </section>
+          <TermHintsContext.Provider value={hints}>
+            <section aria-labelledby="q-title">
+              <div className="q-tags">
+                <div className={`q-tag ${item.retry ? 'retry' : ''}`}>{item.retry ? '↻ Revisão' : practice ? `Prática · ${typeLabel(q)}` : typeLabel(q)}</div>
+                <NewWordTag texts={[q.prompt, q.type === 'truefalse' ? q.statement : q.type === 'fill' ? q.sentence : '']} />
+                {hintCard && !fb && (
+                  <HintButton
+                    left={HINT_DELAY_S - elapsed}
+                    step={hintStep}
+                    hasMore={Boolean(reveal)}
+                    onClick={() => (hintStep === 0 ? setConfirmHint(true) : moreHint())}
+                  />
+                )}
+              </div>
+              <h1 id="q-title" className="q-title"><TermText text={q.prompt} /></h1>
+              {hintCard && hintStep > 0 && <HintBox title={hintCard.title} remember={hintCard.remember!} reveal={hintStep > 1 ? reveal : null} />}
+              <Exercise
+                q={q}
+                seed={seed}
+                answer={answer}
+                onAnswer={onAnswer}
+                checked={fb ? { correct: fb.correct } : null}
+                eliminated={hintStep > 1 ? (reveal?.kind === 'eliminate-option' ? reveal.optionId : reveal?.kind === 'eliminate-word' ? reveal.word : undefined) : undefined}
+              />
+            </section>
+          </TermHintsContext.Provider>
         )}
       </main>
 
@@ -228,6 +321,7 @@ export function LessonPlayer({
                   {showCombo && <span className="fb-combo"> · {combo} acertos seguidos!</span>}
                 </p>
                 <div className="fb-text">
+                  {lastCorrect && hinted && <p className="fb-hinted">💡 Acerto com dica: não conta como acerto de primeira.</p>}
                   {!lastCorrect && <p className="fb-answer"><strong>{fb.correctText}</strong></p>}
                   {!lastCorrect && fb.whyWrong && <p>Por que a sua não: {fb.whyWrong}</p>}
                   <p>{q.explanation}</p>
@@ -258,6 +352,12 @@ export function LessonPlayer({
         </div>
       </footer>
 
+      {confirmHint && (
+        <Dialog labelledBy="hint-title" tone="warn" onClose={() => setConfirmHint(false)}>
+          <HintDialogBody onConfirm={confirmUseHint} />
+        </Dialog>
+      )}
+
       {confirmQuit && (
         <Dialog labelledBy="quit-title" onClose={() => setConfirmQuit(false)}>
           <QuitDialogBody onExit={onExit} />
@@ -277,6 +377,58 @@ function QuitDialogBody({ onExit }: { onExit: () => void }) {
       <div className="stack">
         <button className="btn" autoFocus onClick={close}>Continuar estudando</button>
         <button className="btn ghost" onClick={onExit}>Sair da lição</button>
+      </div>
+    </>
+  );
+}
+
+function HintButton({ left, step, hasMore, onClick }: { left: number; step: number; hasMore: boolean; onClick: () => void }) {
+  if (step >= 2 || (step === 1 && !hasMore)) return null;
+  const waiting = left > 0;
+  return (
+    <button type="button" className="btn ghost sm hint-btn" disabled={waiting} onClick={onClick}>
+      💡 {waiting ? `Dica em ${left}s` : step === 0 ? 'Dica' : 'Mais uma dica'}
+    </button>
+  );
+}
+
+function revealText(r: HintReveal): string {
+  switch (r.kind) {
+    case 'eliminate-option':
+      return `Pode riscar “${r.text}”: ${r.why}`;
+    case 'eliminate-word':
+      return `Pode tirar “${r.word}”: ${r.why}`;
+    case 'pair':
+      return `Um dos pares: “${r.left}” combina com “${r.right}”.`;
+    case 'first-step':
+      return `O primeiro é: “${r.text}”.`;
+  }
+}
+
+function HintBox({ title, remember, reveal }: { title: string; remember: string; reveal: HintReveal | null }) {
+  return (
+    <div className="hint-box" role="note" aria-label="Dica" aria-live="polite">
+      <Lumi mood="think" size={56} />
+      <div className="grow">
+        <p className="hint-head">💡 Lembre do cartão “{title}”</p>
+        <p>{remember}</p>
+        {reveal && <p className="hint-reveal">{revealText(reveal)}</p>}
+      </div>
+    </div>
+  );
+}
+
+function HintDialogBody({ onConfirm }: { onConfirm: () => void }) {
+  const close = useDialogClose();
+  return (
+    <>
+      <Lumi mood="think" size={84} />
+      <h2 id="hint-title">Usar a dica?</h2>
+      <p>A dica ajuda a lembrar o conceito, mas tem um custo: <strong>esta questão não vai contar como acerto de primeira.</strong></p>
+      <p>Isso diminui a sua pontuação na lição: a % de acertos cai, você perde o bônus de lição perfeita e pode não alcançar o domínio da lição.</p>
+      <div className="stack">
+        <button className="btn" autoFocus onClick={close}>Tentar sem dica</button>
+        <button className="btn ghost" onClick={onConfirm}>Usar a dica</button>
       </div>
     </>
   );

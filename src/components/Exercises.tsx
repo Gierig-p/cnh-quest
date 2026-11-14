@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent as RPointerEvent } from 'react';
 import type { ChoiceQuestion, FillBlankQuestion, MatchQuestion, OrderQuestion, Question, TrueFalseQuestion } from '../content/types';
 import type { Answer } from '../engine/grading';
 import { seededShuffle } from '../engine/grading';
 import { Visual } from './Visual';
+import { TermText } from './TermText';
+import { useSound } from '../ui/hooks';
 
 export interface ExerciseProps<Q extends Question> {
   q: Q;
@@ -12,6 +14,8 @@ export interface ExerciseProps<Q extends Question> {
   onAnswer: (a: Answer | null) => void;
   /** depois de "Verificar": mostra o resultado e bloqueia */
   checked: null | { correct: boolean };
+  /** alternativa (escolha) ou palavra (lacuna) riscada pela dica */
+  eliminated?: string;
 }
 
 export function Exercise(props: ExerciseProps<Question>) {
@@ -22,12 +26,22 @@ export function Exercise(props: ExerciseProps<Question>) {
     case 'truefalse':
       return <TrueFalseEx {...(props as ExerciseProps<TrueFalseQuestion>)} />;
     case 'fill':
-      return <FillEx {...(props as ExerciseProps<FillBlankQuestion>)} />;
+      return <><QVisual q={q} /><FillEx {...(props as ExerciseProps<FillBlankQuestion>)} /></>;
     case 'order':
-      return <OrderEx {...(props as ExerciseProps<OrderQuestion>)} />;
+      return <><QVisual q={q} /><OrderEx {...(props as ExerciseProps<OrderQuestion>)} /></>;
     case 'match':
-      return <MatchEx {...(props as ExerciseProps<MatchQuestion>)} />;
+      return <><QVisual q={q} /><MatchEx {...(props as ExerciseProps<MatchQuestion>)} /></>;
   }
+}
+
+/** imagem do enunciado nos tipos que não a desenham por conta própria (lacuna, ordenar, pares) */
+function QVisual({ q }: { q: Question }) {
+  if (!q.visual) return null;
+  return (
+    <div className="q-visual">
+      <Visual v={q.visual} size={150} />
+    </div>
+  );
 }
 
 export function typeLabel(q: Question): string {
@@ -62,6 +76,7 @@ function RadioGroup({
   correctId,
   layout = 'list',
   label,
+  disabledId,
 }: {
   items: RadioItem[];
   selected: string | null;
@@ -70,6 +85,8 @@ function RadioGroup({
   correctId?: string;
   layout?: 'list' | 'grid';
   label: string;
+  /** alternativa riscada pela dica: não pode ser escolhida */
+  disabledId?: string;
 }) {
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -78,7 +95,7 @@ function RadioGroup({
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.target instanceof HTMLElement && e.target.closest('input, textarea, select')) return;
       const n = Number(e.key);
-      if (Number.isInteger(n) && n >= 1 && n <= items.length) {
+      if (Number.isInteger(n) && n >= 1 && n <= items.length && items[n - 1].id !== disabledId) {
         e.preventDefault();
         onSelect(items[n - 1].id);
         refs.current[n - 1]?.focus();
@@ -86,13 +103,14 @@ function RadioGroup({
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [items, locked, onSelect]);
+  }, [items, locked, onSelect, disabledId]);
 
   const onArrow = (e: KeyboardEvent, i: number) => {
     const d = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
     if (!d || locked) return;
     e.preventDefault();
-    const j = (i + d + items.length) % items.length;
+    let j = (i + d + items.length) % items.length;
+    if (items[j].id === disabledId) j = (j + d + items.length) % items.length;
     onSelect(items[j].id);
     refs.current[j]?.focus();
   };
@@ -103,6 +121,7 @@ function RadioGroup({
     <div className={`options ${layout === 'grid' ? 'grid' : ''}`} role="radiogroup" aria-label={label}>
       {items.map((it, i) => {
         const isSel = selected === it.id;
+        const off = it.id === disabledId && !locked;
         const state = locked ? (it.id === correctId ? 'is-correct' : isSel ? 'is-wrong' : '') : '';
         return (
           <button
@@ -111,10 +130,10 @@ function RadioGroup({
             type="button"
             role="radio"
             aria-checked={isSel}
-            aria-label={`${it.ariaLabel}${state === 'is-correct' ? ' (resposta correta)' : state === 'is-wrong' ? ' (sua resposta, incorreta)' : ''}`}
+            aria-label={`${it.ariaLabel}${state === 'is-correct' ? ' (resposta correta)' : state === 'is-wrong' ? ' (sua resposta, incorreta)' : off ? ' (eliminada pela dica)' : ''}`}
             tabIndex={i === focusIndex ? 0 : -1}
-            className={`opt ${state}`}
-            disabled={locked}
+            className={`opt ${state} ${off ? 'is-eliminated' : ''}`}
+            disabled={locked || off}
             onClick={() => onSelect(it.id)}
             onKeyDown={(e) => onArrow(e, i)}
           >
@@ -132,7 +151,7 @@ function RadioGroup({
 
 /* ---------- escolha ---------- */
 
-function ChoiceEx({ q, seed, answer, onAnswer, checked }: ExerciseProps<ChoiceQuestion>) {
+function ChoiceEx({ q, seed, answer, onAnswer, checked, eliminated }: ExerciseProps<ChoiceQuestion>) {
   const opts = useMemo(() => seededShuffle(q.options, seed), [q, seed]);
   const selected = answer?.type === 'choice' ? answer.optionId : null;
   const grid = q.layout === 'grid';
@@ -148,6 +167,7 @@ function ChoiceEx({ q, seed, answer, onAnswer, checked }: ExerciseProps<ChoiceQu
         layout={grid ? 'grid' : 'list'}
         locked={Boolean(checked)}
         correctId={q.correct}
+        disabledId={eliminated}
         selected={selected}
         onSelect={(id) => onAnswer({ type: 'choice', optionId: id })}
         items={opts.map((o) => ({
@@ -172,7 +192,7 @@ function TrueFalseEx({ q, answer, onAnswer, checked }: ExerciseProps<TrueFalseQu
           <Visual v={q.visual} />
         </div>
       )}
-      <p className="statement">“{q.statement}”</p>
+      <p className="statement">“<TermText text={q.statement} />”</p>
       <RadioGroup
         label={q.statement}
         locked={Boolean(checked)}
@@ -190,7 +210,7 @@ function TrueFalseEx({ q, answer, onAnswer, checked }: ExerciseProps<TrueFalseQu
 
 /* ---------- completar lacuna ---------- */
 
-function FillEx({ q, seed, answer, onAnswer, checked }: ExerciseProps<FillBlankQuestion>) {
+function FillEx({ q, seed, answer, onAnswer, checked, eliminated }: ExerciseProps<FillBlankQuestion>) {
   const bank = useMemo(() => seededShuffle(q.bank, seed), [q, seed]);
   const word = answer?.type === 'fill' ? answer.word : null;
   const [before, after] = q.sentence.split('___');
@@ -198,7 +218,7 @@ function FillEx({ q, seed, answer, onAnswer, checked }: ExerciseProps<FillBlankQ
   return (
     <>
       <p className="sentence">
-        {before}
+        <TermText text={before} />
         <span className="blank" aria-live="polite" aria-label={word ? `Lacuna preenchida com ${word}` : 'Lacuna vazia'}>
           {word && (
             <button
@@ -212,11 +232,18 @@ function FillEx({ q, seed, answer, onAnswer, checked }: ExerciseProps<FillBlankQ
             </button>
           )}
         </span>
-        {after}
+        <TermText text={after ?? ''} />
       </p>
       <div className="bank" role="group" aria-label="Banco de palavras">
         {bank.map((w) => (
-          <button key={w} type="button" className={`chip ${w === word ? 'used' : ''}`} disabled={locked || w === word} onClick={() => onAnswer({ type: 'fill', word: w })}>
+          <button
+            key={w}
+            type="button"
+            className={`chip ${w === word ? 'used' : ''} ${w === eliminated && !locked ? 'is-eliminated' : ''}`}
+            disabled={locked || w === word || w === eliminated}
+            aria-label={w === eliminated ? `${w} (eliminada pela dica)` : undefined}
+            onClick={() => onAnswer({ type: 'fill', word: w })}
+          >
             {w}
           </button>
         ))}
@@ -227,9 +254,29 @@ function FillEx({ q, seed, answer, onAnswer, checked }: ExerciseProps<FillBlankQ
 
 /* ---------- ordenar ---------- */
 
+/** Move o item da posição `from` para `to` (usado ao soltar um item arrastado). */
+export function moveItem<T>(xs: T[], from: number, to: number): T[] {
+  const next = [...xs];
+  const [it] = next.splice(from, 1);
+  next.splice(to, 0, it);
+  return next;
+}
+
+/**
+ * Para onde vai o item arrastado: quantos dos outros itens têm o centro acima do centro dele.
+ * `centers` são os centros (eixo vertical) de cada item antes de começar a arrastar.
+ */
+export function dropIndex(centers: number[], from: number, draggedCenter: number): number {
+  return centers.filter((c, j) => j !== from && c < draggedCenter).length;
+}
+
 function OrderEx({ q, answer, onAnswer, checked }: ExerciseProps<OrderQuestion>) {
   const ids = answer?.type === 'order' ? answer.ids : q.items.map((i) => i.id);
   const [moved, setMoved] = useState<string | null>(null);
+  // arrastar: item segurado, quanto já desceu/subiu e para onde iria se soltasse agora
+  const [drag, setDrag] = useState<{ from: number; dy: number; to: number; active: boolean } | null>(null);
+  const geo = useRef<{ startY: number; centers: number[]; step: number; pointer: number } | null>(null);
+  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const byId = Object.fromEntries(q.items.map((i) => [i.id, i.text]));
   useEffect(() => {
     if (!answer) onAnswer({ type: 'order', ids: q.items.map((i) => i.id) });
@@ -243,12 +290,63 @@ function OrderEx({ q, answer, onAnswer, checked }: ExerciseProps<OrderQuestion>)
     onAnswer({ type: 'order', ids: next });
   };
   const locked = Boolean(checked);
+
+  const onPointerDown = (e: RPointerEvent<HTMLLIElement>, i: number) => {
+    if (locked || (e.pointerType === 'mouse' && e.button !== 0) || (e.target as HTMLElement).closest('button')) return;
+    const rects = itemRefs.current.map((el) => el?.getBoundingClientRect());
+    const centers = rects.map((r) => (r ? r.top + r.height / 2 : 0));
+    const r = rects[i];
+    const next = rects[i + 1] ?? rects[i - 1];
+    // distância entre dois itens vizinhos (altura + espaço)
+    const step = r && next ? Math.abs(next.top - r.top) : (r?.height ?? 60) + 10;
+    geo.current = { startY: e.clientY, centers, step, pointer: e.pointerId };
+    setDrag({ from: i, dy: 0, to: i, active: false });
+  };
+  const onPointerMove = (e: RPointerEvent<HTMLLIElement>) => {
+    const g = geo.current;
+    if (!drag || !g || e.pointerId !== g.pointer) return;
+    const dy = e.clientY - g.startY;
+    // só vira "arrastar" depois de um pequeno movimento (um toque simples não mexe em nada)
+    if (!drag.active && Math.abs(dy) < 6) return;
+    if (!drag.active) e.currentTarget.setPointerCapture?.(e.pointerId);
+    e.preventDefault();
+    setDrag({ ...drag, active: true, dy, to: dropIndex(g.centers, drag.from, g.centers[drag.from] + dy) });
+  };
+  const endDrag = (e: RPointerEvent<HTMLLIElement>, cancel = false) => {
+    const g = geo.current;
+    if (!drag || !g || e.pointerId !== g.pointer) return;
+    geo.current = null;
+    setDrag(null);
+    if (cancel || !drag.active || drag.to === drag.from) return;
+    const next = moveItem(ids, drag.from, drag.to);
+    setMoved(ids[drag.from]);
+    onAnswer({ type: 'order', ids: next });
+  };
+  // deslocamento visual de cada item enquanto um deles é arrastado
+  const shiftOf = (i: number) => {
+    if (!drag?.active || !geo.current) return 0;
+    if (i === drag.from) return drag.dy;
+    if (drag.from < drag.to && i > drag.from && i <= drag.to) return -geo.current.step;
+    if (drag.to < drag.from && i >= drag.to && i < drag.from) return geo.current.step;
+    return 0;
+  };
+
   return (
-    <ol className="order-list" aria-label="Itens para ordenar">
+    <ol className={`order-list ${drag?.active ? 'is-dragging' : ''}`} aria-label="Itens para ordenar">
       {ids.map((id, i) => {
         const right = checked ? q.answer[i] === id : null;
+        const shift = shiftOf(i);
         return (
-          <li key={id} className={`order-item ${moved === id ? 'moved' : ''} ${right === null ? '' : right ? 'is-correct' : 'is-wrong'}`}>
+          <li
+            key={id}
+            ref={(el) => (itemRefs.current[i] = el)}
+            className={`order-item ${moved === id && !drag ? 'moved' : ''} ${drag?.active && drag.from === i ? 'dragging' : ''} ${locked ? '' : 'draggable'} ${right === null ? '' : right ? 'is-correct' : 'is-wrong'}`}
+            style={shift ? { transform: `translateY(${shift}px)` } : undefined}
+            onPointerDown={(e) => onPointerDown(e, i)}
+            onPointerMove={onPointerMove}
+            onPointerUp={(e) => endDrag(e)}
+            onPointerCancel={(e) => endDrag(e, true)}
+          >
             <span className="pos">{i + 1}</span>
             <span>{byId[id]}</span>
             {right !== null && <span className="mark" aria-label={right ? 'posição correta' : 'posição incorreta'}>{right ? '✓' : '✗'}</span>}
@@ -268,63 +366,87 @@ function OrderEx({ q, answer, onAnswer, checked }: ExerciseProps<OrderQuestion>)
 function MatchEx({ q, seed, answer, onAnswer, checked }: ExerciseProps<MatchQuestion>) {
   const rights = useMemo(() => seededShuffle(q.pairs.map((p) => ({ id: p.id, text: p.right })), seed), [q, seed]);
   const pairs = answer?.type === 'match' ? answer.pairs : {};
-  const [pick, setPick] = useState<string | null>(null);
+  const mistakes = answer?.type === 'match' ? answer.mistakes ?? 0 : 0;
+  // seleção pode começar por qualquer coluna, como no Duolingo
+  const [pick, setPick] = useState<{ side: 'l' | 'r'; id: string } | null>(null);
+  // par certo acabou de ser formado (pisca verde) / par errado (treme vermelho e solta)
+  const [flash, setFlash] = useState<{ ok: boolean; l: string; r: string } | null>(null);
+  const [live, setLive] = useState('');
+  const play = useSound();
   const locked = Boolean(checked);
-  const usedRight = new Set(Object.values(pairs));
-  const complete = Object.keys(pairs).length === q.pairs.length;
+  const matched = new Set(Object.keys(pairs)); // ids de pares certos (esquerda e direita têm o mesmo id)
+  const complete = matched.size === q.pairs.length;
 
-  const setPairs = (next: Record<string, string>) => {
-    onAnswer(Object.keys(next).length === q.pairs.length ? { type: 'match', pairs: next } : Object.keys(next).length ? { type: 'match', pairs: next } : null);
-  };
-  const clickLeft = (id: string) => {
-    if (pairs[id]) {
-      const { [id]: _, ...rest } = pairs;
-      void _;
-      setPairs(rest);
-      setPick(id);
-    } else setPick(pick === id ? null : id);
-  };
-  const clickRight = (rid: string) => {
-    if (!pick) return;
-    setPairs({ ...pairs, [pick]: rid });
+  useEffect(() => {
+    if (!flash) return;
+    const t = setTimeout(() => setFlash(null), flash.ok ? 450 : 650);
+    return () => clearTimeout(t);
+  }, [flash]);
+
+  const leftText = (id: string) => q.pairs.find((p) => p.id === id)?.left ?? '';
+  const rightText = (id: string) => q.pairs.find((p) => p.id === id)?.right ?? '';
+
+  const tryPair = (l: string, r: string) => {
     setPick(null);
+    if (l === r) {
+      setFlash({ ok: true, l, r });
+      setLive(`Certo: ${leftText(l)} com ${rightText(r)}.`);
+      play('select');
+      onAnswer({ type: 'match', pairs: { ...pairs, [l]: r }, mistakes });
+    } else {
+      setFlash({ ok: false, l, r });
+      setLive(`Não combina: ${leftText(l)} e ${rightText(r)}. Tente outro par.`);
+      play('wrong');
+      onAnswer({ type: 'match', pairs, mistakes: mistakes + 1 });
+    }
   };
-  const rightLabel = (rid: string) => rights.find((r) => r.id === rid)?.text ?? '';
+  const click = (side: 'l' | 'r', id: string) => {
+    if (locked || matched.has(id)) return;
+    if (!pick || pick.side === side) {
+      setPick(pick?.side === side && pick.id === id ? null : { side, id });
+      return;
+    }
+    if (side === 'r') tryPair(pick.id, id);
+    else tryPair(id, pick.id);
+  };
+
+  const stateOf = (side: 'l' | 'r', id: string) => {
+    if (flash && flash[side] === id) return flash.ok ? 'is-correct' : 'is-wrong';
+    if (matched.has(id)) return 'paired';
+    return '';
+  };
 
   return (
     <>
       <p className="sr-only" aria-live="polite">
-        {pick ? `Selecionado: ${q.pairs.find((p) => p.id === pick)?.left}. Agora escolha o par.` : complete ? 'Todos os pares formados.' : ''}
+        {live || (pick ? `Selecionado: ${pick.side === 'l' ? leftText(pick.id) : rightText(pick.id)}. Agora escolha o par.` : complete ? 'Todos os pares formados.' : '')}
       </p>
       <div className="match">
         <div className="col" role="group" aria-label="Coluna da esquerda">
-          {q.pairs.map((p) => {
-            const paired = pairs[p.id];
-            const st = checked && paired ? (paired === p.id ? 'is-correct' : 'is-wrong') : '';
-            return (
-              <button
-                key={p.id}
-                type="button"
-                className={`opt ${paired && !checked ? 'paired' : ''} ${st}`}
-                aria-pressed={pick === p.id}
-                disabled={locked}
-                onClick={() => clickLeft(p.id)}
-                aria-label={`${p.left}${paired ? `, associado a ${rightLabel(paired)}` : ''}`}
-              >
-                {p.leftVisual ? <span className="sw"><Visual v={p.leftVisual} size={54} /></span> : null}
-                <span>{p.left}</span>
-              </button>
-            );
-          })}
+          {q.pairs.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              className={`opt ${stateOf('l', p.id)}`}
+              aria-pressed={pick?.side === 'l' && pick.id === p.id}
+              disabled={locked || matched.has(p.id)}
+              onClick={() => click('l', p.id)}
+              aria-label={`${p.left}${matched.has(p.id) ? `, associado a ${p.right}` : ''}`}
+            >
+              {p.leftVisual ? <span className="sw"><Visual v={p.leftVisual} size={54} /></span> : null}
+              <span>{p.left}</span>
+            </button>
+          ))}
         </div>
         <div className="col" role="group" aria-label="Coluna da direita">
           {rights.map((r) => (
             <button
               key={r.id}
               type="button"
-              className={`opt ${usedRight.has(r.id) && !checked ? 'paired' : ''}`}
-              disabled={locked || usedRight.has(r.id) || !pick}
-              onClick={() => clickRight(r.id)}
+              className={`opt ${stateOf('r', r.id)}`}
+              aria-pressed={pick?.side === 'r' && pick.id === r.id}
+              disabled={locked || matched.has(r.id)}
+              onClick={() => click('r', r.id)}
             >
               {r.text}
             </button>

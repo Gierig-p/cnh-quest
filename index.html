@@ -8,6 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>
+      // aplica o tema salvo antes do primeiro desenho (evita piscar claro)
+      try {
+        var t = JSON.parse(localStorage.getItem('cnhquest:progress:v1') || '{}').prefs.theme;
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

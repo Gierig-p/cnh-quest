@@ -38,6 +38,8 @@ export interface Prefs {
   sound: boolean;
   hearts: boolean;
   motion: 'system' | 'reduce' | 'full';
+  /** tema de cores; ausente = seguir o aparelho */
+  theme?: 'system' | 'light' | 'dark';
   examConfig: string;
 }
 
@@ -54,6 +56,11 @@ export interface ProgressState {
   exams: ExamRecord[];
   prefs: Prefs;
   onboarded: boolean;
+  /**
+   * Questões sorteadas de cada lição/rodada/revisão, guardadas na primeira vez que abre
+   * (chave de `drawKey`). Sair e entrar de novo repete as mesmas questões. Ausente no progresso antigo.
+   */
+  draws?: Record<string, string[]>;
 }
 
 export const DAILY_GOALS = [
@@ -158,6 +165,11 @@ export function roundsDone(s: ProgressState, lesson: Lesson): number {
   const p = s.lessons[lesson.id];
   if (!p) return 0;
   return Math.min(lessonRounds(lesson), p.roundsDone ?? (p.completed ? 1 : 0));
+}
+
+/** Lições com pelo menos a rodada 1 feita: os cartões delas já foram vistos. */
+export function lessonsWithCardsSeen(s: ProgressState): string[] {
+  return Object.keys(s.lessons).filter((id) => s.lessons[id].completed || (s.lessons[id].roundsDone ?? 0) >= 1);
 }
 
 export function lessonFinished(s: ProgressState, lesson: Lesson): boolean {
