@@ -149,7 +149,7 @@ Essa indicação vale só pelo título.
 | Mundo | Módulo | Lições previstas (assunto · subassunto) | Fonte oficial prevista | Conteúdo | Vínculo |
 |---|---|---|---|---|---|
 | 2 A linguagem das placas | 1 | Regulamentação; advertência; indicação; sinalização horizontal; semáforo e gestos | MBST Vols. I–V (Res. CONTRAN 973/2022); CTB | Confirmado só para os códigos já lidos (seção 2); o resto A investigar | Inferido pela organização do app |
-| 3 Regras para circular | 3 | Circulação e faixas; velocidade; ultrapassagem; estacionamento e parada | CTB arts. 29–67 | Parcial (arts. 29, 44, 61, 70 lidos) | Inferido pela organização do app |
+| 3 Regras para circular | 3 | Circulação e faixas; velocidade; ultrapassagem; estacionamento e parada | CTB arts. 28–65 e Anexo I | **Feito em 14/11** (arts. 28–49, 54, 55, 61, 62, 64, 65 e Anexo I lidos no Planalto) | Inferido pela organização do app |
 | 4 Infrações e consequências | 2 | Natureza, multa e pontos; suspensão; infrações mais comuns; crimes; procedimentos | CTB arts. 161–312 | Parcial (arts. 258, 259, 261 lidos) | Inferido pela organização do app |
 | 5 Motorista defensivo | 3 | Fundamentos; fator humano; visibilidade; reação e frenagem; usuários vulneráveis; Sistema Seguro | Portaria 923/2025, eixo de direção defensiva | Tema confirmado no programa; conteúdo técnico A investigar | Inferido pela organização do app |
 | 6 Emergências e primeiros socorros | 4 | Sinalizar e acionar socorro; avaliação inicial; o que não fazer | Portaria 923/2025; CTB art. 147 IV | Tema confirmado no programa; conteúdo técnico A investigar | Inferido pela organização do app |

@@ -5,7 +5,8 @@ import type { ReferenceModuleId } from '../content/types';
 import { IconBolt, IconChart, IconClipboard, IconFire, IconMedal } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
 import { getVolume, playSound, setVolume } from '../ui/sound';
-import { ACHIEVEMENTS, DAILY_GOALS, currentStreak, levelFromXp, topicReport, type Prefs, type ProgressState } from '../engine/progress';
+import { ACHIEVEMENTS, DAILY_GOALS, currentStreak, levelFromXp, pauseBackOn, topicReport, type Prefs, type ProgressState } from '../engine/progress';
+import { pauseStatus } from '../components/DailyMission';
 import { useApp } from '../state/AppState';
 
 function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label: string }) {
@@ -134,6 +135,7 @@ export function ProgressScreen() {
         <div className="stat-box purple"><IconBolt size={28} /><strong>{progress.xp}</strong><span>XP total</span></div>
         <div className="stat-box blue"><IconClipboard size={28} /><strong>{progress.exams.length}</strong><span>Simulados</span></div>
       </div>
+      <p className="pause-status muted">🛟 {pauseStatus(pauseBackOn(progress.streak))}</p>
 
       <StudiedCard progress={progress} />
 

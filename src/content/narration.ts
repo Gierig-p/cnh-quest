@@ -222,4 +222,130 @@ export const NARRATION: Record<string, string[]> = {
     'Um exemplo. De madrugada, um cruzamento está com o amarelo piscando. Ninguém tem o verde. Chegue devagar, olhe para os lados e siga as regras de preferência.',
     'Para guardar: pisca-pisca amarelo, devagar e atenção.',
   ],
+
+  /* ---- Mundo 3: Regras para circular ---- */
+  'c3-lado-direito': [
+    'Bem-vindo ao mundo das regras para circular. Vamos começar pelo básico: por onde andar.',
+    'No Brasil, o trânsito anda pelo lado direito da via. Quando a regra é outra, há sinalização avisando.',
+    'A pista pode ser dividida em faixas, que são como corredores, cada um com largura para um carro.',
+    'Quando há várias faixas no mesmo sentido, as da direita são para os veículos mais lentos e maiores. As da esquerda são para ultrapassar e para quem anda mais rápido.',
+    'Guarde distância de segurança: para a frente, para os lados e da beirada da pista. Quanto maior a velocidade, a chuva ou o movimento, maior o espaço.',
+    'E o tempo todo, você deve ter o domínio do veículo, dirigindo com atenção.',
+    'Um exemplo. Numa avenida de três faixas, o caminhão lento vai pela direita. Você usa a faixa da esquerda para passar por ele, e depois volta.',
+    'Para guardar: direita para andar devagar, esquerda para passar.',
+  ],
+
+  'c3-calcada-acostamento': [
+    'Calçada e acostamento não são caminho para carro.',
+    'A calçada é das pessoas a pé. O acostamento é aquela faixa ao lado da pista, na estrada. Ele serve para parar em emergência, e para pedestres e bicicletas quando não há outro lugar.',
+    'O carro só pode passar sobre a calçada ou o acostamento para entrar ou sair de uma casa, uma garagem ou um estacionamento.',
+    'Acostamento não é faixa extra para fugir do congestionamento.',
+    'E tem mais uma regra importante: quem é maior cuida de quem é menor. O caminhão cuida do carro. O carro cuida da moto e da bicicleta. Os veículos com motor cuidam dos sem motor. E todos juntos cuidam dos pedestres.',
+    'Um exemplo. O trânsito parou na rodovia. Andar pelo acostamento para passar à frente é proibido. Ele fica livre para quem tem uma emergência.',
+    'Para guardar: quanto maior, mais responsável. E o pedestre é de todos.',
+  ],
+
+  'c3-ultrapassar-como': [
+    'Ultrapassar é sair da sua faixa, passar à frente de um veículo mais lento que vai no mesmo sentido, e voltar.',
+    'É uma das manobras mais perigosas. Por isso tem passos certos.',
+    'Em regra, ultrapasse pela esquerda. A exceção: se o veículo da frente sinalizou que vai entrar à esquerda, você passa pela direita dele.',
+    'Antes de passar, olhe três coisas. Ninguém atrás já começou a ultrapassar você? O da frente não vai ultrapassar outro? A faixa está livre por um bom trecho?',
+    'Durante a ultrapassagem: ligue a seta, ou faça o gesto de braço. Passe com distância para o lado. E volte à sua faixa, de novo com a seta.',
+    'E quem está sendo ultrapassado não acelera. Se estiver na faixa da esquerda, vai para a da direita.',
+    'Um exemplo. Pelo retrovisor, você vê que um carro quer passar, e você está na faixa da esquerda. Ligue a seta, vá para a direita e mantenha a velocidade.',
+    'Para guardar: olhe, sinalize, passe com espaço e volte sinalizando.',
+  ],
+
+  'c3-onde-nao-ultrapassar': [
+    'Há lugares em que você não enxerga quem vem de frente, ou em que há pessoas e trilhos por perto. Neles, ultrapassar é proibido.',
+    'Numa pista única de mão dupla, ou seja, uma pista só com os dois sentidos lado a lado, não ultrapasse em curvas e subidas sem boa visão.',
+    'Também não ultrapasse em passagens de nível, que são os lugares onde a rua cruza um trilho de trem. Nem em pontes, viadutos e faixas de pedestres. A não ser que a sinalização permita.',
+    'Nos cruzamentos e perto deles, também não se ultrapassa.',
+    'E se um ônibus estiver parado, com gente subindo ou descendo: reduza, redobre a atenção ou pare. Pode surgir alguém na frente dele.',
+    'Um exemplo. Numa estrada de mão dupla, o caminhão da frente está devagar numa subida, e você não vê o topo. Espere a reta, com visão livre, para passar.',
+    'Para guardar: se não dá para ver quem vem, não dá para passar.',
+  ],
+
+  'c3-seta': [
+    'Toda vez que você vai para o lado, os outros precisam saber antes. A seta é o seu aviso.',
+    'Antes de qualquer manobra, confira se ela não traz perigo para quem vem atrás, vai à frente ou vai cruzar com você.',
+    'Mudar de faixa, virar à direita ou à esquerda e fazer o retorno: tudo isso é ir para o lado. Avise com a seta, com antecedência. Se a seta não funcionar, use o gesto de braço.',
+    'Mudar de faixa pode ser para a esquerda ou para a direita, sempre com os mesmos cuidados.',
+    'E saindo de uma garagem ou de um estacionamento para a rua, a preferência é de quem já está na rua: carros e pedestres.',
+    'Um exemplo. Você sai da garagem de ré. Um pedestre passa na calçada e um carro vem pela rua. Os dois passam primeiro. Depois, você entra.',
+    'Para guardar: primeiro olhe, depois a seta, só então vire.',
+  ],
+
+  'c3-conversao': [
+    'Na hora de virar, a posição do carro conta. E mesmo com o sinal verde, nem sempre dá para entrar no cruzamento.',
+    'Para virar à direita, encoste o máximo possível no lado direito e faça a curva no menor espaço.',
+    'Para virar à esquerda numa rua de mão dupla, chegue perto do meio da pista. Numa rua de mão única, encoste no lado esquerdo.',
+    'Ao virar, dê passagem aos pedestres e ciclistas, e aos veículos que vêm no sentido contrário.',
+    'Na rodovia com acostamento e sem lugar próprio para virar à esquerda ou voltar, espere no acostamento da direita e cruze quando der.',
+    'Sinal verde não basta: se você pode ficar parado no meio do cruzamento, travando quem cruza, não entre.',
+    'E virar à direita no sinal vermelho só é livre onde a sinalização permitir.',
+    'Para guardar: verde não é ordem de entrar. Só entre se tiver espaço para sair.',
+  ],
+
+  'c3-farois': [
+    'O farol serve para você ver e, principalmente, para ser visto. Cada situação pede uma luz.',
+    'A luz baixa é o farol normal. Use à noite. E use também de dia, em túneis e com chuva, neblina ou cerração. Cerração é a neblina bem fechada.',
+    'A luz alta é o farol forte, que ilumina longe. Use em via sem iluminação. Mas troque pela baixa quando cruzar com outro veículo ou quando estiver seguindo um.',
+    'As motos usam o farol baixo de dia e de noite. Os ônibus nas faixas só deles também.',
+    'E se o carro não tem luz de rodagem diurna, que é a luz própria para o dia, o farol fica aceso de dia nas rodovias de pista simples fora da cidade.',
+    'Um exemplo. Numa estrada escura, você usa a luz alta. Um carro aparece vindo de frente: você baixa a luz para não cegar o motorista.',
+    'Para guardar: alguém de frente ou logo à frente? Luz baixa.',
+  ],
+
+  'c3-pisca-buzina': [
+    'Piscar o farol, ligar o pisca-alerta e buzinar são avisos. Por isso, cada um só vale em situações certas.',
+    'Piscar o farol, trocando a luz baixa e a alta bem rápido, só serve para avisar que você vai ultrapassar o da frente, ou para avisar um perigo a quem vem de frente.',
+    'O pisca-alerta são as duas setas piscando juntas. Use com o veículo parado na via, numa emergência, ou quando a regra do local mandar.',
+    'A buzina é só um toque breve, para evitar um acidente. Fora da cidade, o toque breve também pode avisar que você vai ultrapassar.',
+    'E não freie de repente, a não ser por segurança.',
+    'Um exemplo. Seu carro quebrou na pista. Ligue o pisca-alerta e sinalize o local para os outros verem de longe.',
+    'Para guardar: buzina é aviso de perigo, não de pressa.',
+  ],
+
+  'c3-parada-estacionamento': [
+    'Parar e estacionar parecem a mesma coisa, mas não são. A diferença é o tempo e o motivo.',
+    'Parada é parar só o tempo para alguém subir ou descer do veículo. Estacionamento é qualquer tempo maior que esse.',
+    'Onde é proibido estacionar, a parada só pode durar o tempo de alguém subir ou descer, sem atrapalhar carros e pedestres.',
+    'Atenção: carga e descarga, que é colocar ou tirar mercadorias, conta como estacionamento.',
+    'E se o veículo ficar parado na via por emergência, sinalize o local na hora.',
+    'Um exemplo. Você deixa um amigo na porta da escola e sai: foi uma parada. Se desce para comprar pão e deixa o carro na rua, foi um estacionamento.',
+    'Para guardar: sobe ou desce e vai embora, é parada. Ficou, é estacionamento.',
+  ],
+
+  'c3-posicao-portas': [
+    'Não basta saber onde parar. A posição do veículo e o jeito de abrir a porta também têm regra.',
+    'O carro fica no sentido do trânsito, paralelo à beirada da pista e junto ao meio-fio. Meio-fio é a pedra da beirada da calçada. Isso vale a não ser que a sinalização diga outra coisa.',
+    'A moto fica perpendicular ao meio-fio, ou seja, formando um L com a calçada, e junto a ele.',
+    'Na estrada com acostamento, pare fora da pista.',
+    'Antes de abrir a porta, veja se não vem ninguém: carro, moto, bicicleta ou pedestre.',
+    'Os passageiros sobem e descem pelo lado da calçada. Só o motorista usa o outro lado.',
+    'Um exemplo. Você estacionou. Antes de abrir a porta, olha o retrovisor e vem uma bicicleta. Espere ela passar.',
+    'Para guardar: carro paralelo, moto em L, porta só depois de olhar.',
+  ],
+
+  'c3-velocidade-estrada': [
+    'No mundo um, você viu os limites da cidade. Fora dela, o limite depende do tipo de via e do veículo. E a placa sempre vem primeiro.',
+    'Rodovia é a via fora da cidade com asfalto. Estrada é a via fora da cidade sem asfalto.',
+    'Sem placa, na rodovia de pista dupla, aquela com uma pista para cada sentido: cento e dez quilômetros por hora para carros, caminhonetes e motos. Noventa para os outros veículos.',
+    'Sem placa, na rodovia de pista simples: cem quilômetros por hora para carros, caminhonetes e motos. Noventa para os outros.',
+    'Sem placa, na estrada de terra: sessenta quilômetros por hora.',
+    'E a velocidade mínima é a metade da máxima. Andar devagar demais sem motivo também atrapalha.',
+    'Um exemplo. Numa rodovia de pista simples sem placa, você vai de carro a até cem. O caminhão ao lado, até noventa. Se aparecer uma placa de oitenta, vale oitenta para os dois.',
+    'Para guardar: pista dupla, cento e dez. Simples, cem. Terra, sessenta. A mínima é a metade.',
+  ],
+
+  'c3-cinto-capacete': [
+    'Em qualquer viagem, curta ou longa, o corpo precisa estar protegido.',
+    'O cinto de segurança é obrigatório para o motorista e para todos os passageiros, em todas as vias do país.',
+    'Criança com menos de dez anos e menos de um metro e quarenta e cinco vai no banco de trás, no dispositivo de retenção certo para a idade, o peso e a altura. Dispositivo de retenção é o bebê conforto, a cadeirinha ou o assento de elevação.',
+    'Na moto, quem pilota usa capacete com viseira ou óculos de proteção, as duas mãos no guidão e roupa de proteção. Viseira é a parte transparente do capacete, que protege os olhos.',
+    'O passageiro da moto usa capacete e roupa de proteção, e vai no assento atrás de quem pilota.',
+    'Um exemplo. Uma criança de seis anos vai com você ao mercado, a duas quadras. Mesmo perto, ela vai no banco de trás, na cadeirinha.',
+    'Para guardar: todo mundo de cinto. Criança atrás. Capacete fechado.',
+  ],
 };

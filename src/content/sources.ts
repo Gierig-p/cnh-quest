@@ -14,7 +14,7 @@ export const SOURCES: Record<string, Source> = {
     id: 'ctb',
     title: 'Código de Trânsito Brasileiro — Lei nº 9.503/1997 (texto compilado)',
     url: 'https://www.planalto.gov.br/ccivil_03/leis/l9503compilado.htm',
-    checkedAt: '2026-10-19',
+    checkedAt: '2026-11-14',
   },
   res1020: {
     id: 'res1020',

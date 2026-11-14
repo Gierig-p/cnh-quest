@@ -52,7 +52,11 @@ export interface ProgressState {
   xp: number;
   dailyGoal: number;
   daily: { date: string; xp: number };
-  streak: { count: number; best: number; lastDay: string | null };
+  /**
+   * Ofensiva. `pauses`: dias sem estudo que a pausa da semana cobriu (pedido do dono, 14/11/2026).
+   * Ausente no progresso antigo.
+   */
+  streak: { count: number; best: number; lastDay: string | null; pauses?: string[] };
   lessons: Record<string, LessonProgress>;
   questions: Record<string, QuestionStat>;
   topics: Record<string, TopicStat>;
@@ -65,6 +69,10 @@ export interface ProgressState {
    * (chave de `drawKey`). Sair e entrar de novo repete as mesmas questões. Ausente no progresso antigo.
    */
   draws?: Record<string, string[]>;
+  /** Missão do dia (pedido do dono, 14/11/2026). Ausente = nenhuma missão andou hoje. */
+  mission?: { date: string; id: MissionId; count: number; done: boolean };
+  /** Data da prova marcada pelo aluno ("AAAA-MM-DD"), para o plano até a prova. Ausente = sem data. */
+  examDate?: string;
 }
 
 export const DAILY_GOALS = [
@@ -98,13 +106,62 @@ export function dayKey(d: Date): string {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
 
+/** Dias inteiros entre duas datas "AAAA-MM-DD" (b - a). */
+export function daysBetween(a: string, b: string): number {
+  const [ya, ma, da] = a.split('-').map(Number);
+  const [yb, mb, db] = b.split('-').map(Number);
+  return Math.round((Date.UTC(yb, mb - 1, db) - Date.UTC(ya, ma - 1, da)) / 86400000);
+}
+
+/* ---------- ofensiva e pausa da semana ---------- */
+
+/**
+ * Pausa da ofensiva (pedido do dono, 14/11/2026): se a pessoa fica UM dia sem estudar, a ofensiva
+ * não quebra, desde que não tenha usado outra pausa nos 7 dias antes. Dois dias seguidos sem
+ * estudar quebram. A pausa é automática: vale quando a pessoa volta a estudar no dia seguinte.
+ */
+export const PAUSE_EVERY = 7;
+
+/** Último dia coberto por uma pausa, ou null. */
+export function lastPause(streak: ProgressState['streak']): string | null {
+  const ps = [...(streak.pauses ?? [])].sort();
+  return ps.length ? ps[ps.length - 1] : null;
+}
+
+/** A pausa pode cobrir o dia `missed`? (nenhuma pausa nos 7 dias antes dele) */
+export function pauseAvailable(streak: ProgressState['streak'], missed: string): boolean {
+  const last = lastPause(streak);
+  return !last || daysBetween(last, missed) >= PAUSE_EVERY;
+}
+
+/** Dia em que a pausa volta a valer, ou null se já vale hoje. */
+export function pauseBackOn(streak: ProgressState['streak'], now: Date = new Date()): string | null {
+  const last = lastPause(streak);
+  if (!last) return null;
+  const back = addDays(last, PAUSE_EVERY);
+  return back > dayKey(now) ? back : null;
+}
+
+/**
+ * Ofensiva segura pela pausa: ontem não houve estudo, mas a sequência continua se a pessoa
+ * estudar hoje. Devolve o dia perdido (ontem) ou null.
+ */
+export function streakOnPause(streak: ProgressState['streak'], now: Date = new Date()): string | null {
+  const today = dayKey(now);
+  const missed = addDays(today, -1);
+  if (streak.count > 0 && streak.lastDay === addDays(today, -2) && pauseAvailable(streak, missed)) return missed;
+  return null;
+}
+
 /**
  * Ofensiva que vale hoje, só para mostrar na tela: se o último dia de estudo não foi
  * hoje nem ontem, a sequência já quebrou e aparece 0 (o dado salvo não muda).
+ * Com a pausa da semana disponível, um dia perdido ainda não quebra.
  */
 export function currentStreak(streak: ProgressState['streak'], now: Date = new Date()): number {
   const today = dayKey(now);
   if (streak.lastDay === today || streak.lastDay === addDays(today, -1)) return streak.count;
+  if (streakOnPause(streak, now)) return streak.count;
   return 0;
 }
 
@@ -281,13 +338,53 @@ export function nextLesson(s: ProgressState, worlds: World[]): { world: World; l
   return null;
 }
 
+/* ---------- missão do dia ---------- */
+
+export type MissionId = 'acertos' | 'sessoes' | 'perfeita';
+
+/** Missões que se revezam, uma por dia (pedido do dono, 14/11/2026). Todas cabem num estudo curto. */
+export const MISSIONS: Record<MissionId, { text: string; target: number }> = {
+  acertos: { text: 'Acerte 10 questões de primeira', target: 10 },
+  sessoes: { text: 'Termine 2 lições ou revisões', target: 2 },
+  perfeita: { text: 'Termine uma lição ou revisão sem errar', target: 1 },
+};
+const MISSION_ORDER: MissionId[] = ['acertos', 'sessoes', 'perfeita'];
+
+/** XP extra ao cumprir a missão. */
+export const MISSION_XP = 10;
+
+/** Missão de hoje, com o andamento (0 se nada andou ainda). Sempre a mesma no mesmo dia. */
+export function todayMission(s: ProgressState, now: Date = new Date()) {
+  const today = dayKey(now);
+  const saved = s.mission?.date === today ? s.mission : null;
+  const n = MISSION_ORDER.length;
+  const id = saved?.id ?? MISSION_ORDER[((daysBetween('2026-01-01', today) % n) + n) % n];
+  return { id, ...MISSIONS[id], count: saved?.count ?? 0, done: saved?.done ?? false };
+}
+
+/** Conta uma sessão terminada (lição ou revisão) na missão do dia. */
+function advanceMission(s: ProgressState, result: SessionResult, now: Date): { state: ProgressState; missionDone: boolean } {
+  const m = todayMission(s, now);
+  if (m.done || !result.completed) return { state: s, missionDone: false };
+  const perfect = result.total > 0 && result.correctFirstTry === result.total;
+  const step = m.id === 'acertos' ? result.correctFirstTry : m.id === 'sessoes' ? 1 : perfect ? 1 : 0;
+  if (!step) return { state: s, missionDone: false };
+  const count = Math.min(m.target, m.count + step);
+  const done = count >= m.target;
+  return { state: { ...s, mission: { date: dayKey(now), id: m.id, count, done } }, missionDone: done };
+}
+
 /* ---------- conclusão de lição ---------- */
 
 export interface CompletionOutcome {
   state: ProgressState;
   xpGained: number;
   streakIncreased: boolean;
+  /** a pausa da semana cobriu o dia sem estudo (a ofensiva continuou) */
+  pauseUsed: boolean;
   goalReachedNow: boolean;
+  /** XP extra da missão do dia cumprida agora (0 se não cumpriu) */
+  missionXp: number;
   newAchievements: string[];
   mastered: boolean;
   /** rodada que acabou de ser feita e total de rodadas da lição */
@@ -313,13 +410,19 @@ export function addXp(s: ProgressState, amount: number, now: Date) {
   const daily = { date: today, xp: dailyBefore + amount };
   let streak = s.streak;
   let streakIncreased = false;
+  let pauseUsed = false;
   if (amount > 0 && streak.lastDay !== today) {
-    const count = streak.lastDay === addDays(today, -1) ? streak.count + 1 : 1;
-    streak = { count, best: Math.max(streak.best, count), lastDay: today };
+    const missed = streakOnPause(streak, now);
+    const keeps = streak.lastDay === addDays(today, -1) || Boolean(missed);
+    const count = keeps ? streak.count + 1 : 1;
+    // guarda só as pausas recentes
+    const pauses = missed ? [...(streak.pauses ?? []), missed].slice(-4) : streak.pauses;
+    streak = { count, best: Math.max(streak.best, count), lastDay: today, ...(pauses ? { pauses } : {}) };
     streakIncreased = true;
+    pauseUsed = Boolean(missed);
   }
   const goalReachedNow = dailyBefore < s.dailyGoal && daily.xp >= s.dailyGoal;
-  return { state: { ...s, xp: s.xp + amount, daily, streak }, streakIncreased, goalReachedNow };
+  return { state: { ...s, xp: s.xp + amount, daily, streak }, streakIncreased, goalReachedNow, pauseUsed };
 }
 
 export function completeLesson(s: ProgressState, lesson: Lesson, result: SessionResult, now: Date): CompletionOutcome {
@@ -339,7 +442,9 @@ export function completeLesson(s: ProgressState, lesson: Lesson, result: Session
     bestAccuracy: Math.max(prev.bestAccuracy, result.accuracy),
     attempts: prev.attempts + 1,
   };
-  const x = addXp({ ...s, lessons: { ...s.lessons, [lesson.id]: lp } }, xpGained, now);
+  const mi = advanceMission({ ...s, lessons: { ...s.lessons, [lesson.id]: lp } }, result, now);
+  const missionXp = mi.missionDone ? MISSION_XP : 0;
+  const x = addXp(mi.state, xpGained + missionXp, now);
   let state = x.state;
   const unlocked: string[] = [];
   const grant = (id: string) => {
@@ -355,7 +460,9 @@ export function completeLesson(s: ProgressState, lesson: Lesson, result: Session
     state,
     xpGained,
     streakIncreased: x.streakIncreased,
+    pauseUsed: x.pauseUsed,
     goalReachedNow: x.goalReachedNow,
+    missionXp,
     newAchievements: unlocked,
     mastered,
     round,
@@ -371,7 +478,9 @@ export function completeLesson(s: ProgressState, lesson: Lesson, result: Session
  */
 export function completePractice(s: ProgressState, result: SessionResult, now: Date): CompletionOutcome {
   const xpGained = result.correctFirstTry * 2;
-  const x = addXp(s, xpGained, now);
+  const mi = advanceMission(s, result, now);
+  const missionXp = mi.missionDone ? MISSION_XP : 0;
+  const x = addXp(mi.state, xpGained + missionXp, now);
   const unlocked: string[] = [];
   const grant = (id: string) => {
     if (!x.state.achievements.includes(id) && !unlocked.includes(id)) unlocked.push(id);
@@ -382,7 +491,9 @@ export function completePractice(s: ProgressState, result: SessionResult, now: D
     state: { ...x.state, achievements: [...x.state.achievements, ...unlocked] },
     xpGained,
     streakIncreased: x.streakIncreased,
+    pauseUsed: x.pauseUsed,
     goalReachedNow: x.goalReachedNow,
+    missionXp,
     newAchievements: unlocked,
     mastered: result.accuracy >= 0.8,
     round: 1,

@@ -90,7 +90,7 @@ export function Dialog({ labelledBy, onClose, children, tone }: { labelledBy: st
         close();
       } else if (e.key === 'Tab' && ref.current) {
         // mantém o foco dentro do diálogo
-        const f = ref.current.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], select, [tabindex]:not([tabindex="-1"])');
+        const f = ref.current.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], input, select, [tabindex]:not([tabindex="-1"])');
         if (!f.length) return;
         const first = f[0];
         const last = f[f.length - 1];

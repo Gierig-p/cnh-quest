@@ -10,7 +10,7 @@ import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 // @ts-ignore: módulo .mjs sem tipos
 import { efeito, falaPausada, RAIZ } from './eleven.mjs';
-import { WORLD1_SITUATIONS, WORLD2_SITUATIONS } from '../../src/content/situations';
+import { WORLD1_SITUATIONS, WORLD2_SITUATIONS, WORLD3_SITUATIONS } from '../../src/content/situations';
 
 /** Voz escolhida pelo dono em 14/11/2026: Davi Andrei (pt-BR), a mesma dos cartões. */
 const VOZ = '2CECaLAGTS5NRGxgbcxr';
@@ -25,6 +25,7 @@ const SONS: Record<string, Som> = {
   passaros: { tipo: 'fundo', segundos: 20, prompt: 'quiet suburban street in the morning, birds singing, soft breeze, calm' },
   caminhao: { tipo: 'fundo', segundos: 20, prompt: 'heavy truck engine rumbling slowly ahead on a two-lane country road, heard from a car behind it' },
   estrada: { tipo: 'fundo', segundos: 20, prompt: 'car driving on a rural highway, interior road noise and soft wind, steady' },
+  chuva: { tipo: 'fundo', segundos: 20, prompt: 'heavy rain drumming on the roof and windshield of a car, wipers moving, muffled city traffic, daytime' },
   seta: { tipo: 'fundo', segundos: 12, prompt: 'car turn signal indicator ticking steadily inside a quiet car' },
   apito: { tipo: 'evento', segundos: 1.6, prompt: 'traffic police officer blowing a whistle, one short sharp blast, outdoors on a street' },
   sirene: { tipo: 'evento', segundos: 6, prompt: 'ambulance siren approaching from far behind and getting louder, wailing siren' },
@@ -46,7 +47,7 @@ async function som(chave: string) {
   return efeito(s.prompt, s.segundos, join(TMP, `som_${chave}.mp3`)) as Promise<string>;
 }
 
-const todas = [...WORLD1_SITUATIONS, ...WORLD2_SITUATIONS];
+const todas = [...WORLD1_SITUATIONS, ...WORLD2_SITUATIONS, ...WORLD3_SITUATIONS];
 const pedidas = process.argv.slice(2);
 mkdirSync(TMP, { recursive: true });
 mkdirSync(OUT, { recursive: true });

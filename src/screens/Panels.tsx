@@ -1,7 +1,7 @@
 import { QUESTIONS } from '../content';
 import { IconBolt, IconClipboard, IconFire, IconMedal, IconMoon, IconReview, IconSound, IconSoundOff, IconSun, IconTarget } from '../components/Icons';
 import { playSound } from '../ui/sound';
-import { ACHIEVEMENTS, currentStreak, dayKey, dueQuestions, levelFromXp, topicReport } from '../engine/progress';
+import { ACHIEVEMENTS, currentStreak, dayKey, dueQuestions, levelFromXp, streakOnPause, topicReport } from '../engine/progress';
 import { useApp } from '../state/AppState';
 import { useDarkTheme } from '../ui/hooks';
 
@@ -10,6 +10,7 @@ export function TopStats() {
   const lvl = levelFromXp(progress.xp);
   const studiedToday = progress.streak.lastDay === dayKey(new Date());
   const streak = currentStreak(progress.streak);
+  const onPause = Boolean(streakOnPause(progress.streak));
   const sound = progress.prefs.sound;
   const toggleSound = () => {
     update((p) => ({ ...p, prefs: { ...p.prefs, sound: !sound } }));
@@ -25,7 +26,7 @@ export function TopStats() {
       <button type="button" className={`stat sound-toggle theme-toggle ${dark ? 'on' : ''}`} aria-pressed={dark} aria-label="Modo escuro" title={dark ? 'Mudar para o modo claro' : 'Mudar para o modo escuro'} onClick={toggleTheme}>
         {dark ? <IconSun /> : <IconMoon />}
       </button>
-      <span className={`stat streak ${studiedToday ? 'on' : ''}`} title="Ofensiva: dias seguidos de estudo" aria-label={`Ofensiva de ${streak} dias${studiedToday ? '' : ', ainda não estudou hoje'}`}>
+      <span className={`stat streak ${studiedToday ? 'on' : ''}`} title={onPause ? 'Ofensiva segura pela pausa da semana: estude hoje para continuar' : 'Ofensiva: dias seguidos de estudo'} aria-label={`Ofensiva de ${streak} dias${studiedToday ? '' : ', ainda não estudou hoje'}${onPause ? ', segura pela pausa da semana' : ''}`}>
         <IconFire /> {streak}
       </span>
       <span className="stat xp" title="XP total" aria-label={`${progress.xp} pontos de experiência`}>

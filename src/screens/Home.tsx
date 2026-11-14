@@ -5,6 +5,8 @@ import type { Lesson, ReferenceModuleId, World } from '../content/types';
 import { Burst } from '../components/Fx';
 import { IconCheck, IconChest, IconCrown, IconLock, IconRoad, IconShield, IconSign, IconStar, IconTrophy } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
+import { ExamPlan } from '../components/ExamPlan';
+import { DailyMission, PauseNote } from '../components/DailyMission';
 import { dayKey, dueQuestions, lessonFinished, lessonRounds, lessonState, nextLesson, roundsDone, worldCompleted, type NodeState } from '../engine/progress';
 import { useApp } from '../state/AppState';
 import { useSound } from '../ui/hooks';
@@ -252,7 +254,10 @@ function TodayCard({ onStart, onReview }: { onStart: (l: Lesson) => void; onRevi
   return (
     <section className="card today-card" aria-labelledby="today-h">
       <h2 id="today-h">Hoje</h2>
+      <PauseNote />
       {body}
+      <DailyMission />
+      <ExamPlan />
     </section>
   );
 }

@@ -108,7 +108,7 @@ describe('fluxo principal', () => {
     storage.setItem('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true }));
     const { user, unmount } = setup(storage);
     const hoje = screen.getByRole('region', { name: 'Hoje' });
-    expect(within(hoje).getAllByRole('button')).toHaveLength(1);
+    expect(within(hoje).getAllByRole('button').filter((b) => b.classList.contains('btn'))).toHaveLength(1); // uma ação principal (o link da data da prova é à parte)
     await user.click(within(hoje).getByRole('button', { name: 'Continuar: Quem manda no trânsito?' }));
     expect(screen.getByRole('heading', { name: 'O que é um sinal de trânsito?' })).toBeInTheDocument();
     unmount();
@@ -120,7 +120,7 @@ describe('fluxo principal', () => {
     storage.setItem('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true, questions }));
     setup(storage);
     const hoje2 = screen.getByRole('region', { name: 'Hoje' });
-    expect(within(hoje2).getAllByRole('button')).toHaveLength(1);
+    expect(within(hoje2).getAllByRole('button').filter((b) => b.classList.contains('btn'))).toHaveLength(1);
     expect(within(hoje2).getByRole('button', { name: /^Revisar 12 questões$/ })).toBeInTheDocument();
   });
 

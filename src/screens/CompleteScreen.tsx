@@ -107,14 +107,23 @@ export function CompleteScreen({
           </div>
         </div>
 
-        {(outcome?.streakIncreased || outcome?.goalReachedNow || newAch.length > 0) && (
+        {(outcome?.streakIncreased || outcome?.goalReachedNow || outcome?.missionXp || newAch.length > 0) && (
           <ul className="rewards" aria-label="Recompensas">
             {outcome?.streakIncreased && (
               <li className="reward streak">
                 <span className="reward-icon"><IconFire size={26} /></span>
-                <span>{progress.streak.count === 1 ? 'Ofensiva iniciada: 1 dia de estudo!' : `Ofensiva: ${progress.streak.count} dias seguidos!`}</span>
+                <span>
+                  {progress.streak.count === 1 ? 'Ofensiva iniciada: 1 dia de estudo!' : `Ofensiva: ${progress.streak.count} dias seguidos!`}
+                  {outcome.pauseUsed && ' A pausa da semana cobriu o dia sem estudo.'}
+                </span>
               </li>
             )}
+            {outcome?.missionXp ? (
+              <li className="reward goal">
+                <span className="reward-icon"><IconTarget size={26} /></span>
+                <span>Missão do dia cumprida! +{outcome.missionXp} XP</span>
+              </li>
+            ) : null}
             {outcome?.goalReachedNow && (
               <li className="reward goal">
                 <span className="reward-icon"><IconTarget size={26} /></span>

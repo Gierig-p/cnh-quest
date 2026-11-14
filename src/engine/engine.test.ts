@@ -468,7 +468,10 @@ describe('ofensiva exibida', () => {
     const now = new Date(2026, 10, 14, 12);
     expect(currentStreak({ count: 5, best: 7, lastDay: '2026-11-14' }, now)).toBe(5);
     expect(currentStreak({ count: 5, best: 7, lastDay: '2026-11-13' }, now)).toBe(5);
-    expect(currentStreak({ count: 5, best: 7, lastDay: '2026-11-12' }, now)).toBe(0);
+    // um dia perdido: a pausa da semana segura; com pausa usada há pouco, quebra
+    expect(currentStreak({ count: 5, best: 7, lastDay: '2026-11-12' }, now)).toBe(5);
+    expect(currentStreak({ count: 5, best: 7, lastDay: '2026-11-12', pauses: ['2026-11-09'] }, now)).toBe(0);
+    expect(currentStreak({ count: 5, best: 7, lastDay: '2026-11-11' }, now)).toBe(0);
     expect(currentStreak({ count: 0, best: 0, lastDay: null }, now)).toBe(0);
   });
 });
@@ -477,7 +480,8 @@ describe('prática concede conquistas (decisão do dono, 14/11)', () => {
   it('bater a meta na prática dá "meta-diaria" uma vez só, sem XP extra', async () => {
     const { completePractice, initialProgress } = await import('./progress');
     const now = new Date(2026, 10, 14, 12);
-    const s = { ...initialProgress(), dailyGoal: 10 };
+    // missão do dia já cumprida, para não somar o XP dela
+    const s = { ...initialProgress(), dailyGoal: 10, mission: { date: '2026-11-14', id: 'acertos' as const, count: 10, done: true } };
     const result = { total: 6, correctFirstTry: 6, accuracy: 1, completed: true } as Parameters<typeof completePractice>[1];
     const a = completePractice(s, result, now);
     expect(a.xpGained).toBe(12);
