@@ -18,10 +18,14 @@ function memoryStorage(): Storage {
 }
 
 /** Passa o cartão de conceito inteiro, mesmo quando ele vem em partes ("Parte 1 de 2"). */
+const nextFrame = () => act(() => new Promise<void>((r) => requestAnimationFrame(() => r())));
+
 async function passCard(user: { click: (el: Element) => Promise<void> }) {
   for (;;) {
     const m = screen.queryByText(/^Parte \d+ de \d+$/)?.textContent?.match(/(\d+) de (\d+)/);
     await user.click(screen.getByRole('button', { name: 'Continuar' }));
+    // espera a tela atualizar: o app ignora um 2º toque até o próximo quadro (evita avanço duplo)
+    await nextFrame();
     if (!m || m[1] === m[2]) return;
   }
 }
@@ -140,8 +144,10 @@ describe('fluxo principal', () => {
     const { user } = setup(storage);
     await user.click(screen.getByRole('button', { name: /^Quem manda no trânsito\?/ }));
     await user.keyboard('{Enter}'); // cartão em 2 partes: Enter vai para a 2ª
+    await nextFrame();
     expect(screen.getByText('Parte 2 de 2')).toBeInTheDocument();
     await user.keyboard('{Enter}'); // e depois sai do cartão
+    await nextFrame();
     await user.keyboard('1');
     expect(screen.getAllByRole('radio').some((r) => r.getAttribute('aria-checked') === 'true')).toBe(true);
     await user.keyboard('{Enter}');
