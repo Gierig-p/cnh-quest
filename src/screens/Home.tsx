@@ -5,7 +5,7 @@ import type { Lesson, ReferenceModuleId, World } from '../content/types';
 import { Burst } from '../components/Fx';
 import { IconCheck, IconChest, IconCrown, IconLock, IconRoad, IconShield, IconSign, IconStar, IconTrophy } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
-import { lessonFinished, lessonRounds, lessonState, nextLesson, roundsDone, worldCompleted, type NodeState } from '../engine/progress';
+import { dayKey, dueQuestions, lessonFinished, lessonRounds, lessonState, nextLesson, roundsDone, worldCompleted, type NodeState } from '../engine/progress';
 import { useApp } from '../state/AppState';
 import { useSound } from '../ui/hooks';
 
@@ -188,6 +188,7 @@ function WorldPath({ world, index, prev, onStart }: { world: World; index: numbe
                       <IconCheck size={14} />
                     </span>
                   )}
+                  {changes[i] === 'just-unlocked' && <i className="unlock-ring" aria-hidden="true" />}
                   {(changes[i] === 'just-unlocked' || changes[i] === 'just-mastered') && <Burst color={st === 'mastered' ? '#ffc83d' : '#22b357'} />}
                 </button>
                 <span className={`node-label side-${labelSide}`}>
@@ -208,9 +209,58 @@ function WorldPath({ world, index, prev, onStart }: { world: World; index: numbe
   );
 }
 
-export function Home({ onStart }: { onStart: (l: Lesson) => void }) {
+/** Tamanho máximo de uma revisão do dia (o mesmo do botão "Revisar agora"). */
+export const TODAY_REVIEW_MAX = 12;
+
+/**
+ * Cartão "Hoje": uma ação só, a mais útil agora.
+ * 1. há revisões no ponto → revisar (até 12);
+ * 2. meta do dia ainda aberta e há lição liberada → continuar a lição;
+ * 3. senão → estudo de hoje feito.
+ */
+function TodayCard({ onStart, onReview }: { onStart: (l: Lesson) => void; onReview: (ids: string[]) => void }) {
+  const { progress } = useApp();
+  const now = new Date();
+  const due = dueQuestions(progress, now).slice(0, TODAY_REVIEW_MAX);
+  const xpToday = progress.daily.date === dayKey(now) ? progress.daily.xp : 0;
+  const goalDone = xpToday >= progress.dailyGoal;
+  const rec = nextLesson(progress, WORLDS);
+  const recOpen = rec && lessonState(progress, rec.world, rec.lesson, WORLDS[WORLDS.indexOf(rec.world) - 1]) === 'available' ? rec : null;
+
+  let body: JSX.Element;
+  if (due.length) {
+    body = (
+      <>
+        <p className="today-text">Algumas questões estão no ponto de revisar. Revisar agora fixa o que você já estudou.</p>
+        <button className="btn blue wide" onClick={() => onReview(due)}>Revisar {due.length} {due.length === 1 ? 'questão' : 'questões'}</button>
+      </>
+    );
+  } else if (!goalDone && recOpen) {
+    body = (
+      <>
+        <p className="today-text">Faltam {progress.dailyGoal - xpToday} XP para a meta do dia.</p>
+        <button className="btn wide" onClick={() => onStart(recOpen.lesson)}>Continuar: {recOpen.lesson.title}</button>
+      </>
+    );
+  } else {
+    body = (
+      <p className="today-text today-done">
+        <IconCheck size={20} /> Seu estudo de hoje está feito. {recOpen ? 'Se quiser, siga pela trilha abaixo.' : 'Volte amanhã para as revisões.'}
+      </p>
+    );
+  }
+  return (
+    <section className="card today-card" aria-labelledby="today-h">
+      <h2 id="today-h">Hoje</h2>
+      {body}
+    </section>
+  );
+}
+
+export function Home({ onStart, onReview }: { onStart: (l: Lesson) => void; onReview: (ids: string[]) => void }) {
   return (
     <div className="home">
+      <TodayCard onStart={onStart} onReview={onReview} />
       {WORLDS.map((w, i) => (
         <WorldPath key={w.id} world={w} index={i} prev={WORLDS[i - 1]} onStart={onStart} />
       ))}

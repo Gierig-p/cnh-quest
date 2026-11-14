@@ -3,21 +3,31 @@ import { GLOSSARY, HINT_CARDS, QUESTION_BY_ID } from '../content';
 import { buildHintIndex } from '../content/glossary';
 import { HINT_DELAY_S, hintReveal, type HintReveal } from '../content/hints';
 import { SOURCES } from '../content/sources';
-import type { SourceRef } from '../content/types';
+import type { ConceptCard, SourceRef } from '../content/types';
 import { Exercise, isAnswerReady, typeLabel } from '../components/Exercises';
 import { Burst, Dialog, useDialogClose } from '../components/Fx';
 import { IconCheck, IconClose, IconHeart, IconSparkle, IconWrong } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
 import { NarrationButton } from '../components/NarrationButton';
 import { SituationBox } from '../components/SituationBox';
+import { SpeakButton, speechText } from '../components/SpeakButton';
 import { TermHintsContext, TermText, useHasNewTerm } from '../components/TermText';
-import { Visual } from '../components/Visual';
+import { ConceptBlocks, cardParts } from '../components/ConceptView';
 import { grade, type Answer, type Feedback } from '../engine/grading';
 import { lessonsWithCardsSeen, recordAnswer } from '../engine/progress';
 import { advance, answerCurrent, currentItem, isFinished, progressRatio, type SessionState } from '../engine/session';
 import { sameTopicQuestions } from '../engine/review';
 import { useApp } from '../state/AppState';
-import { useSound } from '../ui/hooks';
+import { useReducedMotion, useSound } from '../ui/hooks';
+import { HOWTO, howtoSeen, markHowtoSeen } from '../ui/howto';
+import type { SoundKind } from '../ui/sound';
+
+/** Marcos do combo (Entrega 2 do PLANO-v2): só celebração; nada de XP extra. */
+const MARCOS: Record<number, { som: SoundKind; frase: string }> = {
+  3: { som: 'streak3', frase: '3 acertos seguidos!' },
+  5: { som: 'streak5', frase: '5 seguidos: sinal verde!' },
+  10: { som: 'streak10', frase: '10 seguidos: pista livre!' },
+};
 
 const PRAISE = ['Isso aí!', 'Mandou bem!', 'Correto!', 'Na mosca!', 'Muito bem!'];
 
@@ -90,6 +100,7 @@ export function LessonPlayer({
   }, []);
   useEffect(() => cancelLater, [cancelLater]);
   const play = useSound();
+  const reduced = useReducedMotion();
 
   const item = currentItem(s);
   const q = item?.kind === 'question' ? QUESTION_BY_ID[item.questionId] : undefined;
@@ -108,11 +119,22 @@ export function LessonPlayer({
   const seedForHint = `${q?.id ?? 'c'}-${s.index}`;
   const reveal = useMemo(() => (hintCard && q ? hintReveal(q, seedForHint) : null), [hintCard, q, seedForHint]);
   const hinted = hintStep > 0;
+  // instrução da primeira vez deste tipo de exercício (decidida ao abrir a questão)
+  const qType = q?.type;
+  const howto = useMemo(() => (qType && !howtoSeen(qType) ? HOWTO[qType] : null), [qType, s.index]);
+
+  // cartão longo em partes (Entrega 3): cada item começa na parte 1, com a correção resumida
+  const parts = useMemo(() => (item?.kind === 'concept' ? cardParts(item.card) : []), [item]);
+  const [part, setPart] = useState(0);
+  const [moreFb, setMoreFb] = useState(false);
+  const [showCard, setShowCard] = useState(false);
 
   // cada questão começa sem dica e com o relógio zerado
   useEffect(() => {
     setHintStep(0);
     setElapsed(0);
+    setPart(0);
+    setMoreFb(false);
   }, [s.index]);
 
   // a dica só libera depois de HINT_DELAY_S segundos na questão
@@ -131,11 +153,13 @@ export function LessonPlayer({
     if (checkedAt.current === s.index) return;
     checkedAt.current = s.index;
     const f = grade(q, answer!);
+    markHowtoSeen(q.type);
     setFb(f);
     const nextCombo = f.correct ? combo + 1 : 0;
     setCombo(nextCombo);
-    play(f.correct ? 'correct' : 'wrong');
-    if (f.correct && nextCombo >= 3 && nextCombo % 2 === 1) later(() => play('combo'), 260);
+    // nos marcos (3, 5, 10) o som do marco substitui o do acerto; depois do 10 só o número cresce
+    const marco = f.correct ? MARCOS[nextCombo] : undefined;
+    play(marco ? marco.som : f.correct ? 'correct' : 'wrong');
     // com dica, não conta como acerto de primeira
     const firstTry = !item.retry && !(q.id in s.firstTry) && !hinted;
     update((p) => recordAnswer(p, q, f.correct, new Date(), firstTry));
@@ -186,11 +210,30 @@ export function LessonPlayer({
     if (advancing.current) return;
     advancing.current = true;
     requestAnimationFrame(() => (advancing.current = false));
+    // cartão em partes: primeiro mostra a próxima parte, do alto da tela
+    if (part < parts.length - 1) {
+      setPart((p) => p + 1);
+      requestAnimationFrame(() => {
+        mainRef.current?.querySelector<HTMLElement>('h1')?.focus({ preventScroll: true });
+        window.scrollTo?.({ top: 0 });
+      });
+      return;
+    }
     cancelLater();
     setFb(null);
     setAnswer(null);
     setS((prev) => advance(prev));
-  }, [cancelLater]);
+  }, [cancelLater, part, parts.length]);
+
+  /** Volta para a parte anterior do cartão de conceito. */
+  const prevPart = useCallback(() => {
+    if (part === 0) return;
+    setPart((p) => Math.max(0, p - 1));
+    requestAnimationFrame(() => {
+      mainRef.current?.querySelector<HTMLElement>('h1')?.focus({ preventScroll: true });
+      window.scrollTo?.({ top: 0 });
+    });
+  }, [part]);
 
   const onAnswer = useCallback(
     (a: Answer | null) => {
@@ -205,7 +248,7 @@ export function LessonPlayer({
   // Enter: verificar / continuar
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Enter' || confirmQuit || confirmHint) return;
+      if (e.key !== 'Enter' || confirmQuit || confirmHint || showCard) return;
       // botões comuns tratam o próprio Enter; numa alternativa (radio), Enter verifica
       if (e.target instanceof HTMLButtonElement && e.target.getAttribute('role') !== 'radio') return;
       e.preventDefault();
@@ -215,14 +258,20 @@ export function LessonPlayer({
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [item, fb, check, next, confirmQuit, confirmHint]);
+  }, [item, fb, check, next, confirmQuit, confirmHint, showCard]);
 
   if (!item) return null;
   const ratio = progressRatio(s);
   const seed = `${item.kind === 'question' ? item.questionId : 'c'}-${s.index}`;
   const lastCorrect = fb?.correct;
   const footClass = fb ? (fb.correct ? 'ok' : 'bad') : '';
-  const showCombo = Boolean(fb?.correct && combo >= 3);
+  const marco = fb?.correct ? MARCOS[combo] : undefined;
+  // celebração curta (< 1 s): some ao avançar (fb zera), ao abrir diálogo e com movimento reduzido
+  const celebra = marco && !confirmQuit && !confirmHint && !reduced;
+  // pares: todos formados no fim, mas com tentativas erradas no caminho
+  const matchSlip = fb && !fb.correct && answer?.type === 'match' ? (answer.mistakes ?? 0) : 0;
+  // rever o cartão que ensinou a questão: só nas lições comuns (não na prática nem na revisão)
+  const againCard = fb && q && allowHints && !practice ? HINT_CARDS[q.id] : undefined;
 
   return (
     <div className="lesson">
@@ -231,9 +280,9 @@ export function LessonPlayer({
           <IconClose />
         </button>
         <div className="progress" role="progressbar" aria-label="Progresso da lição" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(ratio * 100)}>
-          <span style={{ width: `${Math.max(4, ratio * 100)}%` }} />
+          <span style={{ clipPath: `inset(0 ${(100 - Math.max(4, ratio * 100)).toFixed(2)}% 0 0 round 9px)` }} />
           {combo >= 2 && (
-            <em className="combo-chip" key={combo} aria-hidden="true">
+            <em className={`combo-chip ${celebra ? 'pulse' : ''}`} key={combo} aria-hidden="true">
               <IconSparkle size={12} /> {combo} seguidas
             </em>
           )}
@@ -249,54 +298,15 @@ export function LessonPlayer({
       <main className="lesson-body" key={s.index} ref={mainRef}>
         {item.kind === 'concept' && (
           <section className="concept" aria-labelledby="concept-title">
-            <div className="q-tag new"><IconSparkle size={14} /> Conceito novo</div>
+            <div className="q-tags">
+              <div className="q-tag new"><IconSparkle size={14} /> Conceito novo</div>
+              {parts.length > 1 && <div className="q-tag part-tag">Parte {part + 1} de {parts.length}</div>}
+            </div>
             <h1 id="concept-title" className="q-title" tabIndex={-1}>{item.card.title}</h1>
             <NarrationButton cardId={item.card.id} />
-            <div className="bubble-row">
-              <Lumi mood="wave" size={92} />
-              <p className="bubble">{item.card.body}</p>
+            <div className={parts.length > 1 ? 'card-part' : undefined} key={part}>
+              <ConceptBlocks card={item.card} show={parts[part] ?? []} sources={part === parts.length - 1} />
             </div>
-            {item.card.visual && (
-              <div className="q-visual pop-in">
-                <Visual v={item.card.visual} size={150} />
-              </div>
-            )}
-            {item.card.terms && item.card.terms.length > 0 && (
-              <div className="c-box c-terms">
-                <h2 className="c-head">📖 Palavras novas</h2>
-                <dl>
-                  {item.card.terms.map((t) => (
-                    <div key={t.term}>
-                      <dt>{t.term}</dt>
-                      <dd>{t.meaning}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            )}
-            {item.card.points && item.card.points.length > 0 && (
-              <div className="c-box c-points">
-                <h2 className="c-head">🧭 Passo a passo</h2>
-                <ol>
-                  {item.card.points.map((p, i) => (
-                    <li key={i}>{p}</li>
-                  ))}
-                </ol>
-              </div>
-            )}
-            {item.card.example && (
-              <div className="c-box c-example">
-                <h2 className="c-head">🚗 Na prática</h2>
-                <p>{item.card.example}</p>
-              </div>
-            )}
-            {item.card.remember && (
-              <div className="c-box c-remember">
-                <h2 className="c-head">💡 Para guardar</h2>
-                <p>{item.card.remember}</p>
-              </div>
-            )}
-            <p className="source-line"><SourceList refs={item.card.sources} /></p>
           </section>
         )}
 
@@ -325,6 +335,8 @@ export function LessonPlayer({
               </div>
               {q.situation && <SituationBox questionId={q.id} lines={q.situation} />}
               <h1 id="q-title" className="q-title" tabIndex={-1}><TermText text={q.prompt} /></h1>
+              {progress.prefs.readAloud && !fb && <SpeakButton text={speechText(q, seed)} />}
+              {howto && !fb && <p className="howto" id="q-howto">👆 {howto}</p>}
               {hintCard && hintStep > 0 && <HintBox title={hintCard.title} remember={hintCard.remember!} reveal={hintStep > 1 ? reveal : null} />}
               <Exercise
                 q={q}
@@ -345,20 +357,54 @@ export function LessonPlayer({
             <div className="feedback" role="status" aria-live="assertive">
               <span className="fb-icon" aria-hidden="true">
                 {lastCorrect ? <IconCheck size={30} /> : <IconWrong size={30} />}
-                {lastCorrect && <Burst count={8} />}
+                {lastCorrect && !marco && <Burst count={8} />}
               </span>
               <div className="grow">
                 <p className="fb-title">
                   {lastCorrect ? PRAISE[s.index % PRAISE.length] : 'Resposta correta:'}
-                  {showCombo && <span className="fb-combo"> · {combo} acertos seguidos!</span>}
+                  {marco && <span className="fb-combo"> · {marco.frase}</span>}
                 </p>
+                {celebra && combo === 5 && (
+                  <span className="cele cele-5" aria-hidden="true">
+                    <Lumi mood="wave" size={44} />
+                    <span className="mini-light"><i /><i /><i /></span>
+                  </span>
+                )}
+                {celebra && combo === 10 && (
+                  <span className="cele cele-10" aria-hidden="true">
+                    <span className="mini-road"><i className="mini-car" /></span>
+                  </span>
+                )}
                 <div className="fb-text">
                   {lastCorrect && hinted && <p className="fb-hinted">💡 Acerto com dica: não conta como acerto de primeira.</p>}
                   {!lastCorrect && <p className="fb-answer"><strong>{fb.correctText}</strong></p>}
+                  {matchSlip > 0 && (
+                    <p className="fb-slip">
+                      Você chegou a todos os pares, mas errou {matchSlip === 1 ? '1 vez' : `${matchSlip} vezes`} no caminho. Por isso esta conta como erro.
+                    </p>
+                  )}
                   {!lastCorrect && fb.whyWrong && <p>Por que a sua não: {fb.whyWrong}</p>}
                   <p>{q.explanation}</p>
-                  <p className="memo">💡 {q.mnemonic}</p>
-                  <p><SourceList refs={q.sources} /></p>
+                  {moreFb && (
+                    <div id="fb-more">
+                      <p className="memo">💡 {q.mnemonic}</p>
+                      <p><SourceList refs={q.sources} /></p>
+                    </div>
+                  )}
+                  {(!moreFb || againCard) && (
+                    <div className="fb-links">
+                      {!moreFb && (
+                        <button type="button" className="link-btn" aria-expanded={false} aria-controls="fb-more" onClick={() => setMoreFb(true)}>
+                          Ver explicação completa
+                        </button>
+                      )}
+                      {againCard && (
+                        <button type="button" className="link-btn" onClick={() => setShowCard(true)}>
+                          📖 Ver a explicação de novo
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -370,6 +416,19 @@ export function LessonPlayer({
               Verificar
             </button>
           ) : (
+            <>
+            {item.kind === 'concept' && part > 0 && (
+              <button
+                type="button"
+                className="btn ghost back-btn"
+                onClick={() => {
+                  play('transition');
+                  prevPart();
+                }}
+              >
+                Voltar
+              </button>
+            )}
             <button
               className={`btn ${fb && !fb.correct ? 'red' : ''}`}
               onClick={() => {
@@ -380,6 +439,7 @@ export function LessonPlayer({
             >
               Continuar
             </button>
+            </>
           )}
         </div>
       </footer>
@@ -387,6 +447,12 @@ export function LessonPlayer({
       {confirmHint && (
         <Dialog labelledBy="hint-title" tone="warn" onClose={() => setConfirmHint(false)}>
           <HintDialogBody onConfirm={confirmUseHint} />
+        </Dialog>
+      )}
+
+      {showCard && againCard && (
+        <Dialog labelledBy="again-title" onClose={() => setShowCard(false)}>
+          <AgainDialogBody card={againCard} />
         </Dialog>
       )}
 
@@ -411,6 +477,20 @@ function QuitDialogBody({ onExit }: { onExit: () => void }) {
         <button className="btn ghost" onClick={onExit}>Sair da lição</button>
       </div>
     </>
+  );
+}
+
+function AgainDialogBody({ card }: { card: ConceptCard }) {
+  const close = useDialogClose();
+  // abre do começo do cartão: o foco vai para o título, não para o "Fechar" lá embaixo
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => titleRef.current?.focus({ preventScroll: true }), []);
+  return (
+    <div className="again concept">
+      <h2 id="again-title" ref={titleRef} tabIndex={-1}>{card.title}</h2>
+      <ConceptBlocks card={card} show={cardParts({ ...card, id: '' })[0]} lumiSize={64} />
+      <button className="btn wide" onClick={close}>Fechar</button>
+    </div>
   );
 }
 

@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { EXAM_CONFIGS } from '../content';
+import { EXAM_CONFIGS, QUESTIONS } from '../content';
+import { MODULE_TO_REFERENCE, REFERENCE_MODULES } from '../content/referenceModules';
+import type { ReferenceModuleId } from '../content/types';
 import { IconBolt, IconChart, IconClipboard, IconFire, IconMedal } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
 import { getVolume, playSound, setVolume } from '../ui/sound';
-import { ACHIEVEMENTS, DAILY_GOALS, currentStreak, levelFromXp, topicReport, type Prefs } from '../engine/progress';
+import { ACHIEVEMENTS, DAILY_GOALS, currentStreak, levelFromXp, topicReport, type Prefs, type ProgressState } from '../engine/progress';
 import { useApp } from '../state/AppState';
 
 function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label: string }) {
@@ -44,6 +46,65 @@ function VolumeSlider({ enabled }: { enabled: boolean }) {
   );
 }
 
+export type StudyStatus = 'sem conteúdo ainda' | 'ainda não começou' | 'começou' | 'praticado';
+
+/**
+ * O que o aluno já estudou em cada um dos 4 módulos: quantas questões do app ele já viu.
+ * "Praticado" = viu todas as questões que o app tem do módulo. Nunca é uma chance de passar.
+ */
+export function studyReport(p: ProgressState): { module: ReferenceModuleId; total: number; seen: number; status: StudyStatus }[] {
+  return ([1, 2, 3, 4] as ReferenceModuleId[]).map((m) => {
+    const ids = QUESTIONS.filter((q) => MODULE_TO_REFERENCE[q.module] === m).map((q) => q.id);
+    const seen = ids.filter((id) => p.questions[id]).length;
+    const status: StudyStatus = !ids.length ? 'sem conteúdo ainda' : !seen ? 'ainda não começou' : seen < ids.length ? 'começou' : 'praticado';
+    return { module: m, total: ids.length, seen, status };
+  });
+}
+
+const STATUS_PILL: Record<StudyStatus, string> = {
+  'sem conteúdo ainda': 'vazio',
+  'ainda não começou': 'novo',
+  começou: 'em-progresso',
+  praticado: 'dominado',
+};
+
+function StudiedCard({ progress }: { progress: ProgressState }) {
+  const rows = studyReport(progress);
+  const exams = progress.exams;
+  const last = exams[exams.length - 1];
+  const best = exams.reduce<(typeof exams)[number] | undefined>((b, e) => (!b || e.correct / e.total > b.correct / b.total ? e : b), undefined);
+  return (
+    <section className="card studied" aria-labelledby="studied-title">
+      <h2 id="studied-title">O que você já estudou</h2>
+      <p className="muted">Os 4 módulos da prova teórica. A conta mostra quantas questões do app você já respondeu em cada um.</p>
+      <ul className="list">
+        {rows.map((r) => (
+          <li key={r.module} className="stack" style={{ gap: 6 }}>
+            <div className="row">
+              <span className="grow"><strong>Módulo {r.module}</strong> · {REFERENCE_MODULES[r.module].title}</span>
+              <span className={`pill ${STATUS_PILL[r.status]}`}>{r.status}</span>
+            </div>
+            {r.total > 0 && (
+              <>
+                <div className="meter green" style={{ height: 10 }} role="progressbar" aria-label={`Módulo ${r.module}: ${r.seen} de ${r.total} questões respondidas`} aria-valuenow={r.seen} aria-valuemin={0} aria-valuemax={r.total}>
+                  <span style={{ width: `${(r.seen / r.total) * 100}%` }} />
+                </div>
+                <p className="muted studied-count">{r.seen} de {r.total} questões respondidas</p>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+      <p className="studied-exam">
+        {last
+          ? `Simulado: na última vez, ${last.correct} de ${last.total}${best && best !== last ? `; a melhor, ${best.correct} de ${best.total}` : ''}.`
+          : 'Simulado: você ainda não fez nenhum.'}
+      </p>
+      <p className="muted studied-note">O app ainda não tem questões de todos os assuntos. Estudar aqui ajuda, mas não garante a aprovação na prova.</p>
+    </section>
+  );
+}
+
 export function ProgressScreen() {
   const { progress, update, reset, volatile } = useApp();
   const [confirm, setConfirm] = useState(false);
@@ -73,6 +134,8 @@ export function ProgressScreen() {
         <div className="stat-box purple"><IconBolt size={28} /><strong>{progress.xp}</strong><span>XP total</span></div>
         <div className="stat-box blue"><IconClipboard size={28} /><strong>{progress.exams.length}</strong><span>Simulados</span></div>
       </div>
+
+      <StudiedCard progress={progress} />
 
       <section className="card">
         <h2 className="card-title"><span className="card-icon green" aria-hidden="true"><IconChart size={22} /></span>Desempenho por assunto</h2>
@@ -139,6 +202,14 @@ export function ProgressScreen() {
         <div className="setting">
           <span>Modo desafio (vidas nas lições)<br /><span className="muted">Cada erro tira 1 de 5 vidas.</span></span>
           <Switch on={progress.prefs.hearts} onChange={(v) => setPref('hearts', v)} label="Modo desafio com vidas" />
+        </div>
+        <div className="setting">
+          <span>Letra grande<br /><span className="muted">Aumenta o texto das lições, das questões e da correção.</span></span>
+          <Switch on={!!progress.prefs.bigText} onChange={(v) => setPref('bigText', v)} label="Letra grande" />
+        </div>
+        <div className="setting">
+          <span>Ouvir as questões (teste)<br /><span className="muted">Mostra um botão que lê a pergunta e as respostas com a voz do aparelho.</span></span>
+          <Switch on={!!progress.prefs.readAloud} onChange={(v) => setPref('readAloud', v)} label="Ouvir as questões" />
         </div>
         <div className="setting">
           <span id="lbl-theme">Tema</span>

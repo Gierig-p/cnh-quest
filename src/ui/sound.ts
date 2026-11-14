@@ -1,8 +1,9 @@
 /**
  * Sistema de áudio do CNH Quest.
  *
- * Todos os efeitos são sintetizados aqui mesmo com Web Audio (nenhum arquivo externo, nenhum som de terceiros):
- * zero bytes para baixar, nada para carregar antes de tocar e direitos 100% próprios.
+ * Os efeitos principais (acerto, erro, combo, desbloqueio, conclusão) são arquivos curtos em public/audio/sons/,
+ * gerados pelo ElevenLabs com scripts/audio/sons_app.mjs. Os demais são sintetizados aqui com Web Audio.
+ * Os arquivos são baixados no primeiro gesto do aluno; até chegarem (ou se falharem), toca a versão sintetizada.
  *
  * Regras:
  * - O AudioContext só é criado dentro de uma chamada de `playSound`, que sempre parte de um gesto do aluno
@@ -19,6 +20,9 @@ export type SoundKind =
   | 'correct' // resposta certa
   | 'wrong' // resposta errada
   | 'combo' // sequência de acertos
+  | 'streak3' // marco: 3 acertos seguidos (substitui o 'correct')
+  | 'streak5' // marco: 5 seguidos
+  | 'streak10' // marco: 10 seguidos
   | 'complete' // lição concluída
   | 'xp' // contagem de XP
   | 'achievement' // conquista desbloqueada
@@ -72,6 +76,7 @@ function ensureContext(): AudioContext | null {
     master = ctx.createGain();
     master.gain.value = volume * 0.9;
     master.connect(comp).connect(ctx.destination);
+    preload(ctx);
   }
   if (ctx.state === 'suspended') void ctx.resume();
   return ctx;
@@ -149,6 +154,19 @@ const RECIPES: Record<SoundKind, () => void> = {
   combo: () => {
     [C6, E6, G6].forEach((f, i) => note(f, i * 0.05, 0.14, { type: 'sine', gain: 0.1, partial: 0.3 }));
   },
+  // marcos do combo: o mesmo arpejo do acerto, cada vez mais alto e mais longo
+  streak3: () => {
+    [E5, G5, C6, E6].forEach((f, i) => note(f, i * 0.06, 0.18, { type: 'triangle', gain: 0.15, partial: 0.25 }));
+  },
+  streak5: () => {
+    [G5, C6, E6, G6].forEach((f, i) => note(f, i * 0.06, 0.2, { type: 'triangle', gain: 0.14, partial: 0.3 }));
+    note(C6 * 2, 0.26, 0.45, { type: 'sine', gain: 0.06 });
+  },
+  streak10: () => {
+    [C6, E6, G6].forEach((f, i) => note(f, i * 0.055, 0.18, { type: 'triangle', gain: 0.13, partial: 0.3 }));
+    [E6, G6, C6 * 2].forEach((f, i) => note(f, 0.2 + i * 0.055, 0.22, { type: 'sine', gain: 0.12, partial: 0.3 }));
+    note(G6 * 1.5, 0.38, 0.55, { type: 'sine', gain: 0.06 });
+  },
   complete: () => {
     [C5, E5, G5, C6].forEach((f, i) => note(f, i * 0.1, 0.24, { type: 'triangle', gain: 0.16, partial: 0.2 }));
     [C5, E5, G5].forEach((f) => note(f * 2, 0.42, 0.8, { type: 'sine', gain: 0.07 }));
@@ -174,6 +192,55 @@ const RECIPES: Record<SoundKind, () => void> = {
   },
 };
 
+/** Efeitos que têm arquivo próprio; os marcos do combo usam o mesmo som, um pouco mais agudo a cada marco. */
+const FILES: Partial<Record<SoundKind, { file: string; rate?: number }>> = {
+  correct: { file: 'acerto' },
+  wrong: { file: 'erro' },
+  combo: { file: 'combo' },
+  streak3: { file: 'combo' },
+  streak5: { file: 'combo', rate: 1.06 },
+  streak10: { file: 'combo', rate: 1.12 },
+  unlock: { file: 'desbloqueio' },
+  complete: { file: 'conclusao' },
+};
+const buffers = new Map<string, AudioBuffer | null>();
+/**
+ * Os arquivos estão em -22 LUFS (pico até -6 dBFS). O acerto sintetizado mede -29 LUFS (pico -12,7 dBFS);
+ * com este ganho (-7 dB) os arquivos ficam na mesma altura, com bastante folga para não estourar.
+ */
+const FILE_GAIN = 0.45;
+
+/** Baixa e decodifica os arquivos uma vez só (chamado quando o contexto de áudio nasce). */
+function preload(c: AudioContext) {
+  const base = (import.meta.env?.BASE_URL as string | undefined) ?? '/';
+  for (const f of new Set(Object.values(FILES).map((x) => x!.file))) {
+    if (buffers.has(f)) continue;
+    buffers.set(f, null);
+    fetch(`${base}audio/sons/${f}.mp3`)
+      .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject(new Error(String(r.status)))))
+      .then((b) => c.decodeAudioData(b))
+      .then((buf) => buffers.set(f, buf))
+      .catch(() => {
+        /* fica com o som sintetizado */
+      });
+  }
+}
+
+/** Toca o arquivo do efeito, se já estiver pronto. Devolve false para usar o sintetizado. */
+function playFile(kind: SoundKind): boolean {
+  const spec = FILES[kind];
+  const buf = spec && buffers.get(spec.file);
+  if (!ctx || !master || !spec || !buf) return false;
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.playbackRate.value = spec.rate ?? 1;
+  const g = ctx.createGain();
+  g.gain.value = FILE_GAIN;
+  src.connect(g).connect(master);
+  src.start();
+  return true;
+}
+
 /** Ponto único para tocar efeitos. `enabled` vem de `prefs.sound`. */
 export function playSound(kind: SoundKind, enabled: boolean) {
   if (!enabled || volume <= 0) return;
@@ -184,7 +251,7 @@ export function playSound(kind: SoundKind, enabled: boolean) {
   lastPlayed.set(kind, now);
   try {
     if (!ensureContext()) return;
-    RECIPES[kind]();
+    if (!playFile(kind)) RECIPES[kind]();
   } catch {
     /* sem áudio disponível */
   }

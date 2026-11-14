@@ -151,7 +151,7 @@ export default function App() {
           </div>
         </div>
         <div className="tab-view" key={tab}>
-          {tab === 'home' && <Home onStart={(l) => startLesson(l)} />}
+          {tab === 'home' && <Home onStart={(l) => startLesson(l)} onReview={(ids) => startPracticeSession('Revisão do dia', ids, 'home')} />}
           {tab === 'review' && <ReviewScreen onPractice={(title, ids) => startPracticeSession(title, ids, 'review')} />}
           {tab === 'exam' && <ExamScreen onPracticeWrong={(ids) => startPracticeSession('Erros do simulado', ids, 'exam')} />}
           {tab === 'progress' && <ProgressScreen />}

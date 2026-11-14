@@ -3,7 +3,7 @@ import { QUESTION_BY_ID } from '../content';
 import { Confetti } from '../components/Fx';
 import { IconBolt, IconFire, IconMedal, IconTarget } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
-import { ACHIEVEMENTS, type CompletionOutcome } from '../engine/progress';
+import { ACHIEVEMENTS, dayKey, dayLabel, nextReviewDay, type CompletionOutcome } from '../engine/progress';
 import type { SessionResult } from '../engine/session';
 import { useApp } from '../state/AppState';
 import { useCountUp, useSound } from '../ui/hooks';
@@ -46,6 +46,13 @@ export function CompleteScreen({
   const pct = Math.round(result.accuracy * 100);
   const good = result.completed && (outcome ? outcome.mastered : pct >= 80);
   const newAch = outcome?.newAchievements ?? [];
+  // lição perfeita: todas as questões acertadas de primeira (sem dica e sem erro)
+  const perfect = result.completed && result.total > 0 && result.correctFirstTry === result.total;
+  // fim honesto: diz quando é a próxima revisão e, com a meta feita, que pode parar por hoje
+  const now = new Date();
+  const today = dayKey(now);
+  const nextDay = nextReviewDay(progress, now);
+  const goalDone = progress.daily.date === today && progress.daily.xp >= progress.dailyGoal;
 
   // sequência sonora: conclusão → celebração (domínio) → conquista
   useEffect(() => {
@@ -71,12 +78,18 @@ export function CompleteScreen({
       : `${roundName} concluída — dá para melhorar`;
 
   return (
-    <div className={`complete ${good ? 'is-good' : result.completed ? '' : 'is-out'}`}>
-      {good && <Confetti />}
+    <div className={`complete ${good ? 'is-good' : result.completed ? '' : 'is-out'} ${perfect ? 'is-perfect' : ''}`}>
+      {good && (perfect ? <Confetti count={56} short /> : <Confetti />)}
       <div className="complete-inner">
         <div className="hero">
           <span className="rays" aria-hidden="true" />
-          <Lumi mood={good ? 'cheer' : result.completed ? 'happy' : 'sad'} size={140} />
+          <Lumi mood={good ? 'cheer' : result.completed ? 'happy' : 'sad'} size={140} className={perfect ? 'hop' : ''} />
+          {perfect && (
+            <span className="seal" role="img" aria-label="Selo: lição perfeita">
+              <span aria-hidden="true">★</span>
+              <b aria-hidden="true">Perfeita</b>
+            </span>
+          )}
         </div>
         <div>
           <h1 className="complete-title">{heading}</h1>
@@ -127,10 +140,24 @@ export function CompleteScreen({
                 <li key={t}>{t}</li>
               ))}
             </ul>
-            <p className="muted">Essas questões voltam na aba “Revisar” nos próximos dias.</p>
+            <p className="muted">Essas questões entram na aba “Revisar”.</p>
           </div>
         ) : (
-          result.completed && <p className="perfect">Nenhum erro. Excelente!</p>
+          result.completed && <p className="perfect">{perfect ? 'Lição perfeita: tudo certo de primeira!' : 'Nenhum erro. Excelente!'}</p>
+        )}
+        {result.completed && (goalDone || nextDay) && (
+          <div className="end-note">
+            {goalDone && <p className="end-title">Por hoje está ótimo.</p>}
+            {nextDay && (
+              <p>
+                {nextDay === today
+                  ? goalDone
+                    ? 'Se quiser, ainda há questões para rever hoje na aba “Revisar”.'
+                    : 'Há questões para rever hoje na aba “Revisar”.'
+                  : `Sua próxima revisão: ${dayLabel(nextDay, now)}.`}
+              </p>
+            )}
+          </div>
         )}
         {roundsLeft && outcome && (
           <p className="notice">

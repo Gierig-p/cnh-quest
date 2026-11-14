@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#1b9e5a" />
     <title>CNH Quest</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script>
-      // aplica o tema salvo antes do primeiro desenho (evita piscar claro)
+      // aplica o tema e a letra salvos antes do primeiro desenho (evita piscar claro)
       try {
-        var t = JSON.parse(localStorage.getItem('cnhquest:progress:v1') || '{}').prefs.theme;
-        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+        var pr = JSON.parse(localStorage.getItem('cnhquest:progress:v1') || '{}').prefs || {};
+        if (pr.theme === 'light' || pr.theme === 'dark') document.documentElement.setAttribute('data-theme', pr.theme);
+        if (pr.bigText) document.documentElement.setAttribute('data-text', 'big');
       } catch (e) {}
     </script>
   </head>

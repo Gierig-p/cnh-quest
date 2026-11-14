@@ -4,7 +4,8 @@ import { useReducedMotion } from '../ui/hooks';
 const PALETTE = ['#22b357', '#ffc83d', '#ff5a5f', '#1e96f0', '#8b5cf6', '#ff9f1c'];
 
 /** Confete em CSS puro (transform/opacity), poucos elementos e desmonta sozinho. */
-export function Confetti({ count = 44 }: { count?: number }) {
+/** Confete; `short` cai mais rápido e some antes (final da lição perfeita). */
+export function Confetti({ count = 44, short = false }: { count?: number; short?: boolean }) {
   const reduce = useReducedMotion();
   const [alive, setAlive] = useState(true);
   const pieces = useMemo(
@@ -12,7 +13,7 @@ export function Confetti({ count = 44 }: { count?: number }) {
       Array.from({ length: count }, (_, i) => ({
         left: Math.random() * 100,
         delay: Math.random() * 0.5,
-        dur: 1.8 + Math.random() * 1.4,
+        dur: short ? 1.2 + Math.random() * 0.7 : 1.8 + Math.random() * 1.4,
         drift: (Math.random() - 0.5) * 160,
         spin: 360 + Math.random() * 720,
         w: 7 + Math.random() * 6,
@@ -22,9 +23,9 @@ export function Confetti({ count = 44 }: { count?: number }) {
     [count],
   );
   useEffect(() => {
-    const t = setTimeout(() => setAlive(false), 3800);
+    const t = setTimeout(() => setAlive(false), short ? 2500 : 3800);
     return () => clearTimeout(t);
-  }, []);
+  }, [short]);
   if (reduce || !alive) return null;
   return (
     <div className="confetti" aria-hidden="true">

@@ -40,6 +40,10 @@ export interface Prefs {
   motion: 'system' | 'reduce' | 'full';
   /** tema de cores; ausente = seguir o aparelho */
   theme?: 'system' | 'light' | 'dark';
+  /** letra grande nos textos de leitura (Entrega 4); ausente = normal */
+  bigText?: boolean;
+  /** botão "Ouvir" nas questões, com a voz do navegador (protótipo da Entrega 4) */
+  readAloud?: boolean;
   examConfig: string;
 }
 
@@ -139,6 +143,30 @@ export function dueQuestions(s: ProgressState, now: Date): string[] {
     .filter(([, st]) => st.due <= today && st.box < 5)
     .sort((a, b) => a[1].box - b[1].box || a[1].due.localeCompare(b[1].due))
     .map(([id]) => id);
+}
+
+/**
+ * Dia da próxima revisão: o vencimento mais cedo entre as questões ainda não dominadas.
+ * Revisão atrasada conta como hoje. Sem questões para rever, null.
+ */
+export function nextReviewDay(s: ProgressState, now: Date): string | null {
+  const first = Object.values(s.questions)
+    .filter((q) => q.box < 5)
+    .map((q) => q.due)
+    .sort()[0];
+  if (!first) return null;
+  const today = dayKey(now);
+  return first < today ? today : first;
+}
+
+/** "hoje", "amanhã" ou "sexta-feira, 20/11", para mostrar ao aluno. */
+export function dayLabel(key: string, now: Date): string {
+  const today = dayKey(now);
+  if (key === today) return 'hoje';
+  if (key === addDays(today, 1)) return 'amanhã';
+  const [y, m, d] = key.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+  return `${date.toLocaleDateString('pt-BR', { weekday: 'long' })}, ${String(d).padStart(2, '0')}/${String(m).padStart(2, '0')}`;
 }
 
 /* ---------- desempenho por assunto ---------- */

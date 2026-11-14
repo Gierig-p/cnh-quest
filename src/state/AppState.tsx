@@ -47,6 +47,12 @@ export function AppStateProvider({ children, store }: { children: ReactNode; sto
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#131f24' : '#1b9e5a');
   }, [progress.prefs.theme]);
 
+  // letra grande: o CSS aumenta os textos de leitura quando html[data-text='big']
+  useLayoutEffect(() => {
+    if (progress.prefs.bigText) document.documentElement.setAttribute('data-text', 'big');
+    else document.documentElement.removeAttribute('data-text');
+  }, [progress.prefs.bigText]);
+
   const value = useMemo(() => ({ progress, update, reset, volatile: s.volatile }), [progress, update, reset, s]);
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;
 }

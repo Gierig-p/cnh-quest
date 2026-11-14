@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { EXAM_CONFIGS, QUESTION_BY_ID, QUESTIONS } from '../content';
-import { MODULE_TO_REFERENCE, REFERENCE_MODULES } from '../content/referenceModules';
+import { MODULE_TO_REFERENCE, PLANNED_WORLDS, REFERENCE_MODULES } from '../content/referenceModules';
 import type { ChoiceQuestion, ModuleId } from '../content/types';
 import { Exercise } from '../components/Exercises';
 import { Confetti, Dialog, useDialogClose } from '../components/Fx';
@@ -78,6 +78,11 @@ export function ExamScreen({ onPracticeWrong }: { onPracticeWrong: (ids: string[
             <li>Você pode navegar entre as questões e mudar respostas até entregar.</li>
             <li>A prova é entregue automaticamente quando o tempo acaba.</li>
           </ul>
+          {PLANNED_WORLDS.length > 0 && (
+            <p className="notice">
+              <strong>Atenção:</strong> o banco de questões ainda não cobre todos os assuntos da prova. Ainda faltam, por exemplo: {PLANNED_WORLDS.slice(0, 5).map((w) => w.title.toLowerCase()).join(', ')}. Uma nota boa aqui ainda não garante a aprovação na prova.
+            </p>
+          )}
           {poolSize < config.questionCount && (
             <p className="notice">
               O banco verificado tem <strong>{poolSize}</strong> questões no formato oficial (4 alternativas). Até chegarmos a {config.questionCount}, o simulado usa todas elas, com nota mínima e tempo proporcionais.
