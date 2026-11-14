@@ -94,6 +94,35 @@ describe('fluxo principal', () => {
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
+  it('verificar duas vezes seguidas grava a resposta uma vez só', async () => {
+    const storage = memoryStorage();
+    storage.setItem('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true }));
+    const { user } = setup(storage);
+    await user.click(screen.getByRole('button', { name: /Quem manda no trânsito\?/ }));
+    await user.click(screen.getByRole('button', { name: 'Continuar' }));
+    await user.click(screen.getByRole('radio', { name: 'Gestos do agente de trânsito' }));
+    const check = screen.getByRole('button', { name: 'Verificar' });
+    // dois cliques no mesmo instante, antes da tela se atualizar
+    act(() => {
+      check.click();
+      check.click();
+    });
+    const saved = JSON.parse(storage.getItem('cnhquest:progress:v1')!);
+    expect(saved.questions['w1-l1-q1'].seen).toBe(1);
+    expect(saved.questions['w1-l1-q1'].wrong).toBe(1);
+  });
+
+  it('com um diálogo aberto, as teclas 1–9 não escolhem alternativa', async () => {
+    const storage = memoryStorage();
+    storage.setItem('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true }));
+    const { user } = setup(storage);
+    await user.click(screen.getByRole('button', { name: /Quem manda no trânsito\?/ }));
+    await user.click(screen.getByRole('button', { name: 'Continuar' }));
+    await user.click(screen.getByRole('button', { name: 'Sair da lição' }));
+    await user.keyboard('1');
+    expect(screen.getAllByRole('radio', { hidden: true }).some((r) => r.getAttribute('aria-checked') === 'true')).toBe(false);
+  });
+
   it('com a rodada 1 feita, a lição abre direto na rodada de prática, sem cartões', async () => {
     const storage = memoryStorage();
     storage.setItem(

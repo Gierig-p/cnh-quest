@@ -146,7 +146,7 @@ export function ExamScreen({ onPracticeWrong }: { onPracticeWrong: (ids: string[
               <article key={id} className="wrong-item">
                 <p style={{ fontWeight: 800 }}>{q.prompt}</p>
                 <p className="muted">Sua resposta: {chosen ? chosen.text : 'em branco'}</p>
-                <p style={{ color: 'var(--green-dark)', fontWeight: 800 }}>Correta: {right.text}</p>
+                <p style={{ color: 'var(--green-ink)', fontWeight: 800 }}>Correta: {right.text}</p>
                 {chosen?.whyWrong && <p className="muted">Por que a sua não: {chosen.whyWrong}</p>}
                 <p className="muted">{q.explanation}</p>
                 <p className="muted" style={{ fontSize: 13 }}><SourceList refs={q.sources} /></p>

@@ -75,6 +75,18 @@ export function LessonPlayer({
   const [combo, setCombo] = useState(0);
   const footRef = useRef<HTMLDivElement>(null);
   const advancing = useRef(false);
+  // trava: cada questão (posição na fila) só é verificada uma vez
+  const checkedAt = useRef(-1);
+  // sons e efeitos atrasados; cancelados ao avançar ou sair da lição
+  const timers = useRef<number[]>([]);
+  const later = useCallback((fn: () => void, ms: number) => {
+    timers.current.push(window.setTimeout(fn, ms));
+  }, []);
+  const cancelLater = useCallback(() => {
+    timers.current.forEach((t) => window.clearTimeout(t));
+    timers.current = [];
+  }, []);
+  useEffect(() => cancelLater, [cancelLater]);
   const play = useSound();
 
   const item = currentItem(s);
@@ -114,12 +126,14 @@ export function LessonPlayer({
 
   const check = useCallback(() => {
     if (!q || !item || item.kind !== 'question' || !isAnswerReady(q, answer)) return;
+    if (checkedAt.current === s.index) return;
+    checkedAt.current = s.index;
     const f = grade(q, answer!);
     setFb(f);
     const nextCombo = f.correct ? combo + 1 : 0;
     setCombo(nextCombo);
     play(f.correct ? 'correct' : 'wrong');
-    if (f.correct && nextCombo >= 3 && nextCombo % 2 === 1) setTimeout(() => play('combo'), 260);
+    if (f.correct && nextCombo >= 3 && nextCombo % 2 === 1) later(() => play('combo'), 260);
     // com dica, não conta como acerto de primeira
     const firstTry = !item.retry && !(q.id in s.firstTry) && !hinted;
     update((p) => recordAnswer(p, q, f.correct, new Date(), firstTry));
@@ -128,10 +142,16 @@ export function LessonPlayer({
     setS((prev) => answerCurrent(prev, f.correct, { hinted, alternatives }));
     if (!f.correct && s.hearts !== null) {
       setHeartHit(true);
-      setTimeout(() => setHeartHit(false), 450);
+      later(() => setHeartHit(false), 450);
     }
-    requestAnimationFrame(() => footRef.current?.querySelector<HTMLButtonElement>('.btn')?.focus());
-  }, [q, item, answer, play, combo, s, update, hinted]);
+    requestAnimationFrame(() => {
+      const foot = footRef.current;
+      if (!foot) return;
+      foot.querySelector<HTMLButtonElement>('.btn')?.focus({ preventScroll: true });
+      // mostra a explicação: inteira se couber; se for maior que a tela, a partir do começo
+      foot.scrollIntoView?.({ block: foot.offsetHeight > window.innerHeight ? 'start' : 'end' });
+    });
+  }, [q, item, answer, play, combo, s, update, hinted, later]);
 
   // pares: cada par já é corrigido na hora; ao formar o último, verifica sozinho
   useEffect(() => {
@@ -152,15 +172,23 @@ export function LessonPlayer({
     if (reveal?.kind === 'eliminate-word' && answer?.type === 'fill' && answer.word === reveal.word) setAnswer(null);
   }, [reveal, answer]);
 
+  // a cada item novo, o foco vai para o enunciado: o leitor de tela lê a pergunta nova
+  // e o Tab começa do alto, não do botão que ficou no rodapé
+  const mainRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    mainRef.current?.querySelector<HTMLElement>('h1')?.focus();
+  }, [s.index]);
+
   const next = useCallback(() => {
     // evita avanço duplo (duplo clique / Enter repetido)
     if (advancing.current) return;
     advancing.current = true;
     requestAnimationFrame(() => (advancing.current = false));
+    cancelLater();
     setFb(null);
     setAnswer(null);
     setS((prev) => advance(prev));
-  }, []);
+  }, [cancelLater]);
 
   const onAnswer = useCallback(
     (a: Answer | null) => {
@@ -216,11 +244,11 @@ export function LessonPlayer({
         )}
       </header>
 
-      <main className="lesson-body" key={s.index}>
+      <main className="lesson-body" key={s.index} ref={mainRef}>
         {item.kind === 'concept' && (
           <section className="concept" aria-labelledby="concept-title">
             <div className="q-tag new"><IconSparkle size={14} /> Conceito novo</div>
-            <h1 id="concept-title" className="q-title">{item.card.title}</h1>
+            <h1 id="concept-title" className="q-title" tabIndex={-1}>{item.card.title}</h1>
             <div className="bubble-row">
               <Lumi mood="wave" size={92} />
               <p className="bubble">{item.card.body}</p>
@@ -272,7 +300,7 @@ export function LessonPlayer({
         {item.kind === 'review-intro' && (
           <section className="concept review-intro">
             <Lumi mood="think" size={130} />
-            <h1 className="q-title">Vamos rever o que você errou</h1>
+            <h1 className="q-title" tabIndex={-1}>Vamos rever o que você errou</h1>
             <p className="muted">Errar faz parte. Agora você já sabe a explicação — tente de novo.</p>
           </section>
         )}
@@ -292,7 +320,7 @@ export function LessonPlayer({
                   />
                 )}
               </div>
-              <h1 id="q-title" className="q-title"><TermText text={q.prompt} /></h1>
+              <h1 id="q-title" className="q-title" tabIndex={-1}><TermText text={q.prompt} /></h1>
               {hintCard && hintStep > 0 && <HintBox title={hintCard.title} remember={hintCard.remember!} reveal={hintStep > 1 ? reveal : null} />}
               <Exercise
                 q={q}

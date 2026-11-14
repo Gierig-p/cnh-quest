@@ -3,7 +3,7 @@ import { QUESTION_BY_ID, WORLDS } from './content';
 import type { Lesson } from './content/types';
 import { IconChart, IconClipboard, IconHome, IconReview } from './components/Icons';
 import { Lumi } from './components/Lumi';
-import { addXp, completeLesson, dueQuestions, lessonFinished, nextLesson, nextRound, practiceRoundIds, type CompletionOutcome } from './engine/progress';
+import { completeLesson, completePractice, dueQuestions, lessonFinished, nextLesson, nextRound, practiceRoundIds, type CompletionOutcome } from './engine/progress';
 import { drawKey, drawLessonSteps, rebuildLessonSteps, reviewPool, reviewRoundIds } from './engine/review';
 import { startPractice, startSession, summarize, type SessionResult, type SessionState } from './engine/session';
 import { CompleteScreen } from './screens/CompleteScreen';
@@ -85,11 +85,7 @@ export default function App() {
       const now = new Date();
       let outcome: CompletionOutcome;
       if (lesson) outcome = completeLesson(latest.current, lesson, result, now);
-      else {
-        const gained = result.correctFirstTry * 2;
-        const x = addXp(latest.current, gained, now);
-        outcome = { state: x.state, xpGained: gained, streakIncreased: x.streakIncreased, goalReachedNow: x.goalReachedNow, newAchievements: [], mastered: result.accuracy >= 0.8, round: 1, rounds: 1, roundsDone: 1 };
-      }
+      else outcome = completePractice(latest.current, result, now);
       latest.current = outcome.state;
       update(() => outcome.state);
       setRoute({ name: 'done', title, result, outcome, lesson, round, back });

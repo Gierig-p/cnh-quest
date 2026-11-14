@@ -21,7 +21,7 @@ export function ReviewScreen({ onPractice }: { onPractice: (title: string, ids: 
           <Lumi mood={due.length ? 'wave' : 'think'} size={64} />
           <div className="grow">
             <h2>Revisão espaçada</h2>
-            <p className="muted">Questões que você errou voltam no mesmo dia; as que acertou voltam em 1, 2, 4, 8 e 16 dias.</p>
+            <p className="muted">Questões que você errou voltam no mesmo dia; as que acertou voltam depois de 1, 2, 4 e 8 dias. Depois disso, contam como aprendidas e saem da revisão.</p>
           </div>
         </div>
         <div style={{ marginTop: 14 }}>

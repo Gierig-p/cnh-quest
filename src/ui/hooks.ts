@@ -13,7 +13,7 @@ function systemPrefersReduce() {
   return typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-/** true quando o aluno (ajuste do app) ou o sistema pedem menos movimento. */
+/** true quando o aluno (ajuste do app) ou o sistema pedem menos movimento: vale o mais restritivo. */
 export function useReducedMotion() {
   const { progress } = useApp();
   const m = progress.prefs.motion;
@@ -25,7 +25,7 @@ export function useReducedMotion() {
     mq.addEventListener?.('change', on);
     return () => mq.removeEventListener?.('change', on);
   }, []);
-  return m === 'reduce' || (m === 'system' && sys);
+  return m === 'reduce' || sys;
 }
 
 /** Número que "sobe" até o valor final (XP, porcentagens). Sem animação quando há redução de movimento. */

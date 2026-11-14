@@ -94,6 +94,8 @@ function RadioGroup({
     if (locked) return;
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.target instanceof HTMLElement && e.target.closest('input, textarea, select')) return;
+      // com um diálogo aberto (sair, dica), as teclas 1–9 não mexem na questão de trás
+      if (document.querySelector('[aria-modal="true"]')) return;
       const n = Number(e.key);
       if (Number.isInteger(n) && n >= 1 && n <= items.length && items[n - 1].id !== disabledId) {
         e.preventDefault();
@@ -115,7 +117,9 @@ function RadioGroup({
     refs.current[j]?.focus();
   };
 
-  const focusIndex = Math.max(0, items.findIndex((it) => it.id === selected));
+  // o botão que recebe o Tab: o escolhido ou, sem escolha, o primeiro que não foi riscado pela dica
+  const selIndex = items.findIndex((it) => it.id === selected);
+  const focusIndex = selIndex >= 0 ? selIndex : Math.max(0, items.findIndex((it) => locked || it.id !== disabledId));
 
   return (
     <div className={`options ${layout === 'grid' ? 'grid' : ''}`} role="radiogroup" aria-label={label}>
@@ -291,8 +295,9 @@ function OrderEx({ q, answer, onAnswer, checked }: ExerciseProps<OrderQuestion>)
   };
   const locked = Boolean(checked);
 
-  const onPointerDown = (e: RPointerEvent<HTMLLIElement>, i: number) => {
-    if (locked || (e.pointerType === 'mouse' && e.button !== 0) || (e.target as HTMLElement).closest('button')) return;
+  // o arraste começa só pela alça (⠿): no resto do item, o dedo rola a página normalmente
+  const onPointerDown = (e: RPointerEvent<HTMLElement>, i: number) => {
+    if (locked || (e.pointerType === 'mouse' && e.button !== 0)) return;
     const rects = itemRefs.current.map((el) => el?.getBoundingClientRect());
     const centers = rects.map((r) => (r ? r.top + r.height / 2 : 0));
     const r = rects[i];
@@ -342,11 +347,17 @@ function OrderEx({ q, answer, onAnswer, checked }: ExerciseProps<OrderQuestion>)
             ref={(el) => (itemRefs.current[i] = el)}
             className={`order-item ${moved === id && !drag ? 'moved' : ''} ${drag?.active && drag.from === i ? 'dragging' : ''} ${locked ? '' : 'draggable'} ${right === null ? '' : right ? 'is-correct' : 'is-wrong'}`}
             style={shift ? { transform: `translateY(${shift}px)` } : undefined}
-            onPointerDown={(e) => onPointerDown(e, i)}
             onPointerMove={onPointerMove}
             onPointerUp={(e) => endDrag(e)}
             onPointerCancel={(e) => endDrag(e, true)}
           >
+            {!locked && (
+              <span className="grip" aria-hidden="true" title="Arraste para mudar a ordem" onPointerDown={(e) => onPointerDown(e, i)}>
+                <svg width="16" height="22" viewBox="0 0 16 22">
+                  {[4, 11, 18].map((y) => [5, 11].map((x) => <circle key={`${x}-${y}`} cx={x} cy={y} r="2" fill="currentColor" />))}
+                </svg>
+              </span>
+            )}
             <span className="pos">{i + 1}</span>
             <span>{byId[id]}</span>
             {right !== null && <span className="mark" aria-label={right ? 'posição correta' : 'posição incorreta'}>{right ? '✓' : '✗'}</span>}
@@ -402,6 +413,7 @@ function MatchEx({ q, seed, answer, onAnswer, checked }: ExerciseProps<MatchQues
   };
   const click = (side: 'l' | 'r', id: string) => {
     if (locked || matched.has(id)) return;
+    setLive('');
     if (!pick || pick.side === side) {
       setPick(pick?.side === side && pick.id === id ? null : { side, id });
       return;

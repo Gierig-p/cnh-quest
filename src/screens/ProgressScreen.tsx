@@ -3,7 +3,7 @@ import { EXAM_CONFIGS } from '../content';
 import { IconBolt, IconChart, IconClipboard, IconFire, IconMedal } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
 import { getVolume, playSound, setVolume } from '../ui/sound';
-import { ACHIEVEMENTS, DAILY_GOALS, levelFromXp, topicReport, type Prefs } from '../engine/progress';
+import { ACHIEVEMENTS, DAILY_GOALS, currentStreak, levelFromXp, topicReport, type Prefs } from '../engine/progress';
 import { useApp } from '../state/AppState';
 
 function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label: string }) {
@@ -68,7 +68,7 @@ export function ProgressScreen() {
       </section>
 
       <div className="stat-grid">
-        <div className="stat-box orange"><IconFire size={28} /><strong>{progress.streak.count}</strong><span>Ofensiva atual</span></div>
+        <div className="stat-box orange"><IconFire size={28} /><strong>{currentStreak(progress.streak)}</strong><span>Ofensiva atual</span></div>
         <div className="stat-box gold"><IconFire size={28} /><strong>{progress.streak.best}</strong><span>Recorde de ofensiva</span></div>
         <div className="stat-box purple"><IconBolt size={28} /><strong>{progress.xp}</strong><span>XP total</span></div>
         <div className="stat-box blue"><IconClipboard size={28} /><strong>{progress.exams.length}</strong><span>Simulados</span></div>
@@ -149,8 +149,12 @@ export function ProgressScreen() {
           </select>
         </div>
         <div className="setting">
-          <span id="lbl-motion">Animações</span>
-          <select aria-labelledby="lbl-motion" value={progress.prefs.motion} onChange={(e) => setPref('motion', e.target.value as Prefs['motion'])}>
+          <span>
+            <span id="lbl-motion">Animações</span>
+            <br />
+            <span className="muted" id="help-motion">Se o celular ou o computador pedir menos movimento, o app obedece, mesmo em "Completas".</span>
+          </span>
+          <select aria-labelledby="lbl-motion" aria-describedby="help-motion" value={progress.prefs.motion} onChange={(e) => setPref('motion', e.target.value as Prefs['motion'])}>
             <option value="system">Seguir o sistema</option>
             <option value="reduce">Reduzidas</option>
             <option value="full">Completas</option>

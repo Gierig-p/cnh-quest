@@ -94,6 +94,16 @@ export function dayKey(d: Date): string {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
 
+/**
+ * Ofensiva que vale hoje, só para mostrar na tela: se o último dia de estudo não foi
+ * hoje nem ontem, a sequência já quebrou e aparece 0 (o dado salvo não muda).
+ */
+export function currentStreak(streak: ProgressState['streak'], now: Date = new Date()): number {
+  const today = dayKey(now);
+  if (streak.lastDay === today || streak.lastDay === addDays(today, -1)) return streak.count;
+  return 0;
+}
+
 export function addDays(key: string, days: number): string {
   const [y, m, d] = key.split('-').map(Number);
   return dayKey(new Date(y, m - 1, d + days));
@@ -323,6 +333,33 @@ export function completeLesson(s: ProgressState, lesson: Lesson, result: Session
     round,
     rounds,
     roundsDone: done,
+  };
+}
+
+/**
+ * Prática (aba Revisar): 2 XP por acerto de primeira, como antes. Decisão do dono (14/11):
+ * se essa prática bate a meta do dia, concede "meta-diaria"; ela já conta para a ofensiva,
+ * então "ofensiva-3" também pode sair aqui. Concessão única, sem XP extra.
+ */
+export function completePractice(s: ProgressState, result: SessionResult, now: Date): CompletionOutcome {
+  const xpGained = result.correctFirstTry * 2;
+  const x = addXp(s, xpGained, now);
+  const unlocked: string[] = [];
+  const grant = (id: string) => {
+    if (!x.state.achievements.includes(id) && !unlocked.includes(id)) unlocked.push(id);
+  };
+  if (x.goalReachedNow) grant('meta-diaria');
+  if (x.state.streak.count >= 3) grant('ofensiva-3');
+  return {
+    state: { ...x.state, achievements: [...x.state.achievements, ...unlocked] },
+    xpGained,
+    streakIncreased: x.streakIncreased,
+    goalReachedNow: x.goalReachedNow,
+    newAchievements: unlocked,
+    mastered: result.accuracy >= 0.8,
+    round: 1,
+    rounds: 1,
+    roundsDone: 1,
   };
 }
 

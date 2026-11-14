@@ -461,3 +461,30 @@ describe('persistência', () => {
 it('todos os mundos têm conteúdo', () => {
   expect(WORLDS.length).toBeGreaterThan(0);
 });
+
+describe('ofensiva exibida', () => {
+  it('mostra 0 quando o último estudo foi antes de ontem, sem mudar o dado salvo', async () => {
+    const { currentStreak } = await import('./progress');
+    const now = new Date(2026, 10, 14, 12);
+    expect(currentStreak({ count: 5, best: 7, lastDay: '2026-11-14' }, now)).toBe(5);
+    expect(currentStreak({ count: 5, best: 7, lastDay: '2026-11-13' }, now)).toBe(5);
+    expect(currentStreak({ count: 5, best: 7, lastDay: '2026-11-12' }, now)).toBe(0);
+    expect(currentStreak({ count: 0, best: 0, lastDay: null }, now)).toBe(0);
+  });
+});
+
+describe('prática concede conquistas (decisão do dono, 14/11)', () => {
+  it('bater a meta na prática dá "meta-diaria" uma vez só, sem XP extra', async () => {
+    const { completePractice, initialProgress } = await import('./progress');
+    const now = new Date(2026, 10, 14, 12);
+    const s = { ...initialProgress(), dailyGoal: 10 };
+    const result = { total: 6, correctFirstTry: 6, accuracy: 1, completed: true } as Parameters<typeof completePractice>[1];
+    const a = completePractice(s, result, now);
+    expect(a.xpGained).toBe(12);
+    expect(a.state.xp).toBe(12);
+    expect(a.newAchievements).toEqual(['meta-diaria']);
+    const b = completePractice(a.state, result, now);
+    expect(b.newAchievements).toEqual([]);
+    expect(b.state.achievements.filter((x) => x === 'meta-diaria')).toHaveLength(1);
+  });
+});
