@@ -1509,6 +1509,15 @@ export const WORLD2: World = {
       ],
     },
     {
+      id: 'w2-rua',
+      title: 'Na rua',
+      icon: 'shield',
+      masteryThreshold: 0.8,
+      xp: 15,
+      referenceModule: 1,
+      steps: [1, 2, 3, 4, 5, 6].map((n) => q(`w2-rua-${n}`)),
+    },
+    {
       id: 'w2-review',
       title: 'Revisão do mundo',
       icon: 'trophy',

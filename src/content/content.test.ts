@@ -32,6 +32,7 @@ describe('conteúdo', () => {
       ['w1-mid', 1],
       ['w1-l3', 1],
       ['w1-l4', 1],
+      ['w1-rua', 1],
       ['w1-review', 1],
     ]);
     expect(worldReferenceModules(w1)).toEqual([1, 3]);

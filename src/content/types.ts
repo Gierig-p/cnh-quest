@@ -72,6 +72,15 @@ export type SceneId =
   | 'placa-escondida'
   | 'placa-distancias';
 
+/**
+ * Uma linha da situação narrada ("Na rua"): uma fala do narrador ou um som.
+ * O áudio pronto fica em public/audio/situacoes/<id da questão>.mp3 (scripts/audio/situacoes.ts).
+ */
+export type SituationLine =
+  | { kind: 'fala'; text: string }
+  /** `som` é a chave do efeito no script de áudio; `label` é o que aparece na tela, ex.: "apito". */
+  | { kind: 'som'; som: string; label: string };
+
 interface QuestionBase {
   id: string;
   module: ModuleId;
@@ -89,6 +98,8 @@ interface QuestionBase {
   review: ReviewStatus;
   /** Pode entrar no simulado (formato oficial: 4 alternativas, 1 correta). */
   examEligible?: boolean;
+  /** Situação narrada com sons, tocada antes da pergunta (lições "Na rua"). */
+  situation?: SituationLine[];
 }
 
 export interface ChoiceOption {

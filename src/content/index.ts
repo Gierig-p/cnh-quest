@@ -3,10 +3,11 @@ import { buildHintCards } from './hints';
 import type { ExamConfig, Question, World } from './types';
 import { WORLD1, WORLD1_QUESTIONS } from './world1';
 import { WORLD2, WORLD2_QUESTIONS } from './world2';
+import { WORLD1_SITUATIONS, WORLD2_SITUATIONS } from './situations';
 
 export const WORLDS: World[] = [WORLD1, WORLD2];
 
-export const QUESTIONS: Question[] = [...WORLD1_QUESTIONS, ...WORLD2_QUESTIONS];
+export const QUESTIONS: Question[] = [...WORLD1_QUESTIONS, ...WORLD2_QUESTIONS, ...WORLD1_SITUATIONS, ...WORLD2_SITUATIONS];
 
 export const QUESTION_BY_ID: Record<string, Question> = Object.fromEntries(
   QUESTIONS.map((q) => [q.id, q]),

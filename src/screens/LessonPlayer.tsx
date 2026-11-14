@@ -9,6 +9,7 @@ import { Burst, Dialog, useDialogClose } from '../components/Fx';
 import { IconCheck, IconClose, IconHeart, IconSparkle, IconWrong } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
 import { NarrationButton } from '../components/NarrationButton';
+import { SituationBox } from '../components/SituationBox';
 import { TermHintsContext, TermText, useHasNewTerm } from '../components/TermText';
 import { Visual } from '../components/Visual';
 import { grade, type Answer, type Feedback } from '../engine/grading';
@@ -322,6 +323,7 @@ export function LessonPlayer({
                   />
                 )}
               </div>
+              {q.situation && <SituationBox questionId={q.id} lines={q.situation} />}
               <h1 id="q-title" className="q-title" tabIndex={-1}><TermText text={q.prompt} /></h1>
               {hintCard && hintStep > 0 && <HintBox title={hintCard.title} remember={hintCard.remember!} reveal={hintStep > 1 ? reveal : null} />}
               <Exercise
