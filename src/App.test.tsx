@@ -23,7 +23,7 @@ const nextFrame = () => act(() => new Promise<void>((r) => requestAnimationFrame
 async function passCard(user: { click: (el: Element) => Promise<void> }) {
   for (;;) {
     const m = screen.queryByText(/^Parte \d+ de \d+$/)?.textContent?.match(/(\d+) de (\d+)/);
-    await user.click(screen.getByRole('button', { name: 'Continuar' }));
+    await user.click(screen.getByRole('button', { name: /^(Continuar|Ir para as perguntas)$/ }));
     // espera a tela atualizar: o app ignora um 2º toque até o próximo quadro (evita avanço duplo)
     await nextFrame();
     if (!m || m[1] === m[2]) return;

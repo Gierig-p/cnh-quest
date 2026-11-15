@@ -1,17 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 /** AudioContext falso: conta quantos contextos e osciladores foram criados. */
-function installFakeAudio() {
-  const stats = { contexts: 0, oscillators: 0 };
+function installFakeAudio(opts: { startState?: string; resumeWorks?: boolean } = {}) {
+  const { startState = 'running', resumeWorks = true } = opts;
+  const stats = { contexts: 0, oscillators: 0, resumes: 0, all: [] as { state: string }[] };
   const param = () => ({ value: 0, setValueAtTime: vi.fn(), linearRampToValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn(), setTargetAtTime: vi.fn() });
   const node = () => ({ connect: vi.fn((n: unknown) => n ?? node()), gain: param(), frequency: param(), Q: param(), threshold: param(), ratio: param(), type: '', start: vi.fn(), stop: vi.fn(), buffer: null });
   class FakeCtx {
     currentTime = 0;
     sampleRate = 8000;
-    state = 'running';
+    state = startState;
     destination = node();
     constructor() {
       stats.contexts++;
+      stats.all.push(this);
     }
     createGain = () => node();
     createDynamicsCompressor = () => node();
@@ -22,7 +24,15 @@ function installFakeAudio() {
       stats.oscillators++;
       return node();
     };
-    resume = vi.fn();
+    resume = vi.fn(() => {
+      stats.resumes++;
+      if (resumeWorks) this.state = 'running';
+      return resumeWorks ? Promise.resolve() : new Promise<void>(() => {});
+    });
+    close = vi.fn(() => {
+      this.state = 'closed';
+      return Promise.resolve();
+    });
   }
   (window as unknown as { AudioContext: unknown }).AudioContext = FakeCtx;
   return stats;
@@ -68,5 +78,40 @@ describe('sistema de áudio', () => {
     const again = await import('./sound');
     expect(again.getVolume()).toBeCloseTo(0.35);
     expect(localStorage.getItem('cnhquest:progress:v1')).toBeNull();
+  });
+
+  it('contexto adormecido: espera acordar e só então toca', async () => {
+    const stats = installFakeAudio({ startState: 'suspended' });
+    const { playSound } = await import('./sound');
+    playSound('correct', true);
+    expect(stats.oscillators).toBe(0); // ainda não tocou: está acordando
+    await vi.waitFor(() => expect(stats.oscillators).toBeGreaterThan(0));
+    expect(stats.resumes).toBe(1);
+  });
+
+  it('um toque na tela acorda o áudio antes de o efeito ser pedido', async () => {
+    const stats = installFakeAudio();
+    const { playSound } = await import('./sound');
+    playSound('tap', true);
+    stats.all[0].state = 'suspended'; // o aparelho adormeceu o áudio
+    document.dispatchEvent(new Event('pointerdown'));
+    expect(stats.resumes).toBe(1);
+    expect(stats.all[0].state).toBe('running');
+  });
+
+  it('se o áudio não acorda, o efeito é descartado (nada de som atrasado) e o contexto é recriado', async () => {
+    vi.useFakeTimers();
+    try {
+      const stats = installFakeAudio({ startState: 'interrupted', resumeWorks: false });
+      const { playSound } = await import('./sound');
+      playSound('correct', true);
+      await vi.advanceTimersByTimeAsync(1100);
+      expect(stats.oscillators).toBe(0);
+      expect(stats.all[0].state).toBe('closed');
+      playSound('wrong', true); // próximo gesto: contexto novo
+      expect(stats.contexts).toBe(2);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

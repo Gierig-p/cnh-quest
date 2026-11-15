@@ -64,6 +64,7 @@ export function setVolume(v: number) {
   if (master && ctx) master.gain.setTargetAtTime(volume * 0.9, ctx.currentTime, 0.02);
 }
 
+/** Cria o contexto de áudio (só dentro de um gesto do aluno) e liga os "despertadores". */
 function ensureContext(): AudioContext | null {
   if (typeof window === 'undefined') return null;
   const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
@@ -77,9 +78,59 @@ function ensureContext(): AudioContext | null {
     master.gain.value = volume * 0.9;
     master.connect(comp).connect(ctx.destination);
     preload(ctx);
+    listenWake();
   }
-  if (ctx.state === 'suspended') void ctx.resume();
   return ctx;
+}
+
+/**
+ * Acordar o áudio (14/11/2026). Depois de um tempo parado, o celular ou o navegador "adormece" o
+ * AudioContext (estado 'suspended' ou, no iPhone, 'interrupted'). Antes, o som era tocado sem esperar
+ * o contexto acordar e saía atrasado. Agora:
+ * - todo toque na tela, tecla ou volta para o app já acorda o contexto, antes de o efeito ser pedido;
+ * - o efeito só toca quando o contexto está rodando; se acordar demorar demais, o efeito é descartado
+ *   (som atrasado confunde mais que som nenhum);
+ * - se o contexto não acordar, ele é recriado no próximo gesto (os arquivos já baixados são reaproveitados).
+ */
+const WAKE_TIMEOUT_MS = 1000;
+const LATE_MS = 350;
+let waking: Promise<boolean> | null = null;
+let listening = false;
+
+function wake(): Promise<boolean> {
+  const c = ctx;
+  if (!c) return Promise.resolve(false);
+  if (c.state === 'running') return Promise.resolve(true);
+  if (c.state === 'closed') {
+    ctx = master = null;
+    return Promise.resolve(false);
+  }
+  if (!waking) {
+    waking = Promise.race([
+      Promise.resolve(c.resume()).then(() => c.state === 'running', () => false),
+      new Promise<boolean>((ok) => setTimeout(() => ok(false), WAKE_TIMEOUT_MS)),
+    ]).then((ok) => {
+      waking = null;
+      if (!ok && ctx === c) {
+        // não acordou: descarta este contexto; o próximo gesto cria outro
+        void Promise.resolve(c.close?.()).catch(() => undefined);
+        ctx = master = null;
+      }
+      return ok;
+    });
+  }
+  return waking;
+}
+
+function listenWake() {
+  if (listening || typeof document === 'undefined') return;
+  listening = true;
+  const onGesture = () => void wake();
+  document.addEventListener('pointerdown', onGesture, { capture: true, passive: true });
+  document.addEventListener('keydown', onGesture, { capture: true });
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) void wake();
+  });
 }
 
 /** Nota com envelope de ataque rápido e decaimento exponencial; `partial` soma um harmônico (som de sino). */
@@ -250,8 +301,31 @@ export function playSound(kind: SoundKind, enabled: boolean) {
   if (now - last < DEDUP_MS) return;
   lastPlayed.set(kind, now);
   try {
-    if (!ensureContext()) return;
-    if (!playFile(kind)) RECIPES[kind]();
+    const c = ensureContext();
+    if (!c) return;
+    const start = () => {
+      if (!playFile(kind)) RECIPES[kind]();
+    };
+    if (c.state === 'running') {
+      start();
+      return;
+    }
+    // adormecido: espera acordar e só toca se ainda fizer sentido (sem atraso perceptível)
+    void wake().then((ok) => {
+      const late = (typeof performance !== 'undefined' ? performance.now() : Date.now()) - now > LATE_MS;
+      if (!ok) {
+        // contexto descartado: tenta de novo com um contexto novo, se ainda der tempo
+        if (!late && ensureContext()?.state === 'running') start();
+        return;
+      }
+      if (!late) {
+        try {
+          start();
+        } catch {
+          /* sem áudio disponível */
+        }
+      }
+    });
   } catch {
     /* sem áudio disponível */
   }

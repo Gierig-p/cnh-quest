@@ -126,6 +126,8 @@ export function LessonPlayer({
   // cartão longo em partes (Entrega 3): cada item começa na parte 1, com a correção resumida
   const parts = useMemo(() => (item?.kind === 'concept' ? cardParts(item.card) : []), [item]);
   const [part, setPart] = useState(0);
+  // fim da explicação (última parte do cartão) com uma questão logo depois: o botão leva às perguntas
+  const toQuestions = item?.kind === 'concept' && part >= parts.length - 1 && s.queue[s.index + 1]?.kind === 'question';
   const [moreFb, setMoreFb] = useState(false);
   const [showCard, setShowCard] = useState(false);
 
@@ -437,7 +439,7 @@ export function LessonPlayer({
               }}
               autoFocus={!fb}
             >
-              Continuar
+              {toQuestions ? 'Ir para as perguntas' : 'Continuar'}
             </button>
             </>
           )}

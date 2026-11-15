@@ -43,6 +43,25 @@ describe('cartão em partes', () => {
     }
     expect(onFinish).toHaveBeenCalled();
   });
+  it('no fim da explicação, com questão em seguida, o botão é "Ir para as perguntas"', async () => {
+    const m = new Map<string, string>();
+    const storage = { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v), removeItem: (k: string) => void m.delete(k) } as Storage;
+    const user = userEvent.setup();
+    render(
+      <AppStateProvider store={createLocalStore(storage)}>
+        <LessonPlayer initial={startSession({ id: 't', steps: [{ kind: 'concept', card: CONCEPTS.preferencia }, { kind: 'question', questionId: 'w1-l1-q1' }] })} practice={false} allowHints onExit={() => {}} onFinish={() => {}} />
+      </AppStateProvider>,
+    );
+    const n = cardParts(CONCEPTS.preferencia).length;
+    for (let i = 1; i < n; i++) {
+      expect(screen.queryByRole('button', { name: 'Ir para as perguntas' })).not.toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: 'Continuar' }));
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+    await user.click(screen.getByRole('button', { name: 'Ir para as perguntas' }));
+    await new Promise((r) => requestAnimationFrame(r));
+    expect(screen.getByRole('button', { name: 'Verificar' })).toBeInTheDocument();
+  });
   it('"Voltar" mostra a parte anterior e não aparece na primeira parte', async () => {
     const m = new Map<string, string>();
     const storage = { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v), removeItem: (k: string) => void m.delete(k) } as Storage;
