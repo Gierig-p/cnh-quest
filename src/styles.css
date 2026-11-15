@@ -492,6 +492,21 @@ html[data-motion='reduce'] *, html[data-motion='reduce'] *::before, html[data-mo
 .anim-scene { margin: 0; width: 440px; max-width: 100%; }
 .anim-scene-art { border-radius: 16px; overflow: hidden; aspect-ratio: 8 / 5; background: #9fcf8f; }
 .anim-scene-wait { width: 100%; height: 100%; }
+.video-conceito { margin: 14px auto 0; }
+.video-tela { position: relative; }
+.video-play { position: absolute; inset: 0; margin: auto; width: 76px; height: 76px; border-radius: 50%; border: 0;
+  background: rgba(15, 23, 42, 0.72); color: #fff; font-size: 34px; cursor: pointer; display: grid; place-items: center; }
+.video-play span { transform: translateX(3px); }
+.video-play:hover:not(:disabled) { background: rgba(15, 23, 42, 0.86); }
+.video-toque { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: transparent; cursor: pointer; }
+.video-barra { height: 6px; margin-top: 8px; border-radius: 3px; background: var(--border); overflow: hidden; }
+.video-barra span { display: block; height: 100%; background: var(--green, #58cc02); transition: width 0.1s linear; }
+.video-legenda { min-height: 3.2em; margin-top: 10px; padding: 10px 14px; border-radius: 12px; background: var(--surface);
+  border: 2px solid var(--border); font-size: 18px; font-weight: 700; line-height: 1.4; text-align: center; }
+.video-denovo { display: block; margin: 12px auto 0; }
+.c-resumo { border-color: var(--green-line, var(--border)); }
+.c-resumo ul { margin: 0; padding-left: 20px; }
+.c-resumo li + li { margin-top: 6px; }
 .anim-scene-cap { margin-top: 8px; text-align: center; font-weight: 800; color: var(--text-2, inherit); }
 .pop-in { animation: pop-in 500ms var(--ease-spring) 120ms both; }
 @keyframes pop-in { from { opacity: 0; transform: scale(.8); } }

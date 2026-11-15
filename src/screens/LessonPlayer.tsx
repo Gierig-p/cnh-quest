@@ -305,7 +305,7 @@ export function LessonPlayer({
               {parts.length > 1 && <div className="q-tag part-tag">Parte {part + 1} de {parts.length}</div>}
             </div>
             <h1 id="concept-title" className="q-title" tabIndex={-1}>{item.card.title}</h1>
-            <NarrationButton cardId={item.card.id} />
+            {!item.card.video && <NarrationButton cardId={item.card.id} />}
             <div className={parts.length > 1 ? 'card-part' : undefined} key={part}>
               <ConceptBlocks card={item.card} show={parts[part] ?? []} sources={part === parts.length - 1} />
             </div>
@@ -490,7 +490,7 @@ function AgainDialogBody({ card }: { card: ConceptCard }) {
   return (
     <div className="again concept">
       <h2 id="again-title" ref={titleRef} tabIndex={-1}>{card.title}</h2>
-      <ConceptBlocks card={card} show={cardParts({ ...card, id: '' })[0]} lumiSize={64} />
+      <ConceptBlocks card={card} show={card.video ? ['resumo', 'guardar'] : cardParts({ ...card, id: '' })[0]} lumiSize={64} />
       <button className="btn wide" onClick={close}>Fechar</button>
     </div>
   );

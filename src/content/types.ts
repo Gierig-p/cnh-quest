@@ -1,3 +1,4 @@
+import type { VideoId } from './videos';
 /** Modelo de dados do conteúdo educativo. Nenhum texto de questão vive nos componentes. */
 
 export type ModuleId =
@@ -207,6 +208,11 @@ export interface ConceptCard {
   /** Frase curta para memorizar. */
   remember?: string;
   visual?: Visual;
+  /**
+   * Piloto de 15/11/2026: o cartão vira um vídeo animado (página 1) e um resumo em texto (página 2).
+   * Com vídeo, a fala da Lumi, o passo a passo e o exemplo não aparecem; o resumo e as palavras novas, sim.
+   */
+  video?: { id: VideoId; resumo: string[] };
   sources: SourceRef[];
 }
 

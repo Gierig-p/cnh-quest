@@ -25,7 +25,7 @@ type Pr = (p: V3) => V2;
 /* ---------------- peças ---------------- */
 
 /** ônibus urbano indo para o norte, porta do lado direito (leste) */
-function onibus(x: number, y: number, cor = '#f2a13a'): Obj {
+export function onibus(x: number, y: number, cor = '#f2a13a'): Obj {
   const W = 1.25, L = 5.6, z0 = 0.35, z1 = 3.15;
   const corpo = box(x - W, y - L, z0, x + W, y + L, z1, (k) => (k === 'top' ? '#e6e9ed' : cor), (k, q) => {
     const D: Dec[] = [];
@@ -106,7 +106,7 @@ function poeira(x: number, y: number): ReactNode {
 }
 
 /** chuva forte (pixels): céu cinza e riscos inclinados */
-function chuva(): ReactNode {
+export function chuva(): ReactNode {
   const r = rng(31);
   const riscos = Array.from({ length: 110 }, () => [r() * 340 - 10, r() * 210 - 10, 7 + r() * 6] as const);
   return (

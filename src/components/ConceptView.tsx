@@ -2,9 +2,10 @@ import type { ConceptCard } from '../content/types';
 import { Lumi } from './Lumi';
 import { Visual } from './Visual';
 import { SourceList } from '../screens/LessonPlayer';
+import { VideoConceito } from './VideoConceito';
 
 /** Blocos de um cartão de conceito, na ordem em que aparecem. */
-export type CardBlock = 'body' | 'terms' | 'points' | 'example';
+export type CardBlock = 'body' | 'terms' | 'points' | 'example' | 'video' | 'resumo' | 'guardar';
 
 /**
  * Cartões longos são mostrados em partes ("Parte 1 de N"), Entrega 3 do PLANO-v2.
@@ -26,6 +27,8 @@ function blockSize(card: ConceptCard, b: CardBlock): number {
       return (card.points ?? []).reduce((n, p) => n + p.length, 0);
     case 'example':
       return (card.example ?? '').length + (card.remember ?? '').length;
+    default:
+      return 0;
   }
 }
 
@@ -36,6 +39,8 @@ function blockSize(card: ConceptCard, b: CardBlock): number {
  * senão, vêm na parte seguinte.
  */
 export function cardParts(card: ConceptCard): CardBlock[][] {
+  // cartão com vídeo: o vídeo numa página, o resumo na outra
+  if (card.video) return card.id ? [['video'], ['resumo', 'terms', 'guardar']] : [['video', 'resumo', 'terms', 'guardar']];
   const blocks = (['body', 'terms', 'points', 'example'] as CardBlock[]).filter((b) => blockSize(card, b) > 0);
   if (!card.id || blocks.reduce((n, b) => n + blockSize(card, b), 0) <= LONG_CARD) return [blocks];
   const has = (b: CardBlock) => blocks.includes(b);
@@ -86,6 +91,17 @@ export function ConceptBlocks({ card, show, sources = true, lumiSize = 92 }: { c
           )}
         </>
       )}
+      {has('video') && card.video && <VideoConceito id={card.video.id} title={card.title} />}
+      {has('resumo') && card.video && (
+        <div className="c-box c-resumo">
+          <h2 className="c-head">📝 Resumo</h2>
+          <ul>
+            {card.video.resumo.map((r, i) => (
+              <li key={i}>{r}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       {has('terms') && card.terms && card.terms.length > 0 && (
         <div className="c-box c-terms">
           <h2 className="c-head">📖 Palavras novas</h2>
@@ -116,6 +132,12 @@ export function ConceptBlocks({ card, show, sources = true, lumiSize = 92 }: { c
         </div>
       )}
       {has('example') && card.remember && (
+        <div className="c-box c-remember">
+          <h2 className="c-head">💡 Para guardar</h2>
+          <p>{card.remember}</p>
+        </div>
+      )}
+      {has('guardar') && card.remember && (
         <div className="c-box c-remember">
           <h2 className="c-head">💡 Para guardar</h2>
           <p>{card.remember}</p>

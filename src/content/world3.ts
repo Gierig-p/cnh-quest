@@ -35,6 +35,16 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
       'Numa avenida de três faixas, o caminhão lento vai pela direita. Você, que vai ultrapassá-lo, usa a faixa da ' +
       'esquerda e depois volta.',
     remember: 'Direita para andar devagar, esquerda para passar.',
+    video: {
+      id: 'faixas',
+      resumo: [
+        'Ande pelo lado direito da via. Exceções, só com sinalização.',
+        'Faixas da direita: veículos mais lentos e maiores.',
+        'Faixas da esquerda: ultrapassar e andar mais rápido.',
+        'Guarde distância para a frente, para os lados e da beirada. Mais velocidade, chuva ou movimento pedem mais espaço.',
+        'Dirija com atenção, com o carro sob controle.',
+      ],
+    },
     sources: ctb('art. 28', 'art. 29, I, II e IV'),
   },
   calcadaAcostamento: {

@@ -93,6 +93,48 @@ export async function falaPausada(blocos, voz, destino, { entreFrases = 0.6, ent
   return destino;
 }
 
+/**
+ * Fala com tempos (vídeos dos cartões): cada fala é uma frase da legenda, gerada separada e juntada com `pausa` segundos
+ * de silêncio. Devolve o início e o fim de cada fala (em segundos) e a duração total.
+ */
+export async function falaComTempos(falas, voz, destino, { pausa = 1.0, inicio = 0.6, velocidade = 0.9 } = {}) {
+  const tmp = join(CACHE, 'tmp');
+  mkdirSync(tmp, { recursive: true });
+  const pecas = [];
+  for (let k = 0; k < falas.length; k++) {
+    const mp3 = await pedir(`/v1/text-to-speech/${voz}?output_format=mp3_44100_128`, {
+      text: falas[k],
+      model_id: MODELO,
+      previous_text: falas[k - 1],
+      next_text: falas[k + 1],
+      voice_settings: { stability: 0.6, similarity_boost: 0.75, style: 0, use_speaker_boost: true, speed: velocidade },
+    });
+    const wav = join(tmp, `v${k}.wav`);
+    execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', mp3, '-af',
+      'silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse',
+      '-ar', '44100', '-ac', '1', wav]);
+    const dur = Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', wav]).toString().trim());
+    pecas.push({ wav, dur });
+  }
+  const tempos = [];
+  let t = inicio;
+  const args = ['-hide_banner', '-loglevel', 'error', '-y'];
+  const fil = [];
+  pecas.forEach((p, k) => {
+    args.push('-i', p.wav);
+    tempos.push({ ini: +t.toFixed(3), fim: +(t + p.dur).toFixed(3) });
+    const ms = Math.round(t * 1000);
+    fil.push(`[${k}:a]adelay=${ms}|${ms}[p${k}]`);
+    t += p.dur + pausa;
+  });
+  const total = +(t - pausa + 1.2).toFixed(3);
+  const mix = fil.join(';') + ';' + pecas.map((_, k) => `[p${k}]`).join('') +
+    `amix=inputs=${pecas.length}:normalize=0,apad,atrim=0:${total},loudnorm=I=-16:TP=-1.5:LRA=11[out]`;
+  mkdirSync(dirname(destino), { recursive: true });
+  execFileSync('ffmpeg', [...args, '-filter_complex', mix, '-map', '[out]', '-ar', '44100', '-ac', '1', '-b:a', '64k', destino]);
+  return { dur: total, falas: tempos };
+}
+
 /** Efeito sonoro curto (pedido em inglês). */
 export async function efeito(texto, segundos, destino) {
   const mp3 = await pedir('/v1/sound-generation?output_format=mp3_44100_128', {
