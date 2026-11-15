@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -149,6 +149,32 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Antes de abrir a porta, olhe se não vem ninguém: carro, moto, bicicleta ou pedestre.',
       'Os passageiros sobem e descem pelo lado da calçada. Só o motorista usa o outro lado.',
       'Para guardar: carro paralelo, moto em L, porta só depois de olhar.',
+    ],
+  },
+  'velocidade-estrada': {
+    falas: [
+      'Fora da cidade, o limite de velocidade depende do tipo de via e do veículo.',
+      'Rodovia é a via rural com asfalto. Estrada é a via rural de terra.',
+      'Na rodovia de pista dupla, sem placa: carros, caminhonetes e motos vão até 110 quilômetros por hora.',
+      'Os outros veículos, como caminhões e ônibus, até 90.',
+      'Na rodovia de pista simples, sem placa: carros, caminhonetes e motos até 100. Os outros, até 90.',
+      'Na estrada de terra, sem placa: 60 quilômetros por hora.',
+      'Mas a placa sempre vem primeiro. Se ela marca 80, vale 80 para todos.',
+      'E a velocidade mínima é a metade da máxima. Andar devagar demais sem motivo também atrapalha.',
+      'Para guardar: pista dupla 110, simples 100, terra 60. Mínima: metade.',
+    ],
+  },
+  cinto: {
+    falas: [
+      'Em qualquer viagem, curta ou longa, o corpo precisa estar protegido.',
+      'O cinto de segurança é obrigatório para o motorista e para todos os passageiros, em todas as vias.',
+      'Vale no banco da frente e no banco de trás.',
+      'Criança com menos de 10 anos e menos de um metro e quarenta e cinco vai no banco de trás.',
+      'E na proteção certa para a idade, o peso e a altura: bebê conforto, cadeirinha ou assento de elevação.',
+      'Na moto, quem pilota usa capacete com viseira ou óculos de proteção.',
+      'Pilota com as duas mãos no guidão e com roupa de proteção.',
+      'O passageiro também usa capacete e roupa de proteção, e vai sentado atrás de quem pilota.',
+      'Para guardar: todo mundo de cinto, criança atrás, capacete fechado.',
     ],
   },
 };

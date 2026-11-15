@@ -425,8 +425,7 @@ export function CarroQuebrado(p: CenaProps) {
 /* ---------------- 5. velocidade ---------------- */
 
 /** estrada de terra entre as roças, sem placa */
-export function EstradaTerra(p: CenaProps) {
-  const ground: Part[] = [
+export const TERRA_CHAO: Part[] = [
     ...grassPatches(-50, -70, 50, 40, 12),
     rect(-4.2, -70, 4.2, 40, '#c2a476'),
     rect(-3.4, -70, 3.4, 40, '#b99b6b', 0.001),
@@ -435,7 +434,10 @@ export function EstradaTerra(p: CenaProps) {
     rect(-0.5, -70, 0.1, 40, '#a4875a', 0.002, 0.8),
     rect(0.9, -70, 1.5, 40, '#a4875a', 0.002, 0.8),
     rect(2.3, -70, 2.9, 40, '#a4875a', 0.002, 0.8),
-  ];
+];
+
+export function EstradaTerra(p: CenaProps) {
+  const ground = TERRA_CHAO;
   const objs = [...campo(9), bush(-5.5, -12, 0.8, 3), bush(5.8, -26, 0.8, 4), car({ x: 1.6, y: 1.5, color: VOCE })];
   return cena(CAM_ESTRADA, ground, objs, (pr) => {
     const [px, py] = pr([1.6, 4.2, 0.4]);
@@ -448,32 +450,37 @@ export function EstradaTerra(p: CenaProps) {
   }, p);
 }
 
+/** sua pista, duas faixas para o norte, entre x = e0 e x = e1; a outra é o espelho */
+export const DUPLA_E0 = 0.8, DUPLA_E1 = 8.0;
+const e0 = DUPLA_E0, e1 = DUPLA_E1;
+export const DUPLA_CHAO: Part[] = [
+  ...grassPatches(-50, -70, 50, 40, 13),
+  rect(e1, -70, e1 + 2.2, 40, '#6d747d', 0, 0.55),
+  ...asphalt(e0, -70, e1, 40, 3),
+  rect(e1, -70, e1 + 2.2, 40, '#757c85'),
+  lines([{ p: [[(e0 + e1) / 2, -70, 0], [(e0 + e1) / 2, 40, 0]], c: '#eeeeea', w: 1, dash: '6 6' }]),
+  rect(e1 - 0.15, -70, e1, 40, '#eeeeea'),
+  rect(e0, -70, e0 + 0.15, 40, '#f2c21b'),
+  // canteiro de grama e a outra pista
+  rect(-e0, -70, e0, 40, '#8cc47a', 0.01),
+  ...asphalt(-e1, -70, -e0, 40, 9),
+  rect(-e1 - 2.2, -70, -e1, 40, '#757c85'),
+  lines([{ p: [[-(e0 + e1) / 2, -70, 0], [-(e0 + e1) / 2, 40, 0]], c: '#eeeeea', w: 1, dash: '6 6' }]),
+  rect(-e0 - 0.15, -70, -e0, 40, '#f2c21b'),
+  rect(-e1, -70, -e1 + 0.15, 40, '#eeeeea'),
+];
+
+// defensa de metal no canteiro, no sentido norte-sul
+export const defensaY = (x: number): Obj => {
+  const parts: Part[] = [box(x - 0.06, -70, 0.5, x + 0.06, 40, 0.82, '#c3c9d0', (k, q) => (k === 'e' || k === 'w' ? [{ p: subq(q, 0, 0.42, 1, 0.58), c: '#8f99a2' }] : undefined))];
+  for (let y = -60; y < 40; y += 2.5) parts.push(box(x - 0.06, y, 0, x + 0.14, y + 0.12, 0.8, '#7d868e'));
+  return { parts, shadow: true };
+};
+
 /** rodovia de pista dupla (canteiro no meio) com a placa de 80 km/h */
 export function RodoviaDupla80(p: CenaProps) {
-  const e0 = 0.8, e1 = 8.0; // sua pista, duas faixas para o norte
   const placa = { x: 10.6, y: -9, code: 'R-19' as const, speed: 80, face: 0 };
-  const ground: Part[] = [
-    ...grassPatches(-50, -70, 50, 40, 13),
-    rect(e1, -70, e1 + 2.2, 40, '#6d747d', 0, 0.55),
-    ...asphalt(e0, -70, e1, 40, 3),
-    rect(e1, -70, e1 + 2.2, 40, '#757c85'),
-    lines([{ p: [[(e0 + e1) / 2, -70, 0], [(e0 + e1) / 2, 40, 0]], c: '#eeeeea', w: 1, dash: '6 6' }]),
-    rect(e1 - 0.15, -70, e1, 40, '#eeeeea'),
-    rect(e0, -70, e0 + 0.15, 40, '#f2c21b'),
-    // canteiro de grama e a outra pista
-    rect(-e0, -70, e0, 40, '#8cc47a', 0.01),
-    ...asphalt(-e1, -70, -e0, 40, 9),
-    rect(-e1 - 2.2, -70, -e1, 40, '#757c85'),
-    lines([{ p: [[-(e0 + e1) / 2, -70, 0], [-(e0 + e1) / 2, 40, 0]], c: '#eeeeea', w: 1, dash: '6 6' }]),
-    rect(-e0 - 0.15, -70, -e0, 40, '#f2c21b'),
-    rect(-e1, -70, -e1 + 0.15, 40, '#eeeeea'),
-  ];
-  // defensa de metal no canteiro, no sentido norte-sul
-  const defensaY = (x: number): Obj => {
-    const parts: Part[] = [box(x - 0.06, -70, 0.5, x + 0.06, 40, 0.82, '#c3c9d0', (k, q) => (k === 'e' || k === 'w' ? [{ p: subq(q, 0, 0.42, 1, 0.58), c: '#8f99a2' }] : undefined))];
-    for (let y = -60; y < 40; y += 2.5) parts.push(box(x - 0.06, y, 0, x + 0.14, y + 0.12, 0.8, '#7d868e'));
-    return { parts, shadow: true };
-  };
+  const ground = DUPLA_CHAO;
   const objs: Obj[] = [
     defensaY(0),
     tree(-14, -6, 1.1, 1),

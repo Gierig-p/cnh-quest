@@ -370,6 +370,16 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
       'Numa rodovia de pista simples sem placa, você vai de carro a até 100 km/h. O caminhão ao lado, até 90 km/h. ' +
       'Se aparecer uma placa de 80, vale 80 para os dois.',
     remember: 'Pista dupla 110, simples 100, terra 60. Mínima: metade.',
+    video: {
+      id: 'velocidade-estrada',
+      resumo: [
+        'Rodovia é a via rural com asfalto; estrada é a via rural de terra.',
+        'Pista dupla, sem placa: carros, caminhonetes e motos até 110 km/h; os outros veículos até 90.',
+        'Pista simples, sem placa: carros, caminhonetes e motos até 100 km/h; os outros até 90.',
+        'Estrada de terra, sem placa: 60 km/h.',
+        'A placa vem primeiro. A mínima é a metade da máxima.',
+      ],
+    },
     sources: ctb('art. 43, I', 'art. 61, caput e §§ 1º, II, e 2º', 'art. 62', 'Anexo I — Rodovia', 'Anexo I — Estrada'),
   },
   cintoCapacete: {
@@ -395,6 +405,15 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
       'Uma criança de 6 anos vai com você ao mercado, a duas quadras. Mesmo perto, ela vai no banco de trás, na ' +
       'cadeirinha.',
     remember: 'Todo mundo de cinto. Criança atrás. Capacete fechado.',
+    video: {
+      id: 'cinto',
+      resumo: [
+        'Cinto: obrigatório para o motorista e todos os passageiros, na frente e atrás.',
+        'Criança com menos de 10 anos e menos de 1,45 m: banco de trás, no bebê conforto, cadeirinha ou assento de elevação.',
+        'Moto: capacete com viseira ou óculos, as duas mãos no guidão e roupa de proteção.',
+        'Passageiro da moto: capacete e roupa de proteção, sentado atrás de quem pilota.',
+      ],
+    },
     sources: ctb('art. 54', 'art. 55', 'art. 64', 'art. 65'),
   },
 };
