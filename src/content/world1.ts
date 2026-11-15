@@ -29,6 +29,13 @@ export const CONCEPTS: Record<string, ConceptCard> = {
       'Dispositivos auxiliares: peças que ajudam a sinalizar, como cones e tachões.',
     ],
     remember: 'Placa, pintura, luz, som, gesto e auxiliar: só isso é sinal. Em pé é placa; deitado no chão é pintura.',
+    video: {
+      id: 'sinais',
+      resumo: [
+        'Sinal de trânsito é tudo o que avisa o que fazer na via.',
+        'Seis tipos: placas (verticais), pinturas (horizontais), semáforos (luminosos), apito (sonoro), gestos e auxiliares (cones, tachões).',
+      ],
+    },
     sources: [
       { sourceId: 'ctb', locator: 'art. 87' },
       { sourceId: 'ctb', locator: 'Anexo I — agente da autoridade de trânsito' },
@@ -51,6 +58,14 @@ export const CONCEPTS: Record<string, ConceptCard> = {
       'Outro caso: a lei tem um limite geral de velocidade, mas a rua tem uma placa com outro número. Vale a placa.',
     remember: 'Agente, Semáforo, Sinais, Normas: "A-S-S-N". Tem placa? Vale a placa.',
     visual: { kind: 'scene', scene: 'agente-semaforo', alt: 'Agente de trânsito ao lado de um semáforo' },
+    video: {
+      id: 'hierarquia',
+      resumo: [
+        '1º agente, 2º semáforo, 3º placas e marcas no chão, 4º regras gerais da lei.',
+        'Vermelho, mas o agente manda seguir: você segue.',
+        'A lei tem um limite geral, mas a rua tem placa: vale a placa.',
+      ],
+    },
     sources: [
       { sourceId: 'ctb', locator: 'art. 89' },
       { sourceId: 'ctb', locator: 'art. 61, §§ 1º e 2º' },
@@ -68,6 +83,14 @@ export const CONCEPTS: Record<string, ConceptCard> = {
       'As regras gerais continuam valendo. Placa escondida não é "terra sem lei".',
     ],
     remember: 'Placa que não se vê não pune, mas a regra geral continua.',
+    video: {
+      id: 'placa-escondida',
+      resumo: [
+        'Placa escondida, apagada ou no lugar errado: você não pode ser punido por não obedecer a ela.',
+        'Quem responde pela placa é o órgão de trânsito da via, não o motorista nem o dono da casa.',
+        'As regras gerais continuam valendo: nada fica liberado.',
+      ],
+    },
     sources: [{ sourceId: 'ctb', locator: 'art. 90 e § 1º' }],
   },
 

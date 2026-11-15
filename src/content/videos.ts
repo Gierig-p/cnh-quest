@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -175,6 +175,46 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Pilota com as duas mãos no guidão e com roupa de proteção.',
       'O passageiro também usa capacete e roupa de proteção, e vai sentado atrás de quem pilota.',
       'Para guardar: todo mundo de cinto, criança atrás, capacete fechado.',
+    ],
+  },
+  // cartão c-tipos-sinais (CTB art. 87; Anexo I)
+  sinais: {
+    falas: [
+      'Sinal de trânsito é tudo o que dá um recado a quem dirige ou anda na rua.',
+      'A lei diz que existem só seis tipos de sinal.',
+      'As placas, em pé nos postes, são os sinais verticais.',
+      'As pinturas no chão, como a faixa de pedestres e as linhas da pista, são os sinais horizontais.',
+      'Os semáforos são os sinais luminosos.',
+      'O apito do agente de trânsito é o sinal sonoro.',
+      'Os movimentos de braço do agente são gestos. Os do motorista também.',
+      'E os dispositivos auxiliares, como cones e tachões, ajudam a sinalizar.',
+      'Para guardar: placa, pintura, luz, som, gesto e auxiliar.',
+    ],
+  },
+  // cartão c-hierarquia (CTB art. 89; art. 61, §§ 1º e 2º)
+  hierarquia: {
+    falas: [
+      'Às vezes dois sinais parecem dizer coisas diferentes. A lei já definiu quem manda mais.',
+      'Pense numa escada: quem está no degrau de cima manda em quem está embaixo.',
+      'Em primeiro lugar, o agente de trânsito. O que ele mandar vale mais que tudo.',
+      'Em segundo, o semáforo. Ele vale mais que as placas e as pinturas no chão.',
+      'Em terceiro, os outros sinais: as placas e as marcas no chão.',
+      'Em quarto, as regras gerais da lei, como o limite de velocidade que vale quando não há placa.',
+      'O semáforo está vermelho, mas o agente faz sinal para você seguir: você segue.',
+      'A lei tem um limite geral, mas a rua tem uma placa com outro número: vale a placa.',
+      'Para guardar: agente, semáforo, sinais e normas. Tem placa? Vale a placa.',
+    ],
+  },
+  // cartão c-sinalizacao-falha (CTB art. 90 e § 1º)
+  'placa-escondida': {
+    falas: [
+      'Às vezes uma placa fica atrás de uma árvore, apagada ou no lugar errado.',
+      'Se a sinalização é insuficiente ou errada, você não pode ser punido por não obedecer àquele sinal.',
+      'Quem responde pela placa é o órgão de trânsito responsável pela via.',
+      'Não é o motorista, nem o dono da casa em frente.',
+      'Mas as regras gerais continuam valendo.',
+      'Placa escondida não quer dizer que tudo está liberado.',
+      'Para guardar: placa que não se vê não pune, mas a regra geral continua.',
     ],
   },
 };
