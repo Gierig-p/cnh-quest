@@ -198,7 +198,8 @@ function trecho(k: number, lt: number, d: number): Quadro {
     case 8: {
       const yl = -2 - 2.6 * lt;
       const xl = lerp(FX[0], FX[1], ease((lt - 2.2) / 1.2));
-      const yr = yl + 14 - 4.5 * lt;
+      // o de trás espera você sair da faixa (até lt 3.4) e só então passa ao lado
+      const yr = yl + (lt < 3.4 ? 14 - 2 * lt : 7.2 - 6 * (lt - 3.4));
       return {
         cam: camLook(-0.6, yl + 2, 0, 18, 44, 8.4),
         ground: AV,
