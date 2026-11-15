@@ -107,7 +107,7 @@ export function AgenteApito(p: CenaProps) {
     ...bairro(cy, 1),
     // tablado baixo onde o agente fica
     { parts: [box(-0.55, cy + 2.0, 0, 0.55, cy + 3.1, 0.14, '#e9e2cf')] },
-    person(0, cy + 2.55, AGENTE, 0, Math.PI, 1.35, { r: [2.9, 0], l: [0.15, 0] }),
+    person(0, cy + 2.55, AGENTE, 0, Math.PI, 1.35, { r: [2.5, 0], l: [0.15, 0] }),
     car({ x: 1.75, y: 1.2, color: VOCE }),
   ];
   return cena(cam, cruzamento(cy), objs, (pr) => {
@@ -121,17 +121,37 @@ export function AgenteApito(p: CenaProps) {
   }, p);
 }
 
-/** semáforo vermelho e o agente ao lado, fazendo sinal com o braço */
-export function AgenteSemaforo(p: CenaProps) {
+/**
+ * Semáforo e o agente ao lado, contrariando o sinal. A imagem segue o texto de cada questão:
+ * - `luz` vermelho: o agente manda SEGUIR. Ele fica de lado para você, com o braço levantado e o antebraço indo da frente
+ *   para trás (CTB, Anexo II). O movimento aparece como um arco curto perto da mão.
+ * - `luz` verde: o agente manda PARAR. Ele fica de frente, com o braço levantado na vertical e a palma para a frente.
+ * Não use o braço estendido na horizontal: no CTB ele manda parar quem vem na direção que cruza o braço.
+ */
+export function AgenteSemaforo({ luz = 'vermelho', ...p }: CenaProps & { luz?: 'vermelho' | 'verde' }) {
   const cy = -8;
+  const ax = 1.5, ay = cy + 4.6;
   const cam = camLook(1.8, -2.4, 0.6, 18, 38, 17);
-  const objs = [
-    ...bairro(cy, 2),
-    trafficLight(4.3, cy + 4.0, 'vermelho'),
-    person(1.5, cy + 4.6, AGENTE, 0, Math.PI, 1.35, { r: [1.5, 0], l: [0.1, 0] }),
-    car({ x: 1.75, y: 1.4, color: VOCE }),
-  ];
-  return cena(cam, cruzamento(cy), objs, (pr) => voce(pr, 1.75, 1.4), p);
+  const siga = luz === 'vermelho';
+  const agente = siga
+    ? person(ax, ay, AGENTE, 0, Math.PI / 2, 1.35, { r: [0.4, 2.6], l: [0.1, 0] })
+    : person(ax, ay, AGENTE, 0, Math.PI, 1.35, { r: [2.5, 0], l: [0.15, 0] });
+  const objs = [...bairro(cy, 2), trafficLight(4.3, cy + 4.0, luz), agente, car({ x: 1.75, y: 1.4, color: VOCE })];
+  return cena(cam, cruzamento(cy), objs, (pr) => (
+    <>
+      {siga && (() => {
+        // arco do antebraço: da frente (leste) para trás (oeste), por cima da cabeça
+        const a = pr([ax + 0.75, ay + 0.3, 2.35]), m = pr([ax + 0.15, ay + 0.3, 2.85]), b = pr([ax - 0.45, ay + 0.3, 2.45]);
+        return (
+          <g fill="none" stroke="#fff" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round">
+            <path d={`M${a[0]} ${a[1]}Q${m[0]} ${m[1] - 4} ${b[0]} ${b[1]}`} />
+            <path d={`M${b[0] + 3.5} ${b[1] - 2.5}L${b[0]} ${b[1]}L${b[0] + 3.8} ${b[1] + 1.6}`} />
+          </g>
+        );
+      })()}
+      {voce(pr, 1.75, 1.4)}
+    </>
+  ), p);
 }
 
 /* ---------------- veículos de emergência ---------------- */
@@ -379,7 +399,8 @@ export function Rotatoria(p: CenaProps) {
     building({ x0: -20, y0: -30, x1: -12, y1: -22, h: 11, color: '#f1dca6', seed: 4 }),
     tree(7.6, 2.5, 0.9, 4),
     tree(-7.6, 2.5, 0.9, 5),
-    car({ x: cx, y: cyy, heading: a - Math.PI / 2 + Math.PI, color: '#1e96f0' }),
+    // de frente para a tangente do anel (sentido anti-horário); com heading = a o carro anda em (sen a, −cos a)
+    car({ x: cx, y: cyy, heading: a, color: '#1e96f0' }),
     car({ x: 1.75, y: 3.6, color: VOCE }),
   ];
   return cena(cam, ground, objs, (pr) => voce(pr, 1.75, 3.6), p);
