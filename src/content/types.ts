@@ -48,13 +48,15 @@ export interface Visual {
 }
 
 /** cenas que reagem à resposta (piloto de 14/11/2026) */
-export type AnimSceneId = 'pedestre-faixa' | 'linha-retencao' | 'porta-bicicleta';
+export type AnimSceneId = 'pedestre-faixa' | 'linha-retencao' | 'porta-bicicleta' | 'pare-esquina';
 
 export type SceneId =
   | 'cruzamento-direita'
   | 'rotatoria'
   | 'rodovia-via-local'
   | 'agente-semaforo'
+  /** o agente manda parar com o semáforo verde (w1-l1-q17) */
+  | 'agente-semaforo-verde'
   | 'pedestre-faixa'
   | 'ambulancia'
   | 'linha-amarela-continua'

@@ -371,7 +371,7 @@ export const WORLD1_QUESTIONS: Question[] = [
   },
   {
     id: 'w1-l1-q7',
-    visual: { kind: 'scene', scene: 'placa-escondida', alt: 'Placa de proibição quase toda escondida pelas folhas de uma árvore' },
+    visual: { kind: 'scene', scene: 'placa-escondida', alt: 'Placa totalmente escondida pelas folhas de uma árvore' },
     type: 'choice',
     module: 'sinalizacao',
     topic: 'Sinalização insuficiente',
@@ -827,7 +827,7 @@ export const WORLD1_QUESTIONS: Question[] = [
   },
   {
     id: 'w1-l1-q11',
-    visual: { kind: 'scene', scene: 'placa-escondida', alt: 'Placa de proibição quase toda escondida pelas folhas de uma árvore' },
+    visual: { kind: 'scene', scene: 'placa-escondida', alt: 'Placa totalmente escondida pelas folhas de uma árvore' },
     type: 'truefalse',
     module: 'sinalizacao',
     topic: 'Sinalização insuficiente',
@@ -1354,7 +1354,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Hierarquia da sinalização',
     objective: 'Aplicar a hierarquia em situação de conflito',
     prompt: 'O semáforo está verde para você, mas o agente de trânsito faz sinal para você parar. O que fazer?',
-    visual: { kind: 'scene', scene: 'agente-semaforo', alt: 'Agente de trânsito ao lado de um semáforo' },
+    visual: { kind: 'scene', scene: 'agente-semaforo-verde', alt: 'Semáforo verde e agente de trânsito com o braço levantado' },
     options: [
       { id: 'a', text: 'Seguir, porque o verde é seu', whyWrong: 'As ordens do agente prevalecem sobre o semáforo (art. 89, I).' },
       { id: 'b', text: 'Parar, obedecendo ao agente' },
@@ -1490,7 +1490,7 @@ export const WORLD1_QUESTIONS: Question[] = [
   },
   {
     id: 'w1-l1-q24',
-    visual: { kind: 'scene', scene: 'placa-escondida', alt: 'Placa de proibição quase toda escondida pelas folhas de uma árvore' },
+    visual: { kind: 'scene', scene: 'placa-escondida', alt: 'Placa totalmente escondida pelas folhas de uma árvore' },
     type: 'choice',
     module: 'sinalizacao',
     topic: 'Sinalização insuficiente',

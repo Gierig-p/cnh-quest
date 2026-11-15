@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { QUESTION_BY_ID } from '../content';
 import { AppStateProvider } from '../state/AppState';
@@ -26,6 +26,18 @@ describe('cenas que reagem à resposta', () => {
     expect(QUESTION_BY_ID['w1-rua-3'].visual?.anim).toBe('pedestre-faixa');
     expect(QUESTION_BY_ID['w2-rua-4'].visual?.anim).toBe('linha-retencao');
     expect(QUESTION_BY_ID['w3-rua-5'].visual?.anim).toBe('porta-bicicleta');
+    expect(QUESTION_BY_ID['w1-rua-5'].visual?.anim).toBe('pare-esquina');
+  });
+
+  it('a imagem segue o texto: verde na w1-l1-q17, vermelho nas outras do agente', () => {
+    expect(QUESTION_BY_ID['w1-l1-q17'].visual?.scene).toBe('agente-semaforo-verde');
+    expect(QUESTION_BY_ID['w1-l1-q3'].visual?.scene).toBe('agente-semaforo');
+  });
+
+  it('cena parada do Mundo 1 abre no estilo 3D, com a descrição no leitor de tela', async () => {
+    render(cena('w1-l1-q17', null));
+    const fig = await screen.findByRole('img', { name: /Semáforo verde e agente/ });
+    expect(await within(fig).findByText((_, el) => el?.tagName.toLowerCase() === 'svg')).toBeInTheDocument();
   });
 
   it('antes de verificar: cena parada, sem aviso; no erro: "Veja a ação correta"; no acerto: sem aviso', async () => {

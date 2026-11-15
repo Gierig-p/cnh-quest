@@ -141,7 +141,7 @@ export const WORLD1_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'Você chega a uma esquina com a placa PARE. Olhando de longe, não vem nenhum carro.' },
     ],
     prompt: 'O que você faz?',
-    visual: { kind: 'sign', sign: 'R-1', alt: 'Placa octogonal vermelha com a palavra PARE' },
+    visual: { kind: 'scene', anim: 'pare-esquina', alt: 'De madrugada, rua vazia: placa PARE na esquina e uma linha branca antes do cruzamento' },
     options: [
       { id: 'a', text: 'Só diminuo a velocidade e passo', whyWrong: 'A placa PARE obriga a parar sempre, mesmo sem ninguém vindo.' },
       { id: 'b', text: 'Passo direto, porque de madrugada a placa não vale', whyWrong: 'A placa vale a qualquer hora. Passar direto pelo PARE é infração gravíssima.' },

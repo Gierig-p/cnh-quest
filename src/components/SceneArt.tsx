@@ -742,6 +742,14 @@ const SCENES: Record<SceneId, React.ReactNode> = {
       <Arrow d="M160 160 H190" />
     </>
   ),
+  'agente-semaforo-verde': (
+    <>
+      <Side />
+      <TrafficLight x={57} y={20} lit="green" />
+      <Agent x={232} y={138} gesture="pare" />
+      <CarSide x={120} y={160} label="Você" />
+    </>
+  ),
   'agente-apito': (
     <>
       <Side />

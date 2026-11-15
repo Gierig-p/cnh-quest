@@ -13,6 +13,7 @@ type SceneComp = ComponentType<{ t?: number; id?: string }>;
 const CENAS: Record<AnimSceneId, { C: SceneComp; dur: number }> = {
   'pedestre-faixa': { C: lazy(() => import('./scenes/PedestreFaixa').then((m) => ({ default: m.PedestreFaixa }))), dur: 2.2 },
   'linha-retencao': { C: lazy(() => import('./scenes/LinhaRetencao').then((m) => ({ default: m.LinhaRetencao }))), dur: 1.6 },
+  'pare-esquina': { C: lazy(() => import('./scenes/PareEsquina').then((m) => ({ default: m.PareEsquina }))), dur: 2.2 },
   'porta-bicicleta': { C: lazy(() => import('./scenes/PortaBicicleta').then((m) => ({ default: m.PortaBicicleta }))), dur: 2.2 },
 };
 
