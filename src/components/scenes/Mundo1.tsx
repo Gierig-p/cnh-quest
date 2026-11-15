@@ -313,10 +313,10 @@ export function defensa(x0: number, x1: number, y: number): Obj {
 }
 
 /** rodovia larga cruzando uma estrada local estreita; um carro vermelho vem pela rodovia */
-export function RodoviaViaLocal(p: CenaProps) {
-  const cam = camLook(0.5, -4, 0, 16, 42, 9);
-  const y0 = -13, y1 = -4.6, ym = (y0 + y1) / 2;
-  const ground = [
+export const ROD_Y0 = -13, ROD_Y1 = -4.6, ROD_YM = (ROD_Y0 + ROD_Y1) / 2;
+export function rodoviaChao(): Part[] {
+  const y0 = ROD_Y0, y1 = ROD_Y1, ym = ROD_YM;
+  return [
     ...grassPatches(-50, -50, 50, 50, 8),
     // acostamentos de terra e a rodovia
     rect(-50, y0 - 1.2, 50, y1 + 1.2, '#c9b48a'),
@@ -336,9 +336,13 @@ export function RodoviaViaLocal(p: CenaProps) {
       { p: [[4.5, 6, 0.9], [50, 6, 0.9]], c: '#8a6a48', w: 0.8 },
     ]),
   ];
+}
+/** a paisagem da rodovia, sem os carros */
+export function rodoviaObjs(): Obj[] {
+  const y0 = ROD_Y0, y1 = ROD_Y1;
   const cercas: Obj[] = [];
   for (const x of [-20, -16, -12, -8, -4.5, 4.5, 8, 12, 16, 20]) cercas.push({ parts: [box(x - 0.06, 5.94, 0, x + 0.06, 6.06, 1.0, '#8a6a48')], shadow: true });
-  const objs: Obj[] = [
+  return [
     defensa(-50, -3.3, y1 + 0.9),
     defensa(3.3, 50, y1 + 0.9),
     defensa(-50, -3.3, y0 - 0.9),
@@ -352,21 +356,29 @@ export function RodoviaViaLocal(p: CenaProps) {
     bush(5, 2, 0.9, 1),
     bush(-5.5, -18, 0.9, 2),
     house(9, -26, 16, -19, '#f3e3b8', '#c8553d', 'w'),
-    car({ x: -13, y: ym + 2.1, heading: Math.PI / 2, color: '#e0412f' }),
+  ];
+}
+
+/** rodovia larga cruzando uma estrada local estreita; um carro vermelho vem pela rodovia */
+export function RodoviaViaLocal(p: CenaProps) {
+  const cam = camLook(0.5, -4, 0, 16, 42, 9);
+  const objs: Obj[] = [
+    ...rodoviaObjs(),
+    car({ x: -13, y: ROD_YM + 2.1, heading: Math.PI / 2, color: '#e0412f' }),
     car({ x: 1.2, y: 1.2, color: VOCE }),
   ];
-  return cena(cam, ground, objs, (pr) => voce(pr, 1.2, 1.2), p);
+  return cena(cam, rodoviaChao(), objs, (pr) => voce(pr, 1.2, 1.2), p);
 }
 
 /* ---------------- rotatória ---------------- */
 
 /** rotatória sem sinalização: um carro já circula (vem pela sua esquerda) e você quer entrar */
-export function Rotatoria(p: CenaProps) {
-  const C: V2 = [0, -12];
-  const R = 10.5, ilha = 5;
-  const cam = camLook(0, -5.5, 0, 12, 50, 9);
+export const ROT_C: V2 = [0, -12];
+export const ROT_R = 10.5;
+export function rotatoriaChao(): Part[] {
+  const C = ROT_C, R = ROT_R, ilha = 5;
   const disco = (r: number, n: number) => circle(r, n).map(([a, b]): V2 => [C[0] + a, C[1] + b]);
-  const ground = [
+  return [
     ...grassPatches(-40, -40, 40, 40, 3),
     ...asphalt(-3.5, -40, 3.5, 40, 4),
     ...asphalt(-40, C[1] - 3.5, 40, C[1] + 3.5, 5),
@@ -385,10 +397,15 @@ export function Rotatoria(p: CenaProps) {
       { p: [[0, -40, 0], [0, C[1] - R - 0.5, 0]], c: '#eeeeea', w: 0.9, dash: '5 5' },
     ]),
   ];
-  // carro circulando no lado sudoeste do anel, indo para o sudeste (sentido anti-horário visto de cima)
-  const a = (140 * Math.PI) / 180, rr = 7.8;
-  const cx = C[0] + Math.cos(a) * rr, cyy = C[1] + Math.sin(a) * rr;
-  const objs: Obj[] = [
+}
+/** carro girando na rotatória: ângulo `a` (rad) no anel; com heading = a ele anda em (sen a, −cos a), então `a` diminui com o tempo */
+export function carroRotatoria(a: number, color = '#1e96f0', rr = 7.8): Obj {
+  return car({ x: ROT_C[0] + Math.cos(a) * rr, y: ROT_C[1] + Math.sin(a) * rr, heading: a, color });
+}
+/** a paisagem da rotatória, sem os carros */
+export function rotatoriaObjs(): Obj[] {
+  const C = ROT_C;
+  return [
     tree(C[0] - 0.8, C[1] - 0.6, 1.15, 2),
     bush(C[0] + 2.2, C[1] + 1.2, 0.8, 1),
     bush(C[0] + 1.4, C[1] - 2.6, 0.7, 3),
@@ -399,11 +416,15 @@ export function Rotatoria(p: CenaProps) {
     building({ x0: -20, y0: -30, x1: -12, y1: -22, h: 11, color: '#f1dca6', seed: 4 }),
     tree(7.6, 2.5, 0.9, 4),
     tree(-7.6, 2.5, 0.9, 5),
-    // de frente para a tangente do anel (sentido anti-horário); com heading = a o carro anda em (sen a, −cos a)
-    car({ x: cx, y: cyy, heading: a, color: '#1e96f0' }),
-    car({ x: 1.75, y: 3.6, color: VOCE }),
   ];
-  return cena(cam, ground, objs, (pr) => voce(pr, 1.75, 3.6), p);
+}
+
+/** rotatória sem sinalização: um carro já circula (vem pela sua esquerda) e você quer entrar */
+export function Rotatoria(p: CenaProps) {
+  const cam = camLook(0, -5.5, 0, 12, 50, 9);
+  // carro circulando no lado sudoeste do anel, indo para o sudeste
+  const objs: Obj[] = [...rotatoriaObjs(), carroRotatoria((140 * Math.PI) / 180), car({ x: 1.75, y: 3.6, color: VOCE })];
+  return cena(cam, rotatoriaChao(), objs, (pr) => voce(pr, 1.75, 3.6), p);
 }
 
 /* ---------------- rua local ---------------- */

@@ -118,6 +118,15 @@ export const CONCEPTS: Record<string, ConceptCard> = {
       'Você chega a um cruzamento de duas ruas comuns, sem placa. Um carro vem pela sua direita. Ele passa primeiro, mesmo que você tenha chegado antes.',
     remember: 'Rodovia > rotatória > direita. Tamanho não é documento.',
     visual: { kind: 'scene', scene: 'cruzamento-direita', alt: 'Cruzamento com um carro vindo pela direita' },
+    video: {
+      id: 'preferencia',
+      resumo: [
+        'Preferência é o direito de passar primeiro.',
+        'Tem placa ou semáforo? Obedeça a eles.',
+        'Sem nada, três perguntas na ordem: rodovia (passa quem está nela), rotatória (passa quem já gira), direita (passa quem vem pela sua direita).',
+        'Tamanho, velocidade e quem chegou primeiro não contam. Chegue devagar, pronto para parar.',
+      ],
+    },
     sources: [
       { sourceId: 'ctb', locator: 'art. 29, III' },
       { sourceId: 'ctb', locator: 'art. 44' },
@@ -139,6 +148,15 @@ export const CONCEPTS: Record<string, ConceptCard> = {
       'Você vai virar à direita e um pedestre já está no meio da faixa. Você para e espera ele chegar do outro lado.',
     remember: 'Pé na faixa, pé no freio. Verde para você não apaga quem está na faixa.',
     visual: { kind: 'scene', scene: 'pedestre-faixa', alt: 'Pedestre atravessando na faixa' },
+    video: {
+      id: 'pedestre',
+      resumo: [
+        'Pedestre é quem está a pé: a parte mais frágil do trânsito.',
+        'Faixa sem semáforo: quem atravessa passa primeiro. Com semáforo, vale o semáforo.',
+        'Abriu para você e ainda tem gente na faixa? Ela termina a travessia primeiro. Ao virar à direita, o mesmo.',
+        'Não dar a preferência na faixa é infração gravíssima.',
+      ],
+    },
     sources: [
       { sourceId: 'ctb', locator: 'art. 70' },
       { sourceId: 'ctb', locator: 'art. 214, I e II' },
@@ -157,6 +175,14 @@ export const CONCEPTS: Record<string, ConceptCard> = {
     ],
     remember: 'Sirene tocou: direita e calma.',
     visual: { kind: 'scene', scene: 'ambulancia', alt: 'Ambulância com luzes ligadas' },
+    video: {
+      id: 'emergencia',
+      resumo: [
+        'Ambulância, bombeiros e polícia em urgência precisam chegar rápido.',
+        'Sirene tocando e luzes piscando são o sinal de urgência.',
+        'Deixe livre a faixa da esquerda: vá para a direita e pare, se for necessário.',
+      ],
+    },
     sources: [{ sourceId: 'ctb', locator: 'art. 29, VII, "a"' }],
   },
 

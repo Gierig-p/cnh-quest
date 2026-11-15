@@ -39,6 +39,9 @@ const carregar: Record<VideoId, () => Promise<VideoDef>> = {
   sinais: () => import('./scenes/VideoSinais').then(paraDef),
   hierarquia: () => import('./scenes/VideoHierarquia').then(paraDef),
   'placa-escondida': () => import('./scenes/VideoPlacaEscondida').then(paraDef),
+  preferencia: () => import('./scenes/VideoPreferencia').then(paraDef),
+  pedestre: () => import('./scenes/VideoPedestre').then(paraDef),
+  emergencia: () => import('./scenes/VideoEmergencia').then(paraDef),
 };
 
 const cache: Partial<Record<VideoId, VideoDef>> = {};

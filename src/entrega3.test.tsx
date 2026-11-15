@@ -14,11 +14,12 @@ import { dayLabel, initialProgress, nextReviewDay } from './engine/progress';
 import { studyReport } from './screens/ProgressScreen';
 
 const cards = ALL_LESSONS.flatMap((l) => l.steps.flatMap((s) => (s.kind === 'concept' ? [s.card as ConceptCard] : [])));
+/** o mesmo cartão só com o texto: a divisão em partes é a dos cartões sem vídeo */
+const soTexto = (id: string): ConceptCard => ({ ...cards.find((c) => c.id === id)!, video: undefined });
 
 describe('cartão em partes', () => {
   it('o cartão de teste vira várias partes, sem perder nem repetir bloco', () => {
-    const card = cards.find((c) => c.id === 'c-preferencia')!;
-    const parts = cardParts(card);
+    const parts = cardParts(soTexto('c-preferencia'));
     expect(parts.length).toBeGreaterThan(1);
     expect([...parts.flat()].sort()).toEqual(['body', 'example', 'points', 'terms']);
     // a fala da Lumi e o Passo a passo ficam juntos
@@ -92,7 +93,7 @@ describe('cartão em partes', () => {
       for (const part of parts) expect(part.length).toBeGreaterThan(0);
     }
     expect(cards.filter((c) => cardParts(c).length > 1).length).toBeGreaterThan(10);
-    expect(cardParts(cards.find((c) => c.id === 'c-emergencia')!)).toHaveLength(1);
+    expect(cardParts(soTexto('c-emergencia'))).toHaveLength(1);
   });
 });
 

@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -215,6 +215,42 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Mas as regras gerais continuam valendo.',
       'Placa escondida não quer dizer que tudo está liberado.',
       'Para guardar: placa que não se vê não pune, mas a regra geral continua.',
+    ],
+  },
+  // cartão c-preferencia (CTB art. 29, III, e art. 44)
+  preferencia: {
+    falas: [
+      'Preferência é o direito de passar primeiro.',
+      'Se o cruzamento tem placa ou semáforo, obedeça a eles.',
+      'Se não tem nada, faça três perguntas, nesta ordem.',
+      'Primeira: um dos carros está numa rodovia? Passa quem está na rodovia.',
+      'Segunda: é uma rotatória? Passa quem já está girando nela. Quem vai entrar espera.',
+      'Terceira: nenhum dos dois? Passa quem vem pela sua direita.',
+      'Tamanho do veículo, velocidade e quem chegou primeiro não contam.',
+      'E chegue a qualquer cruzamento devagar, pronto para parar.',
+      'Para guardar: rodovia, rotatória, direita.',
+    ],
+  },
+  // cartão c-pedestre (CTB art. 70 e art. 214)
+  pedestre: {
+    falas: [
+      'Pedestre é quem está a pé. É a parte mais frágil do trânsito.',
+      'Na faixa sem semáforo, quem está atravessando passa primeiro. Você para e espera.',
+      'Na faixa com semáforo, vale o semáforo.',
+      'Mas, se o sinal abrir para você e ainda houver alguém na faixa, essa pessoa termina a travessia primeiro.',
+      'Vai virar à direita e o pedestre já está na faixa? Pare e espere ele chegar do outro lado.',
+      'Não dar a preferência ao pedestre na faixa é infração gravíssima, a mais séria.',
+      'Para guardar: pé na faixa, pé no freio.',
+    ],
+  },
+  // cartão c-emergencia (CTB art. 29, VII, "a")
+  emergencia: {
+    falas: [
+      'Ambulância, bombeiros e polícia em urgência precisam chegar rápido.',
+      'Repare: sirene tocando e luzes piscando são o sinal de urgência.',
+      'Deixe livre a faixa da esquerda.',
+      'Vá para a direita e pare, se for necessário.',
+      'Para guardar: sirene tocou, direita e calma.',
     ],
   },
 };
