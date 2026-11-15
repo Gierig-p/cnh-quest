@@ -7,7 +7,7 @@ import type { SceneId } from '../content/types';
  */
 export function SceneArt({ scene, title }: { scene: SceneId; title: string }) {
   return (
-    <svg viewBox="0 0 320 200" width="320" height="200" role="img" aria-label={title} style={{ borderRadius: 16, background: GRASS }}>
+    <svg viewBox="0 0 320 200" width="440" height="275" role="img" aria-label={title} style={{ borderRadius: 16, background: GRASS }}>
       <title>{title}</title>
       <Defs />
       {SCENES[scene]}

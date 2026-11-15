@@ -81,7 +81,7 @@ export function ConceptBlocks({ card, show, sources = true, lumiSize = 92 }: { c
           </div>
           {card.visual && (
             <div className="q-visual pop-in">
-              <Visual v={card.visual} size={150} />
+              <Visual v={card.visual} size={180} />
             </div>
           )}
         </>

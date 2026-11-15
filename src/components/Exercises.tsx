@@ -39,7 +39,7 @@ function QVisual({ q, checked }: { q: Question; checked: ExerciseProps<Question>
   if (!q.visual) return null;
   return (
     <div className="q-visual">
-      <Visual v={q.visual} size={150} checked={checked} />
+      <Visual v={q.visual} size={180} checked={checked} />
     </div>
   );
 }
@@ -163,7 +163,7 @@ function ChoiceEx({ q, seed, answer, onAnswer, checked, eliminated }: ExercisePr
     <>
       {q.visual && (
         <div className="q-visual">
-          <Visual v={q.visual} size={150} checked={checked} />
+          <Visual v={q.visual} size={180} checked={checked} />
         </div>
       )}
       <RadioGroup
