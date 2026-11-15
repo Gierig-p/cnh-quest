@@ -879,6 +879,20 @@ const SCENES: Record<SceneId, React.ReactNode> = {
       <Car x={250} y={80} rot={-90} color={RED} />
     </>
   ),
+  'linha-amarela-continua-carro': (
+    <>
+      <Grass />
+      <Roads h={[[55, 90]]} />
+      <line x1="0" y1="60" x2="320" y2="60" stroke={LINE} strokeWidth="3" />
+      <line x1="0" y1="140" x2="320" y2="140" stroke={LINE} strokeWidth="3" />
+      <line x1="0" y1="100" x2="320" y2="100" stroke={YELLOW} strokeWidth="4" />
+      <Tree x={40} y={22} r={14} /><Tree x={180} y={20} r={12} /><Tree x={290} y={26} r={15} />
+      <Tree x={100} y={178} r={13} /><Tree x={250} y={176} r={14} />
+      <Car x={70} y={120} rot={90} label="Você" />
+      <Car x={150} y={120} rot={90} color={GREY} />
+      <Car x={250} y={80} rot={-90} color={RED} />
+    </>
+  ),
   'linha-amarela-tracejada': (
     <>
       <Grass />

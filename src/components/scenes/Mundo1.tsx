@@ -21,7 +21,7 @@ const RAPAZ: Look = { skin: '#d7a77f', hair: '#5a3b25', top: '#f2a13a', bottom: 
 /* ---------------- peças de chão ---------------- */
 
 /** cruzamento de duas ruas de mão dupla (7 m), com a rua que cruza no centro y = cy */
-function cruzamento(cy: number, opts: { linhaMeio?: boolean } = {}): Part[] {
+export function cruzamento(cy: number, opts: { linhaMeio?: boolean } = {}): Part[] {
   const a = 3.5, c = 6.5;
   const ls: Line[] = [];
   if (opts.linhaMeio !== false) {
@@ -48,7 +48,7 @@ function cruzamento(cy: number, opts: { linhaMeio?: boolean } = {}): Part[] {
 }
 
 /** casas e árvores nas quatro esquinas de um cruzamento de bairro */
-function bairro(cy: number, seed = 0): Obj[] {
+export function bairro(cy: number, seed = 0): Obj[] {
   const cores = ['#f3e3b8', '#cfe7c4', '#f1d0b0', '#d9e3f0', '#f6d2d2'];
   const tel = ['#c8553d', '#a8483a', '#b5603f'];
   const k = (i: number) => cores[(i + seed) % cores.length];
@@ -74,7 +74,7 @@ function bairro(cy: number, seed = 0): Obj[] {
 }
 
 /** ondas de som (apito, sirene), já em pixels */
-function ondas(x: number, y: number, ang = -90, cor = '#ffffff'): ReactNode {
+export function ondas(x: number, y: number, ang = -90, cor = '#ffffff'): ReactNode {
   const a = (ang * Math.PI) / 180;
   return (
     <g fill="none" stroke={cor} strokeLinecap="round" strokeWidth={1.4}>
@@ -87,13 +87,13 @@ function ondas(x: number, y: number, ang = -90, cor = '#ffffff'): ReactNode {
   );
 }
 
-const voce = (pr: (p: [number, number, number]) => V2, x: number, y: number, z = 2.2) => {
+export const voce = (pr: (p: [number, number, number]) => V2, x: number, y: number, z = 2.2) => {
   const [px, py] = pr([x, y + 0.4, z]);
   return <Tag x={px} y={py - 8} text="Você" />;
 };
 
-type CenaProps = { id?: string; label?: string };
-const cena = (cam: Cam, ground: Part[], objs: Obj[], overlay: (pr: (p: [number, number, number]) => V2) => ReactNode, { id = 'c', label }: CenaProps) => (
+export type CenaProps = { id?: string; label?: string };
+export const cena = (cam: Cam, ground: Part[], objs: Obj[], overlay: (pr: (p: [number, number, number]) => V2) => ReactNode, { id = 'c', label }: CenaProps) => (
   <Scene3D id={id} cam={cam} ground={ground} objs={objs} overlay={overlay} label={label} />
 );
 
@@ -157,11 +157,11 @@ export function AgenteSemaforo({ luz = 'vermelho', ...p }: CenaProps & { luz?: '
 /* ---------------- veículos de emergência ---------------- */
 
 /** avenida de mão única com duas faixas; você na da esquerda e o veículo de emergência atrás */
-function avenida(): Part[] {
+export function avenida(central: 'tracejada' | 'continua' = 'tracejada'): Part[] {
   return [
     ...grassPatches(-40, -40, 40, 40, 2),
     ...asphalt(-3.6, -40, 3.6, 40, 4),
-    lines([{ p: [[0, -40, 0], [0, 40, 0]], c: '#eeeeea', w: 1, dash: '6 6' }]),
+    central === 'tracejada' ? lines([{ p: [[0, -40, 0], [0, 40, 0]], c: '#eeeeea', w: 1, dash: '6 6' }]) : rect(-0.1, -40, 0.1, 40, '#eeeeea'),
     rect(-3.45, -40, -3.32, 40, '#eeeeea'),
     rect(3.32, -40, 3.45, 40, '#eeeeea'),
     ...manhole(1.8, -12),
@@ -171,7 +171,7 @@ function avenida(): Part[] {
     ...sidewalk(3.6, -40, 6.6, 40),
   ];
 }
-function avenidaObjs(seed = 0): Obj[] {
+export function avenidaObjs(seed = 0): Obj[] {
   return [
     tree(-5.1, -14 + seed, 0.9, 1),
     tree(-5.1, -2 + seed, 0.95, 2),

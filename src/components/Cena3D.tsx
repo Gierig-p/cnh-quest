@@ -7,7 +7,9 @@ import type { SceneId } from '../content/types';
  */
 type Comp = ComponentType<{ id?: string }>;
 const m1 = () => import('./scenes/Mundo1');
+const m2 = () => import('./scenes/Mundo2');
 const de = (pega: (m: Awaited<ReturnType<typeof m1>>) => Comp): Comp => lazy(() => m1().then((m) => ({ default: pega(m) })));
+const de2 = (pega: (m: Awaited<ReturnType<typeof m2>>) => Comp): Comp => lazy(() => m2().then((m) => ({ default: pega(m) })));
 
 const CENAS3D: Partial<Record<SceneId, Comp>> = {
   'agente-apito': de((m) => m.AgenteApito),
@@ -26,6 +28,17 @@ const CENAS3D: Partial<Record<SceneId, Comp>> = {
   'rodovia-via-local': de((m) => m.RodoviaViaLocal),
   rotatoria: de((m) => m.Rotatoria),
   'rua-local': de((m) => m.RuaLocal),
+  // Mundo 2
+  'linha-amarela-continua': de2((m) => m.LinhaAmarelaContinua),
+  'linha-amarela-continua-carro': de2((m) => m.LinhaAmarelaContinuaCarro),
+  'linha-amarela-tracejada': de2((m) => m.LinhaAmarelaTracejada),
+  'linha-branca-continua': de2((m) => m.LinhaBrancaContinua),
+  'linha-retencao': de2((m) => m.LinhaRetencaoParada),
+  'semaforo-amarelo': de2((m) => m.SemaforoAmarelo),
+  'semaforo-amarelo-piscando': de2((m) => m.SemaforoAmareloPiscando),
+  'semaforo-pedestre-piscando': de2((m) => m.SemaforoPedestrePiscando),
+  'vaga-idoso': de2((m) => m.VagaIdoso),
+  'placa-distancias': de2((m) => m.PlacaDistancias),
 };
 
 export const temCena3D = (s: SceneId) => s in CENAS3D;

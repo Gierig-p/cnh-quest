@@ -60,6 +60,7 @@ export type SceneId =
   | 'pedestre-faixa'
   | 'ambulancia'
   | 'linha-amarela-continua'
+  | 'linha-amarela-continua-carro'
   | 'linha-amarela-tracejada'
   | 'linha-retencao'
   | 'semaforo-amarelo'

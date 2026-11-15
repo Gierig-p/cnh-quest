@@ -798,7 +798,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Sinalização horizontal',
     objective: 'Aplicar a regra da linha amarela contínua',
     prompt: 'Você está atrás de um carro lento numa pista de mão dupla com esta linha no centro. O que pode fazer?',
-    visual: { kind: 'scene', scene: 'linha-amarela-continua', alt: 'Pista de mão dupla com linha amarela contínua no centro e um carro lento à frente' },
+    visual: { kind: 'scene', scene: 'linha-amarela-continua-carro', alt: 'Pista de mão dupla com linha amarela contínua no centro e um carro lento à frente' },
     options: [
       { id: 'a', text: 'Ultrapassar, se não vier ninguém de frente', whyWrong: 'A linha amarela contínua proíbe a ultrapassagem, mesmo com a pista livre.' },
       { id: 'b', text: 'Ultrapassar pelo acostamento', whyWrong: 'O acostamento não é lugar de ultrapassar. A proibição continua.' },

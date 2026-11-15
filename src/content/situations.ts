@@ -259,7 +259,7 @@ export const WORLD2_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'No meio da pista, a linha amarela é contínua, sem nenhum espaço. Parece que não vem ninguém do outro lado.' },
     ],
     prompt: 'O que você pode fazer?',
-    visual: { kind: 'scene', scene: 'linha-amarela-continua', alt: 'Estrada de mão dupla com linha amarela contínua no centro' },
+    visual: { kind: 'scene', scene: 'linha-amarela-continua', alt: 'Estrada de mão dupla com linha amarela contínua no centro e um caminhão lento à frente' },
     options: [
       { id: 'a', text: 'Ultrapassar, já que não vem ninguém', whyWrong: 'A linha amarela contínua proíbe a ultrapassagem, mesmo com a pista livre.' },
       { id: 'b', text: 'Seguir atrás, sem ultrapassar' },

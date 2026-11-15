@@ -40,6 +40,13 @@ describe('cenas que reagem à resposta', () => {
     expect(await within(fig).findByText((_, el) => el?.tagName.toLowerCase() === 'svg')).toBeInTheDocument();
   });
 
+  it('Mundo 2: a questão do carro lento usa a cena com o carro, e a cena abre no estilo 3D', async () => {
+    expect(QUESTION_BY_ID['w2-l4-q2'].visual?.scene).toBe('linha-amarela-continua-carro');
+    render(cena('w2-l4-q2', null));
+    const fig = await screen.findByRole('img', { name: /carro lento à frente/ });
+    expect(await within(fig).findByText((_, el) => el?.tagName.toLowerCase() === 'svg')).toBeInTheDocument();
+  });
+
   it('antes de verificar: cena parada, sem aviso; no erro: "Veja a ação correta"; no acerto: sem aviso', async () => {
     const { rerender } = render(cena('w3-rua-5', null));
     expect(await screen.findByRole('img', { name: /bicicleta vindo por trás/ })).toBeInTheDocument();
