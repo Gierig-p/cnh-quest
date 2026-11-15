@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { SignCode } from '../content/types';
 
 /**
@@ -14,7 +14,41 @@ const OFFICIAL: Partial<Record<SignCode, string>> = {
 };
 const SPEEDS = [20, 40, 50, 60, 80];
 
-function officialFile(code: SignCode, speed: number): string | undefined {
+/** endereço do arquivo oficial (funciona também fora do Vite, nos testes) */
+export function placaUrl(file: string) {
+  const base = (import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/';
+  return `${base}placas/${file}.svg`;
+}
+
+/** largura / altura de cada arquivo oficial (do viewBox); as outras placas são quadradas */
+const ASPECT: Partial<Record<string, number>> = { 'R-2': 89.652 / 79.088, 'A-41': 50.204 / 29.364, 'A-24': 50.908 / 50.195 };
+
+/**
+ * A placa como desenho SVG numa caixa de 100 x (100 / aspect), para colar na placa 3D das cenas.
+ * Usa o arquivo oficial quando existe; senão, o desenho do app (que é 100 x 100).
+ */
+export function signGraphic(code: SignCode, speed = 60): { node: ReactNode; aspect: number; href?: string } {
+  const file = officialFile(code, speed);
+  if (code === 'IND-destino')
+    // o desenho do app ocupa só o retângulo 92 x 60 no meio da caixa 100 x 100: recorta para a chapa retangular
+    return { node: <g transform="scale(1.087) translate(-4 -20)">{render(code, speed)}</g>, aspect: 92 / 60 };
+  if (!file) return { node: render(code, speed), aspect: 1 };
+  const aspect = ASPECT[file] ?? 1;
+  const href = placaUrl(file);
+  return { node: <PlacaImg href={href} code={code} speed={speed} aspect={aspect} />, aspect, href };
+}
+
+/** arquivo oficial dentro do SVG da cena; se não carregar, mostra o desenho do app (centrado, sem esticar) */
+function PlacaImg({ href, code, speed, aspect }: { href: string; code: SignCode; speed: number; aspect: number }) {
+  const [falhou, setFalhou] = useState(false);
+  if (falhou) {
+    const k = Math.min(1, 1 / aspect);
+    return <g transform={`translate(${50 - 50 * k} ${50 / aspect - 50 * k}) scale(${k})`}>{render(code, speed)}</g>;
+  }
+  return <image href={href} width={100} height={100 / aspect} preserveAspectRatio="xMidYMid meet" onError={() => setFalhou(true)} />;
+}
+
+export function officialFile(code: SignCode, speed: number): string | undefined {
   if (code === 'R-19') return SPEEDS.includes(speed) ? `R-19-${speed}` : undefined;
   return OFFICIAL[code];
 }
@@ -25,7 +59,7 @@ export function SignArt({ code, speed = 60, size = 120, title }: { code: SignCod
   if (file && failed !== file) {
     return (
       <img
-        src={`${import.meta.env.BASE_URL}placas/${file}.svg`}
+        src={placaUrl(file)}
         width={size}
         height={size}
         alt={title ?? code}

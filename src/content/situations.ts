@@ -81,7 +81,7 @@ export const WORLD1_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'Uma senhora já está no meio da faixa de pedestres, atravessando a rua para onde você vai entrar.' },
     ],
     prompt: 'O que você faz?',
-    visual: { kind: 'scene', scene: 'pedestre-faixa', alt: 'Pedestre atravessando na faixa, à frente do carro' },
+    visual: { kind: 'scene', scene: 'pedestre-faixa', anim: 'pedestre-faixa', alt: 'Esquina sem semáforo: uma senhora atravessa a faixa da rua onde você vai entrar à direita' },
     options: [
       { id: 'a', text: 'Passo devagar por trás dela', whyWrong: 'Quem está na faixa tem prioridade. Não ceder é infração gravíssima.' },
       { id: 'b', text: 'Buzino para ela andar mais rápido', whyWrong: 'Ela tem prioridade. Apressar o pedestre não é dar preferência.' },
@@ -290,7 +290,7 @@ export const WORLD2_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'No chão, antes do cruzamento, tem uma linha branca larga, de um lado a outro da sua faixa.' },
     ],
     prompt: 'Onde você para o carro?',
-    visual: { kind: 'scene', scene: 'linha-retencao', alt: 'Linha branca larga atravessando a faixa antes do cruzamento' },
+    visual: { kind: 'scene', scene: 'linha-retencao', anim: 'linha-retencao', alt: 'Semáforo vermelho e uma linha branca larga atravessando a sua faixa antes do cruzamento' },
     options: [
       { id: 'a', text: 'Em cima da linha branca', whyWrong: 'A linha é o limite. O carro para antes dela, sem passar por cima.' },
       { id: 'b', text: 'Antes da linha branca, que é o limite para parar' },
@@ -486,6 +486,7 @@ export const WORLD3_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'No retrovisor, aparece uma bicicleta vindo pela rua, bem perto da sua porta.' },
     ],
     prompt: 'O que você faz?',
+    visual: { kind: 'scene', anim: 'porta-bicicleta', alt: 'Seu carro estacionado junto à calçada e uma bicicleta vindo por trás, perto da porta do motorista' },
     options: [
       { id: 'a', text: 'Abro a porta rápido, antes de ela chegar', whyWrong: 'Abrir a porta com alguém chegando é perigoso. Espere passar.' },
       { id: 'b', text: 'Espero a bicicleta passar e só então abro a porta' },

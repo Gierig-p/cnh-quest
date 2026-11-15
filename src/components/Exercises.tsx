@@ -26,20 +26,20 @@ export function Exercise(props: ExerciseProps<Question>) {
     case 'truefalse':
       return <TrueFalseEx {...(props as ExerciseProps<TrueFalseQuestion>)} />;
     case 'fill':
-      return <><QVisual q={q} /><FillEx {...(props as ExerciseProps<FillBlankQuestion>)} /></>;
+      return <><QVisual q={q} checked={props.checked} /><FillEx {...(props as ExerciseProps<FillBlankQuestion>)} /></>;
     case 'order':
-      return <><QVisual q={q} /><OrderEx {...(props as ExerciseProps<OrderQuestion>)} /></>;
+      return <><QVisual q={q} checked={props.checked} /><OrderEx {...(props as ExerciseProps<OrderQuestion>)} /></>;
     case 'match':
-      return <><QVisual q={q} /><MatchEx {...(props as ExerciseProps<MatchQuestion>)} /></>;
+      return <><QVisual q={q} checked={props.checked} /><MatchEx {...(props as ExerciseProps<MatchQuestion>)} /></>;
   }
 }
 
 /** imagem do enunciado nos tipos que não a desenham por conta própria (lacuna, ordenar, pares) */
-function QVisual({ q }: { q: Question }) {
+function QVisual({ q, checked }: { q: Question; checked: ExerciseProps<Question>['checked'] }) {
   if (!q.visual) return null;
   return (
     <div className="q-visual">
-      <Visual v={q.visual} size={150} />
+      <Visual v={q.visual} size={150} checked={checked} />
     </div>
   );
 }
@@ -163,7 +163,7 @@ function ChoiceEx({ q, seed, answer, onAnswer, checked, eliminated }: ExercisePr
     <>
       {q.visual && (
         <div className="q-visual">
-          <Visual v={q.visual} size={150} />
+          <Visual v={q.visual} size={150} checked={checked} />
         </div>
       )}
       <RadioGroup
@@ -193,7 +193,7 @@ function TrueFalseEx({ q, answer, onAnswer, checked }: ExerciseProps<TrueFalseQu
     <>
       {q.visual && (
         <div className="q-visual">
-          <Visual v={q.visual} />
+          <Visual v={q.visual} checked={checked} />
         </div>
       )}
       <p className="statement">“<TermText text={q.statement} />”</p>

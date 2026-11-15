@@ -42,8 +42,13 @@ export interface Visual {
   speed?: number;
   /** para kind = 'scene': id de cena em SceneArt */
   scene?: SceneId;
+  /** cena 3D que reage à resposta (AnimScene); quando existe, substitui `scene` */
+  anim?: AnimSceneId;
   alt: string;
 }
+
+/** cenas que reagem à resposta (piloto de 14/11/2026) */
+export type AnimSceneId = 'pedestre-faixa' | 'linha-retencao' | 'porta-bicicleta';
 
 export type SceneId =
   | 'cruzamento-direita'
