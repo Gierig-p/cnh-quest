@@ -16,10 +16,10 @@ import { ACOST, CAM_ESTRADA, campo, estrada, raios } from './Mundo2';
 const VOCE = '#e9eef3';
 const TIRE = '#262b33';
 const GLASS = '#3b5470';
-const MOCA: Look = { skin: '#7a4e35', hair: '#2b2420', top: '#2fa36b', bottom: '#33415a', bag: '#e0a43a' };
-const RAPAZ: Look = { skin: '#d7a77f', hair: '#5a3b25', top: '#f2a13a', bottom: '#3a4a66' };
-const SENHORA: Look = { skin: '#c98a5e', hair: '#d9d9d9', top: '#8e5cc2', bottom: '#4a4a5a', skirt: true };
-const MENINO: Look = { skin: '#b07a55', hair: '#2b2420', top: '#e05a5a', bottom: '#2f4f7f', bag: '#2f80ed' };
+export const MOCA: Look = { skin: '#7a4e35', hair: '#2b2420', top: '#2fa36b', bottom: '#33415a', bag: '#e0a43a' };
+export const RAPAZ: Look = { skin: '#d7a77f', hair: '#5a3b25', top: '#f2a13a', bottom: '#3a4a66' };
+export const SENHORA: Look = { skin: '#c98a5e', hair: '#d9d9d9', top: '#8e5cc2', bottom: '#4a4a5a', skirt: true };
+export const MENINO: Look = { skin: '#b07a55', hair: '#2b2420', top: '#e05a5a', bottom: '#2f4f7f', bag: '#2f80ed' };
 type Pr = (p: V3) => V2;
 
 /* ---------------- peças ---------------- */
@@ -58,7 +58,7 @@ export function onibus(x: number, y: number, cor = '#f2a13a'): Obj {
 }
 
 /** abrigo do ponto de ônibus, com banco, de costas para o leste */
-function abrigo(x: number, y0: number, y1: number): Obj {
+export function abrigo(x: number, y0: number, y1: number): Obj {
   const parts: Part[] = [
     box(x - 0.9, y0, 2.4, x + 0.5, y1, 2.55, '#8b949c'),
     box(x + 0.4, y0, 0, x + 0.5, y1, 2.4, '#a9c8e3', (k, q) => (k === 'w' ? [{ p: subq(q, 0.05, 0.1, 0.95, 0.9), c: '#c3dbee' }] : undefined)),
@@ -69,7 +69,7 @@ function abrigo(x: number, y0: number, y1: number): Obj {
 }
 
 /** fumaça (pixels): bolinhas cinza subindo de um ponto */
-function fumaca(x: number, y: number, k = 1): ReactNode {
+export function fumaca(x: number, y: number, k = 1): ReactNode {
   const b = [
     [0, 0, 5],
     [4, -7, 6.5],

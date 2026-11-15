@@ -51,3 +51,29 @@ describe('vídeo do conceito (piloto c3-lado-direito)', () => {
     expect(screen.getByText(card.remember!)).toBeInTheDocument();
   });
 });
+
+describe('todos os vídeos de conceito', () => {
+  const tempos = import.meta.glob<{ dur: number; falas: { ini: number; fim: number }[] }>('../content/videos/*.json', { eager: true, import: 'default' });
+  const cartoes = Object.values(CONCEPTS3).filter((c) => c.video);
+
+  it('cada vídeo tem tempos para todas as falas, em ordem, dentro da duração', () => {
+    for (const id of Object.keys(VIDEOS) as (keyof typeof VIDEOS)[]) {
+      const t = tempos[`../content/videos/${id}.json`];
+      expect(t, id).toBeDefined();
+      expect(t.falas, id).toHaveLength(VIDEOS[id].falas.length);
+      t.falas.forEach((f, i) => {
+        expect(f.fim, `${id} fala ${i}`).toBeGreaterThan(f.ini);
+        if (i) expect(f.ini, `${id} fala ${i}`).toBeGreaterThanOrEqual(t.falas[i - 1].fim);
+      });
+      expect(t.dur, id).toBeGreaterThanOrEqual(t.falas[t.falas.length - 1].fim);
+    }
+  });
+
+  it('cada cartão com vídeo aponta para um vídeo que existe e tem resumo', () => {
+    expect(cartoes.map((c) => c.video!.id).sort()).toEqual(Object.keys(VIDEOS).sort());
+    for (const c of cartoes) {
+      expect(c.video!.resumo.length, c.id).toBeGreaterThan(0);
+      expect(cardParts(c), c.id).toEqual([['video'], ['resumo', 'terms', 'guardar']]);
+    }
+  });
+});

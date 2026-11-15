@@ -16,8 +16,18 @@ interface VideoDef {
   falaEm: (t: number) => number;
 }
 
+interface VideoMod {
+  Video: VideoComp;
+  DUR: number;
+  falaEm: (t: number) => number;
+}
+const paraDef = (m: VideoMod): VideoDef => ({ C: m.Video, dur: m.DUR, falaEm: m.falaEm });
+
 const carregar: Record<VideoId, () => Promise<VideoDef>> = {
-  faixas: () => import('./scenes/VideoFaixas').then((m) => ({ C: m.VideoFaixas, dur: m.DUR_FAIXAS, falaEm: m.falaEm })),
+  faixas: () => import('./scenes/VideoFaixas').then(paraDef),
+  acostamento: () => import('./scenes/VideoAcostamento').then(paraDef),
+  ultrapassar: () => import('./scenes/VideoUltrapassar').then(paraDef),
+  'nao-ultrapassar': () => import('./scenes/VideoNaoUltrapassar').then(paraDef),
 };
 
 const cache: Partial<Record<VideoId, VideoDef>> = {};

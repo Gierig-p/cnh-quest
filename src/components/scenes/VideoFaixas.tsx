@@ -1,120 +1,18 @@
 /**
- * Vídeo do cartão c3-lado-direito ("Pela direita, com espaço"), teste de 15/11/2026.
+ * Vídeo do cartão c3-lado-direito ("Pela direita, com espaço"), aprovado em 15/11/2026.
  * Animação do motor 3D em SVG; cada trecho acompanha uma fala da narração (tempos em content/videos/faixas.json).
  * `t` é o tempo em segundos (0 = quadro de capa, antes do play).
  */
-import type { ReactNode } from 'react';
-import { Scene3D, camLook, lines, rect, rng, type Obj, type Part, type V2, type V3 } from './engine';
-import { asphalt, building, bush, car, grassPatches, lampPost, sidewalk, tree } from './models';
+import { camLook, rect } from './engine';
+import { car } from './models';
 import { utilitario } from './veiculos';
-import { Tag } from './iso';
 import { avenida, avenidaObjs } from './Mundo1';
 import { onibus } from './Mundo3';
+import { A, AMARELO, AV, AV_OBJS, AZUL, FX, VERDE, VOCE, chuva, clamp, ease, faixa, fazerVideo, lerp, tag, type Quadro } from './videoBase';
 import tempos from '../../content/videos/faixas.json';
-
-type Pr = (p: V3) => V2;
-const VOCE = '#e9eef3';
-const VERDE = '#5fd08a';
-const AZUL = '#5aa0ff';
-const AMARELO = '#ffd84a';
-
-const clamp = (v: number) => Math.max(0, Math.min(1, v));
-const ease = (v: number) => {
-  const k = clamp(v);
-  return k * k * (3 - 2 * k);
-};
-const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
-
-/* ---------------- cenários (montados uma vez) ---------------- */
-
-/** avenida de mão única, três faixas para o norte: centros em -3,5, 0 e 3,5 */
-const A = 5.25;
-const FX = [-3.5, 0, 3.5] as const;
-const Y0 = -130, Y1 = 60;
-
-const AV: Part[] = [
-  ...grassPatches(-60, Y0, 60, Y1, 4),
-  ...asphalt(-A, Y0, A, Y1, 5),
-  lines([
-    { p: [[-1.75, Y0, 0], [-1.75, Y1, 0]], c: '#eeeeea', w: 1, dash: '6 6' },
-    { p: [[1.75, Y0, 0], [1.75, Y1, 0]], c: '#eeeeea', w: 1, dash: '6 6' },
-  ]),
-  rect(-A + 0.15, Y0, -A + 0.28, Y1, '#eeeeea'),
-  rect(A - 0.28, Y0, A - 0.15, Y1, '#eeeeea'),
-  ...sidewalk(A, Y0, A + 3, Y1),
-  ...sidewalk(-A - 3, Y0, -A, Y1),
-];
-
-const AV_OBJS: Obj[] = (() => {
-  const r = rng(9);
-  const cores = ['#9fc3e6', '#f1dca6', '#e9a47c', '#d9e3f0', '#cfe7c4', '#f1d0b0'];
-  const out: Obj[] = [];
-  for (let y = Y0 + 6; y < Y1 - 10; y += 15) {
-    const h1 = 7 + Math.round(r() * 6), h2 = 7 + Math.round(r() * 6);
-    out.push(building({ x0: A + 4, y0: y, x1: A + 12, y1: y + 12, h: h1, color: cores[Math.floor(r() * cores.length)], shop: 'w', seed: Math.floor(r() * 9) }));
-    out.push(building({ x0: -A - 12, y0: y + 4, x1: -A - 4, y1: y + 15, h: h2, color: cores[Math.floor(r() * cores.length)], shop: 'e', seed: Math.floor(r() * 9) }));
-    out.push(tree(A + 1.6, y + 13.5, 0.85, Math.floor(r() * 6)));
-    out.push(tree(-A - 1.6, y + 2, 0.9, Math.floor(r() * 6)));
-  }
-  for (let y = Y0 + 20; y < Y1; y += 30) {
-    out.push(lampPost(A + 1.4, y, -1));
-    out.push(lampPost(-A - 1.4, y + 15, 1));
-  }
-  out.push(bush(A + 2.4, -2, 0.7, 1));
-  return out;
-})();
 
 const RUA = avenida('tracejada');
 const RUA_OBJS = avenidaObjs(1);
-
-/* ---------------- peças da animação ---------------- */
-
-/** pintura transparente sobre uma faixa da avenida */
-const faixa = (i: number, cor: string, o: number): Part[] => (o > 0.01 ? [rect(FX[i] - 1.7, Y0, FX[i] + 1.7, Y1, cor, 0.01, o)] : []);
-
-/** chuva que cai (os riscos descem com o tempo) */
-function chuva(t: number, o: number): ReactNode {
-  if (o <= 0.01) return null;
-  const r = rng(31);
-  const riscos = Array.from({ length: 110 }, () => [r() * 340 - 10, r() * 220, 7 + r() * 6] as const);
-  const d = t * 240;
-  return (
-    <g opacity={o}>
-      <rect x={0} y={0} width={320} height={200} fill="#5d6b7a" opacity={0.42} />
-      <g stroke="#e9f1f8" strokeWidth={0.9} strokeLinecap="round" opacity={0.75}>
-        {riscos.map(([x, y, l], i) => {
-          const yy = ((y + d) % 220) - 10;
-          return <line key={i} x1={x} y1={yy} x2={x - l * 0.28} y2={yy + l} />;
-        })}
-      </g>
-    </g>
-  );
-}
-
-/** etiqueta presa a um ponto da cena */
-const tag = (pr: Pr, p: V3, text: string, o = 1): ReactNode => {
-  if (o <= 0.01) return null;
-  const [x, y] = pr(p);
-  return (
-    <g opacity={o}>
-      <Tag x={x} y={y - 8} text={text} />
-    </g>
-  );
-};
-
-/* ---------------- linha do tempo ---------------- */
-
-const F = tempos.falas;
-export const DUR_FAIXAS = tempos.dur;
-/** começo de cada trecho: meio segundo antes da fala (o corte chega antes da voz) */
-const INI = F.map((f, i) => (i === 0 ? 0 : f.ini - 0.5));
-
-interface Quadro {
-  cam: ReturnType<typeof camLook>;
-  ground: Part[];
-  objs: Obj[];
-  over?: (pr: Pr) => ReactNode;
-}
 
 function trecho(k: number, lt: number, d: number): Quadro {
   const u = clamp(lt / d);
@@ -279,32 +177,4 @@ function trecho(k: number, lt: number, d: number): Quadro {
   }
 }
 
-/** índice da fala que está na tela no tempo `t` */
-export function falaEm(t: number): number {
-  let k = 0;
-  for (let i = 0; i < INI.length; i++) if (t >= INI[i]) k = i;
-  return k;
-}
-
-export function VideoFaixas({ t = 0, id = 'vf' }: { t?: number; id?: string }) {
-  const k = falaEm(t);
-  const fim = k + 1 < INI.length ? INI[k + 1] : DUR_FAIXAS;
-  const q = trecho(k, t - INI[k], fim - INI[k]);
-  // corte: um piscar escuro curto na troca de trecho
-  const perto = Math.min(...INI.slice(1).map((b) => Math.abs(t - b)));
-  const corte = Math.max(0, 1 - perto / 0.18);
-  return (
-    <Scene3D
-      id={id}
-      cam={q.cam}
-      ground={q.ground}
-      objs={q.objs}
-      overlay={(pr) => (
-        <>
-          {q.over?.(pr)}
-          {corte > 0 && <rect x={0} y={0} width={320} height={200} fill="#0b1220" opacity={0.85 * corte} />}
-        </>
-      )}
-    />
-  );
-}
+export const { Video, DUR, falaEm } = fazerVideo(tempos, trecho);

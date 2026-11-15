@@ -71,6 +71,16 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
       'O trânsito parou na rodovia. Andar pelo acostamento para passar à frente é proibido. Ele fica livre para quem ' +
       'tem uma emergência.',
     remember: 'Quanto maior, mais responsável. E o pedestre é de todos.',
+    video: {
+      id: 'acostamento',
+      resumo: [
+        'A calçada é das pessoas a pé. O acostamento é para emergências.',
+        'O carro só passa por cima da calçada ou do acostamento para entrar ou sair de uma garagem ou estacionamento.',
+        'Trânsito parado não é motivo para andar pelo acostamento.',
+        'Quem é maior cuida de quem é menor. Os veículos com motor cuidam dos sem motor.',
+        'E todos juntos cuidam dos pedestres.',
+      ],
+    },
     sources: ctb('art. 29, V e § 2º', 'Anexo I — Acostamento'),
   },
 
@@ -95,6 +105,16 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
       'Pelo retrovisor, você vê que um carro quer passar e você está na faixa da esquerda. Ligue a seta, vá para a ' +
       'direita e mantenha a velocidade.',
     remember: 'Olhe, sinalize, passe com espaço e volte sinalizando.',
+    video: {
+      id: 'ultrapassar',
+      resumo: [
+        'Em regra, ultrapasse pela esquerda.',
+        'Se o da frente sinalizou que vai entrar à esquerda, passe pela direita dele.',
+        'Antes: ninguém atrás já passando você, o da frente sem ir ultrapassar outro e a faixa livre por um bom trecho.',
+        'Durante: seta, distância para o lado e seta de novo para voltar.',
+        'Quem é ultrapassado não acelera e, se estiver na esquerda, vai para a direita.',
+      ],
+    },
     sources: ctb('art. 29, IX, X e XI', 'art. 30', 'Anexo I — Ultrapassagem'),
   },
   ondeNaoUltrapassar: {
@@ -118,6 +138,15 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
       'Numa estrada de mão dupla, o caminhão da frente está devagar numa subida. Você não vê o topo. Espere a reta, ' +
       'com visão livre, para passar.',
     remember: 'Se não dá para ver quem vem, não dá para passar.',
+    video: {
+      id: 'nao-ultrapassar',
+      resumo: [
+        'Em pista única de mão dupla: nada de ultrapassar em curvas e subidas sem boa visão.',
+        'Nem em passagens de nível, pontes, viadutos e faixas de pedestres, a não ser que a sinalização permita.',
+        'Nos cruzamentos e perto deles, também não.',
+        'Ônibus parado com gente subindo ou descendo: reduza, redobre a atenção ou pare.',
+      ],
+    },
     sources: ctb('art. 31', 'art. 32', 'art. 33', 'Anexo I — Passagem de nível'),
   },
 
