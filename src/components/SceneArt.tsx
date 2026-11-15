@@ -645,7 +645,8 @@ const avenida = (
   </>
 );
 
-const SCENES: Record<SceneId, React.ReactNode> = {
+/** desenho antigo; as cenas do Mundo 3 em diante só existem em 3D (Cena3D) */
+const SCENES: Partial<Record<SceneId, React.ReactNode>> = {
   'cruzamento-direita': (
     <>
       <Grass />

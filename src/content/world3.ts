@@ -350,6 +350,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Mão e faixas',
     objective: 'Saber o uso das faixas da direita',
     prompt: 'Um caminhão lento está numa avenida de três faixas, sem faixa especial para ele. Por onde deve seguir?',
+    visual: { kind: 'scene', scene: 'avenida-tres-faixas', alt: 'Avenida de três faixas no mesmo sentido, com um caminhão lento entrando por uma rua lateral' },
     options: [
       { id: 'a', text: 'Pela faixa da direita' },
       { id: 'b', text: 'Pela faixa do meio, sempre', whyWrong: 'O CTB destina as faixas da direita aos veículos mais lentos e maiores.' },
@@ -562,6 +563,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Ultrapassagem',
     objective: 'Saber o que faz quem é ultrapassado',
     prompt: 'Você está na faixa da esquerda e percebe que um carro atrás quer ultrapassar. O que fazer?',
+    visual: { kind: 'scene', scene: 'faixa-esquerda-carro-atras', alt: 'Seu carro na faixa da esquerda, com um carro vermelho logo atrás piscando o farol' },
     options: [
       { id: 'a', text: 'Acelerar para não ficar atrás', whyWrong: 'Quem é ultrapassado não pode acelerar.' },
       { id: 'b', text: 'Ir para a faixa da direita, sem acelerar' },
@@ -618,6 +620,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Onde não ultrapassar',
     objective: 'Saber o cuidado com ônibus parado',
     prompt: 'Um ônibus está parado no ponto, com passageiros descendo. Você quer passar por ele. O que fazer?',
+    visual: { kind: 'scene', scene: 'onibus-ponto', alt: 'Ônibus parado no ponto, com passageiros descendo, e seu carro atrás dele' },
     options: [
       { id: 'a', text: 'Buzinar e passar rápido', whyWrong: 'A buzina não abre caminho, e passar rápido arrisca quem atravessa.' },
       { id: 'b', text: 'Passar normalmente, o ônibus está parado', whyWrong: 'O CTB pede redução e atenção redobrada, pelos pedestres.' },
@@ -715,6 +718,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Seta e manobras',
     objective: 'Saber a preferência ao sair de uma garagem',
     prompt: 'Você vai sair da garagem de casa para a rua. Quem tem a preferência?',
+    visual: { kind: 'scene', scene: 'saida-garagem', alt: 'Seu carro na saída da garagem, com uma pessoa andando na calçada e um carro passando na rua' },
     options: [
       { id: 'a', text: 'Você, que já começou a manobra', whyWrong: 'Quem sai do lote dá a preferência a quem já está na via.' },
       { id: 'b', text: 'Só os carros da rua', whyWrong: 'Os pedestres que passam na calçada também têm a preferência.' },
@@ -830,6 +834,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Conversões',
     objective: 'Saber virar à esquerda na rodovia com acostamento',
     prompt: 'Numa rodovia com acostamento e sem local próprio para o retorno, como virar à esquerda?',
+    visual: { kind: 'scene', scene: 'rodovia-virar-esquerda', alt: 'Rodovia com acostamento e uma estrada de terra à esquerda, para onde você quer ir' },
     options: [
       { id: 'a', text: 'Parar na faixa da esquerda e esperar', whyWrong: 'Parar na pista expõe você a quem vem atrás.' },
       { id: 'b', text: 'Fazer o retorno em qualquer ponto, rápido', whyWrong: 'Sem local apropriado, o CTB manda esperar no acostamento.' },
@@ -865,6 +870,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Conversões',
     objective: 'Dar passagem ao virar',
     prompt: 'Você está virando à direita e um pedestre atravessa a rua para onde você vai. O que fazer?',
+    visual: { kind: 'scene', scene: 'virar-direita-pedestre', alt: 'Seu carro com a seta da direita ligada, perto de um pedestre que atravessa na faixa da rua para onde você vai' },
     options: [
       { id: 'a', text: 'Buzinar para ele andar mais rápido', whyWrong: 'Buzina só para evitar acidente, e quem tem a vez é o pedestre.' },
       { id: 'b', text: 'Passar antes, porque você já começou a virar', whyWrong: 'Durante a mudança de direção, a passagem é do pedestre.' },
@@ -902,6 +908,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Faróis',
     objective: 'Saber a luz na chuva de dia',
     prompt: 'É dia e começa a chover forte. Qual luz usar?',
+    visual: { kind: 'scene', scene: 'chuva-dia', alt: 'Estrada de dia, debaixo de chuva forte' },
     options: [
       { id: 'a', text: 'Nenhuma, porque é dia', whyWrong: 'Mesmo de dia, com chuva, o CTB manda usar a luz baixa.' },
       { id: 'b', text: 'Luz alta', whyWrong: 'A luz alta ofusca os outros. Na chuva, use a baixa.' },
@@ -922,6 +929,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Faróis',
     objective: 'Saber quando usar a luz alta',
     prompt: 'Você está numa estrada sem iluminação, à noite, sem ninguém por perto. Qual luz usar?',
+    visual: { kind: 'scene', scene: 'estrada-escura', alt: 'Estrada sem iluminação, à noite, só com o seu carro' },
     options: [
       { id: 'a', text: 'Luz alta' },
       { id: 'b', text: 'Só a luz de posição', whyWrong: 'Luz de posição não ilumina a via para dirigir.' },
@@ -942,6 +950,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Faróis',
     objective: 'Trocar para luz baixa ao cruzar com outro veículo',
     prompt: 'Numa estrada escura, você está de luz alta e um carro aparece vindo de frente. O que fazer?',
+    visual: { kind: 'scene', scene: 'luz-alta-carro-frente', alt: 'Estrada escura à noite, com seu farol alto aceso e um carro vindo de frente' },
     options: [
       { id: 'a', text: 'Manter a luz alta para enxergar melhor', whyWrong: 'Ao cruzar com outro veículo, a luz alta deve ser trocada pela baixa.' },
       { id: 'b', text: 'Trocar para a luz baixa' },
@@ -1133,6 +1142,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Parada e estacionamento',
     objective: 'Reconhecer um estacionamento',
     prompt: 'Você deixa o carro na rua enquanto entra na padaria. Isso é:',
+    visual: { kind: 'scene', scene: 'carro-padaria', alt: 'Seu carro parado na rua, em frente a uma padaria, enquanto você vai entrar' },
     options: [
       { id: 'a', text: 'Uma parada, porque é rápido', whyWrong: 'Parada é só para alguém subir ou descer. Fazer compras já é estacionamento.' },
       { id: 'b', text: 'Um estacionamento' },
@@ -1188,6 +1198,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Parada e estacionamento',
     objective: 'Saber o que fazer com o veículo parado em emergência',
     prompt: 'Seu carro quebrou e ficou parado na pista. O que o CTB manda fazer logo?',
+    visual: { kind: 'scene', scene: 'carro-quebrado', alt: 'Seu carro quebrado e soltando fumaça na pista, com outro carro vindo atrás' },
     options: [
       { id: 'a', text: 'Sinalizar o local na hora, para avisar quem vem' },
       { id: 'b', text: 'Esperar o guincho dentro do carro, sem sinalizar', whyWrong: 'A sinalização de advertência deve ser providenciada imediatamente.' },
@@ -1365,6 +1376,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Velocidade nas rodovias',
     objective: 'Saber o limite nas estradas',
     prompt: 'Numa estrada de terra (via rural sem asfalto), sem placa, qual é o limite?',
+    visual: { kind: 'scene', scene: 'estrada-terra', alt: 'Estrada de terra no campo, sem asfalto e sem placa' },
     options: [
       { id: 'a', text: '40 km/h', whyWrong: '40 km/h é o limite das vias urbanas coletoras.' },
       { id: 'b', text: '80 km/h', whyWrong: '80 km/h é limite urbano das vias de trânsito rápido.' },
@@ -1385,6 +1397,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Velocidade nas rodovias',
     objective: 'Saber que a placa vale mais que o limite geral',
     prompt: 'Numa rodovia de pista dupla, uma placa indica 80 km/h. Qual é o limite para o carro?',
+    visual: { kind: 'scene', scene: 'rodovia-dupla-80', alt: 'Rodovia de pista dupla, com uma placa de velocidade máxima de 80 km/h' },
     options: [
       { id: 'a', text: '110 km/h, o limite da pista dupla', whyWrong: 'Os limites gerais só valem onde não há placa.' },
       { id: 'b', text: '80 km/h' },

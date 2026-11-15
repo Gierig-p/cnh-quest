@@ -17,7 +17,7 @@ type Pr = (p: V3) => V2;
 /* ---------------- peças de desenho (overlay, em pixels) ---------------- */
 
 /** balão branco ligado por uma linha fina a um ponto da cena; o conteúdo usa (0,0) no canto do balão */
-function Balao({ at, x, y, w, h, children }: { at: V2; x: number; y: number; w: number; h: number; children: ReactNode }) {
+export function Balao({ at, x, y, w, h, children }: { at: V2; x: number; y: number; w: number; h: number; children: ReactNode }) {
   const cx = x + w / 2, cy = y + h / 2;
   return (
     <g>
@@ -30,7 +30,7 @@ function Balao({ at, x, y, w, h, children }: { at: V2; x: number; y: number; w: 
 }
 
 /** raios curtos em volta de uma luz (para mostrar que ela pisca) */
-function raios(x: number, y: number, r: number, len: number, cor: string, n = 8): ReactNode {
+export function raios(x: number, y: number, r: number, len: number, cor: string, n = 8): ReactNode {
   return (
     <g stroke={cor} strokeWidth={1.8} strokeLinecap="round">
       {Array.from({ length: n }, (_, i) => {
@@ -109,7 +109,7 @@ const placaVerde = (
 );
 
 /** noite: escurece a cena e acende os postes */
-function noite(id: string, pr: Pr, postes: V3[]): ReactNode {
+export function noite(id: string, pr: Pr, postes: V3[]): ReactNode {
   return (
     <>
       <defs>
@@ -135,10 +135,10 @@ function noite(id: string, pr: Pr, postes: V3[]): ReactNode {
 
 /* ---------------- estrada de mão dupla ---------------- */
 
-const PISTA = 3.5, ACOST = 6;
+export const PISTA = 3.5, ACOST = 6;
 
 /** estrada de mão dupla com acostamento; a linha amarela do meio é contínua ou tracejada */
-function estrada(central: 'continua' | 'tracejada'): Part[] {
+export function estrada(central: 'continua' | 'tracejada'): Part[] {
   return [
     ...grassPatches(-50, -70, 50, 40, 7),
     rect(-ACOST - 0.7, -70, ACOST + 0.7, 40, '#c9b48a'),
@@ -155,11 +155,13 @@ function estrada(central: 'continua' | 'tracejada'): Part[] {
 }
 
 /** cercas, árvores e um sítio ao longe dos dois lados da estrada */
-function campo(seed = 0): Obj[] {
+export function campo(seed = 0, vao?: [number, number]): Obj[] {
   const out: Obj[] = [];
   for (const x of [-9, 9]) {
-    out.push({ parts: [lines([{ p: [[x, -70, 0.95], [x, 40, 0.95]], c: '#8a6a48', w: 0.8 }, { p: [[x, -70, 0.55], [x, 40, 0.55]], c: '#8a6a48', w: 0.7 }])] });
-    for (let y = -46; y < 30; y += 4) out.push({ parts: [box(x - 0.06, y - 0.06, 0, x + 0.06, y + 0.06, 1.05, '#8a6a48')], shadow: true });
+    // `vao`: trecho da cerca da esquerda aberto (entrada de uma estrada)
+    const trechos: [number, number][] = x < 0 && vao ? [[-70, vao[0]], [vao[1], 40]] : [[-70, 40]];
+    for (const [a, b] of trechos) out.push({ parts: [lines([{ p: [[x, a, 0.95], [x, b, 0.95]], c: '#8a6a48', w: 0.8 }, { p: [[x, a, 0.55], [x, b, 0.55]], c: '#8a6a48', w: 0.7 }])] });
+    for (let y = -46; y < 30; y += 4) if (!(x < 0 && vao && y > vao[0] && y < vao[1])) out.push({ parts: [box(x - 0.06, y - 0.06, 0, x + 0.06, y + 0.06, 1.05, '#8a6a48')], shadow: true });
   }
   out.push(
     tree(-12, 6 + seed, 1.1, 1),
@@ -174,7 +176,7 @@ function campo(seed = 0): Obj[] {
   return out;
 }
 
-const CAM_ESTRADA = camLook(1.2, -7, 0, 12, 36, 8.5);
+export const CAM_ESTRADA = camLook(1.2, -7, 0, 12, 36, 8.5);
 
 /** atrás de um caminhão lento, numa estrada de mão dupla com linha amarela contínua */
 export function LinhaAmarelaContinua(p: CenaProps) {

@@ -305,7 +305,7 @@ export function PlacaEscondida(p: CenaProps) {
 
 /* ---------------- rodovia e via local ---------------- */
 
-function defensa(x0: number, x1: number, y: number): Obj {
+export function defensa(x0: number, x1: number, y: number): Obj {
   // lâmina da defensa com uma dobra mais escura no meio
   const parts: Part[] = [box(x0, y - 0.06, 0.5, x1, y + 0.06, 0.82, '#c3c9d0', (k, q) => (k === 'n' || k === 's' ? [{ p: subq(q, 0, 0.42, 1, 0.58), c: '#8f99a2' }] : undefined))];
   for (let x = x0 + 0.3; x < x1; x += 2.5) parts.push(box(x, y - 0.06, 0, x + 0.12, y + 0.14, 0.8, '#7d868e'));

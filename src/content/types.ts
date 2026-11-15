@@ -78,7 +78,21 @@ export type SceneId =
   | 'semaforo-amarelo-piscando'
   | 'semaforo-pedestre-piscando'
   | 'placa-escondida'
-  | 'placa-distancias';
+  | 'placa-distancias'
+  // Mundo 3 (só 3D, 15/11)
+  | 'avenida-tres-faixas'
+  | 'faixa-esquerda-carro-atras'
+  | 'onibus-ponto'
+  | 'saida-garagem'
+  | 'rodovia-virar-esquerda'
+  | 'virar-direita-pedestre'
+  | 'chuva-dia'
+  | 'estrada-escura'
+  | 'luz-alta-carro-frente'
+  | 'carro-padaria'
+  | 'carro-quebrado'
+  | 'estrada-terra'
+  | 'rodovia-dupla-80';
 
 /**
  * Uma linha da situação narrada ("Na rua"): uma fala do narrador ou um som.

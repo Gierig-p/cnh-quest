@@ -47,6 +47,13 @@ describe('cenas que reagem à resposta', () => {
     expect(await within(fig).findByText((_, el) => el?.tagName.toLowerCase() === 'svg')).toBeInTheDocument();
   });
 
+  it('Mundo 3: a questão do ônibus no ponto usa a cena 3D, com a descrição no leitor de tela', async () => {
+    expect(QUESTION_BY_ID['w3-l2-q7'].visual?.scene).toBe('onibus-ponto');
+    render(cena('w3-l2-q7', null));
+    const fig = await screen.findByRole('img', { name: /Ônibus parado no ponto/ });
+    expect(await within(fig).findByText((_, el) => el?.tagName.toLowerCase() === 'svg')).toBeInTheDocument();
+  });
+
   it('antes de verificar: cena parada, sem aviso; no erro: "Veja a ação correta"; no acerto: sem aviso', async () => {
     const { rerender } = render(cena('w3-rua-5', null));
     expect(await screen.findByRole('img', { name: /bicicleta vindo por trás/ })).toBeInTheDocument();
