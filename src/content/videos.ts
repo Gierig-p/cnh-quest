@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -65,6 +65,48 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Ônibus parado, com gente subindo ou descendo? Reduza, redobre a atenção ou pare.',
       'Alguém pode surgir na frente dele.',
       'Para guardar: se não dá para ver quem vem, não dá para passar.',
+    ],
+  },
+  // cartão c3-seta (CTB art. 29, § 1º; arts. 34, 35 e 36)
+  seta: {
+    falas: [
+      'Antes de ir para o lado, olhe em volta.',
+      'A manobra não pode trazer perigo para quem vem atrás, vai à frente ou vai cruzar com você.',
+      'Mudar de faixa, virar e fazer o retorno: tudo isso é ir para o lado.',
+      'Em todos esses casos, avise antes, com a seta.',
+      'Se a seta não funcionar, avise com o gesto de braço.',
+      'Mudar de faixa vale para a esquerda ou para a direita, sempre com os mesmos cuidados.',
+      'Vai sair de uma garagem para a rua? Quem já está na rua passa primeiro: carros e pedestres.',
+      'Espere os dois passarem. Depois, entre.',
+      'Para guardar: primeiro olhe, depois a seta, só então vire.',
+    ],
+  },
+  // cartão c3-conversao (CTB art. 37, art. 38 e parágrafo único, art. 44-A, art. 45)
+  conversao: {
+    falas: [
+      'Na hora de virar, a posição do carro conta.',
+      'Para virar à direita, encoste o máximo no lado direito e faça a curva fechada, no menor espaço.',
+      'Para virar à esquerda numa rua de mão dupla, chegue perto do meio da pista.',
+      'Numa rua de mão única, encoste no lado esquerdo.',
+      'Ao virar, dê passagem aos pedestres, aos ciclistas e a quem vem em sentido contrário.',
+      'Na rodovia sem lugar próprio para virar à esquerda, espere no acostamento da direita e cruze quando der.',
+      'Sinal verde não basta. Se você vai ficar parado no meio do cruzamento, não entre.',
+      'Virar à direita no sinal vermelho, só onde a sinalização permitir.',
+      'Para guardar: verde não é ordem de entrar. Só entre se tiver espaço para sair.',
+    ],
+  },
+  // cartão c3-farois (CTB art. 40, I e II, §§ 1º e 2º)
+  farois: {
+    falas: [
+      'O farol serve para você ver e, principalmente, para ser visto.',
+      'À noite, use a luz baixa.',
+      'De dia também, nos túneis e com chuva, neblina ou cerração.',
+      'Numa estrada sem iluminação, use a luz alta.',
+      'Mas troque pela baixa quando cruzar com um carro vindo de frente.',
+      'E também quando estiver logo atrás de outro carro.',
+      'Motos usam o farol baixo de dia e de noite. Ônibus nas faixas só deles também.',
+      'Carro sem luz própria para o dia acende o farol de dia nas rodovias de pista simples, fora da cidade.',
+      'Para guardar: alguém de frente ou logo à frente? Luz baixa.',
     ],
   },
 };

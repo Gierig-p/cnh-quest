@@ -183,3 +183,49 @@ export function fazerVideo(tempos: { dur: number; falas: { ini: number; fim: num
   }
   return { Video, DUR, falaEm };
 }
+
+/* ---------------- caminhos (virar, retorno) ---------------- */
+
+/** pontos de um arco de círculo, do ângulo a0 ao a1 (radianos; 0 = leste, π/2 = sul) */
+export const arco = (cx: number, cy: number, r: number, a0: number, a1: number, n = 14): V2[] =>
+  Array.from({ length: n + 1 }, (_, i) => {
+    const a = a0 + ((a1 - a0) * i) / n;
+    return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+  });
+
+/**
+ * Caminho feito de retas e arcos (uma lista de pontos). `em(s)` dá a posição e a direção do carro
+ * a `s` metros do começo (direção no padrão do `car`: 0 = norte, π/2 = leste). `total` é o comprimento.
+ */
+export function caminho(pts: V2[]) {
+  const acc = [0];
+  for (let i = 1; i < pts.length; i++) acc.push(acc[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+  const total = acc[acc.length - 1];
+  const em = (s: number) => {
+    const d = Math.max(0, Math.min(total, s));
+    let i = 1;
+    while (i < pts.length - 1 && acc[i] < d) i++;
+    const [a, b] = [pts[i - 1], pts[i]];
+    const k = acc[i] > acc[i - 1] ? (d - acc[i - 1]) / (acc[i] - acc[i - 1]) : 0;
+    return { x: a[0] + (b[0] - a[0]) * k, y: a[1] + (b[1] - a[1]) * k, heading: Math.atan2(b[0] - a[0], -(b[1] - a[1])) };
+  };
+  return { em, total, pts };
+}
+
+/** linha tracejada no chão mostrando um caminho (seta de manobra), em pixels */
+export function rastro(pr: Pr, pts: V2[], cor: string, o = 1, ponta = true): ReactNode {
+  if (o <= 0.01 || pts.length < 2) return null;
+  const P = pts.map(([x, y]) => pr([x, y, 0.05]));
+  const d = 'M' + P.map((p) => p.map((v) => v.toFixed(1)).join(' ')).join('L');
+  const [a, b] = [P[P.length - 2], P[P.length - 1]];
+  const ang = Math.atan2(b[1] - a[1], b[0] - a[0]);
+  const s = 5;
+  const tri = `M${b[0] + Math.cos(ang) * s} ${b[1] + Math.sin(ang) * s}L${b[0] + Math.cos(ang + 2.4) * s} ${b[1] + Math.sin(ang + 2.4) * s}L${b[0] + Math.cos(ang - 2.4) * s} ${b[1] + Math.sin(ang - 2.4) * s}Z`;
+  return (
+    <g opacity={o}>
+      <path d={d} fill="none" stroke="#0b1220" strokeWidth={4.2} strokeLinecap="round" strokeLinejoin="round" opacity={0.35} />
+      <path d={d} fill="none" stroke={cor} strokeWidth={2.4} strokeDasharray="5 4" strokeLinecap="round" strokeLinejoin="round" />
+      {ponta && <path d={tri} fill={cor} />}
+    </g>
+  );
+}

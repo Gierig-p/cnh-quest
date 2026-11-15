@@ -171,6 +171,16 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
       'Você sai da garagem de ré. Um pedestre passa na calçada e um carro vem pela rua. Os dois passam primeiro. Depois, ' +
       'você entra.',
     remember: 'Primeiro olhe, depois a seta, só então vire.',
+    video: {
+      id: 'seta',
+      resumo: [
+        'Antes de ir para o lado, olhe: quem vem atrás, quem vai à frente e quem vai cruzar com você.',
+        'Mudar de faixa, virar e fazer o retorno: avise antes, com a seta.',
+        'Sem seta funcionando, faça o gesto de braço.',
+        'Mudar de faixa, para a esquerda ou para a direita, pede os mesmos cuidados.',
+        'Saindo da garagem, quem já está na rua passa primeiro: carros e pedestres.',
+      ],
+    },
     sources: ctb('art. 29, § 1º', 'art. 34', 'art. 35', 'art. 36'),
   },
   conversao: {
@@ -193,6 +203,17 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
       'O sinal abriu, mas a fila do outro lado do cruzamento não andou. Se você entrar, vai ficar parado no meio. ' +
       'Espere antes da faixa.',
     remember: 'Verde não é ordem de entrar: só entre se tiver espaço para sair.',
+    video: {
+      id: 'conversao',
+      resumo: [
+        'À direita: encoste no lado direito e faça a curva fechada.',
+        'À esquerda: na mão dupla, perto do meio da pista; na mão única, encostado no lado esquerdo.',
+        'Ao virar, dê passagem a pedestres, ciclistas e a quem vem em sentido contrário.',
+        'Na rodovia sem lugar para virar à esquerda, espere no acostamento da direita e cruze quando der.',
+        'Sem espaço para sair do cruzamento, não entre, nem com o sinal verde.',
+        'À direita no vermelho, só onde a sinalização permitir.',
+      ],
+    },
     sources: ctb('art. 37', 'art. 38 e parágrafo único', 'art. 44-A', 'art. 45'),
   },
 
@@ -219,6 +240,16 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
       'Numa estrada escura, você usa a luz alta. Um carro aparece vindo de frente: você baixa a luz para não cegar o ' +
       'motorista.',
     remember: 'Alguém de frente ou logo à frente? Luz baixa.',
+    video: {
+      id: 'farois',
+      resumo: [
+        'Luz baixa à noite.',
+        'Luz baixa de dia também: em túneis e com chuva, neblina ou cerração.',
+        'Estrada sem iluminação: luz alta. Troque pela baixa com alguém de frente ou logo à frente.',
+        'Motos: farol baixo de dia e de noite. Ônibus nas faixas só deles também.',
+        'Carro sem luz própria para o dia: farol aceso nas rodovias de pista simples, fora da cidade.',
+      ],
+    },
     sources: ctb('art. 40, I e II', 'art. 40, §§ 1º e 2º'),
   },
   piscaBuzina: {

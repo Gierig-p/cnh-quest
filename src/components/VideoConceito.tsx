@@ -28,6 +28,9 @@ const carregar: Record<VideoId, () => Promise<VideoDef>> = {
   acostamento: () => import('./scenes/VideoAcostamento').then(paraDef),
   ultrapassar: () => import('./scenes/VideoUltrapassar').then(paraDef),
   'nao-ultrapassar': () => import('./scenes/VideoNaoUltrapassar').then(paraDef),
+  seta: () => import('./scenes/VideoSeta').then(paraDef),
+  conversao: () => import('./scenes/VideoConversao').then(paraDef),
+  farois: () => import('./scenes/VideoFarois').then(paraDef),
 };
 
 const cache: Partial<Record<VideoId, VideoDef>> = {};
