@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -107,6 +107,48 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Motos usam o farol baixo de dia e de noite. Ônibus nas faixas só deles também.',
       'Carro sem luz própria para o dia acende o farol de dia nas rodovias de pista simples, fora da cidade.',
       'Para guardar: alguém de frente ou logo à frente? Luz baixa.',
+    ],
+  },
+  // cartão c3-pisca-buzina (CTB art. 40, III e V; art. 41; art. 42)
+  'pisca-buzina': {
+    falas: [
+      'Piscar o farol, ligar o pisca-alerta e buzinar são avisos.',
+      'Por isso, cada um só vale nas situações certas.',
+      'Piscar o farol é trocar a luz baixa e a alta bem rápido.',
+      'Serve para avisar o carro da frente que você vai ultrapassar.',
+      'Ou para avisar um perigo a quem vem de frente.',
+      'O pisca-alerta é para o veículo parado na via, numa emergência, ou quando a regra do local mandar.',
+      'A buzina é só um toque breve, para evitar um acidente.',
+      'Fora da cidade, o toque breve também avisa que você vai ultrapassar.',
+      'E não freie de repente, a não ser por segurança.',
+      'Para guardar: buzina é aviso de perigo, não de pressa.',
+    ],
+  },
+  // cartão c3-parada-estacionamento (CTB art. 46; art. 47 e parágrafo único; Anexo I)
+  parada: {
+    falas: [
+      'Parar e estacionar parecem a mesma coisa, mas não são.',
+      'A diferença é o tempo e o motivo.',
+      'Parada é parar só o tempo de alguém subir ou descer do carro.',
+      'Estacionamento é ficar parado por mais tempo que isso.',
+      'Carregar ou descarregar mercadorias também conta como estacionamento.',
+      'Onde é proibido estacionar, a parada só pode durar o tempo de alguém subir ou descer.',
+      'E sem atrapalhar os carros e os pedestres.',
+      'Se o carro ficar parado na via por uma emergência, sinalize o local na hora.',
+      'Para guardar: subiu ou desceu e foi embora, é parada. Ficou, é estacionamento.',
+    ],
+  },
+  // cartão c3-posicao-portas (CTB art. 48, caput e §§ 1º e 2º; art. 49 e parágrafo único)
+  portas: {
+    falas: [
+      'Não basta saber onde parar. A posição do veículo também tem regra.',
+      'O carro fica no sentido do trânsito, paralelo à beirada da pista e junto ao meio-fio.',
+      'A moto fica de frente ou de traseira para o meio-fio, formando um L, e junto a ele.',
+      'Isso vale quando a sinalização não mandar outra coisa.',
+      'Na estrada com acostamento, pare fora da pista.',
+      'Antes de abrir a porta, olhe se não vem ninguém: carro, moto, bicicleta ou pedestre.',
+      'Os passageiros sobem e descem pelo lado da calçada. Só o motorista usa o outro lado.',
+      'Para guardar: carro paralelo, moto em L, porta só depois de olhar.',
     ],
   },
 };

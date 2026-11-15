@@ -270,6 +270,16 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
     ],
     example: 'Seu carro quebrou na pista. Ligue o pisca-alerta e sinalize o local para os outros verem de longe.',
     remember: 'Buzina é aviso de perigo, não de pressa.',
+    video: {
+      id: 'pisca-buzina',
+      resumo: [
+        'Piscar o farol: só para avisar que vai ultrapassar o da frente, ou um perigo a quem vem de frente.',
+        'Pisca-alerta: veículo parado na via, emergência, ou quando a regra do local mandar.',
+        'Buzina: um toque breve, para evitar um acidente.',
+        'Fora da cidade, o toque breve também avisa que você vai ultrapassar.',
+        'Não freie de repente, a não ser por segurança.',
+      ],
+    },
     sources: ctb('art. 40, III e V', 'art. 41', 'art. 42'),
   },
 
@@ -295,6 +305,16 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
       'Você deixa um amigo na porta da escola e sai: foi uma parada. Se desce para comprar pão e deixa o carro na rua, ' +
       'foi um estacionamento.',
     remember: 'Sobe ou desce e vai embora: parada. Ficou: estacionamento.',
+    video: {
+      id: 'parada',
+      resumo: [
+        'Parada: só o tempo de alguém subir ou descer.',
+        'Estacionamento: qualquer tempo maior que esse.',
+        'Carga e descarga conta como estacionamento.',
+        'Onde é proibido estacionar, a parada é só para subir ou descer, sem atrapalhar carros e pedestres.',
+        'Parado por emergência: sinalize o local na hora.',
+      ],
+    },
     sources: ctb('art. 46', 'art. 47 e parágrafo único', 'Anexo I — Parada', 'Anexo I — Estacionamento'),
   },
   posicaoPortas: {
@@ -315,6 +335,16 @@ export const CONCEPTS3: Record<string, ConceptCard> = {
     ],
     example: 'Você estacionou. Antes de abrir a porta, olha o retrovisor: vem uma bicicleta. Espere ela passar.',
     remember: 'Carro paralelo, moto em "L", porta só depois de olhar.',
+    video: {
+      id: 'portas',
+      resumo: [
+        'Carro: no sentido do trânsito, paralelo e junto ao meio-fio, salvo sinalização.',
+        'Moto: em "L" (perpendicular) e junto ao meio-fio, salvo sinalização.',
+        'Na estrada com acostamento, pare fora da pista.',
+        'Antes de abrir a porta, veja se não vem carro, moto, bicicleta ou pedestre.',
+        'Passageiros pelo lado da calçada. Só o motorista usa o outro lado.',
+      ],
+    },
     sources: ctb('art. 48, caput e §§ 1º e 2º', 'art. 49 e parágrafo único'),
   },
 

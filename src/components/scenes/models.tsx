@@ -15,8 +15,8 @@ export interface CarOpts {
   heading?: number;
   color?: string;
   brake?: boolean;
-  /** pisca: 'r' direita, 'l' esquerda (aceso neste quadro) */
-  blink?: 'r' | 'l' | null;
+  /** pisca: 'r' direita, 'l' esquerda, 'lr' os dois (pisca-alerta), aceso neste quadro */
+  blink?: 'r' | 'l' | 'lr' | null;
   /** abertura da porta do motorista (0 fechada, 1 = ~65°) */
   door?: number;
 }
@@ -44,8 +44,8 @@ export function car({ x, y, heading = 0, color = '#e8eef4', brake = false, blink
         D.push({ p: subq(q, 0.27, 0.33, 0.65, 0.67), c: '#3a404a' });
         D.push({ p: subq(q, 0.3, 0.36, 0.62, 0.64), c: '#f4f4f0' });
         D.push({ p: subq(q, 0.53, 0.36, 0.62, 0.64), c: '#1e5bb8' });
-        if (blink === 'r') D.push({ p: subq(q, 0.38, 0.8, 0.54, 0.97), c: '#ffb020', flat: true });
-        if (blink === 'l') D.push({ p: subq(q, 0.38, 0.03, 0.54, 0.2), c: '#ffb020', flat: true });
+        if (blink === 'r' || blink === 'lr') D.push({ p: subq(q, 0.38, 0.8, 0.54, 0.97), c: '#ffb020', flat: true });
+        if (blink === 'l' || blink === 'lr') D.push({ p: subq(q, 0.38, 0.03, 0.54, 0.2), c: '#ffb020', flat: true });
       }
       if (k === 7) {
         // frente (u desce): faróis, grade e para-choque
@@ -125,8 +125,8 @@ export function car({ x, y, heading = 0, color = '#e8eef4', brake = false, blink
   if (brake) {
     glows.push({ p: [-0.72, 2.18, 0.67], n: [0, 1, 0], r: 6, c: '#ff3b30' }, { p: [0.72, 2.18, 0.67], n: [0, 1, 0], r: 6, c: '#ff3b30' });
   }
-  if (blink === 'r') glows.push({ p: [0.82, 2.18, 0.58], n: [0, 1, 0], r: 7, c: '#ffb020' }, { p: [0.9, -2.15, 0.52], n: [0, -1, 0], r: 6, c: '#ffb020' }, { p: [1.1, -0.88, 1.0], r: 4, c: '#ffb020' });
-  if (blink === 'l') glows.push({ p: [-0.82, 2.18, 0.58], n: [0, 1, 0], r: 7, c: '#ffb020' }, { p: [-1.1, -0.88, 1.0], r: 4, c: '#ffb020' });
+  if (blink === 'r' || blink === 'lr') glows.push({ p: [0.82, 2.18, 0.58], n: [0, 1, 0], r: 7, c: '#ffb020' }, { p: [0.9, -2.15, 0.52], n: [0, -1, 0], r: 6, c: '#ffb020' }, { p: [1.1, -0.88, 1.0], r: 4, c: '#ffb020' });
+  if (blink === 'l' || blink === 'lr') glows.push({ p: [-0.82, 2.18, 0.58], n: [0, 1, 0], r: 7, c: '#ffb020' }, { p: [-1.1, -0.88, 1.0], r: 4, c: '#ffb020' });
   return tfObj({ parts, glows, shadow: true }, chain(T(x, y), Rz(heading)));
 }
 

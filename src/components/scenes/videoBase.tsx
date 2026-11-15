@@ -24,7 +24,7 @@ export const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
 /** aparece em `a` e some em `b` (meio segundo de transição) */
 export const janela = (lt: number, a: number, b = Infinity, f = 0.4) => ease((lt - a) / f) * (1 - ease((lt - b) / f));
 /** pisca da seta: aceso em metade do tempo */
-export const pisca = (lt: number, lado: 'l' | 'r' | null) => (lado && Math.floor(lt * 3) % 2 === 0 ? lado : null);
+export const pisca = (lt: number, lado: 'l' | 'r' | 'lr' | null) => (lado && Math.floor(lt * 3) % 2 === 0 ? lado : null);
 
 /** etiqueta presa a um ponto da cena */
 export const tag = (pr: Pr, p: V3, text: string, o = 1): ReactNode => {
@@ -228,4 +228,94 @@ export function rastro(pr: Pr, pts: V2[], cor: string, o = 1, ponta = true): Rea
       {ponta && <path d={tri} fill={cor} />}
     </g>
   );
+}
+
+/* ---------------- luzes (lote 4: farol piscando, pisca-alerta) ---------------- */
+
+/** escurece a cena: noite (`o` alto) ou fim de tarde (`o` baixo, cor arroxeada) */
+export const escuro = (o: number, cor = '#070d22'): ReactNode => (o > 0.01 ? <rect x={0} y={0} width={320} height={200} fill={cor} opacity={o} /> : null);
+
+/** luzinha redonda em pixels, presa a um ponto da cena */
+export function luz(pr: Pr, p: V3, r: number, cor: string, k: string | number = 0): ReactNode {
+  const [x, y] = pr(p);
+  return (
+    <g key={k}>
+      <circle cx={x} cy={y} r={r * 2.2} fill={cor} opacity={0.25} />
+      <circle cx={x} cy={y} r={r} fill={cor} />
+    </g>
+  );
+}
+
+/** os dois faróis de um carro em (x, y); `dir` -1 = indo para o norte, 1 = indo para o sul */
+export const farolPar = (pr: Pr, x: number, y: number, dir: 1 | -1, r = 1.6) => [-0.6, 0.6].map((dx) => luz(pr, [x + dx, y + dir * 2.15, 0.75], r, '#fff6c8', `f${dx}`));
+
+/** facho no chão à frente do carro: luz baixa (k = 0) até luz alta (k = 1) */
+export function facho(pr: Pr, x: number, y: number, dir: 1 | -1, k: number, o = 0.3): ReactNode {
+  if (o <= 0.01) return null;
+  const yf = y + dir * 2.1, alcance = lerp(8, 28, k), abre = lerp(2.2, 4.4, k);
+  const pts: V3[] = [[x - 0.7, yf, 0], [x + 0.7, yf, 0], [x + abre, yf + dir * alcance, 0], [x - abre, yf + dir * alcance, 0]];
+  const d = 'M' + pts.map((p) => pr(p).map((v) => v.toFixed(1)).join(' ')).join('L') + 'Z';
+  return <path d={d} fill="#fff4c8" opacity={o} />;
+}
+
+/** triângulo de sinalização no chão, virado para quem vem do sul */
+export function triangulo(x: number, y: number): Obj {
+  const s = 0.75, h = s * 0.87;
+  const fora: V2[] = [[-s / 2, 0.06], [s / 2, 0.06], [0, 0.06 + h]];
+  const dentro: V2[] = [[-s / 4, 0.06 + h * 0.2], [s / 4, 0.06 + h * 0.2], [0, 0.06 + h * 0.62]];
+  return {
+    parts: [
+      box(-0.3, -0.12, 0, 0.3, 0.12, 0.05, '#2d333c'),
+      extrude(fora, 'y', 0, 0.04, (k) => (k === 'cap1' ? '#ef2c30' : '#b8322c')),
+      extrude(dentro, 'y', 0.041, 0.05, '#f4f1e6'),
+    ].map((pt) => tfObj({ parts: [pt] }, T(x, y)).parts[0]),
+    shadow: true,
+  };
+}
+
+/** relógio em pixels; `k` = voltas do ponteiro */
+export function relogio(x: number, y: number, k: number, o = 1, r = 9): ReactNode {
+  if (o <= 0.01) return null;
+  const a = k * Math.PI * 2 - Math.PI / 2, b = (k / 12) * Math.PI * 2 - Math.PI / 2;
+  return (
+    <g opacity={o}>
+      <circle cx={x} cy={y} r={r} fill="#fff" stroke="#22313f" strokeWidth={2} />
+      <line x1={x} y1={y} x2={x + Math.cos(b) * r * 0.5} y2={y + Math.sin(b) * r * 0.5} stroke="#22313f" strokeWidth={2} strokeLinecap="round" />
+      <line x1={x} y1={y} x2={x + Math.cos(a) * r * 0.78} y2={y + Math.sin(a) * r * 0.78} stroke="#d93a35" strokeWidth={1.4} strokeLinecap="round" />
+    </g>
+  );
+}
+
+/* ---------------- rua de mão dupla com meio-fio (parar, estacionar, portas) ---------------- */
+
+/** meia largura do asfalto; a calçada vai de RA até RC */
+export const RA = 3.4, RC = 6.2;
+/** x do carro estacionado junto ao meio-fio da direita */
+export const XM = RA - 1.15;
+
+export function ruaChao(extra: Part[] = []): Part[] {
+  return [
+    ...grassPatches(-40, -60, 40, 40, 8),
+    ...asphalt(-RA, -60, RA, 40, 2),
+    lines([{ p: [[0, -60, 0], [0, 40, 0]], c: '#eeeeea', w: 0.9, dash: '5 5' }]),
+    ...extra,
+    ...sidewalk(RA, -60, RC, 40),
+    ...sidewalk(-RC, -60, -RA, 40),
+  ];
+}
+
+/** `baixo`: prédios do lado esquerdo baixos, para a câmera ver o meio-fio da direita por cima deles */
+export function ruaObjs(seed = 0, baixo = false): Obj[] {
+  const r = rng(40 + seed);
+  const cores = ['#9fc3e6', '#f1dca6', '#e9a47c', '#d9e3f0', '#cfe7c4', '#f1d0b0'];
+  const out: Obj[] = [];
+  for (let y = -52; y < 30; y += 11) {
+    out.push(building({ x0: RC, y0: y, x1: RC + 8, y1: y + 10, h: 6 + Math.round(r() * 5), color: cores[Math.floor(r() * cores.length)], shop: 'w', seed: Math.floor(r() * 9) }));
+    out.push(building({ x0: -RC - 8, y0: y + 3, x1: -RC, y1: y + 13, h: baixo ? 2.6 + Math.round(r() * 1) : 6 + Math.round(r() * 5), color: cores[Math.floor(r() * cores.length)], shop: 'e', seed: Math.floor(r() * 9) }));
+  }
+  for (let y = -46; y < 30; y += 22) {
+    out.push(tree(RA + 1.2, y, 0.8, Math.floor(r() * 6)));
+    out.push(lampPost(-RA - 1.1, y + 11, 1));
+  }
+  return out;
 }
