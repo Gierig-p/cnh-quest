@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores' | 'marcas-linhas' | 'marcas-transversais' | 'semaforo' | 'semaforo-pisca';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -390,6 +390,57 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'A vermelha marca a ciclovia e a ciclofaixa.',
       'A azul é o fundo do símbolo nas vagas especiais, como as de pessoa com deficiência.',
       'Para guardar: amarelo divide quem vai de quem vem. Branco organiza quem vai junto.',
+    ],
+  },
+  // cartão c2-marcas-linhas (MBST vol. IV, item 4)
+  'marcas-linhas': {
+    falas: [
+      'O desenho da linha muda tudo. Linha cheia é um muro pintado. Linha tracejada é uma porta, que pode ser usada com cuidado.',
+      'A amarela contínua, simples ou dupla, proíbe ultrapassar e mudar de lado.',
+      'Só pode cruzar para entrar ou sair de um imóvel à beira da via.',
+      'A amarela tracejada mostra onde pode ultrapassar e mudar de lado, sempre com segurança.',
+      'A branca contínua, entre faixas do mesmo sentido, proíbe ultrapassar e trocar de faixa.',
+      'A branca tracejada só organiza as faixas. Pode trocar de faixa com cuidado e dando seta.',
+      'Na estrada com amarela contínua no meio, você não ultrapassa o caminhão, mesmo que ele esteja devagar.',
+      'Para guardar: cheia, não cruza. Tracejada, cruza com cuidado.',
+    ],
+  },
+  // cartão c2-marcas-transversais (MBST vol. IV, itens 5.1, 5.4 e 8.2.8)
+  'marcas-transversais': {
+    falas: [
+      'Algumas pinturas atravessam a pista de um lado ao outro. Elas mostram onde parar e por onde as pessoas passam.',
+      'A linha de retenção é uma linha branca larga. É o limite onde você deve parar, como no semáforo vermelho ou na placa PARE.',
+      'A faixa de pedestres pode ser zebrada ou ter duas linhas paralelas. Ela dá prioridade de passagem aos pedestres, nos casos da lei.',
+      'No sinal vermelho, você para antes da linha de retenção, sem ficar em cima da faixa de pedestres.',
+      'E a vaga com o símbolo de pessoa idosa é reservada a carros dirigidos por pessoas com sessenta anos ou mais.',
+      'Para guardar: pare antes da linha. A faixa é do pedestre.',
+    ],
+  },
+  // cartão c2-semaforo (MBST vol. V, Tabela 3.1 e itens 2.2.2 e 2.2.3)
+  semaforo: {
+    falas: [
+      'O semáforo conversa com você por cores. Cada cor pede uma atitude.',
+      'Verde: você pode seguir, respeitando as regras.',
+      'Amarelo: o seu direito de passar está acabando. Pare, a não ser que não dê para parar com segurança.',
+      'Vermelho: proibido passar. Você é obrigado a parar.',
+      'As luzes ficam nesta ordem: vermelho, amarelo e verde, de cima para baixo. No semáforo deitado, da esquerda para a direita.',
+      'E elas acendem nesta sequência: verde, amarelo, vermelho, e de volta ao verde.',
+      'O amarelo acendeu e você ainda está longe? Freie com calma e pare.',
+      'Se você já está quase em cima da linha e frear seria perigoso, siga com atenção.',
+      'Para guardar: amarelo não é acelera. É pare, se der para parar com segurança.',
+    ],
+  },
+  // cartão c2-semaforo-pisca (MBST vol. V, Tabelas 3.1 e 3.2 e item 2.2.3)
+  'semaforo-pisca': {
+    falas: [
+      'Às vezes a luz fica piscando. Isso também é um recado, diferente da luz acesa direto.',
+      'Amarelo piscando, para os carros, quer dizer perigo ou obstáculo. Reduza a velocidade e siga as regras.',
+      'De madrugada, o cruzamento está com amarelo piscando. Ninguém tem o verde.',
+      'Chegue devagar, olhe para os lados e siga as regras de preferência.',
+      'No semáforo de pedestres, o vermelho piscando avisa: quem ainda não começou a atravessar não começa.',
+      'Quem já está atravessando termina a travessia.',
+      'A sequência dele é: verde, vermelho piscando, vermelho, e de volta ao verde.',
+      'Para guardar: pisca-pisca amarelo, devagar e atenção.',
     ],
   },
 };

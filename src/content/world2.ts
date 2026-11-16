@@ -245,6 +245,13 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     example: 'Na estrada de mão dupla com linha amarela contínua no centro, você não ultrapassa o caminhão da frente, mesmo que ele esteja devagar.',
     remember: 'Cheia: não cruza. Tracejada: cruza com cuidado.',
     visual: { kind: 'scene', scene: 'linha-amarela-continua', alt: 'Pista de mão dupla com linha amarela contínua no centro' },
+    video: {
+      id: 'marcas-linhas',
+      resumo: [
+        'Amarela contínua: não ultrapassa nem muda de lado (só para entrar ou sair de um imóvel). Amarela tracejada: pode, com segurança.',
+        'Branca contínua: não troca de faixa. Branca tracejada: troca com cuidado e seta.',
+      ],
+    },
     sources: [
       { sourceId: 'mbst4', locator: 'item 4 — Marcas longitudinais' },
       { sourceId: 'mbst4', locator: 'item 4.1.2 — LFO-2' },
@@ -267,6 +274,13 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     example: 'No semáforo vermelho, você para antes da linha de retenção, sem ficar em cima da faixa de pedestres.',
     remember: 'Pare antes da linha; a faixa é do pedestre.',
     visual: { kind: 'scene', scene: 'linha-retencao', alt: 'Carro parado antes da linha de retenção, com faixa de pedestres e semáforo vermelho' },
+    video: {
+      id: 'marcas-transversais',
+      resumo: [
+        'Linha de retenção: o limite onde você para. Faixa de pedestres (zebrada ou com duas linhas): prioridade de quem atravessa.',
+        'No vermelho, pare antes da linha, sem ficar em cima da faixa. Vaga com símbolo de idoso: 60 anos ou mais.',
+      ],
+    },
     sources: [
       { sourceId: 'mbst4', locator: 'item 5.1 — LRE' },
       { sourceId: 'mbst4', locator: 'item 5.4 — FTP' },
@@ -294,6 +308,13 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     example: 'O amarelo acende quando você ainda está longe: freie com calma e pare. Se ele acender quando você já está quase em cima da linha e frear seria perigoso, siga com atenção.',
     remember: 'Amarelo não é "acelera": é "pare, se der para parar com segurança".',
     visual: { kind: 'scene', scene: 'semaforo-amarelo', alt: 'Semáforo com a luz amarela acesa e um carro se aproximando' },
+    video: {
+      id: 'semaforo',
+      resumo: [
+        'Verde: segue. Amarelo: pare, se der com segurança. Vermelho: proibido passar.',
+        'De cima para baixo: vermelho, amarelo, verde. Sequência: verde, amarelo, vermelho e verde de novo.',
+      ],
+    },
     sources: [
       { sourceId: 'mbst5', locator: 'Tabela 3.1 — Cores e sinais em focos circulares' },
       { sourceId: 'mbst5', locator: 'item 2.2.2 — Tipos de semáforos' },
@@ -315,6 +336,13 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     ],
     example: 'De madrugada, um cruzamento está com amarelo piscando. Ninguém tem "o verde": chegue devagar, olhe para os lados e siga as regras de preferência.',
     remember: 'Pisca-pisca amarelo: devagar e atenção.',
+    video: {
+      id: 'semaforo-pisca',
+      resumo: [
+        'Amarelo piscando: perigo ou obstáculo. Reduza, olhe para os lados e siga a preferência.',
+        'Pedestre com vermelho piscando: não comece a atravessar; quem já está na faixa termina.',
+      ],
+    },
     sources: [
       { sourceId: 'mbst5', locator: 'Tabela 3.1 — amarela intermitente' },
       { sourceId: 'mbst5', locator: 'Tabela 3.2 — vermelha intermitente (pedestres)' },

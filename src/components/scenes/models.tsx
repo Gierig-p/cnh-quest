@@ -306,7 +306,7 @@ export function lampPost(x: number, y: number, dir = -1): Obj {
 }
 
 /** semáforo virado para `face` (0 = as luzes olham para o sul) */
-export function trafficLight(x: number, y: number, luz: 'vermelho' | 'amarelo' | 'verde', face = 0): Obj {
+export function trafficLight(x: number, y: number, luz: 'vermelho' | 'amarelo' | 'verde' | 'apagado', face = 0): Obj {
   const pole = '#3d4652';
   const on = { vermelho: '#ff3b30', amarelo: '#ffc83d', verde: '#22d36b' };
   const off = { vermelho: '#5a2a2a', amarelo: '#5a4a22', verde: '#22472f' };
@@ -325,7 +325,7 @@ export function trafficLight(x: number, y: number, luz: 'vermelho' | 'amarelo' |
     // pala em cima de cada luz
     box(-0.2, 0.18, 3.28, 0.2, 0.32, 3.3, '#2b323b'),
   ];
-  const glows: Glow[] = [{ p: [0, 0.19, 2.25 + (0.08 + { verde: 0, amarelo: 1, vermelho: 2 }[luz] * 0.31 + 0.12) * 1.1], n: [0, 1, 0], r: 11, c: on[luz] }];
+  const glows: Glow[] = luz === 'apagado' ? [] : [{ p: [0, 0.19, 2.25 + (0.08 + { verde: 0, amarelo: 1, vermelho: 2 }[luz] * 0.31 + 0.12) * 1.1], n: [0, 1, 0], r: 11, c: on[luz] }];
   return tfObj({ parts, glows, shadow: true }, chain(T(x, y), Rz(face)));
 }
 /** oval (círculo achatado) dentro de um quadrilátero, em coordenadas (u, v) */

@@ -53,6 +53,10 @@ const carregar: Record<VideoId, () => Promise<VideoDef>> = {
   indicacao: () => import('./scenes/VideoIndicacao').then(paraDef),
   distancias: () => import('./scenes/VideoDistancias').then(paraDef),
   'marcas-cores': () => import('./scenes/VideoMarcasCores').then(paraDef),
+  'marcas-linhas': () => import('./scenes/VideoMarcasLinhas').then(paraDef),
+  'marcas-transversais': () => import('./scenes/VideoMarcasTransversais').then(paraDef),
+  semaforo: () => import('./scenes/VideoSemaforo').then(paraDef),
+  'semaforo-pisca': () => import('./scenes/VideoSemaforoPisca').then(paraDef),
 };
 
 const cache: Partial<Record<VideoId, VideoDef>> = {};

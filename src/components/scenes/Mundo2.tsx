@@ -43,7 +43,7 @@ export function raios(x: number, y: number, r: number, len: number, cor: string,
 }
 
 /** semáforo de carros desenhado grande (24 x 60), com a luz pedida acesa */
-function SemaforoDesenho({ luz, pisca = false }: { luz: 'vermelho' | 'amarelo' | 'verde'; pisca?: boolean }) {
+export function SemaforoDesenho({ luz, pisca = false }: { luz: 'vermelho' | 'amarelo' | 'verde' | 'apagado'; pisca?: boolean }) {
   const on = { vermelho: '#ff3b30', amarelo: '#ffc83d', verde: '#22d36b' };
   const off = { vermelho: '#5a2a2a', amarelo: '#5a4a22', verde: '#22472f' };
   const ys = { vermelho: 11, amarelo: 30, verde: 49 };
@@ -56,19 +56,21 @@ function SemaforoDesenho({ luz, pisca = false }: { luz: 'vermelho' | 'amarelo' |
           <circle cx={12} cy={ys[k]} r={7} fill={k === luz ? on[k] : off[k]} />
         </g>
       ))}
-      {pisca && raios(12, ys[luz], 12, 5, '#e0a800')}
+      {pisca && luz !== 'apagado' && raios(12, ys[luz], 12, 5, '#e0a800')}
     </g>
   );
 }
 
 /** foco de pedestres desenhado grande (30 x 60): boneco vermelho parado em cima, verde andando embaixo */
-function FocoPedestreDesenho({ pisca = false }: { pisca?: boolean }) {
+export function FocoPedestreDesenho({ pisca = false, luz = 'vermelho' }: { pisca?: boolean; luz?: 'vermelho' | 'verde' | 'apagado' }) {
+  const ver = luz === 'vermelho' ? '#ff4d4f' : '#5a2a2a', vd = luz === 'verde' ? '#22d36b' : '#2f5a3f';
   return (
     <g>
       <rect x={0} y={0} width={30} height={60} rx={5} fill="#1d242c" />
-      <circle cx={15} cy={16} r={14} fill="#ff4d4f" opacity={0.22} />
+      {luz === 'vermelho' && <circle cx={15} cy={16} r={14} fill="#ff4d4f" opacity={0.22} />}
+      {luz === 'verde' && <circle cx={15} cy={44} r={14} fill="#22d36b" opacity={0.22} />}
       <rect x={4} y={4} width={22} height={24} rx={3} fill="#3b1c1c" />
-      <g fill="#ff4d4f">
+      <g fill={ver}>
         <circle cx={15} cy={9} r={2.6} />
         <rect x={11.6} y={12} width={6.8} height={8.5} rx={1.5} />
         <rect x={9.4} y={12.4} width={2.1} height={7} rx={1} />
@@ -77,7 +79,7 @@ function FocoPedestreDesenho({ pisca = false }: { pisca?: boolean }) {
         <rect x={15.6} y={20.3} width={2.6} height={6.5} />
       </g>
       <rect x={4} y={32} width={22} height={24} rx={3} fill="#1a3024" />
-      <g fill="#2f5a3f" stroke="#2f5a3f" strokeWidth={2.4} strokeLinecap="round">
+      <g fill={vd} stroke={vd} strokeWidth={2.4} strokeLinecap="round">
         <circle cx={16} cy={36.5} r={2.4} />
         <line x1={15.5} y1={40.5} x2={14.8} y2={46.5} />
         <line x1={14.8} y1={46.5} x2={10.5} y2={53} />
@@ -85,7 +87,7 @@ function FocoPedestreDesenho({ pisca = false }: { pisca?: boolean }) {
         <line x1={15.5} y1={41.5} x2={11.5} y2={45.5} />
         <line x1={15.5} y1={41.5} x2={19.5} y2={45} />
       </g>
-      {pisca && raios(15, 16, 15, 5, '#e0a800')}
+      {pisca && luz === 'vermelho' && raios(15, 16, 15, 5, '#e0a800')}
     </g>
   );
 }
@@ -266,24 +268,26 @@ export const SemaforoAmareloPiscando = (p: CenaProps) => semaforo(true, p);
 /* ---------------- foco de pedestres ---------------- */
 
 /** foco de pedestres num poste; a frente olha para o sul (`face` gira como no semáforo) */
-function focoPedestre(x: number, y: number): Obj {
+function focoPedestre(x: number, y: number, luz: 'vermelho' | 'verde' | 'apagado' = 'vermelho'): Obj {
   const parts: Part[] = [
     box(-0.06, -0.06, 0.15, 0.06, 0.06, 2.9, '#3d4652'),
     box(-0.2, -0.1, 2.0, 0.2, 0.14, 2.85, '#2b323b', (k, q) => {
       if (k !== 's') return undefined;
       const D: Dec[] = [
-        { p: subq(q, 0.14, 0.53, 0.86, 0.94), c: '#ff4d4f', flat: true },
-        { p: subq(q, 0.14, 0.06, 0.86, 0.47), c: '#1a3024' },
+        { p: subq(q, 0.14, 0.53, 0.86, 0.94), c: luz === 'vermelho' ? '#ff4d4f' : '#3b1c1c', flat: luz === 'vermelho' },
+        { p: subq(q, 0.14, 0.06, 0.86, 0.47), c: luz === 'verde' ? '#22d36b' : '#1a3024', flat: luz === 'verde' },
       ];
       return D;
     }),
   ];
-  return { parts: parts.map((pt) => ({ ...pt, faces: pt.faces.map((f) => ({ ...f, p: f.p.map(([a, b, c]): V3 => [a + x, b + y, c]), dec: f.dec?.map((d) => ({ ...d, p: d.p.map(([a, b, c]): V3 => [a + x, b + y, c]) })) })), center: [pt.center[0] + x, pt.center[1] + y, pt.center[2]] as V3 })), shadow: true, glows: [{ p: [x, y + 0.15, 2.62], n: [0, 1, 0], r: 9, c: '#ff4d4f' }] };
+  return { parts: parts.map((pt) => ({ ...pt, faces: pt.faces.map((f) => ({ ...f, p: f.p.map(([a, b, c]): V3 => [a + x, b + y, c]), dec: f.dec?.map((d) => ({ ...d, p: d.p.map(([a, b, c]): V3 => [a + x, b + y, c]) })) })), center: [pt.center[0] + x, pt.center[1] + y, pt.center[2]] as V3 })), shadow: true, glows: luz === 'apagado' ? [] : [{ p: [x, y + 0.15, luz === 'vermelho' ? 2.62 : 2.22], n: [0, 1, 0], r: 9, c: luz === 'vermelho' ? '#ff4d4f' : '#22d36b' }] };
 }
 
-/** você a pé, na calçada, esperando para atravessar; do outro lado o boneco vermelho pisca */
-export function SemaforoPedestrePiscando(p: CenaProps) {
-  const r0 = -7.5, r1 = -0.5; // rua leste-oeste
+/** rua com faixa de pedestres e foco de pedestres do outro lado (chão, objetos e câmera) */
+export const PED_R0 = -7.5, PED_R1 = -0.5;
+export const PED_PESSOA = PEDESTRE;
+export function ruaPedestre(foco: 'vermelho' | 'verde' | 'apagado' = 'vermelho', comPessoa = true) {
+  const r0 = PED_R0, r1 = PED_R1; // rua leste-oeste
   const ground = [
     ...grassPatches(-40, -40, 40, 40, 3),
     ...asphalt(-40, r0, 40, r1, 8),
@@ -302,11 +306,18 @@ export function SemaforoPedestrePiscando(p: CenaProps) {
     tree(-6, r0 - 2.2, 0.9, 1),
     tree(7, r0 - 2.2, 0.95, 2),
     lampPost(-9, r0 - 2.6, 1),
-    focoPedestre(2.3, r0 - 0.6),
+    focoPedestre(2.3, r0 - 0.6, foco),
     car({ x: -5.2, y: (r0 + r1) / 2 + 1.75, heading: Math.PI / 2, color: '#e0412f' }),
-    person(-0.3, 1.2, PEDESTRE, 0, 0, 1.3),
+    ...(comPessoa ? [person(-0.3, 1.2, PEDESTRE, 0, 0, 1.3)] : []),
   ];
   const cam = camLook(0, -4.5, 0.8, 12, 30, 12);
+  return { cam, ground, objs };
+}
+
+/** você a pé, na calçada, esperando para atravessar; do outro lado o boneco vermelho pisca */
+export function SemaforoPedestrePiscando(p: CenaProps) {
+  const r0 = PED_R0;
+  const { cam, ground, objs } = ruaPedestre();
   return cena(cam, ground, objs, (pr) => {
     const [fx, fy] = pr([2.3, r0 - 0.45, 2.62]);
     const [tx, ty] = pr([-0.3, 1.2, 2.25]);
@@ -347,7 +358,7 @@ const marcaIdoso = (
 );
 
 /** estacionamento com vagas lado a lado; a do meio está livre e tem a marca do idoso */
-export function VagaIdoso(p: CenaProps) {
+export function vagaIdoso() {
   const fundo = -6, frente = -0.6, larg = 2.6;
   const vagas = [-2, -1, 0, 1, 2].map((i) => i * larg);
   const ground: Part[] = [
@@ -372,6 +383,11 @@ export function VagaIdoso(p: CenaProps) {
     car({ x: 0, y: 4.2, color: VOCE }),
   ];
   const cam = camLook(0, -1.5, 0, 0, 48, 13);
+  return { cam, ground, objs };
+}
+export const MARCA_IDOSO = marcaIdoso;
+export function VagaIdoso(p: CenaProps) {
+  const { cam, ground, objs } = vagaIdoso();
   return cena(cam, ground, objs, (pr) => voce(pr, 0, 4.2), p);
 }
 
