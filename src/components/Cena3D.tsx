@@ -54,6 +54,20 @@ const CENAS3D: Partial<Record<SceneId, Comp>> = {
   'carro-quebrado': de3((m) => m.CarroQuebrado),
   'estrada-terra': de3((m) => m.EstradaTerra),
   'rodovia-dupla-80': de3((m) => m.RodoviaDupla80),
+  'congestionamento-acostamento': de3((m) => m.CongestionamentoAcostamento),
+  'carro-bicicleta': de3((m) => m.CarroBicicleta),
+  'sendo-ultrapassado': de3((m) => m.SendoUltrapassado),
+  'cruzamento-ultrapassar': de3((m) => m.CruzamentoUltrapassar),
+  'verde-fila-parada': de3((m) => m.VerdeFilaParada),
+  'vermelho-direita': de3((m) => m.VermelhoDireita),
+  'rodovia-simples': de3((m) => m.RodoviaSimples),
+  'tunel-dia': de3((m) => m.TunelDia),
+  'passageiro-desce': de3((m) => m.PassageiroDesce),
+  'carga-descarga': de3((m) => m.CargaDescarga),
+  'rodovia-dupla': de3((m) => m.RodoviaDupla),
+  'rodovia-dupla-caminhao': de3((m) => m.RodoviaDuplaCaminhao),
+  'rodovia-placa-100': de3((m) => m.RodoviaPlaca100),
+  'crianca-carro': de3((m) => m.CriancaCarro),
 };
 
 export const temCena3D = (s: SceneId) => s in CENAS3D;

@@ -93,7 +93,22 @@ export type SceneId =
   | 'carro-padaria'
   | 'carro-quebrado'
   | 'estrada-terra'
-  | 'rodovia-dupla-80';
+  | 'rodovia-dupla-80'
+  // Mundo 3, lote 2 (15/11)
+  | 'congestionamento-acostamento'
+  | 'carro-bicicleta'
+  | 'sendo-ultrapassado'
+  | 'cruzamento-ultrapassar'
+  | 'verde-fila-parada'
+  | 'vermelho-direita'
+  | 'rodovia-simples'
+  | 'tunel-dia'
+  | 'passageiro-desce'
+  | 'carga-descarga'
+  | 'rodovia-dupla'
+  | 'rodovia-dupla-caminhao'
+  | 'rodovia-placa-100'
+  | 'crianca-carro';
 
 /**
  * Uma linha da situação narrada ("Na rua"): uma fala do narrador ou um som.

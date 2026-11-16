@@ -6,12 +6,13 @@
  */
 import type { ReactNode } from 'react';
 import { box, camLook, circle, extrude, lines, rect, rng, scale, subq, type Dec, type Obj, type Part, type V2, type V3 } from './engine';
-import { asphalt, bench, building, bush, car, grassPatches, lampPost, person, sidewalk, tree, wall, zebra, type Look } from './models';
+import { asphalt, bench, building, bush, car, cyclist, grassPatches, lampPost, person, sidewalk, tree, wall, zebra, type Look } from './models';
 import { utilitario } from './veiculos';
 import { SignCallout, signPost, signTop } from './signs';
 import { Tag } from './iso';
 import { avenida, avenidaObjs, bairro, cena, cruzamento, voce, type CenaProps } from './Mundo1';
 import { ACOST, CAM_ESTRADA, campo, estrada, raios } from './Mundo2';
+import { CAM as CAM_SEMAFORO, PARA, balaoLuz, chaoSemaforo, eu, objsSemaforo } from './cruzSemaforo';
 
 const VOCE = '#e9eef3';
 const TIRE = '#262b33';
@@ -479,7 +480,12 @@ export const defensaY = (x: number): Obj => {
 
 /** rodovia de pista dupla (canteiro no meio) com a placa de 80 km/h */
 export function RodoviaDupla80(p: CenaProps) {
-  const placa = { x: 10.6, y: -9, code: 'R-19' as const, speed: 80, face: 0 };
+  return rodoviaDupla(p, 80);
+}
+
+/** rodovia de pista dupla; `velocidade` põe a placa R-19, e `caminhao` troca o seu carro por um caminhão */
+function rodoviaDupla(p: CenaProps, velocidade?: number, caminhao = false) {
+  const placa = { x: 10.6, y: -9, code: 'R-19' as const, speed: velocidade ?? 80, face: 0 };
   const ground = DUPLA_CHAO;
   const objs: Obj[] = [
     defensaY(0),
@@ -488,18 +494,224 @@ export function RodoviaDupla80(p: CenaProps) {
     tree(14, -24, 1.2, 3),
     tree(-15, -30, 1.1, 4),
     bush(12.5, -14, 0.9, 1),
-    signPost(placa),
+    ...(velocidade ? [signPost(placa)] : []),
     car({ x: -2.75, y: -30, heading: Math.PI, color: '#e0412f' }),
     car({ x: -6.25, y: -12, heading: Math.PI, color: '#8f98a3' }),
     car({ x: 2.75, y: -22, color: '#4f7fc4' }),
-    car({ x: 6.2, y: 1.5, color: VOCE }),
+    caminhao ? utilitario({ x: 6.2, y: 0.5, tipo: 'caminhao' }) : car({ x: 6.2, y: 1.5, color: VOCE }),
   ];
   const cam = camLook(3.5, -7, 0, 12, 34, 10);
   return cena(cam, ground, objs, (pr) => (
     <>
-      <SignCallout at={pr(signTop(placa))} code="R-19" speed={80} dx={34} dy={-24} />
-      {voce(pr, 6.2, 1.5)}
+      {velocidade && <SignCallout at={pr(signTop(placa))} code="R-19" speed={velocidade} dx={34} dy={-24} />}
+      {caminhao ? voce(pr, 6.2, 0.5, 3.9) : voce(pr, 6.2, 1.5)}
     </>
   ), p);
 }
 
+/** rodovia de pista dupla, sem placa de velocidade */
+export function RodoviaDupla(p: CenaProps) {
+  return rodoviaDupla(p);
+}
+
+/** você dirige um caminhão numa rodovia de pista dupla, sem placa */
+export function RodoviaDuplaCaminhao(p: CenaProps) {
+  return rodoviaDupla(p, undefined, true);
+}
+
+/** rodovia com a placa de 100 km/h */
+export function RodoviaPlaca100(p: CenaProps) {
+  return rodoviaDupla(p, 100);
+}
+
+
+/* ---------------- lote 2 (15/11/2026): mais questões com imagem ---------------- */
+
+/** rua de mão dupla com calçadas e prédios dos dois lados, para as cenas junto ao meio-fio */
+function ruaMeioFio(seed = 0): { ground: Part[]; objs: Obj[] } {
+  const a = 3.4, c = 6.2;
+  const ground: Part[] = [
+    ...grassPatches(-40, -50, 40, 40, 8 + seed),
+    ...asphalt(-a, -50, a, 40, 2 + seed),
+    lines([{ p: [[0, -50, 0], [0, 40, 0]], c: '#eeeeea', w: 0.9, dash: '5 5' }]),
+    ...sidewalk(a, -50, c, 40),
+    ...sidewalk(-c, -50, -a, 40),
+  ];
+  const objs: Obj[] = [
+    building({ x0: c, y0: -22, x1: c + 8, y1: -11, h: 10, color: '#9fc3e6', shop: 'w', seed: 2 + seed }),
+    building({ x0: c, y0: -10.5, x1: c + 7, y1: 2, h: 7, color: '#f1dca6', shop: 'w', seed: 5 + seed }),
+    building({ x0: -c - 8, y0: -24, x1: -c, y1: -10, h: 11, color: '#cfe7c4', shop: 'e', seed: 3 + seed }),
+    building({ x0: -c - 8, y0: -9, x1: -c, y1: 4, h: 8, color: '#d9e3f0', shop: 'e', seed: 6 + seed }),
+    tree(-4.8, -3, 0.9, 1 + seed),
+    lampPost(4.8, -15, -1),
+  ];
+  return { ground, objs };
+}
+const CAM_MEIO_FIO = camLook(3.6, -4, 0, -40, 40, 17);
+
+/** congestionamento numa rodovia com acostamento: a fila parada e você nela */
+export function CongestionamentoAcostamento(p: CenaProps) {
+  const cores = ['#4f7fc4', '#8f98a3', '#e0412f', '#2fa36b', '#f2a13a'];
+  const fila = [-4, -9.5, -15, -20.5, -26].map((y, i) => car({ x: 1.75, y, color: cores[i], brake: true }));
+  const objs = [...campo(10), ...fila, car({ x: -1.75, y: -18, heading: Math.PI, color: '#d9e3f0' }), car({ x: 1.75, y: 1.5, color: VOCE, brake: true })];
+  return cena(CAM_ESTRADA, estrada('tracejada'), objs, (pr) => voce(pr, 1.75, 1.5), p);
+}
+
+/** um carro e uma bicicleta na mesma rua */
+export function CarroBicicleta(p: CenaProps) {
+  const objs = [...avenidaObjs(2), cyclist(2.6, -5.5, 0.6, 0), car({ x: 1.6, y: 3, color: VOCE }), car({ x: -1.8, y: -22, heading: Math.PI, color: '#4f7fc4' })];
+  const cam = camLook(0.8, -3, 0, 12, 40, 10.5);
+  return cena(cam, avenida(), objs, (pr) => {
+    const [bx, by] = pr([2.6, -5.5, 1.9]);
+    return (
+      <>
+        <Tag x={bx} y={by - 8} text="Bicicleta" />
+        {voce(pr, 1.6, 3)}
+      </>
+    );
+  }, p);
+}
+
+/** você na faixa da direita; um carro passa por você pela faixa da esquerda */
+export function SendoUltrapassado(p: CenaProps) {
+  const objs = [...avenidaObjs(1), car({ x: 1.8, y: -1, color: VOCE }), car({ x: -1.8, y: -2.6, color: '#e0412f' }), car({ x: 1.8, y: -20, color: '#8f98a3' })];
+  const cam = camLook(0, -3, 0, 12, 40, 11);
+  return cena(cam, avenida(), objs, (pr) => voce(pr, 1.8, -1), p);
+}
+
+/** atrás de um caminhão devagar, chegando perto de um cruzamento; ninguém vem de frente */
+export function CruzamentoUltrapassar(p: CenaProps) {
+  const cy = -14;
+  const objs: Obj[] = [...bairro(cy, 3), utilitario({ x: 1.75, y: -3.5, tipo: 'caminhao' }), car({ x: 1.75, y: 6, color: VOCE })];
+  const cam = camLook(1.2, -6, 0, 12, 40, 12.5);
+  return cena(cam, cruzamento(cy), objs, (pr) => {
+    const [cx, cyy] = pr([-4.5, cy, 0.5]);
+    return (
+      <>
+        <Tag x={cx} y={cyy - 6} text="Cruzamento" />
+        {voce(pr, 1.75, 6)}
+      </>
+    );
+  }, p);
+}
+
+/** sinal verde para você, mas a fila do outro lado do cruzamento está parada */
+export function VerdeFilaParada(p: CenaProps) {
+  const cores = ['#4f7fc4', '#8f98a3', '#2fa36b'];
+  const fila = [-19.6, -25, -30.4].map((y, i) => car({ x: 1.75, y, color: cores[i], brake: true }));
+  const cam = camLook(1.4, -13, 0.6, 12, 42, 9.5);
+  return cena(cam, chaoSemaforo(), objsSemaforo('verde', [...fila, eu(0.8)]), (pr) => {
+    const [fx, fy] = pr([1.75, -25, 1.8]);
+    return (
+      <>
+        <Tag x={fx} y={fy - 8} text="Fila parada" />
+        {balaoLuz(pr, 'verde')}
+        {voce(pr, 1.75, 0.8)}
+      </>
+    );
+  }, p);
+}
+
+/** você parado no sinal vermelho, com a seta da direita ligada; a rua está vazia */
+export function VermelhoDireita(p: CenaProps) {
+  return cena(CAM_SEMAFORO, chaoSemaforo(), objsSemaforo('vermelho', [eu(PARA, true, 'r')]), (pr) => (
+    <>
+      {balaoLuz(pr, 'vermelho')}
+      {voce(pr, 1.75, PARA)}
+    </>
+  ), p);
+}
+
+/** rodovia de pista simples, de dia, fora da cidade */
+export function RodoviaSimples(p: CenaProps) {
+  const objs = [...campo(11), car({ x: 1.75, y: -18, color: '#8f98a3' }), car({ x: -1.75, y: -28, heading: Math.PI, color: '#4f7fc4' }), car({ x: 1.75, y: 1.5, color: VOCE })];
+  return cena(CAM_ESTRADA, estrada('tracejada'), objs, (pr) => voce(pr, 1.75, 1.5), p);
+}
+
+/** a entrada de um túnel na estrada, num dia de sol */
+export function TunelDia(p: CenaProps) {
+  const y0 = -15;
+  const morro = box(-45, -60, 0, 45, y0, 8.5, (k) => (k === 'top' ? '#8cc47a' : '#7a9c5e'));
+  const morro2 = box(-45, -60, 8.5, 45, y0 - 6, 12, (k) => (k === 'top' ? '#94c982' : '#83a866'));
+  const boca = box(-6.6, y0, 0, 6.6, y0 + 0.6, 7, '#b3b8bd', (k, q) => {
+    if (k !== 's') return undefined;
+    const D: Dec[] = [{ p: subq(q, 0.06, 0, 0.94, 0.8), c: '#151a20' }];
+    for (const u of [0.2, 0.4, 0.6, 0.8]) D.push({ p: subq(q, u - 0.02, 0.7, u + 0.02, 0.74), c: '#ffd76a' });
+    D.push({ p: subq(q, 0, 0.88, 1, 0.92), c: '#8d949a' });
+    return D;
+  });
+  const cerca: Obj[] = [];
+  for (const x of [-9, 9]) {
+    cerca.push({ parts: [lines([{ p: [[x, y0 + 0.8, 0.95], [x, 40, 0.95]], c: '#8a6a48', w: 0.8 }, { p: [[x, y0 + 0.8, 0.55], [x, 40, 0.55]], c: '#8a6a48', w: 0.7 }])] });
+    for (let y = y0 + 2; y < 30; y += 4) cerca.push({ parts: [box(x - 0.06, y - 0.06, 0, x + 0.06, y + 0.06, 1.05, '#8a6a48')], shadow: true });
+  }
+  const objs: Obj[] = [
+    { parts: [morro2] },
+    { parts: [morro] },
+    { parts: [boca] },
+    ...cerca,
+    tree(-12, y0 + 4, 1, 2),
+    tree(13, y0 + 5, 1.1, 3),
+    tree(-13, 4, 1.1, 1),
+    bush(11, 8, 0.9, 2),
+    car({ x: 1.75, y: 1.5, color: VOCE }),
+  ];
+  const cam = camLook(1.2, -6, 1.5, 10, 26, 11);
+  return cena(cam, estrada('tracejada'), objs, (pr) => {
+    const [tx, ty] = pr([0, y0, 7.6]);
+    return (
+      <>
+        <Tag x={tx} y={ty - 6} text="Túnel" />
+        {voce(pr, 1.75, 1.5)}
+      </>
+    );
+  }, p);
+}
+
+/** seu carro encostado no meio-fio; um passageiro desce para a calçada */
+export function PassageiroDesce(p: CenaProps) {
+  const r = ruaMeioFio(0);
+  const objs = [...r.objs, car({ x: 2.2, y: -3.2, color: VOCE }), person(4.5, -5.6, RAPAZ, 0.8, Math.PI / 2, 1.25), car({ x: -1.75, y: -26, heading: Math.PI, color: '#e0412f' })];
+  return cena(CAM_MEIO_FIO, r.ground, objs, (pr) => {
+    const [tx, ty] = pr([4.5, -5.6, 2.4]);
+    return (
+      <>
+        <Tag x={tx} y={ty - 8} text="Passageiro" />
+        {voce(pr, 2.2, -3.2)}
+      </>
+    );
+  }, p);
+}
+
+/** caminhão junto à calçada; uma pessoa leva caixas para a loja */
+export function CargaDescarga(p: CenaProps) {
+  const r = ruaMeioFio(1);
+  const caixa = (x: number, y: number, z: number, l = 0.5) =>
+    box(x - l / 2, y - l / 2, z, x + l / 2, y + l / 2, z + l * 0.8, '#c89a5b', (k, q) => (k === 'top' ? [{ p: subq(q, 0.45, 0, 0.55, 1), c: '#e3c48a' }] : undefined));
+  const objs: Obj[] = [
+    ...r.objs,
+    utilitario({ x: 2.0, y: -7, tipo: 'caminhao' }),
+    { parts: [caixa(4.0, -2.0, 0.17)], shadow: true },
+    { parts: [caixa(4.6, -2.1, 0.17)], shadow: true },
+    { parts: [caixa(4.3, -2.0, 0.57)] },
+    person(5.0, -0.6, MOCA, 0.6, Math.PI / 2, 1.25, { l: [0, 1.3], r: [0, 1.3] }),
+    { parts: [caixa(5.45, -0.6, 1.0, 0.45)] },
+    car({ x: -1.75, y: -28, heading: Math.PI, color: '#4f7fc4' }),
+  ];
+  return cena(CAM_MEIO_FIO, r.ground, objs, () => null, p);
+}
+
+/** uma criança de 7 anos e 1,20 m, com um adulto, vai entrar no seu carro */
+export function CriancaCarro(p: CenaProps) {
+  const r = ruaMeioFio(2);
+  const objs = [...r.objs, car({ x: 2.2, y: -3.2, color: VOCE }), person(4.4, -7.6, MENINO, 0, -Math.PI / 2, 0.82), person(5.3, -6.3, MOCA, 0, -Math.PI / 2, 1.25)];
+  return cena(CAM_MEIO_FIO, r.ground, objs, (pr) => {
+    const [tx, ty] = pr([4.4, -7.6, 1.5]);
+    return (
+      <>
+        <Tag x={tx} y={ty - 8} text="7 anos, 1,20 m" />
+        {voce(pr, 2.2, -3.2)}
+      </>
+    );
+  }, p);
+}
