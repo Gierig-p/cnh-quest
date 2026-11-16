@@ -207,7 +207,7 @@ Detalhes completos: `docs/repaginacao-visual-duolingo.md`.
 - **~~Mundo 3~~ (aprovado e ligado no app em 15/11):** 13 cenas novas em `src/components/scenes/Mundo3.tsx` (folha `docs/piloto/folha_mundo3.png`), num terceiro pedaço carregado sob demanda (`de3`). Avenida de 3 faixas com caminhão lento (w3-l1-q3), faixa da esquerda com carro piscando atrás (l2-q4), ônibus no ponto (l2-q7), saída de garagem (l3-q2), rodovia com estrada de terra à esquerda (l3-q8), virar à direita com pedestre (l3-q10), chuva de dia (l4-q1), estrada escura (l4-q2, sem facho, para não dar a resposta), luz alta com carro de frente (l4-q3), carro na padaria (l5-q2), carro quebrado (l5-q5), estrada de terra (l6-q4) e rodovia dupla com placa de 80 (l6-q5). Ficaram sem cena a l3-q6 e a l3-q7: a posição do carro seria a resposta. São cenas só 3D: `SceneArt` virou `Partial`. `Mundo2.tsx` passou a exportar `estrada`, `campo` (com `vao` na cerca), `raios` e `Balao`.
 - **Depois:** o Mundo 4.
 
-**Vídeos nos cartões de conceito (15/11), em andamento:**
+**Vídeos nos cartões de conceito (15/11), concluídos nos Mundos 1–3:**
 - **~~Piloto `c3-lado-direito`~~ (aprovado em 15/11).** Formato: página 1 com o vídeo, página 2 com o resumo (`card.video = { id, resumo }`; `cardParts` devolve `[['video'], ['resumo', 'terms', 'guardar']]`).
 - **Como fazer um vídeo novo:** (1) as falas em `src/content/videos.ts` (frases curtas, uma ideia por fala); (2) `npx tsx scripts/audio/videos.ts` com `PATH` incluindo `C:\ffmpeg\bin` gera `public/audio/videos/<id>.mp3` e os tempos em `src/content/videos/<id>.json` (cache pelo texto, chave fora do repo); (3) a cena em `src/components/scenes/Video<Nome>.tsx`, um trecho por fala, terminando com `export const { Video, DUR, falaEm } = fazerVideo(tempos, trecho)` e usando as peças de `videoBase.tsx` (modelos: `VideoFaixas.tsx`, `VideoNaoUltrapassar.tsx` para pista com curva e subida); (4) a entrada em `carregar` no `VideoConceito.tsx`; (5) `video` e `resumo` no cartão; (6) folha de stills para o dono aprovar.
 - **~~Lote 2: `c3-calcada-acostamento`, `c3-ultrapassar-como`, `c3-onde-nao-ultrapassar`~~ (aprovado em 15/11).**
@@ -216,7 +216,7 @@ Detalhes completos: `docs/repaginacao-visual-duolingo.md`.
 - **~~Lote 5: `c3-velocidade-estrada`, `c3-cinto-capacete`~~ (aprovado em 15/11). Todos os cartões de conceito do Mundo 3 têm vídeo.**
 - **Mundo 1:** ~~Lote 1: `c-tipos-sinais`, `c-hierarquia`, `c-sinalizacao-falha`~~ (aprovado em 15/11). ~~Lote 2: preferência, pedestre, emergência~~ (aprovado em 15/11). ~~Lote 3: formas, R-1/R-2, proibições, velocidade~~ (aprovado em 15/11).
 - **Mundo 2:** ~~Lote 1: proíbe movimento, obriga movimento, advertência, avisos de antes~~ (aprovado em 15/11). ~~Lote 2: indicação, distâncias, marcas (cores)~~ (aprovado em 15/11). ~~Lote 3: marcas (linhas, transversais), semáforo e semáforo piscando~~ (aprovado em 15/11). Todos os cartões de conceito do Mundo 2 têm vídeo.
-- **Próximos:** o resto do Mundo 1 e depois o Mundo 2, no mesmo formato e em lotes.
+- **Concluído em 15/11:** todos os cartões de conceito dos Mundos 1, 2 e 3 têm vídeo. Num mundo novo, cada cartão ganha o seu vídeo no mesmo formato e em lotes.
 - O dono ainda precisa testar o piloto no celular.
 
 **Novo plano (14/11, aprovado pelo dono), vem antes da lista abaixo:**
