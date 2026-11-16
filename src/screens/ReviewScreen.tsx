@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { QUESTIONS } from '../content';
-import { IconReview } from '../components/Icons';
+import { IconAula, IconReview } from '../components/Icons';
+import type { Aula } from '../engine/aulas';
+import { AulaView, AulasList } from './AulasScreen';
 import { Lumi } from '../components/Lumi';
 import { Empty } from './ProgressScreen';
 import { dueQuestions, topicReport } from '../engine/progress';
@@ -13,9 +16,27 @@ export function ReviewScreen({ onPractice }: { onPractice: (title: string, ids: 
 
   const topicIds = (topic: string) => QUESTIONS.filter((q) => q.topic === topic).map((q) => q.id);
 
+  // Aulas (pedido do dono, 16/11/2026): a lista e cada aula abrem aqui dentro da aba Revisar
+  const [view, setView] = useState<'main' | 'aulas' | Aula>('main');
+  const [query, setQuery] = useState('');
+  const show = (v: 'main' | 'aulas' | Aula) => {
+    setView(v);
+    window.scrollTo({ top: 0 });
+  };
+  if (view === 'aulas') return <AulasList onOpen={show} onBack={() => show('main')} query={query} setQuery={setQuery} />;
+  if (view !== 'main') return <AulaView key={view.card.id} aula={view} onBack={() => show('aulas')} onPractice={onPractice} />;
+
   return (
     <div className="stack">
       <h1 className="page-title">Revisar</h1>
+      <button className="card aulas-entry" onClick={() => show('aulas')}>
+        <span className="card-icon blue" aria-hidden="true"><IconAula size={26} /></span>
+        <span className="grow">
+          <strong className="aulas-entry-title">Aulas</strong>
+          <span className="muted">Veja de novo os vídeos e resumos que você já estudou</span>
+        </span>
+        <span aria-hidden="true" className="aula-arrow">›</span>
+      </button>
       <section className={`card hero-card blue ${due.length ? 'has-due' : ''}`}>
         <div className="row">
           <Lumi mood={due.length ? 'wave' : 'think'} size={64} />

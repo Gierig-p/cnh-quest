@@ -81,3 +81,7 @@ export const IconWrong = ({ size = 30 }: P) => (
 export const IconPause = ({ size = 22 }: P) => (
   <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.2" height="14" rx="1.4" fill="currentColor" /><rect x="13.8" y="5" width="4.2" height="14" rx="1.4" fill="currentColor" /></svg>
 );
+/** Aula: tela com botão de play (aba Revisar › Aulas). */
+export const IconAula = ({ size = 24 }: P) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="13" rx="3" fill="currentColor" /><path d="M10 8.2v5.6l4.8-2.8z" fill="#fff" /><rect x="7" y="19" width="10" height="2" rx="1" fill="currentColor" /></svg>
+);

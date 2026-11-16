@@ -4,11 +4,12 @@ import type { ExamConfig, Question, World } from './types';
 import { WORLD1, WORLD1_QUESTIONS } from './world1';
 import { WORLD2, WORLD2_QUESTIONS } from './world2';
 import { WORLD3, WORLD3_QUESTIONS } from './world3';
-import { WORLD1_SITUATIONS, WORLD2_SITUATIONS, WORLD3_SITUATIONS } from './situations';
+import { WORLD4, WORLD4_QUESTIONS } from './world4';
+import { WORLD1_SITUATIONS, WORLD2_SITUATIONS, WORLD3_SITUATIONS, WORLD4_SITUATIONS } from './situations';
 
-export const WORLDS: World[] = [WORLD1, WORLD2, WORLD3];
+export const WORLDS: World[] = [WORLD1, WORLD2, WORLD3, WORLD4];
 
-export const QUESTIONS: Question[] = [...WORLD1_QUESTIONS, ...WORLD2_QUESTIONS, ...WORLD3_QUESTIONS, ...WORLD1_SITUATIONS, ...WORLD2_SITUATIONS, ...WORLD3_SITUATIONS];
+export const QUESTIONS: Question[] = [...WORLD1_QUESTIONS, ...WORLD2_QUESTIONS, ...WORLD3_QUESTIONS, ...WORLD4_QUESTIONS, ...WORLD1_SITUATIONS, ...WORLD2_SITUATIONS, ...WORLD3_SITUATIONS, ...WORLD4_SITUATIONS];
 
 export const QUESTION_BY_ID: Record<string, Question> = Object.fromEntries(
   QUESTIONS.map((q) => [q.id, q]),

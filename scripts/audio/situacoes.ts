@@ -10,7 +10,7 @@ import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 // @ts-ignore: módulo .mjs sem tipos
 import { efeito, falaPausada, RAIZ } from './eleven.mjs';
-import { WORLD1_SITUATIONS, WORLD2_SITUATIONS, WORLD3_SITUATIONS } from '../../src/content/situations';
+import { WORLD1_SITUATIONS, WORLD2_SITUATIONS, WORLD3_SITUATIONS, WORLD4_SITUATIONS } from '../../src/content/situations';
 
 /** Voz escolhida pelo dono em 14/11/2026: Davi Andrei (pt-BR), a mesma dos cartões. */
 const VOZ = '2CECaLAGTS5NRGxgbcxr';
@@ -32,6 +32,9 @@ const SONS: Record<string, Som> = {
   passos: { tipo: 'evento', segundos: 3, prompt: 'slow footsteps of an elderly person walking on asphalt, close' },
   carro: { tipo: 'evento', segundos: 4, prompt: 'a single car approaching slowly and braking softly at an intersection' },
   trem: { tipo: 'evento', segundos: 4, prompt: 'distant train horn blowing twice in the countryside' },
+  festa: { tipo: 'fundo', segundos: 20, prompt: 'indoor birthday party ambience, people talking and laughing, soft pop music in the background' },
+  celular: { tipo: 'evento', segundos: 2, prompt: 'smartphone vibrating twice on a car seat, short buzz' },
+  freada: { tipo: 'evento', segundos: 2.5, prompt: 'car braking hard with tires screeching, then a light thud' },
 };
 
 const TMP = join(RAIZ, '_tmp_situacoes');
@@ -47,7 +50,7 @@ async function som(chave: string) {
   return efeito(s.prompt, s.segundos, join(TMP, `som_${chave}.mp3`)) as Promise<string>;
 }
 
-const todas = [...WORLD1_SITUATIONS, ...WORLD2_SITUATIONS, ...WORLD3_SITUATIONS];
+const todas = [...WORLD1_SITUATIONS, ...WORLD2_SITUATIONS, ...WORLD3_SITUATIONS, ...WORLD4_SITUATIONS];
 const pedidas = process.argv.slice(2);
 mkdirSync(TMP, { recursive: true });
 mkdirSync(OUT, { recursive: true });

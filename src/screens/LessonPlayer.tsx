@@ -6,7 +6,7 @@ import { SOURCES } from '../content/sources';
 import type { ConceptCard, SourceRef } from '../content/types';
 import { Exercise, isAnswerReady, typeLabel } from '../components/Exercises';
 import { Burst, Dialog, useDialogClose } from '../components/Fx';
-import { IconCheck, IconClose, IconHeart, IconSparkle, IconWrong } from '../components/Icons';
+import { IconAula, IconCheck, IconClose, IconHeart, IconSparkle, IconWrong } from '../components/Icons';
 import { Lumi } from '../components/Lumi';
 import { NarrationButton } from '../components/NarrationButton';
 import { SituationBox } from '../components/SituationBox';
@@ -17,6 +17,7 @@ import { grade, type Answer, type Feedback } from '../engine/grading';
 import { lessonsWithCardsSeen, recordAnswer } from '../engine/progress';
 import { advance, answerCurrent, currentItem, isFinished, progressRatio, type SessionState } from '../engine/session';
 import { sameTopicQuestions } from '../engine/review';
+import { unlockAula } from '../engine/aulas';
 import { useApp } from '../state/AppState';
 import { useReducedMotion, useSound } from '../ui/hooks';
 import { HOWTO, howtoSeen, markHowtoSeen } from '../ui/howto';
@@ -145,6 +146,27 @@ export function LessonPlayer({
     const t = setTimeout(() => setElapsed((e) => e + 1), 1000);
     return () => clearTimeout(t);
   }, [hintCard, fb, elapsed]);
+
+  // Aula desbloqueada (pedido do dono, 16/11/2026): o cartão aberto fica para rever em Revisar › Aulas.
+  // Na primeira vez que um cartão com vídeo aparece, um aviso curto parecido com uma conquista.
+  const [aulaToast, setAulaToast] = useState<string | null>(null);
+  const conceptId = item?.kind === 'concept' ? item.card.id : '';
+  useEffect(() => {
+    if (!conceptId || item?.kind !== 'concept') return;
+    const known = progress.aulas?.includes(conceptId) ?? false;
+    if (known) return;
+    const isNew = !lessonsWithCardsSeen(progress).includes(s.lessonId);
+    update((p) => unlockAula(p, conceptId));
+    if (!isNew || !item.card.video) return;
+    setAulaToast(item.card.title);
+    const t = window.setTimeout(() => setAulaToast(null), 4200);
+    return () => {
+      window.clearTimeout(t);
+      setAulaToast(null);
+    };
+    // só quando muda o cartão; o progresso é lido no momento em que ele aparece
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conceptId, s.index]);
 
   useEffect(() => {
     if (isFinished(s)) onFinish(s);
@@ -277,6 +299,18 @@ export function LessonPlayer({
 
   return (
     <div className="lesson">
+      <div className="aula-toast-live" aria-live="polite">
+        {aulaToast && (
+          <div className="aula-toast">
+            <span className="aula-toast-icon" aria-hidden="true"><IconAula size={22} /></span>
+            <span>
+              <strong>Aula desbloqueada!</strong>
+              <br />
+              Veja de novo em Revisar › Aulas
+            </span>
+          </div>
+        )}
+      </div>
       <header className="lesson-top">
         <button className="icon-btn" onClick={() => setConfirmQuit(true)} aria-label="Sair da lição">
           <IconClose />

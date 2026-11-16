@@ -418,7 +418,7 @@ html[data-motion='reduce'] *, html[data-motion='reduce'] *::before, html[data-mo
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
 /* ---------- lição ---------- */
-.lesson { display: grid; grid-template-rows: auto 1fr auto; min-height: 100dvh; background: var(--surface); }
+.lesson { display: grid; grid-template-rows: auto 1fr auto; grid-template-columns: minmax(0, 1fr); min-height: 100dvh; background: var(--surface); }
 .lesson-top { display: flex; align-items: center; gap: 16px; width: 100%; max-width: 1000px; margin: 0 auto; padding: 22px 24px 8px; }
 .progress { position: relative; flex: 1; height: 18px; border-radius: 9px; background: var(--track); }
 .progress > span { position: relative; display: block; height: 100%; border-radius: 9px; background: linear-gradient(180deg, #2fca69, var(--green)); transition: clip-path 420ms var(--ease-out); }
@@ -951,3 +951,26 @@ html[data-text='big'] .c-head { font-size: 17px; }
   html[data-text='big'] .fb-title { font-size: 22px; }
   html[data-text='big'] .match .opt { font-size: 18px; }
 }
+
+/* ---------- Aulas (Revisar › Aulas, pedido do dono 16/11/2026) ---------- */
+.aulas-entry { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; border-width: 2px; border-color: var(--blue-line); background: linear-gradient(180deg, var(--blue-soft), var(--surface) 80%); }
+.aulas-entry:hover { border-color: var(--blue-ink-2); }
+.aulas-entry .grow { display: grid; gap: 2px; }
+.aulas-entry-title { font-size: 20px; }
+.aula-arrow { font-size: 28px; font-weight: 900; color: var(--text-2); line-height: 1; }
+.back-link { align-self: flex-start; justify-self: start; width: auto; }
+.aula-search { width: 100%; min-height: 48px; padding: 0 14px; border: 2px solid var(--border-strong); border-radius: 14px; background: var(--surface); color: var(--text); font: inherit; font-size: 16px; }
+.aula-search:focus-visible { outline: 3px solid var(--blue-ink-2); outline-offset: 2px; }
+.aula-lesson + .aula-lesson { margin-top: 14px; }
+.aula-lesson h3 { margin: 10px 0 8px; font-size: 15px; }
+.aula-item { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 60px; padding: 10px 12px; text-align: left; font: inherit; color: inherit; cursor: pointer; border: 2px solid var(--border); border-radius: 14px; background: var(--surface); }
+.aula-item:hover { border-color: var(--blue-line); background: var(--blue-soft); }
+.aula-view .q-tag { color: var(--text-2); }
+.center { text-align: center; }
+
+/* aviso "Aula desbloqueada": curto, no alto da lição, sem tapar os botões de baixo */
+.aula-toast-live { position: fixed; top: calc(env(safe-area-inset-top, 0px) + 70px); left: 0; right: 0; z-index: 70; display: flex; justify-content: center; pointer-events: none; padding: 0 16px; }
+.aula-toast { display: flex; align-items: center; gap: 12px; max-width: 420px; padding: 10px 16px 10px 10px; border: 2px solid var(--gold); border-radius: 16px; background: var(--gold-soft); color: var(--text); font-size: 14px; line-height: 1.35; box-shadow: 0 6px 18px rgba(0, 0, 0, .18); animation: aula-toast-in .45s cubic-bezier(.2, 1.4, .4, 1) both; }
+.aula-toast strong { font-size: 16px; color: var(--gold-ink); }
+.aula-toast-icon { display: inline-grid; place-items: center; flex: none; width: 38px; height: 38px; border-radius: 11px; background: var(--gold); color: #fff; }
+@keyframes aula-toast-in { from { opacity: 0; transform: translateY(-14px) scale(.92); } to { opacity: 1; transform: none; } }

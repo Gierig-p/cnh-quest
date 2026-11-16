@@ -71,6 +71,11 @@ export interface ProgressState {
   draws?: Record<string, string[]>;
   /** Missão do dia (pedido do dono, 14/11/2026). Ausente = nenhuma missão andou hoje. */
   mission?: { date: string; id: MissionId; count: number; done: boolean };
+  /**
+   * Aulas (cartões de conceito) já abertas numa lição, para rever na aba Revisar › Aulas
+   * (pedido do dono, 16/11/2026). Ausente no progresso antigo: aí valem as lições com a rodada 1 feita.
+   */
+  aulas?: string[];
   /** Data da prova marcada pelo aluno ("AAAA-MM-DD"), para o plano até a prova. Ausente = sem data. */
   examDate?: string;
 }
