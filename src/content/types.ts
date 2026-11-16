@@ -31,7 +31,7 @@ export interface SourceRef {
 export type SignCode =
   | 'R-1' | 'R-2' | 'R-3' | 'R-6a' | 'R-6c' | 'R-7' | 'R-19'
   | 'R-4a' | 'R-5a' | 'R-26' | 'R-33'
-  | 'A-12' | 'A-14' | 'A-18' | 'A-24' | 'A-32b' | 'A-41'
+  | 'A-12' | 'A-14' | 'A-15' | 'A-18' | 'A-24' | 'A-32b' | 'A-41'
   /** placa de orientação de destino (verde), exemplo didático sem código oficial */
   | 'IND-destino';
 

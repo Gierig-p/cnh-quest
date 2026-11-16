@@ -10,7 +10,7 @@ import type { SignCode } from '../content/types';
 const OFFICIAL: Partial<Record<SignCode, string>> = {
   'R-1': 'R-1', 'R-2': 'R-2', 'R-3': 'R-3', 'R-4a': 'R-4a', 'R-5a': 'R-5a', 'R-6a': 'R-6a', 'R-6c': 'R-6c',
   'R-7': 'R-7', 'R-26': 'R-26', 'R-33': 'R-33',
-  'A-12': 'A-12', 'A-14': 'A-14', 'A-18': 'A-18', 'A-24': 'A-24', 'A-32b': 'A-32b', 'A-41': 'A-41',
+  'A-12': 'A-12', 'A-14': 'A-14', 'A-15': 'A-15', 'A-18': 'A-18', 'A-24': 'A-24', 'A-32b': 'A-32b', 'A-41': 'A-41',
 };
 const SPEEDS = [20, 40, 50, 60, 80];
 
@@ -249,6 +249,8 @@ function render(code: SignCode, speed: number) {
           <circle cx="50" cy="67" r="6.5" fill="#22b357" />
         </>,
       );
+    case 'A-15':
+      return diamond(<polygon points="42,28 58,28 70,40 70,56 58,68 42,68 30,56 30,40" fill={RED} />);
     case 'A-24':
       return (
         <>

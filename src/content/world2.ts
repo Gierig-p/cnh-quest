@@ -28,6 +28,13 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       'há também a R-5a.',
     remember: 'Seta virando = conversão. Seta em "U" = retorno. Riscada de vermelho = proibido.',
     visual: { kind: 'sign', sign: 'R-4a', alt: 'Placa redonda com seta virando à esquerda, riscada por tarja vermelha (R-4a)' },
+    video: {
+      id: 'proibe-movimento',
+      resumo: [
+        'Seta virando riscada (R-4a): proibido virar à esquerda. Seta em U riscada (R-5a): proibido o retorno.',
+        'Uma não vale pela outra: para proibir os dois, as duas placas.',
+      ],
+    },
     sources: [
       { sourceId: 'mbst1', locator: 'item 3.6 — Formas e cores' },
       { sourceId: 'mbst1', locator: 'R-4a — Significado e Princípios de utilização' },
@@ -54,6 +61,13 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       'ponteiro do relógio.',
     remember: 'Sem risco vermelho, a seta é uma ordem: faça o que ela mostra.',
     visual: { kind: 'sign', sign: 'R-33', alt: 'Placa redonda com setas em círculo (R-33, sentido de circulação na rotatória)' },
+    video: {
+      id: 'obriga-movimento',
+      resumo: [
+        'Sem faixa vermelha, a seta é ordem: R-26 manda seguir em frente (só no cruzamento).',
+        'R-33: na rotatória, gire no sentido anti-horário, com a ilha à sua esquerda.',
+      ],
+    },
     sources: [
       { sourceId: 'mbst1', locator: 'R-26 — Significado e Princípios de utilização' },
       { sourceId: 'mbst1', locator: 'R-33 — Significado' },
@@ -81,6 +95,13 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     example: 'Losango laranja com um trabalhador desenhado (A-24): há obras adiante. Tire o pé e fique atento a máquinas e pessoas.',
     remember: 'Amarelo avisa. Laranja avisa que é obra.',
     visual: { kind: 'sign', sign: 'A-24', alt: 'Placa em losango laranja com um trabalhador (A-24, Obras)' },
+    video: {
+      id: 'advertencia',
+      resumo: [
+        'Losango amarelo e preto: avisa um perigo difícil de ver. Reduza e redobre a atenção.',
+        'Obra é laranja (A-24). Acabou o perigo, a placa é retirada.',
+      ],
+    },
     sources: [
       { sourceId: 'mbst2', locator: 'item 3.1 — Definição e função' },
       { sourceId: 'mbst2', locator: 'item 3.5 — Formas e cores' },
@@ -107,6 +128,13 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       'Numa estrada, você vê a A-14. Ainda não vê o semáforo, mas já sabe que ele vem aí: reduz e se prepara para parar.',
     remember: 'A placa amarela é o "spoiler" do que vem pela frente.',
     visual: { kind: 'sign', sign: 'A-14', alt: 'Placa em losango amarelo com um semáforo (A-14, Semáforo à frente)' },
+    video: {
+      id: 'avisos',
+      resumo: [
+        'A-14 semáforo, A-15 PARE, A-12 rotatória e A-41 trilho: avisam o que vem adiante.',
+        'A A-15 só avisa; quem manda parar é a placa PARE (R-1).',
+      ],
+    },
     sources: [
       { sourceId: 'mbst2', locator: 'A-12, A-14, A-15 — Significado' },
       { sourceId: 'mbst2', locator: 'A-41 — Significado e Relacionamento com outras sinalizações' },

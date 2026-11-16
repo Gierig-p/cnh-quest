@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -303,6 +303,56 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Via local, a rua do bairro: trinta.',
       'Mas, se houver placa, vale a placa, mesmo com outro número.',
       'Para guardar: oitenta, sessenta, quarenta, trinta, do mais rápido para a rua do bairro.',
+    ],
+  },
+  // cartão c2-proibe-movimento (MBST Vol. I: R-4a e R-5a)
+  'proibe-movimento': {
+    falas: [
+      'Algumas placas redondas proíbem um movimento.',
+      'Elas mostram o movimento desenhado, e uma faixa vermelha em diagonal risca por cima.',
+      'Seta virando à esquerda, riscada: proibido virar à esquerda.',
+      'Seta em forma de U, riscada: proibido fazer o retorno, a volta para seguir no sentido contrário.',
+      'Uma não vale pela outra: a placa de não virar à esquerda não proíbe o retorno.',
+      'Para proibir os dois movimentos, o trânsito coloca as duas placas.',
+      'Para guardar: seta virando é conversão, seta em U é retorno. Riscada de vermelho, é proibido.',
+    ],
+  },
+  // cartão c2-obriga-movimento (MBST Vol. I: R-26 e R-33)
+  'obriga-movimento': {
+    falas: [
+      'Outras placas redondas não proíbem: elas mandam fazer um movimento.',
+      'Nelas, o desenho aparece sem a faixa vermelha. A seta é uma ordem.',
+      'Seta reta para cima: siga em frente. Você é obrigado a seguir em frente.',
+      'Ela fala só do movimento no cruzamento. Não diz se a rua é de mão única ou de mão dupla.',
+      'Setas em círculo: é a placa da rotatória.',
+      'Ela manda circular no sentido anti-horário, o contrário do ponteiro do relógio, com a ilha do seu lado esquerdo.',
+      'Para guardar: sem risco vermelho, faça o que a seta mostra.',
+    ],
+  },
+  // cartão c2-advertencia (MBST Vol. II: itens 3.1 e 3.5; A-24)
+  advertencia: {
+    falas: [
+      'A placa amarela em losango é a placa de advertência, a placa de aviso.',
+      'Ela não dá ordem. Ela avisa que existe um perigo ou uma situação diferente logo à frente.',
+      'Ela é usada quando o perigo não é fácil de perceber sozinho.',
+      'Em geral, ela pede: reduza a velocidade e redobre a atenção.',
+      'A forma é um quadrado com uma ponta para cima. A cor é amarela, com desenho preto.',
+      'A exceção é a placa de obras: ela é laranja.',
+      'Viu a placa de obras? Tire o pé e fique atento a máquinas e pessoas.',
+      'Quando o perigo acaba, a placa deve ser retirada.',
+      'Para guardar: amarelo avisa. Laranja avisa que é obra.',
+    ],
+  },
+  // cartão c2-advertencia-exemplos (MBST Vol. II: A-12, A-14, A-15 e A-41)
+  avisos: {
+    falas: [
+      'Muitas placas de aviso preparam você para outra coisa que vem logo depois.',
+      'O semáforo desenhado avisa: tem um semáforo adiante.',
+      'Você ainda não vê o semáforo, mas já reduz e se prepara para parar.',
+      'A placa PARE desenhada no losango avisa que, adiante, existe uma placa PARE. Ela só avisa: quem manda parar é a placa PARE.',
+      'As setas em círculo no losango avisam: tem uma rotatória adiante.',
+      'O X amarelo marca o lugar onde a rua cruza o trilho do trem. Ele vem junto com a placa PARE ou com semáforo.',
+      'Para guardar: a placa amarela conta antes o que vem pela frente.',
     ],
   },
 };

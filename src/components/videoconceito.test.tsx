@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { CONCEPTS3 } from '../content/world3';
+import { CONCEPTS2 } from '../content/world2';
 import { CONCEPTS as CONCEPTS1 } from '../content/world1';
 import { VIDEOS } from '../content/videos';
 import tempos from '../content/videos/faixas.json';
@@ -55,7 +56,7 @@ describe('vídeo do conceito (piloto c3-lado-direito)', () => {
 
 describe('todos os vídeos de conceito', () => {
   const tempos = import.meta.glob<{ dur: number; falas: { ini: number; fim: number }[] }>('../content/videos/*.json', { eager: true, import: 'default' });
-  const cartoes = [...Object.values(CONCEPTS1), ...Object.values(CONCEPTS3)].filter((c) => c.video);
+  const cartoes = [...Object.values(CONCEPTS1), ...Object.values(CONCEPTS2), ...Object.values(CONCEPTS3)].filter((c) => c.video);
 
   it('cada vídeo tem tempos para todas as falas, em ordem, dentro da duração', () => {
     for (const id of Object.keys(VIDEOS) as (keyof typeof VIDEOS)[]) {
