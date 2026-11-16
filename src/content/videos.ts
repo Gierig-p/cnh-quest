@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -353,6 +353,43 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'As setas em círculo no losango avisam: tem uma rotatória adiante.',
       'O X amarelo marca o lugar onde a rua cruza o trilho do trem. Ele vem junto com a placa PARE ou com semáforo.',
       'Para guardar: a placa amarela conta antes o que vem pela frente.',
+    ],
+  },
+  // cartão c2-indicacao (MBST vol. III, itens 2.1, 2.2 e 4.1 a 4.6)
+  indicacao: {
+    falas: [
+      'Existe um terceiro tipo de placa: a de indicação. Ela não manda e não avisa de perigo.',
+      'Ela informa: para onde ir, quanto falta, onde você está e onde encontrar serviços. Quase todas são retangulares.',
+      'A verde mostra o destino: cidades, bairros e direções, com setas e distâncias.',
+      'Nesta placa, o Centro fica em frente e a Praia fica à direita. Siga a seta do lugar aonde você quer ir.',
+      'A azul identifica: o nome da cidade, o quilômetro da rodovia, o pedágio. Ela também mostra serviços e postos de fiscalização.',
+      'A marrom mostra atrativos turísticos, como parque, praia ou museu.',
+      'A branca, com letras pretas, é educativa: lembra regras de bom comportamento.',
+      'Para guardar: verde leva, azul serve, marrom passeia, branco educa.',
+    ],
+  },
+  // cartão c2-distancias (MBST vol. III, item 4.2.2)
+  distancias: {
+    falas: [
+      'Na estrada aparece uma placa verde com nomes de cidades e números.',
+      'Os números são os quilômetros que faltam até cada lugar.',
+      'As cidades vêm em ordem: a mais perto em cima, a mais longe embaixo.',
+      'Nesta placa: doze, quarenta e cinco e noventa quilômetros. A primeira cidade é a que você alcança antes.',
+      'Cada placa tem no máximo três destinos. Se houver mais, eles vão para outra placa.',
+      'Para guardar: em cima, a mais perto.',
+    ],
+  },
+  // cartão c2-marcas-cores (MBST vol. IV, item 3.4.2)
+  'marcas-cores': {
+    falas: [
+      'As pinturas no asfalto também são sinais. E cada cor tem um trabalho diferente.',
+      'A amarela separa os carros que vão dos que vêm. Do outro lado da linha amarela, vêm carros de frente.',
+      'A amarela também marca lugares onde é proibido parar ou estacionar.',
+      'A branca separa faixas do mesmo sentido: todo mundo vai para o mesmo lado.',
+      'A branca também marca a borda da pista, a faixa de pedestres, a linha de retenção e as setas.',
+      'A vermelha marca a ciclovia e a ciclofaixa.',
+      'A azul é o fundo do símbolo nas vagas especiais, como as de pessoa com deficiência.',
+      'Para guardar: amarelo divide quem vai de quem vem. Branco organiza quem vai junto.',
     ],
   },
 };

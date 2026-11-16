@@ -50,6 +50,9 @@ const carregar: Record<VideoId, () => Promise<VideoDef>> = {
   'obriga-movimento': () => import('./scenes/VideoObrigaMovimento').then(paraDef),
   advertencia: () => import('./scenes/VideoAdvertencia').then(paraDef),
   avisos: () => import('./scenes/VideoAvisos').then(paraDef),
+  indicacao: () => import('./scenes/VideoIndicacao').then(paraDef),
+  distancias: () => import('./scenes/VideoDistancias').then(paraDef),
+  'marcas-cores': () => import('./scenes/VideoMarcasCores').then(paraDef),
 };
 
 const cache: Partial<Record<VideoId, VideoDef>> = {};

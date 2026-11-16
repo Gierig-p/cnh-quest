@@ -163,6 +163,13 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     example: 'Placa verde com "Centro ↑" e "Praia →": é orientação de destino. Siga a seta do lugar aonde você quer ir.',
     remember: 'Verde leva, azul serve, marrom passeia, branco educa.',
     visual: { kind: 'sign', sign: 'IND-destino', alt: 'Placa retangular verde com destinos e setas brancas (orientação de destino)' },
+    video: {
+      id: 'indicacao',
+      resumo: [
+        'Indicação informa: verde leva ao destino, azul identifica e mostra serviços, marrom mostra passeios.',
+        'Branca com letras pretas é educativa. Quase todas são retangulares.',
+      ],
+    },
     sources: [
       { sourceId: 'mbst3', locator: 'itens 2.1 e 2.2' },
       { sourceId: 'mbst3', locator: 'itens 4.1, 4.2, 4.3, 4.4, 4.5 e 4.6 — cores' },
@@ -181,6 +188,13 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     ],
     example: 'Uma placa com 12 km, 45 km e 90 km, nessa ordem de cima para baixo. A primeira cidade é a que você alcança antes.',
     remember: 'Em cima, a mais perto.',
+    video: {
+      id: 'distancias',
+      resumo: [
+        'Os números são os quilômetros que faltam; a cidade mais perto fica em cima.',
+        'No máximo três destinos por placa; os outros vão para outra placa.',
+      ],
+    },
     sources: [{ sourceId: 'mbst3', locator: 'item 4.2.2 — Placas indicativas de distância' }],
   },
 
@@ -202,6 +216,13 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     ],
     example: 'Linha amarela no meio da pista: do outro lado vêm carros de frente. Linhas brancas entre faixas: todo mundo vai para o mesmo lado.',
     remember: 'Amarelo divide quem vai de quem vem. Branco organiza quem vai junto.',
+    video: {
+      id: 'marcas-cores',
+      resumo: [
+        'Amarela separa quem vai de quem vem e marca onde é proibido parar; branca organiza o mesmo sentido.',
+        'Vermelha marca ciclovia e ciclofaixa; azul é o fundo das vagas especiais.',
+      ],
+    },
     sources: [{ sourceId: 'mbst4', locator: 'item 3.4.2 — Padrão de cores' }],
   },
   marcasLinhas: {
