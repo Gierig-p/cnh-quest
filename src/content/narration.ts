@@ -94,7 +94,7 @@ export const NARRATION: Record<string, string[]> = {
 
   'c-proibicoes': [
     'Muitas placas redondas mostram um desenho cortado por uma barra vermelha. A barra quer dizer: não pode.',
-    'A placa sentido proibido é um círculo vermelho com uma faixa branca deitada. Ela diz: não entre por ali.',
+    'A placa sentido proibido mostra uma seta para a frente cortada por uma barra vermelha. Ela diz: não entre por ali.',
     'A placa proibido estacionar mostra a letra E cortada por uma barra.',
     'A placa proibido parar e estacionar mostra a letra E com duas barras, formando um X.',
     'Qual a diferença? Parar é ficar parado só o tempo de alguém entrar ou sair do carro. Estacionar é deixar o carro parado por mais tempo do que isso.',

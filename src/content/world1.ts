@@ -206,6 +206,14 @@ export const CONCEPTS: Record<string, ConceptCard> = {
       'na faixa (A-32b) avisa que há faixa de pedestres adiante.',
     remember: 'Redonda manda; amarela em losango avisa.',
     visual: { kind: 'sign', sign: 'R-1', alt: 'Placa octogonal vermelha com a palavra PARE' },
+    video: {
+      id: 'formas',
+      resumo: [
+        'Redonda, em vermelho, preto e branco: placa de regulamentação, que dá uma ordem.',
+        'Exceções: PARE tem 8 lados e "Dê a preferência" é um triângulo.',
+        'Losango amarelo com desenho preto: placa de advertência, que dá um aviso (lombada, faixa de pedestres).',
+      ],
+    },
     sources: [
       { sourceId: 'mbst1', locator: 'item 3.6 — Formas e cores' },
       { sourceId: 'mbst2', locator: 'item 3.5 — Formas e cores; A-18; A-32b' },
@@ -227,6 +235,15 @@ export const CONCEPTS: Record<string, ConceptCard> = {
     ],
     remember: 'Oito lados: PARE sempre. Triângulo de cabeça para baixo: eu cedo.',
     visual: { kind: 'sign', sign: 'R-2', alt: 'Placa triangular de vértice para baixo, branca com borda vermelha' },
+    video: {
+      id: 'r1-r2',
+      resumo: [
+        'PARE (8 lados): pare sempre, mesmo sem ninguém vindo. Depois olhe e siga quando for seguro.',
+        'Passar direto pelo PARE é infração gravíssima.',
+        'Dê a preferência (triângulo de ponta para baixo): reduza e deixe passar quem já está na via.',
+        'As duas placas valem mais que a regra de quem vem pela direita.',
+      ],
+    },
     sources: [
       { sourceId: 'mbst1', locator: 'R-1 e R-2 — Significado e princípios de utilização' },
       { sourceId: 'ctb', locator: 'arts. 208 e 258' },
@@ -243,12 +260,21 @@ export const CONCEPTS: Record<string, ConceptCard> = {
       { term: 'Ultrapassar', meaning: 'Sair da sua faixa para passar à frente de um veículo mais lento que vai no mesmo sentido, e depois voltar.', aliases: ['ultrapassagem', 'ultrapassagens'] },
     ],
     points: [
-      'R-3 "Sentido proibido": círculo vermelho com uma faixa branca deitada. Não entre por ali.',
+      'R-3 "Sentido proibido": seta para a frente cortada por uma barra vermelha. Não entre por ali.',
       'R-6a "Proibido estacionar": letra "E" cortada por uma barra.',
       'R-6c "Proibido parar e estacionar": letra "E" com duas barras em X.',
       'R-7 "Proibido ultrapassar": dois carros lado a lado, cortados por uma barra.',
     ],
     remember: 'Uma barra: não estaciona. Um X: nem para.',
+    video: {
+      id: 'proibicoes',
+      resumo: [
+        'Barra vermelha cortando o desenho: não pode.',
+        'Seta para a frente cortada (R-3): sentido proibido, não entre.',
+        'E com uma barra: proibido estacionar. E com X: proibido parar e estacionar.',
+        'Dois carros cortados (R-7): proibido ultrapassar.',
+      ],
+    },
     sources: [
       { sourceId: 'mbst1', locator: 'R-3, R-6a, R-6c, R-7 — Significado' },
       { sourceId: 'ctb', locator: 'Anexo I — parada, estacionamento, ultrapassagem' },
@@ -270,6 +296,14 @@ export const CONCEPTS: Record<string, ConceptCard> = {
     ],
     remember: '80-60-40-30: do mais rápido para a rua do bairro. Número no círculo = teto de velocidade.',
     visual: { kind: 'sign', sign: 'R-19', speed: 40, alt: 'Placa circular de velocidade máxima de 40 km/h' },
+    video: {
+      id: 'velocidade',
+      resumo: [
+        'O número na placa redonda é a velocidade máxima a partir dela.',
+        'Sem placa, na cidade: trânsito rápido 80, arterial 60, coletora 40 e local 30 km/h.',
+        'Se houver placa, vale a placa.',
+      ],
+    },
     sources: [
       { sourceId: 'mbst1', locator: 'R-19 — Significado' },
       { sourceId: 'ctb', locator: 'art. 61, § 1º, I' },
@@ -635,7 +669,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     prompt: 'Qual destas placas é de ADVERTÊNCIA?',
     layout: 'grid',
     options: [
-      { id: 'a', text: 'R-3', visual: { kind: 'sign', sign: 'R-3', alt: 'Placa circular vermelha com faixa branca' }, whyWrong: 'Circular com vermelho: é regulamentação (R-3, "Sentido proibido").' },
+      { id: 'a', text: 'R-3', visual: { kind: 'sign', sign: 'R-3', alt: 'Placa redonda com uma seta para a frente cortada por uma barra vermelha' }, whyWrong: 'Circular com vermelho: é regulamentação (R-3, "Sentido proibido").' },
       { id: 'b', text: 'A-18', visual: { kind: 'sign', sign: 'A-18', alt: 'Placa amarela em losango com desenho de lombada' } },
       { id: 'c', text: 'R-6a', visual: { kind: 'sign', sign: 'R-6a', alt: 'Placa circular com E cortado' }, whyWrong: 'Circular com orla vermelha: é regulamentação (R-6a, "Proibido estacionar").' },
       { id: 'd', text: 'R-19', visual: { kind: 'sign', sign: 'R-19', speed: 60, alt: 'Placa circular com o número 60' }, whyWrong: 'Circular com orla vermelha: é regulamentação (R-19, "Velocidade máxima").' },
@@ -716,7 +750,7 @@ export const WORLD1_QUESTIONS: Question[] = [
       { id: 'r6c', left: 'R-6c', leftVisual: { kind: 'sign', sign: 'R-6c', alt: 'Proibido parar e estacionar' }, right: 'Proibido parar e estacionar' },
       { id: 'r7', left: 'R-7', leftVisual: { kind: 'sign', sign: 'R-7', alt: 'Proibido ultrapassar' }, right: 'Proibido ultrapassar' },
     ],
-    whyWrong: 'R-3: faixa branca horizontal; R-6a: "E" com uma barra; R-6c: "E" com duas barras em X; R-7: dois carros com barra.',
+    whyWrong: 'R-3: seta para a frente cortada por uma barra; R-6a: "E" com uma barra; R-6c: "E" com duas barras em X; R-7: dois carros com barra.',
     difficulty: 2,
     explanation: 'Uma barra corta o "E" = não estacione. Duas barras em X = não pare nem estacione.',
     mnemonic: 'Uma barra: não estaciona. Um X: nem para.',
@@ -1207,7 +1241,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Placas de regulamentação',
     objective: 'Reconhecer a R-3',
     prompt: 'O que esta placa indica?',
-    visual: { kind: 'sign', sign: 'R-3', alt: 'Placa circular vermelha com faixa branca deitada' },
+    visual: { kind: 'sign', sign: 'R-3', alt: 'Placa redonda com uma seta para a frente cortada por uma barra vermelha' },
     options: [
       { id: 'a', text: 'Sentido proibido: não entre por ali' },
       { id: 'b', text: 'Proibido estacionar', whyWrong: 'Proibido estacionar é a R-6a, com a letra "E" cortada.' },
@@ -1216,8 +1250,8 @@ export const WORLD1_QUESTIONS: Question[] = [
     ],
     correct: 'a',
     difficulty: 1,
-    explanation: 'A R-3 "Sentido proibido" é um círculo vermelho com uma faixa branca deitada: não entre por ali.',
-    mnemonic: 'Faixa branca deitada: contramão.',
+    explanation: 'A R-3 "Sentido proibido" mostra uma seta para a frente cortada por uma barra vermelha: não entre por ali.',
+    mnemonic: 'Seta cortada: não entre.',
     sources: [{ sourceId: 'mbst1', locator: 'R-3 — Significado' }],
     verifiedAt: N,
     review: 'verificado',
@@ -1912,13 +1946,13 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Placas de regulamentação',
     objective: 'Reconhecer a R-3',
     prompt: 'Verdadeiro ou falso?',
-    visual: { kind: 'sign', sign: 'R-3', alt: 'Placa circular vermelha com faixa branca deitada' },
+    visual: { kind: 'sign', sign: 'R-3', alt: 'Placa redonda com uma seta para a frente cortada por uma barra vermelha' },
     statement: 'Esta placa quer dizer "proibido estacionar".',
     answer: false,
     whyWrong: 'Esta é a R-3 "Sentido proibido": não entre por ali. Proibido estacionar é a R-6a, com a letra "E" cortada.',
     difficulty: 1,
-    explanation: 'Círculo vermelho com uma faixa branca deitada é a R-3 "Sentido proibido".',
-    mnemonic: 'Faixa branca deitada: contramão.',
+    explanation: 'A seta para a frente cortada por uma barra vermelha é a R-3 "Sentido proibido".',
+    mnemonic: 'Seta cortada: não entre.',
     sources: [{ sourceId: 'mbst1', locator: 'R-3, R-6a, R-6c, R-7 — Significado' }],
     verifiedAt: D,
     review: 'verificado',
@@ -1955,7 +1989,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     visual: { kind: 'sign', sign: 'R-7', alt: 'Placa circular com dois carros lado a lado cortados por uma barra' },
     options: [
       { id: 'a', text: 'Estacionar', whyWrong: 'Proibido estacionar é a R-6a, com a letra "E" cortada.' },
-      { id: 'b', text: 'Entrar na rua', whyWrong: 'Proibido entrar é a R-3 "Sentido proibido", com a faixa branca deitada.' },
+      { id: 'b', text: 'Entrar na rua', whyWrong: 'Proibido entrar é a R-3 "Sentido proibido", com a seta para a frente cortada.' },
       { id: 'c', text: 'Ultrapassar' },
       { id: 'd', text: 'Parar e estacionar', whyWrong: 'Proibido parar e estacionar é a R-6c, com o "E" e um X.' },
     ],

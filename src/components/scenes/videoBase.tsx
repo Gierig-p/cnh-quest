@@ -7,6 +7,8 @@ import type { ReactNode } from 'react';
 import { Scene3D, box, camLook, circle, extrude, lines, rect, rng, scale, seg, subq, tfObj, chain, T, Rz, type Obj, type Part, type V2, type V3 } from './engine';
 import { asphalt, building, bush, grassPatches, lampPost, sidewalk, tree } from './models';
 import { Tag } from './iso';
+import { signGraphic } from '../SignArt';
+import type { SignCode } from '../../content/types';
 
 export type Pr = (p: V3) => V2;
 export const VOCE = '#e9eef3';
@@ -49,6 +51,18 @@ export const proibido = (pr: Pr, p: V3, o = 1, r = 11): ReactNode => {
     </g>
   );
 };
+
+/** placa oficial grande, em pixels, centrada em (cx, cy) com largura `w` */
+export function placa(code: SignCode, cx: number, cy: number, w: number, o = 1, speed = 60): ReactNode {
+  if (o <= 0.01) return null;
+  const g = signGraphic(code, speed);
+  const h = w / g.aspect;
+  return (
+    <g opacity={o} transform={`translate(${cx - w / 2} ${cy - h / 2}) scale(${w / 100})`}>
+      {g.node}
+    </g>
+  );
+}
 
 /** visto "ok" verde, em pixels */
 export const certo = (pr: Pr, p: V3, o = 1, r = 10): ReactNode => {

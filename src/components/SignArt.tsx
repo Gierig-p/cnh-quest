@@ -152,11 +152,11 @@ function render(code: SignCode, speed: number) {
         </>
       );
     case 'R-3':
-      return (
+      return ring(
         <>
-          <circle cx="50" cy="50" r="46" fill={RED} />
-          <rect x="18" y="41" width="64" height="18" fill="#fff" />
-        </>
+          <path d="M50 20 L66 42 H56 V80 H44 V42 H34 Z" fill={BLACK} />
+          <line x1="22" y1="22" x2="78" y2="78" stroke={RED} strokeWidth="9" />
+        </>,
       );
     case 'R-6a':
       return ring(

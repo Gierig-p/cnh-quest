@@ -429,16 +429,19 @@ export function Rotatoria(p: CenaProps) {
 
 /* ---------------- rua local ---------------- */
 
-/** rua de bairro com casas dos dois lados e nenhuma placa de velocidade */
-export function RuaLocal(p: CenaProps) {
-  const cam = camLook(0.8, -5, 0, 20, 40, 10.5);
-  const ground = [
+/** chão da rua de bairro: asfalto de 6,4 m, calçadas e um bueiro */
+export function ruaLocalChao(): Part[] {
+  return [
     ...grassPatches(-40, -40, 40, 40, 9),
     ...asphalt(-3.2, -40, 3.2, 40, 2),
     ...sidewalk(3.2, -40, 5.8, 40),
     ...sidewalk(-5.8, -40, -3.2, 40),
     ...manhole(-1.4, -9),
   ];
+}
+
+/** casas, muros, árvores e postes da rua de bairro (sem carros nem pessoas) */
+export function ruaLocalObjs(): Obj[] {
   const casas: Obj[] = [];
   const cores = ['#f3e3b8', '#cfe7c4', '#f1d0b0', '#d9e3f0', '#f6d2d2', '#e8d8f0'];
   for (let i = 0; i < 5; i++) {
@@ -448,7 +451,7 @@ export function RuaLocal(p: CenaProps) {
     casas.push(wall(6.0, y - 1.2, 6.25, y + 4.5, 1.2, '#e7dcc4'), gate(6.1, y + 4.5, y + 7.2, 1.2));
     casas.push(wall(-6.25, y + 1.8, -6.0, y + 7.5, 1.2, '#e7dcc4'), gate(-6.1, y + 7.5, y + 10.2, 1.2));
   }
-  const objs: Obj[] = [
+  return [
     ...casas,
     tree(4.6, -12, 0.9, 1),
     tree(4.6, 4, 0.95, 2),
@@ -458,9 +461,17 @@ export function RuaLocal(p: CenaProps) {
     lampPost(4.6, -4.5, -1),
     lampPost(-4.6, 4.5, 1),
     bench(-4.9, -14, Math.PI / 2),
+  ];
+}
+
+/** rua de bairro com casas dos dois lados e nenhuma placa de velocidade */
+export function RuaLocal(p: CenaProps) {
+  const cam = camLook(0.8, -5, 0, 20, 40, 10.5);
+  const objs: Obj[] = [
+    ...ruaLocalObjs(),
     person(4.4, -7.5, MOCA, 0.5, Math.PI, 1.3),
     car({ x: -2.3, y: -16, heading: Math.PI, color: '#f2c21b' }),
     car({ x: 1.6, y: 1.5, color: VOCE }),
   ];
-  return cena(cam, ground, objs, (pr) => voce(pr, 1.6, 1.5), p);
+  return cena(cam, ruaLocalChao(), objs, (pr) => voce(pr, 1.6, 1.5), p);
 }

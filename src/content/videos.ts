@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -251,6 +251,58 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Deixe livre a faixa da esquerda.',
       'Vá para a direita e pare, se for necessário.',
       'Para guardar: sirene tocou, direita e calma.',
+    ],
+  },
+  // cartão c-formas (MBST vol. I item 3.6; vol. II item 3.5, A-18, A-32b)
+  formas: {
+    falas: [
+      'Antes de ler o desenho, olhe a forma e a cor da placa.',
+      'Placa redonda, em vermelho, preto e branco, é de regulamentação: ela dá uma ordem.',
+      'Ordem é algo que você é obrigado a fazer, ou proibido de fazer.',
+      'Há duas exceções: o PARE tem oito lados, e o Dê a preferência é um triângulo.',
+      'Placa amarela, em forma de losango, é de advertência: ela dá um aviso.',
+      'Por exemplo: a lombada desenhada avisa que há uma lombada à frente.',
+      'E a pessoa na faixa avisa que há uma faixa de pedestres adiante.',
+      'Para guardar: redonda manda, amarela em losango avisa.',
+    ],
+  },
+  // cartão c-r1-r2 (MBST vol. I, R-1 e R-2; CTB arts. 208 e 258)
+  'r1-r2': {
+    falas: [
+      'Duas placas parecidas pedem coisas diferentes: o PARE e o Dê a preferência.',
+      'O PARE tem oito lados. Pare sempre, mesmo sem ninguém vindo.',
+      'Depois de parar, olhe e só siga quando for seguro.',
+      'Passar direto pelo PARE é infração gravíssima, como furar o sinal vermelho.',
+      'O Dê a preferência é um triângulo de ponta para baixo.',
+      'Reduza e deixe passar quem já está na via. Pare só se precisar.',
+      'As duas placas valem mais que a regra de quem vem pela direita.',
+      'Para guardar: oito lados, pare sempre. Triângulo de cabeça para baixo, eu cedo.',
+    ],
+  },
+  // cartão c-proibicoes (MBST vol. I, R-3, R-6a, R-6c, R-7)
+  proibicoes: {
+    falas: [
+      'Muitas placas redondas mostram um desenho cortado por uma barra vermelha.',
+      'A barra quer dizer: não pode.',
+      'A seta para a frente, cortada pela barra, é sentido proibido: não entre por ali.',
+      'A letra E com uma barra é proibido estacionar. Parar só para alguém descer ainda pode.',
+      'A letra E com duas barras em X é proibido parar e estacionar.',
+      'Dois carros lado a lado, cortados por uma barra, é proibido ultrapassar.',
+      'Para guardar: uma barra, não estaciona. Um X, nem para.',
+    ],
+  },
+  // cartão c-velocidade (MBST vol. I, R-19; CTB art. 61, § 1º, I)
+  velocidade: {
+    falas: [
+      'O limite de velocidade é o máximo que você pode andar.',
+      'A placa redonda com um número mostra esse limite, a partir dali.',
+      'Sem placa, na cidade, vale o limite da lei, pelo tipo de via.',
+      'Via de trânsito rápido, sem semáforo nem cruzamento: oitenta quilômetros por hora.',
+      'Via arterial, a avenida com semáforos: sessenta.',
+      'Via coletora, que liga o bairro às avenidas: quarenta.',
+      'Via local, a rua do bairro: trinta.',
+      'Mas, se houver placa, vale a placa, mesmo com outro número.',
+      'Para guardar: oitenta, sessenta, quarenta, trinta, do mais rápido para a rua do bairro.',
     ],
   },
 };
