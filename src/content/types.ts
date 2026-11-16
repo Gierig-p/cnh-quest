@@ -108,7 +108,21 @@ export type SceneId =
   | 'rodovia-dupla'
   | 'rodovia-dupla-caminhao'
   | 'rodovia-placa-100'
-  | 'crianca-carro';
+  | 'crianca-carro'
+  // Mundo 4 (16/11)
+  | 'radar-60'
+  | 'avanca-vermelho'
+  | 'celular-mao'
+  | 'celular-banco'
+  | 'fones-ouvido'
+  | 'moto-sem-capacete'
+  | 'blitz-noite'
+  | 'fiscalizacao-cinto'
+  | 'racha'
+  | 'sinistro-moto'
+  | 'escola'
+  | 'zigue-zague'
+  | 'festa';
 
 /**
  * Uma linha da situação narrada ("Na rua"): uma fala do narrador ou um som.

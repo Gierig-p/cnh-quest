@@ -57,6 +57,18 @@ const carregar: Record<VideoId, () => Promise<VideoDef>> = {
   'marcas-transversais': () => import('./scenes/VideoMarcasTransversais').then(paraDef),
   semaforo: () => import('./scenes/VideoSemaforo').then(paraDef),
   'semaforo-pisca': () => import('./scenes/VideoSemaforoPisca').then(paraDef),
+  naturezas: () => import('./scenes/VideoNaturezas').then(paraDef),
+  penalidades: () => import('./scenes/VideoPenalidades').then(paraDef),
+  suspensao: () => import('./scenes/VideoSuspensao').then(paraDef),
+  cassacao: () => import('./scenes/VideoCassacao').then(paraDef),
+  'velocidade-sinal': () => import('./scenes/VideoVelocidadeSinal').then(paraDef),
+  'celular-cinto': () => import('./scenes/VideoCelularCinto').then(paraDef),
+  alcool: () => import('./scenes/VideoAlcool').then(paraDef),
+  'recusa-racha': () => import('./scenes/VideoRecusaRacha').then(paraDef),
+  'crimes-vitima': () => import('./scenes/VideoCrimesVitima').then(paraDef),
+  'crimes-perigo': () => import('./scenes/VideoCrimesPerigo').then(paraDef),
+  'auto-notificacao': () => import('./scenes/VideoAutoNotificacao').then(paraDef),
+  'defesa-recurso': () => import('./scenes/VideoDefesaRecurso').then(paraDef),
 };
 
 const cache: Partial<Record<VideoId, VideoDef>> = {};

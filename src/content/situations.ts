@@ -547,6 +547,7 @@ export const WORLD4_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'Um amigo oferece uma lata de cerveja e diz: uma só não dá nada.' },
     ],
     prompt: 'O que você faz?',
+    visual: { kind: 'scene', scene: 'festa', alt: 'Festa numa casa: um amigo oferece uma lata de cerveja, e o seu carro está estacionado ali perto' },
     options: [
       { id: 'a', text: 'Tomo só uma, porque uma lata está liberada', whyWrong: 'Não existe quantidade liberada. Qualquer concentração de álcool já é infração.' },
       { id: 'b', text: 'Recuso a cerveja, ou deixo o carro e volto de táxi, de aplicativo ou com alguém que não bebeu' },
@@ -575,6 +576,7 @@ export const WORLD4_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'O celular vibra no banco do lado. Chegou uma mensagem.' },
     ],
     prompt: 'O que você faz?',
+    visual: { kind: 'scene', scene: 'celular-banco', alt: 'Por dentro do carro: o celular vibra no banco do passageiro' },
     options: [
       { id: 'a', text: 'Pego o celular rapidinho, só para ler', whyWrong: 'Segurar ou mexer no celular dirigindo é infração gravíssima, mesmo que seja rápido.' },
       { id: 'b', text: 'Respondo com uma mão e dirijo com a outra', whyWrong: 'Mexer no celular é gravíssima, e dirigir com uma mão só também é infração.' },
@@ -603,6 +605,7 @@ export const WORLD4_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'O motociclista está no chão, acordado, segurando a perna.' },
     ],
     prompt: 'O que você faz?',
+    visual: { kind: 'scene', scene: 'sinistro-moto', alt: 'Moto caída na rua, o motociclista no chão e o seu carro parado logo atrás' },
     options: [
       { id: 'a', text: 'Vou embora, porque a culpa foi dele', whyWrong: 'Fugir do local para não ser responsabilizado é crime.' },
       { id: 'b', text: 'Paro, sinalizo o local e chamo o socorro' },
@@ -631,6 +634,7 @@ export const WORLD4_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'Ele pede que você faça o teste do bafômetro.' },
     ],
     prompt: 'Se você se recusar a fazer o teste, o que acontece?',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Blitz à noite: cones na rua e um agente com o bafômetro ao lado do seu carro' },
     options: [
       { id: 'a', text: 'Nada, porque ninguém é obrigado a fazer o teste', whyWrong: 'A recusa é infração própria, com as mesmas penalidades de dirigir sob efeito de álcool.' },
       { id: 'b', text: 'Recebo as mesmas penalidades de quem dirige sob efeito de álcool' },
@@ -685,6 +689,7 @@ export const WORLD4_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'Olhando o painel, você vê que está a cem.' },
     ],
     prompt: 'Se passar assim por um radar, qual é a consequência?',
+    visual: { kind: 'scene', scene: 'radar-60', alt: 'Avenida com placa de velocidade máxima de 60 km/h e um radar à frente' },
     options: [
       { id: 'a', text: 'Infração média, só com multa', whyWrong: 'Média é até 20% acima. 100 está mais de 50% acima de 60.' },
       { id: 'b', text: 'Infração grave, com 5 pontos', whyWrong: 'Grave é de 20% a 50% acima. 100 em via de 60 passa de 50%.' },

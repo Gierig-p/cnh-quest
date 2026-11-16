@@ -136,21 +136,27 @@ export function chuva(t: number, o: number): ReactNode {
   );
 }
 
-/** moto com piloto de capacete, indo para o norte quando `face` = 0 */
-export function moto(x: number, y: number, face = 0, cor = '#2f80ed'): Obj {
+/** moto com piloto de capacete, indo para o norte quando `face` = 0; `piloto: false` tira o piloto, `capacete: false` deixa a cabeça de fora */
+export function moto(x: number, y: number, face = 0, cor = '#2f80ed', { piloto = true, capacete = true }: { piloto?: boolean; capacete?: boolean } = {}): Obj {
   const parts: Part[] = [];
   for (const cy of [-0.72, 0.72]) parts.push(extrude(circle(0.33, 12).map(([a, b]): V2 => [cy + a, 0.33 + b]), 'x', -0.09, 0.09, '#262b33'));
   parts.push(box(-0.2, -0.55, 0.42, 0.2, 0.5, 0.8, cor));
   parts.push(box(-0.16, -0.15, 0.8, 0.16, 0.6, 0.92, '#1f2630'));
   parts.push(box(-0.12, -0.8, 0.5, 0.12, -0.55, 1.05, scale(cor, 0.75)));
   parts.push(seg([-0.32, -0.62, 1.12], [0.32, -0.62, 1.12], 0.06, '#1f2630'));
-  // piloto
-  parts.push(seg([0, 0.15, 0.95], [0, -0.1, 1.55], 0.42, '#3a3f47', 0.26));
-  for (const s of [-1, 1]) {
-    parts.push(seg([s * 0.2, -0.05, 1.5], [s * 0.3, -0.6, 1.15], 0.1, '#3a3f47'));
-    parts.push(seg([s * 0.16, 0.1, 0.95], [s * 0.2, -0.3, 0.6], 0.14, '#33415a'));
+  if (piloto) {
+    parts.push(seg([0, 0.15, 0.95], [0, -0.1, 1.55], 0.42, '#3a3f47', 0.26));
+    for (const s of [-1, 1]) {
+      parts.push(seg([s * 0.2, -0.05, 1.5], [s * 0.3, -0.6, 1.15], 0.1, '#3a3f47'));
+      parts.push(seg([s * 0.16, 0.1, 0.95], [s * 0.2, -0.3, 0.6], 0.14, '#33415a'));
+    }
+    if (capacete) parts.push(box(-0.19, -0.3, 1.55, 0.19, 0.08, 1.92, '#f4f1e6', (k, q) => (k === 'n' ? [{ p: subq(q, 0.12, 0.35, 0.88, 0.8), c: '#2b3a48' }] : undefined)));
+    else {
+      // cabeça de fora: rosto e cabelo, sem capacete
+      parts.push(box(-0.15, -0.24, 1.56, 0.15, 0.04, 1.86, '#c98a5e', (k, q) => (k === 'n' ? [{ p: subq(q, 0, 0.8, 1, 1), c: '#2b2420' }, { p: subq(q, 0.22, 0.45, 0.36, 0.6), c: '#1d2430' }, { p: subq(q, 0.64, 0.45, 0.78, 0.6), c: '#1d2430' }] : k === 's' || k === 'e' || k === 'w' ? [{ p: subq(q, 0, 0.5, 1, 1), c: '#2b2420' }] : undefined)));
+      parts.push(box(-0.16, -0.25, 1.86, 0.16, 0.05, 1.93, '#2b2420'));
+    }
   }
-  parts.push(box(-0.19, -0.3, 1.55, 0.19, 0.08, 1.92, '#f4f1e6', (k, q) => (k === 'n' ? [{ p: subq(q, 0.12, 0.35, 0.88, 0.8), c: '#2b3a48' }] : undefined)));
   return tfObj({ parts, shadow: true }, chain(T(x, y), Rz(face)));
 }
 

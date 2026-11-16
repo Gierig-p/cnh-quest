@@ -12,6 +12,8 @@ const m3 = () => import('./scenes/Mundo3');
 const de = (pega: (m: Awaited<ReturnType<typeof m1>>) => Comp): Comp => lazy(() => m1().then((m) => ({ default: pega(m) })));
 const de2 = (pega: (m: Awaited<ReturnType<typeof m2>>) => Comp): Comp => lazy(() => m2().then((m) => ({ default: pega(m) })));
 const de3 = (pega: (m: Awaited<ReturnType<typeof m3>>) => Comp): Comp => lazy(() => m3().then((m) => ({ default: pega(m) })));
+const m4 = () => import('./scenes/Mundo4');
+const de4 = (pega: (m: Awaited<ReturnType<typeof m4>>) => Comp): Comp => lazy(() => m4().then((m) => ({ default: pega(m) })));
 
 const CENAS3D: Partial<Record<SceneId, Comp>> = {
   'agente-apito': de((m) => m.AgenteApito),
@@ -68,6 +70,20 @@ const CENAS3D: Partial<Record<SceneId, Comp>> = {
   'rodovia-dupla-caminhao': de3((m) => m.RodoviaDuplaCaminhao),
   'rodovia-placa-100': de3((m) => m.RodoviaPlaca100),
   'crianca-carro': de3((m) => m.CriancaCarro),
+  // Mundo 4
+  'radar-60': de4((m) => m.Radar60),
+  'avanca-vermelho': de4((m) => m.AvancaVermelho),
+  'celular-mao': de4((m) => m.CelularMao),
+  'celular-banco': de4((m) => m.CelularBanco),
+  'fones-ouvido': de4((m) => m.FonesOuvido),
+  'moto-sem-capacete': de4((m) => m.MotoSemCapacete),
+  'blitz-noite': de4((m) => m.BlitzNoite),
+  'fiscalizacao-cinto': de4((m) => m.FiscalizacaoCinto),
+  'racha': de4((m) => m.Racha),
+  'sinistro-moto': de4((m) => m.SinistroMoto),
+  'escola': de4((m) => m.Escola),
+  'zigue-zague': de4((m) => m.ZigueZague),
+  'festa': de4((m) => m.Festa),
 };
 
 export const temCena3D = (s: SceneId) => s in CENAS3D;

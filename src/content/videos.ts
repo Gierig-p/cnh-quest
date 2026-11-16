@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores' | 'marcas-linhas' | 'marcas-transversais' | 'semaforo' | 'semaforo-pisca';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores' | 'marcas-linhas' | 'marcas-transversais' | 'semaforo' | 'semaforo-pisca' | 'naturezas' | 'penalidades' | 'suspensao' | 'cassacao' | 'velocidade-sinal' | 'celular-cinto' | 'alcool' | 'recusa-racha' | 'crimes-vitima' | 'crimes-perigo' | 'auto-notificacao' | 'defesa-recurso';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -441,6 +441,201 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Quem já está atravessando termina a travessia.',
       'A sequência dele é: verde, vermelho piscando, vermelho, e de volta ao verde.',
       'Para guardar: pisca-pisca amarelo, devagar e atenção.',
+    ],
+  },
+  // cartão c4-naturezas (CTB art. 258, I a IV e § 2º; art. 259, I a IV; art. 252, VI)
+  naturezas: {
+    falas: [
+      'Toda infração tem uma natureza. Ela diz o quanto a infração é séria.',
+      'São quatro naturezas: leve, média, grave e gravíssima.',
+      'A natureza define o valor da multa e quantos pontos vão para o seu registro de habilitação.',
+      'Leve: multa de oitenta e oito reais e trinta e oito centavos, e três pontos.',
+      'Média: cento e trinta reais e dezesseis centavos, e quatro pontos.',
+      'Grave: cento e noventa e cinco reais e vinte e três centavos, e cinco pontos.',
+      'Gravíssima: duzentos e noventa e três reais e quarenta e sete centavos, e sete pontos.',
+      'Em algumas gravíssimas, muito perigosas, a multa é multiplicada: três, cinco ou até dez vezes.',
+      'Esse número é o fator multiplicador.',
+      'Um exemplo: dirigir com fone de ouvido ligado ao celular é infração média. Multa de cento e trinta reais e dezesseis centavos, e quatro pontos.',
+      'Para guardar: leve três, média quatro, grave cinco, gravíssima sete.',
+    ],
+  },
+  // cartão c4-penalidades (CTB art. 256; art. 267; art. 269, I, II e III; art. 167)
+  penalidades: {
+    falas: [
+      'Quem comete uma infração recebe uma penalidade. A penalidade é a punição.',
+      'Às vezes, o agente também toma uma providência na hora, para corrigir o problema. É a medida administrativa.',
+      'As penalidades são: advertência por escrito, multa e suspensão do direito de dirigir.',
+      'E também: cassação da CNH, cassação da Permissão para Dirigir e curso de reciclagem.',
+      'Infração leve ou média, sem nenhuma outra infração nos últimos doze meses? Em vez de multa, vem a advertência por escrito.',
+      'As medidas administrativas são: reter o veículo, remover o veículo e recolher a CNH.',
+      'Reter: o carro fica parado até o problema ser resolvido.',
+      'Remover: o carro é levado embora do local.',
+      'Um exemplo: o passageiro está sem cinto. A infração é grave, e vem a multa. Essa é a penalidade.',
+      'E o carro fica retido até ele colocar o cinto. Essa é a medida administrativa.',
+      'Para guardar: penalidade pune. Medida administrativa corrige na hora.',
+    ],
+  },
+  // cartão c4-suspensao (CTB art. 261, I, II e §§ 1º, 2º, 3º e 5º; art. 268, II)
+  suspensao: {
+    falas: [
+      'Os pontos das infrações vão somando no seu registro.',
+      'Se passarem do limite em doze meses, o direito de dirigir é suspenso. Você fica um tempo proibido de dirigir.',
+      'O limite de pontos depende das infrações gravíssimas.',
+      'Com duas ou mais gravíssimas, o limite é vinte pontos.',
+      'Com uma gravíssima, trinta pontos.',
+      'Sem nenhuma gravíssima, quarenta pontos.',
+      'Quem dirige como trabalho, ganhando por isso, é suspenso com quarenta pontos, sejam as infrações quais forem.',
+      'Pelos pontos, a suspensão dura de seis meses a um ano.',
+      'Algumas infrações, como dirigir depois de beber, já trazem a suspensão sozinhas.',
+      'A CNH só volta depois de cumprir o prazo e fazer o curso de reciclagem. E os pontos são zerados.',
+      'Para guardar: duas gravíssimas, vinte. Uma, trinta. Nenhuma, quarenta.',
+    ],
+  },
+  // cartão c4-cassacao (CTB art. 263, I, II, III e § 2º; art. 268, II, III e IV)
+  cassacao: {
+    falas: [
+      'A cassação é mais séria que a suspensão. A pessoa perde a habilitação.',
+      'Para voltar a dirigir, ela precisa esperar e começar de novo.',
+      'A CNH é cassada quando a pessoa dirige com o direito de dirigir suspenso.',
+      'Também quando ela repete, em doze meses, certas infrações gravíssimas.',
+      'Dirigir veículo de outra categoria, ou entregar o carro a quem não pode dirigir.',
+      'Dirigir sob efeito de álcool, fazer racha e manobras perigosas.',
+      'E quando a pessoa é condenada pela Justiça por crime de trânsito.',
+      'Depois de dois anos, ela pode pedir a reabilitação, refazendo todos os exames.',
+      'O curso de reciclagem é obrigatório para quem foi suspenso e para quem contribuiu para um sinistro grave.',
+      'Também para quem foi condenado por crime de trânsito.',
+      'Para guardar: dirigir suspenso dá cassação.',
+    ],
+  },
+  // cartão c4-velocidade-sinal (CTB art. 218, I, II e III; art. 208; art. 203)
+  'velocidade-sinal': {
+    falas: [
+      'Algumas infrações caem muito na prova: correr demais, avançar o sinal vermelho e ultrapassar onde não pode.',
+      'Primeiro, a velocidade. A conta é feita sobre a velocidade máxima da via.',
+      'Até vinte por cento acima da velocidade máxima: infração média.',
+      'Mais de vinte até cinquenta por cento acima: grave.',
+      'Mais de cinquenta por cento acima: gravíssima, com multa três vezes maior e suspensão do direito de dirigir.',
+      'Um exemplo: numa via de sessenta quilômetros por hora, quem passa a cem está mais de cinquenta por cento acima. É gravíssima, com suspensão.',
+      'Avançar o sinal vermelho ou a parada obrigatória: gravíssima.',
+      'Ultrapassar pela contramão em lugares perigosos também é gravíssima, com multa cinco vezes maior.',
+      'Em curva ou subida sem visibilidade, e na faixa de pedestres.',
+      'Em ponte, viaduto ou túnel, e sobre a linha amarela contínua.',
+      'Para guardar: até vinte por cento, média. Até cinquenta, grave. Mais que isso, gravíssima.',
+    ],
+  },
+  // cartão c4-celular-cinto (CTB art. 252, V, VI e parágrafo único; art. 167; art. 168; art. 244, I e II)
+  'celular-cinto': {
+    falas: [
+      'Distração e falta de proteção também são infração.',
+      'Olhar o celular por um segundo já basta para causar um sinistro.',
+      'Segurar ou mexer no celular enquanto dirige: gravíssima.',
+      'Dirigir com fones de ouvido ligados ao som ou ao celular: média.',
+      'Dirigir com uma mão só: média.',
+      'Pode tirar a mão para fazer sinal de braço, trocar a marcha ou usar os comandos do carro.',
+      'Condutor ou passageiro sem cinto: grave.',
+      'Levar criança sem seguir as regras de segurança: gravíssima.',
+      'Moto com piloto ou passageiro sem capacete: gravíssima, com suspensão do direito de dirigir.',
+      'Um exemplo: com o carro andando, você pega o celular para ver o mapa. É gravíssima. Programe o mapa antes de sair, com o carro parado.',
+      'Para guardar: celular na mão, gravíssima. Fone, média.',
+    ],
+  },
+  // cartão c4-alcool (CTB art. 165; art. 276; art. 263, II)
+  alcool: {
+    falas: [
+      'O Código pune qualquer quantidade de álcool no corpo de quem dirige.',
+      'Não existe "só um copo". Qualquer concentração no sangue ou no ar dos pulmões já é infração.',
+      'Dirigir sob efeito de álcool ou de outra substância psicoativa é gravíssima.',
+      'A multa é dez vezes maior: dois mil, novecentos e trinta e quatro reais e setenta centavos.',
+      'E o direito de dirigir fica suspenso por doze meses.',
+      'Na hora, o agente recolhe a CNH e retém o veículo.',
+      'Repetiu em doze meses? A multa dobra e a habilitação é cassada.',
+      'O aparelho tem uma pequena margem de erro, definida pelo Contran.',
+      'Ela existe por causa do aparelho. Não é permissão para beber.',
+      'Um exemplo: depois de uma taça de vinho no jantar, não dirija. Chame um táxi, um carro de aplicativo ou alguém que não bebeu.',
+      'Para guardar: se beber, não dirija. Nem um copo.',
+    ],
+  },
+  // cartão c4-recusa-racha (CTB art. 165-A; art. 277, caput e § 3º; arts. 173, 174 e 175)
+  'recusa-racha': {
+    falas: [
+      'Recusar o bafômetro não livra ninguém da punição.',
+      'Quem é parado numa fiscalização ou se envolve num sinistro pode passar pelo teste do bafômetro, por exame ou por perícia.',
+      'Recusar o teste tem as mesmas penalidades de dirigir sob efeito de álcool.',
+      'Gravíssima, multa dez vezes maior e suspensão por doze meses.',
+      'E transformar a rua em pista de corrida é uma das infrações mais graves do Código.',
+      'Racha e competição sem permissão são gravíssimas.',
+      'Manobras perigosas também: arrancada brusca, derrapagem e freada com os pneus arrastando.',
+      'Em todos esses casos: multa dez vezes maior e suspensão do direito de dirigir.',
+      'O agente recolhe a CNH e remove o veículo.',
+      'Um exemplo: no semáforo, dois carros arrancam lado a lado para ver quem chega primeiro. Isso é racha.',
+      'Para guardar: recusar o bafômetro custa o mesmo que beber.',
+    ],
+  },
+  // cartão c4-crimes-vitima (CTB art. 302, caput e § 3º; art. 303; art. 304; art. 305; art. 301)
+  'crimes-vitima': {
+    falas: [
+      'Algumas atitudes no trânsito não são só infração: são crime.',
+      'Aí quem julga é a Justiça, e a pena pode ser de prisão.',
+      'Matar alguém sem querer, dirigindo, é homicídio culposo.',
+      'A pena é detenção de dois a quatro anos, e suspensão ou proibição de dirigir.',
+      'Se o motorista estava sob efeito de álcool ou de droga, a pena sobe: reclusão de cinco a oito anos.',
+      'Ferir alguém sem querer é lesão corporal culposa: detenção de seis meses a dois anos.',
+      'Deixar de socorrer a vítima é crime, mesmo que outra pessoa tenha socorrido.',
+      'Fugir do local para não ser responsabilizado também é crime.',
+      'Quem presta socorro pronto e completo à vítima não é preso em flagrante e não paga fiança.',
+      'Um exemplo: houve um atropelamento. O motorista para, sinaliza o local e chama o socorro. Ele agiu certo.',
+      'Para guardar: socorrer a vítima é dever e protege você.',
+    ],
+  },
+  // cartão c4-crimes-perigo (CTB art. 306, § 1º; arts. 307 a 311)
+  'crimes-perigo': {
+    falas: [
+      'Alguns crimes acontecem mesmo que ninguém se machuque. Basta colocar as pessoas em perigo.',
+      'Dirigir com zero vírgula três miligrama de álcool por litro de ar no bafômetro, ou mais, é crime.',
+      'Também conta seis decigramas por litro de sangue, ou sinais de que a capacidade de dirigir está alterada.',
+      'A pena é detenção de seis meses a três anos, multa e suspensão ou proibição de dirigir.',
+      'Participar de racha na via pública, gerando risco, também é crime: detenção de seis meses a três anos.',
+      'Se alguém se ferir gravemente ou morrer, a pena é maior.',
+      'Dirigir sem habilitação, gerando perigo, é crime. Entregar a direção a quem não é habilitado, ou não tem condições de dirigir, também.',
+      'Nos dois casos: detenção de seis meses a um ano, ou multa.',
+      'Dirigir com o direito de dirigir suspenso também é crime.',
+      'Velocidade incompatível perto de escolas, hospitais ou lugares com muita gente, gerando perigo: detenção de seis meses a um ano, ou multa.',
+      'Um exemplo: você empresta o carro a um amigo que não tem CNH. Mesmo que nada aconteça, você pode responder por crime.',
+      'Para guardar: não precisa ter vítima para ser crime.',
+    ],
+  },
+  // cartão c4-auto-notificacao (CTB art. 280, § 3º; art. 281, § 1º, II; art. 257, §§ 2º, 3º e 7º; art. 260)
+  'auto-notificacao': {
+    falas: [
+      'Quando o agente vê uma infração, ele registra no auto de infração.',
+      'Ele registra mesmo quando não consegue parar o veículo.',
+      'Depois, o dono do veículo recebe um aviso oficial: a notificação.',
+      'Primeiro chega a notificação da autuação. Se a multa for aplicada, chega a da penalidade.',
+      'A notificação da autuação precisa ser expedida em até trinta dias. Se passar desse prazo, o auto é arquivado.',
+      'Se quem dirigia não era o dono, ele pode indicar o condutor em até trinta dias da notificação.',
+      'Sem indicação, a infração fica com o principal condutor cadastrado ou, se não houver, com o proprietário.',
+      'O proprietário responde pelos documentos e pela conservação do carro.',
+      'Quem dirige responde pelo que faz ao volante.',
+      'A multa é aplicada pelo órgão responsável pela via onde a infração aconteceu.',
+      'Um exemplo: seu irmão pegou seu carro e avançou o sinal vermelho. Quando chegar a notificação, indique ele como condutor dentro do prazo, para os pontos irem para a CNH dele.',
+      'Para guardar: não era você? Indique o condutor em trinta dias.',
+    ],
+  },
+  // cartão c4-defesa-recurso (CTB art. 281-A; art. 282, §§ 4º e 5º; arts. 285, 288 e 289; art. 284, caput e §§ 1º e 2º)
+  'defesa-recurso': {
+    falas: [
+      'Você tem direito de se defender de uma multa. E, se preferir pagar, pode ter desconto.',
+      'Depois da notificação da autuação, você tem pelo menos trinta dias para a defesa prévia.',
+      'Se a multa for aplicada, chega a notificação da penalidade. Ela dá pelo menos trinta dias para recorrer.',
+      'Essa data também é o vencimento da multa.',
+      'O primeiro recurso é julgado pela JARI, a Junta Administrativa de Recursos de Infrações.',
+      'Contra a decisão da JARI, cabe novo recurso em trinta dias. Em geral, ele vai para o CETRAN do seu estado. No Distrito Federal, o CONTRANDIFE.',
+      'Pagar até o vencimento: você paga oitenta por cento do valor, ou seja, vinte por cento de desconto.',
+      'E pagar não impede de recorrer.',
+      'Quem aderiu ao sistema de notificação eletrônica antes de receber a notificação, e abre mão da defesa e do recurso, paga sessenta por cento: quarenta por cento de desconto.',
+      'Um exemplo: chegou uma multa grave de cento e noventa e cinco reais e vinte e três centavos, e você não vai recorrer.',
+      'Pagando até o vencimento, você paga oitenta por cento: cento e cinquenta e seis reais e dezoito centavos.',
+      'Para guardar: defesa prévia, JARI, CETRAN. Pagou em dia: vinte por cento de desconto.',
     ],
   },
 };

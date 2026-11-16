@@ -38,6 +38,15 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
     example:
       'Dirigir com fone de ouvido ligado ao celular é infração média: multa de R$ 130,16 e 4 pontos.',
     remember: 'Leve 3, média 4, grave 5, gravíssima 7.',
+    video: {
+      id: 'naturezas',
+      resumo: [
+        'A natureza diz o quanto a infração é séria e define a multa e os pontos.',
+        'Leve: R$ 88,38 e 3 pontos. Média: R$ 130,16 e 4 pontos.',
+        'Grave: R$ 195,23 e 5 pontos. Gravíssima: R$ 293,47 e 7 pontos.',
+        'Em algumas gravíssimas muito perigosas, a multa é multiplicada por 3, 5 ou 10: o fator multiplicador.',
+      ],
+    },
     sources: ctb('art. 258, I a IV e § 2º', 'art. 259, I a IV', 'art. 252, VI'),
   },
   penalidades: {
@@ -70,6 +79,15 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
       'Um passageiro está sem cinto. A infração é grave: vem a multa (penalidade), e o carro fica retido até ele ' +
       'colocar o cinto (medida administrativa).',
     remember: 'Penalidade pune. Medida administrativa corrige na hora.',
+    video: {
+      id: 'penalidades',
+      resumo: [
+        'Penalidade é a punição. Medida administrativa é a providência na hora, para corrigir o problema.',
+        'Penalidades: advertência por escrito, multa, suspensão, cassação da CNH, cassação da PPD e curso de reciclagem.',
+        'Leve ou média, sem outra infração em 12 meses: advertência por escrito no lugar da multa.',
+        'Medidas administrativas: reter o veículo (fica parado), remover o veículo (é levado embora) e recolher a CNH.',
+      ],
+    },
     sources: ctb('art. 256', 'art. 267', 'art. 269, I, II e III', 'art. 167'),
   },
 
@@ -101,6 +119,16 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
     example:
       'Em 12 meses, Ana fez duas infrações gravíssimas e chegou a 20 pontos. O direito de dirigir dela será suspenso.',
     remember: 'Duas gravíssimas: 20. Uma: 30. Nenhuma: 40.',
+    video: {
+      id: 'suspensao',
+      resumo: [
+        'Os pontos somam. Passou do limite em 12 meses: o direito de dirigir é suspenso.',
+        'Limite: 20 pontos com 2 ou mais gravíssimas, 30 com 1, 40 sem nenhuma.',
+        'Quem dirige em atividade remunerada: 40 pontos, sejam as infrações quais forem.',
+        'Pelos pontos, a suspensão dura de 6 meses a 1 ano. Algumas infrações, como dirigir depois de beber, já trazem a suspensão sozinhas.',
+        'A CNH volta depois do prazo e do curso de reciclagem. Os pontos são zerados.',
+      ],
+    },
     sources: ctb('art. 261, I, II e §§ 1º, 2º, 3º e 5º', 'art. 268, II'),
   },
   cassacao: {
@@ -129,6 +157,17 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
     example:
       'Pedro estava com o direito de dirigir suspenso e foi pego dirigindo. A habilitação dele será cassada.',
     remember: 'Dirigir suspenso dá cassação.',
+    video: {
+      id: 'cassacao',
+      resumo: [
+        'A cassação é mais séria que a suspensão: a pessoa perde a habilitação e, para voltar, espera e começa de novo.',
+        'Cassa quem dirige com o direito de dirigir suspenso.',
+        'Também quem repete, em 12 meses, certas gravíssimas: outra categoria, entregar o carro a quem não pode dirigir, álcool, racha e manobras perigosas.',
+        'E quem é condenado pela Justiça por crime de trânsito.',
+        'Depois de 2 anos, pode pedir a reabilitação, refazendo todos os exames.',
+        'Curso de reciclagem: obrigatório para quem foi suspenso, quem contribuiu para um sinistro grave e quem foi condenado por crime de trânsito.',
+      ],
+    },
     sources: ctb('art. 263, I, II, III e § 2º', 'art. 268, II, III e IV'),
   },
 
@@ -153,6 +192,15 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
     example:
       'Numa via de 60 km/h, quem passa a 100 km/h está mais de 50% acima do limite. É gravíssima, com suspensão.',
     remember: 'Até 20%: média. Até 50%: grave. Mais que isso: gravíssima.',
+    video: {
+      id: 'velocidade-sinal',
+      resumo: [
+        'Até 20% acima da velocidade máxima: média. Mais de 20% até 50%: grave.',
+        'Mais de 50% acima: gravíssima, com multa 3 vezes maior e suspensão do direito de dirigir.',
+        'Avançar o sinal vermelho ou a parada obrigatória: gravíssima.',
+        'Ultrapassar pela contramão em curva ou subida sem visibilidade, na faixa de pedestres, em ponte, viaduto ou túnel, ou sobre linha amarela contínua: gravíssima, multa 5 vezes maior.',
+      ],
+    },
     sources: ctb('art. 218, I, II e III', 'art. 208', 'art. 203'),
   },
   celularCinto: {
@@ -176,6 +224,15 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
       'Com o carro andando, você pega o celular para ver o mapa. Isso é infração gravíssima. Programe o mapa antes ' +
       'de sair, com o carro parado.',
     remember: 'Celular na mão: gravíssima. Fone: média.',
+    video: {
+      id: 'celular-cinto',
+      resumo: [
+        'Segurar ou mexer no celular enquanto dirige: gravíssima.',
+        'Fones de ouvido ligados ao som ou ao celular: média. Uma mão só: média (pode tirar para sinal de braço, marcha ou comandos).',
+        'Condutor ou passageiro sem cinto: grave. Criança sem as regras de segurança: gravíssima.',
+        'Moto com piloto ou passageiro sem capacete: gravíssima, com suspensão do direito de dirigir.',
+      ],
+    },
     sources: ctb('art. 252, V, VI e parágrafo único', 'art. 167', 'art. 168', 'art. 244, I e II'),
   },
 
@@ -208,6 +265,16 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
       'Depois de uma taça de vinho no jantar, a resposta certa é não dirigir. Chame um táxi, um carro de aplicativo ' +
       'ou alguém que não bebeu.',
     remember: 'Se beber, não dirija. Nem um copo.',
+    video: {
+      id: 'alcool',
+      resumo: [
+        'Qualquer concentração de álcool no sangue ou no ar dos pulmões já é infração.',
+        'Álcool ou outra substância psicoativa: gravíssima, multa 10 vezes maior (R$ 2.934,70) e suspensão por 12 meses.',
+        'O agente recolhe a CNH e retém o veículo.',
+        'Repetiu em 12 meses: a multa dobra e a habilitação é cassada.',
+        'A margem de erro do aparelho, definida pelo Contran, não é permissão para beber.',
+      ],
+    },
     sources: ctb('art. 165', 'art. 276', 'art. 263, II'),
   },
   recusaRacha: {
@@ -229,6 +296,15 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
     example:
       'Num sábado à noite, dois carros arrancam lado a lado no semáforo para ver quem chega primeiro. Isso é racha.',
     remember: 'Recusar o bafômetro custa o mesmo que beber.',
+    video: {
+      id: 'recusa-racha',
+      resumo: [
+        'Em fiscalização ou sinistro, a pessoa pode passar pelo bafômetro, por exame ou por perícia.',
+        'Recusar o teste: as mesmas penalidades do álcool (gravíssima, multa 10 vezes maior, suspensão por 12 meses).',
+        'Racha, competição sem permissão e manobras perigosas (arrancada brusca, derrapagem, freada com os pneus arrastando): gravíssimas, multa 10 vezes maior e suspensão.',
+        'O agente recolhe a CNH e remove o veículo.',
+      ],
+    },
     sources: ctb('art. 165-A', 'art. 277, caput e § 3º', 'arts. 173, 174 e 175'),
   },
 
@@ -264,6 +340,16 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
       'Houve um atropelamento. O motorista para, sinaliza o local e chama o socorro. Ele agiu certo, e por isso não ' +
       'será preso em flagrante.',
     remember: 'Socorrer a vítima é dever e protege você.',
+    video: {
+      id: 'crimes-vitima',
+      resumo: [
+        'Algumas atitudes são crime: quem julga é a Justiça, e a pena pode ser de prisão.',
+        'Homicídio culposo: detenção de 2 a 4 anos e suspensão ou proibição de dirigir. Com álcool ou droga: reclusão de 5 a 8 anos.',
+        'Lesão corporal culposa: detenção de 6 meses a 2 anos.',
+        'Deixar de socorrer a vítima é crime, mesmo que outro tenha socorrido. Fugir do local também.',
+        'Quem presta socorro pronto e completo não é preso em flagrante e não paga fiança.',
+      ],
+    },
     sources: ctb('art. 302, caput e § 3º', 'art. 303', 'art. 304, caput e parágrafo único', 'art. 305', 'art. 301'),
   },
   crimesPerigo: {
@@ -284,6 +370,17 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
     example:
       'Você empresta o carro a um amigo que não tem CNH. Mesmo que nada aconteça, você pode responder por crime.',
     remember: 'Não precisa ter vítima para ser crime.',
+    video: {
+      id: 'crimes-perigo',
+      resumo: [
+        'Alguns crimes acontecem mesmo sem vítima: basta colocar as pessoas em perigo.',
+        'Álcool: 0,3 mg por litro de ar ou mais (ou 6 dg por litro de sangue), ou capacidade alterada. Detenção de 6 meses a 3 anos, multa e suspensão ou proibição de dirigir.',
+        'Racha na via pública, gerando risco: detenção de 6 meses a 3 anos. Com ferido grave ou morte, a pena é maior.',
+        'Dirigir sem habilitação gerando perigo, ou entregar a direção a quem não é habilitado ou não tem condições: detenção de 6 meses a 1 ano, ou multa.',
+        'Dirigir com o direito de dirigir suspenso também é crime.',
+        'Velocidade incompatível perto de escolas, hospitais ou muita gente, gerando perigo: detenção de 6 meses a 1 ano, ou multa.',
+      ],
+    },
     sources: ctb('art. 306, § 1º', 'art. 307', 'art. 308', 'art. 309', 'art. 310', 'art. 311'),
   },
 
@@ -314,6 +411,17 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
       'Seu irmão pegou seu carro e avançou o sinal vermelho. Quando chegar a notificação, indique ele como condutor ' +
       'dentro do prazo, para os pontos irem para a CNH dele.',
     remember: 'Não era você? Indique o condutor em 30 dias.',
+    video: {
+      id: 'auto-notificacao',
+      resumo: [
+        'O agente registra a infração no auto, mesmo sem parar o veículo.',
+        'Primeiro chega a notificação da autuação; se a multa for aplicada, a da penalidade.',
+        'A notificação da autuação precisa ser expedida em até 30 dias. Se passar, o auto é arquivado.',
+        'Não era o dono dirigindo? Indique o condutor em até 30 dias. Sem indicação, fica com o principal condutor cadastrado ou, se não houver, com o proprietário.',
+        'O proprietário responde pelos documentos e pela conservação do carro; quem dirige, pelo que faz ao volante.',
+        'A multa é aplicada pelo órgão responsável pela via onde a infração aconteceu.',
+      ],
+    },
     sources: ctb('art. 280, § 3º', 'art. 281, § 1º, II', 'art. 257, §§ 2º, 3º e 7º', 'art. 260'),
   },
   defesaRecurso: {
@@ -345,6 +453,16 @@ export const CONCEPTS4: Record<string, ConceptCard> = {
       'Chegou uma multa grave de R$ 195,23 e você não vai recorrer. Pagando até o vencimento, você paga 80%: ' +
       'R$ 156,18.',
     remember: 'Defesa prévia, JARI, CETRAN. Pagou em dia: 20% de desconto.',
+    video: {
+      id: 'defesa-recurso',
+      resumo: [
+        'Depois da notificação da autuação: pelo menos 30 dias para a defesa prévia.',
+        'Notificação da penalidade: pelo menos 30 dias para recorrer. Essa data é também o vencimento da multa.',
+        'O 1º recurso é julgado pela JARI. Contra a decisão, novo recurso em 30 dias, em geral ao CETRAN (no DF, CONTRANDIFE).',
+        'Pagar até o vencimento: 80% do valor (20% de desconto). Pagar não impede de recorrer.',
+        'Notificação eletrônica, abrindo mão da defesa e do recurso: paga 60% (40% de desconto).',
+      ],
+    },
     sources: ctb('art. 281-A', 'art. 282, §§ 4º e 5º', 'art. 285', 'art. 288', 'art. 289', 'art. 284, caput e §§ 1º e 2º'),
   },
 };
@@ -534,6 +652,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Penalidades',
     objective: 'Saber o que acontece com quem anda sem cinto',
     prompt: 'Numa fiscalização, o agente vê um passageiro sem cinto. O que acontece?',
+    visual: { kind: 'scene', scene: 'fiscalizacao-cinto', alt: 'Fiscalização: um agente ao lado de um carro em que o passageiro está sem cinto' },
     options: [
       { id: 'a', text: 'Nada, porque o cinto é dever só do motorista', whyWrong: 'O art. 167 vale para o condutor e para os passageiros.' },
       { id: 'b', text: 'Infração grave, e o carro fica retido até ele colocar o cinto' },
@@ -803,6 +922,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Velocidade',
     objective: 'Classificar o excesso de até 20%',
     prompt: 'A velocidade máxima da rua é 60 km/h, e um carro passa a 70 km/h. Qual é a natureza da infração?',
+    visual: { kind: 'scene', scene: 'radar-60', alt: 'Avenida com placa de velocidade máxima de 60 km/h e um radar à frente' },
     options: [
       { id: 'a', text: 'Leve', whyWrong: 'Excesso de velocidade começa na média.' },
       { id: 'b', text: 'Média' },
@@ -823,6 +943,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Velocidade',
     objective: 'Classificar o excesso entre 20% e 50%',
     prompt: 'Numa rodovia de 80 km/h, um carro passa a 110 km/h. Qual é a natureza da infração?',
+    visual: { kind: 'scene', scene: 'rodovia-dupla-80', alt: 'Rodovia de pista dupla com placa de velocidade máxima de 80 km/h' },
     options: [
       { id: 'a', text: 'Média', whyWrong: 'Média é até 20% acima, ou seja, até 96 km/h aqui.' },
       { id: 'b', text: 'Grave' },
@@ -863,6 +984,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Sinal vermelho',
     objective: 'Saber a natureza de avançar o sinal vermelho',
     prompt: 'Qual é a natureza da infração de avançar o sinal vermelho do semáforo?',
+    visual: { kind: 'scene', scene: 'avanca-vermelho', alt: 'Cruzamento com o semáforo vermelho e outro carro passando por ele' },
     options: [
       { id: 'a', text: 'Leve', whyWrong: 'Avançar o vermelho é das infrações mais perigosas: gravíssima.' },
       { id: 'b', text: 'Média', whyWrong: 'A infração é gravíssima.' },
@@ -916,6 +1038,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Celular e distração',
     objective: 'Saber a natureza de segurar o celular ao dirigir',
     prompt: 'Com o carro andando, o motorista segura o celular para ler uma mensagem. Qual é a natureza da infração?',
+    visual: { kind: 'scene', scene: 'celular-mao', alt: 'Por dentro do carro: o motorista segura o celular com o carro andando' },
     options: [
       { id: 'a', text: 'Leve', whyWrong: 'Segurar ou mexer no celular é gravíssima.' },
       { id: 'b', text: 'Média', whyWrong: 'Média é o fone de ouvido. Celular na mão é gravíssima.' },
@@ -936,6 +1059,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Celular e distração',
     objective: 'Saber a natureza de dirigir com fones de ouvido',
     prompt: 'Dirigir com fones de ouvido ligados ao celular é infração:',
+    visual: { kind: 'scene', scene: 'fones-ouvido', alt: 'Por dentro do carro: o motorista usa fones ligados ao celular' },
     options: [
       { id: 'a', text: 'Média' },
       { id: 'b', text: 'Gravíssima', whyWrong: 'Gravíssima é segurar ou mexer no celular. O fone é média.' },
@@ -971,6 +1095,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Capacete e criança',
     objective: 'Saber a punição de pilotar moto sem capacete',
     prompt: 'Qual é a punição para quem pilota moto sem capacete?',
+    visual: { kind: 'scene', scene: 'moto-sem-capacete', alt: 'Motociclista sem capacete andando à frente do seu carro' },
     options: [
       { id: 'a', text: 'Infração média, só com multa', whyWrong: 'Sem capacete é gravíssima, com suspensão.' },
       { id: 'b', text: 'Infração gravíssima, com suspensão do direito de dirigir' },
@@ -1128,6 +1253,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Álcool',
     objective: 'Saber as medidas administrativas no caso de álcool',
     prompt: 'Um condutor é flagrado dirigindo sob efeito de álcool. Que medidas o agente toma na hora?',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Blitz à noite: cones na rua e um agente com o bafômetro ao lado de um carro' },
     options: [
       { id: 'a', text: 'Recolhe a CNH e retém o veículo' },
       { id: 'b', text: 'Só anota a placa e libera', whyWrong: 'O art. 165 prevê o recolhimento da CNH e a retenção do veículo.' },
@@ -1148,6 +1274,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Recusa e racha',
     objective: 'Saber as penalidades de recusar o bafômetro',
     prompt: 'Numa fiscalização, o condutor se recusa a fazer o teste do bafômetro. O que acontece?',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Blitz à noite: cones na rua e um agente com o bafômetro ao lado de um carro' },
     options: [
       { id: 'a', text: 'Nada, porque ninguém é obrigado a fazer o teste', whyWrong: 'A recusa é infração própria, no art. 165-A.' },
       { id: 'b', text: 'Ele recebe as mesmas penalidades de quem dirige sob efeito de álcool' },
@@ -1183,6 +1310,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Recusa e racha',
     objective: 'Saber as penalidades do racha',
     prompt: 'Quais são as penalidades para quem disputa um racha na via pública?',
+    visual: { kind: 'scene', scene: 'racha', alt: 'À noite, dois carros lado a lado em alta velocidade, com pessoas olhando da calçada' },
     options: [
       { id: 'a', text: 'Infração grave e multa simples', whyWrong: 'Racha é gravíssima, com multa 10 vezes maior.' },
       { id: 'b', text: 'Infração gravíssima, multa 10 vezes maior e suspensão do direito de dirigir' },
@@ -1265,6 +1393,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes com vítima',
     objective: 'Saber o que garante quem presta socorro',
     prompt: 'Num sinistro com vítima, o motorista presta socorro pronto e completo. O que a lei garante a ele?',
+    visual: { kind: 'scene', scene: 'sinistro-moto', alt: 'Moto caída na rua, o motociclista no chão e um carro parado logo atrás' },
     options: [
       { id: 'a', text: 'Que não será preso em flagrante nem pagará fiança' },
       { id: 'b', text: 'Que nunca vai responder por nada', whyWrong: 'Ele pode responder depois. O que não ocorre é a prisão em flagrante.' },
@@ -1410,6 +1539,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes de perigo',
     objective: 'Saber o crime de velocidade perto de escolas',
     prompt: 'Dirigir em velocidade incompatível perto de uma escola, gerando perigo, é:',
+    visual: { kind: 'scene', scene: 'escola', alt: 'Rua em frente a uma escola, com crianças na calçada e na faixa de pedestres' },
     options: [
       { id: 'a', text: 'Crime de trânsito, com detenção de 6 meses a 1 ano, ou multa' },
       { id: 'b', text: 'Permitido fora do horário de aula', whyWrong: 'A lei não fala em horário. Basta gerar perigo perto da escola.' },
@@ -1430,6 +1560,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes de perigo',
     objective: 'Saber o crime de dirigir sem habilitação',
     prompt: 'Uma pessoa sem habilitação dirige em zigue-zague numa avenida movimentada. Isso é:',
+    visual: { kind: 'scene', scene: 'zigue-zague', alt: 'Avenida movimentada com um carro trocando de faixa o tempo todo, em zigue-zague' },
     options: [
       { id: 'a', text: 'Só uma infração, sem crime', whyWrong: 'Dirigir sem habilitação gerando perigo é crime do art. 309.' },
       { id: 'b', text: 'Crime de trânsito, com detenção de 6 meses a 1 ano, ou multa' },
