@@ -125,7 +125,18 @@ export type SceneId =
   | 'sinistro-moto'
   | 'escola'
   | 'zigue-zague'
-  | 'festa';
+  | 'festa'
+  // Mundo 5 (16/11)
+  | 'bola-carros'
+  | 'caminhao-ciclista'
+  | 'ponto-cego'
+  | 'retrovisor-ofusca'
+  | 'dois-segundos'
+  | 'chuva-80'
+  | 'poca-rodovia'
+  | 'granizo'
+  | 'neblina-serra'
+  | 'farol-alto-frente';
 
 /**
  * Uma linha da situação narrada ("Na rua"): uma fala do narrador ou um som.

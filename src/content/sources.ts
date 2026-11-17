@@ -80,4 +80,12 @@ export const SOURCES: Record<string, Source> = {
     url: 'https://www.detran.pe.gov.br/prova-teorica-reteste',
     checkedAt: '2026-10-19',
   },
+  dd2005: {
+    id: 'dd2005',
+    title: 'DENATRAN — Direção defensiva: trânsito seguro é um direito de todos (2005)',
+    url: 'https://www.detran.pr.gov.br/arquivos/File/habilitacao/apostilas/direcaodefensiva.pdf',
+    publishedAt: '2005-05-01',
+    checkedAt: '2026-11-16',
+    sha256: '77f749013b93a3a856b9f15f592ac099379bd4ee739e96b8c0f5af5b19a01d0a',
+  },
 };

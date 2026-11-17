@@ -13,6 +13,8 @@ const de = (pega: (m: Awaited<ReturnType<typeof m1>>) => Comp): Comp => lazy(() 
 const de2 = (pega: (m: Awaited<ReturnType<typeof m2>>) => Comp): Comp => lazy(() => m2().then((m) => ({ default: pega(m) })));
 const de3 = (pega: (m: Awaited<ReturnType<typeof m3>>) => Comp): Comp => lazy(() => m3().then((m) => ({ default: pega(m) })));
 const m4 = () => import('./scenes/Mundo4');
+const m5 = () => import('./scenes/Mundo5');
+const de5 = (pega: (m: Awaited<ReturnType<typeof m5>>) => Comp): Comp => lazy(() => m5().then((m) => ({ default: pega(m) })));
 const de4 = (pega: (m: Awaited<ReturnType<typeof m4>>) => Comp): Comp => lazy(() => m4().then((m) => ({ default: pega(m) })));
 
 const CENAS3D: Partial<Record<SceneId, Comp>> = {
@@ -84,6 +86,17 @@ const CENAS3D: Partial<Record<SceneId, Comp>> = {
   'escola': de4((m) => m.Escola),
   'zigue-zague': de4((m) => m.ZigueZague),
   'festa': de4((m) => m.Festa),
+  // Mundo 5
+  'bola-carros': de5((m) => m.BolaCarros),
+  'caminhao-ciclista': de5((m) => m.CaminhaoCiclista),
+  'ponto-cego': de5((m) => m.PontoCego),
+  'retrovisor-ofusca': de5((m) => m.RetrovisorOfusca),
+  'dois-segundos': de5((m) => m.DoisSegundos),
+  'chuva-80': de5((m) => m.Chuva80),
+  'poca-rodovia': de5((m) => m.PocaRodovia),
+  'granizo': de5((m) => m.Granizo),
+  'neblina-serra': de5((m) => m.NeblinaSerra),
+  'farol-alto-frente': de5((m) => m.FarolAltoFrente),
 };
 
 export const temCena3D = (s: SceneId) => s in CENAS3D;
