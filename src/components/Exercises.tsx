@@ -3,7 +3,7 @@ import type { ChoiceQuestion, FillBlankQuestion, MatchQuestion, OrderQuestion, Q
 import type { Answer } from '../engine/grading';
 import { seededShuffle } from '../engine/grading';
 import { Visual } from './Visual';
-import { TermText } from './TermText';
+import { SignInline, TermText } from './TermText';
 import { useSound } from '../ui/hooks';
 
 export interface ExerciseProps<Q extends Question> {
@@ -177,7 +177,7 @@ function ChoiceEx({ q, seed, answer, onAnswer, checked, eliminated }: ExercisePr
         items={opts.map((o) => ({
           id: o.id,
           ariaLabel: o.visual?.alt ?? o.text,
-          label: grid ? <span className="opt-caption">{o.text}</span> : o.text,
+          label: grid ? <span className="opt-caption">{o.text}</span> : o.visual ? o.text : <SignInline text={o.text} />,
           visual: o.visual ? <Visual v={o.visual} size={grid ? 96 : 56} /> : undefined,
         }))}
       />
@@ -232,7 +232,7 @@ function FillEx({ q, seed, answer, onAnswer, checked, eliminated }: ExerciseProp
               onClick={() => onAnswer(null)}
               aria-label={`Remover ${word}`}
             >
-              {word}
+              <SignInline text={word} />
             </button>
           )}
         </span>
@@ -248,7 +248,7 @@ function FillEx({ q, seed, answer, onAnswer, checked, eliminated }: ExerciseProp
             aria-label={w === eliminated ? `${w} (eliminada pela dica)` : undefined}
             onClick={() => onAnswer({ type: 'fill', word: w })}
           >
-            {w}
+            <SignInline text={w} />
           </button>
         ))}
       </div>
@@ -359,7 +359,7 @@ function OrderEx({ q, answer, onAnswer, checked }: ExerciseProps<OrderQuestion>)
               </span>
             )}
             <span className="pos">{i + 1}</span>
-            <span>{byId[id]}</span>
+            <span><SignInline text={byId[id]} /></span>
             {right !== null && <span className="mark" aria-label={right ? 'posição correta' : 'posição incorreta'}>{right ? '✓' : '✗'}</span>}
             <span className="moves">
               <button type="button" className="icon-btn" disabled={locked || i === 0} onClick={() => move(i, -1)} aria-label={`Subir "${byId[id]}"`}><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
@@ -446,7 +446,7 @@ function MatchEx({ q, seed, answer, onAnswer, checked }: ExerciseProps<MatchQues
               aria-label={`${p.left}${matched.has(p.id) ? `, associado a ${p.right}` : ''}`}
             >
               {p.leftVisual ? <span className="sw"><Visual v={p.leftVisual} size={54} /></span> : null}
-              <span>{p.left}</span>
+              <span>{p.leftVisual ? p.left : <SignInline text={p.left} />}</span>
             </button>
           ))}
         </div>
@@ -460,7 +460,7 @@ function MatchEx({ q, seed, answer, onAnswer, checked }: ExerciseProps<MatchQues
               disabled={locked || matched.has(r.id)}
               onClick={() => click('r', r.id)}
             >
-              {r.text}
+              <SignInline text={r.text} />
             </button>
           ))}
         </div>

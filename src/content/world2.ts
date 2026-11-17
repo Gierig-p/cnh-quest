@@ -54,7 +54,7 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     points: [
       'R-26 "Siga em frente": seta reta para cima. Você é obrigado a fazer o movimento indicado, seguir em frente.',
       'A R-26 não serve para mostrar o sentido de circulação da via (se é mão única ou dupla). Ela fala só do movimento no cruzamento.',
-      'R-33 "Sentido de circulação na rotatória": setas em círculo. Obriga a circular no sentido anti-horário.',
+      'R-33 "Sentido de circulação na rotatória": setas em círculo. Obriga a circular no sentido anti-horário (contrário do relógio).',
     ],
     example:
       'Numa rotatória com a R-33, você entra e contorna a ilha central pela direita dela, no sentido contrário ao do ' +
@@ -65,7 +65,7 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       id: 'obriga-movimento',
       resumo: [
         'Sem faixa vermelha, a seta é ordem: R-26 manda seguir em frente (só no cruzamento).',
-        'R-33: na rotatória, gire no sentido anti-horário, com a ilha à sua esquerda.',
+        'R-33: na rotatória, gire no sentido anti-horário (contrário do relógio), com a ilha à sua esquerda.',
       ],
     },
     sources: [
@@ -120,7 +120,7 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
     points: [
       'A-14 "Semáforo à frente": tem um semáforo adiante.',
       'A-15 "Parada obrigatória à frente": adiante existe uma placa PARE (R-1). Ela só avisa; quem manda parar é a R-1.',
-      'A-12 "Interseção em círculo": tem uma rotatória adiante, onde se circula no sentido anti-horário.',
+      'A-12 "Interseção em círculo": tem uma rotatória adiante, onde se circula no sentido anti-horário (contrário do relógio).',
       'A-41 "Cruz de Santo André": um "X" que marca o próprio local onde a rua cruza o trilho do trem. Ela vem com a placa PARE ou com semáforo.',
       'A-37 "Altura limitada": avisa antes da placa de regulamentação R-15 "Altura máxima permitida".',
     ],
@@ -133,6 +133,7 @@ export const CONCEPTS2: Record<string, ConceptCard> = {
       resumo: [
         'A-14 semáforo, A-15 PARE, A-12 rotatória e A-41 trilho: avisam o que vem adiante.',
         'A A-15 só avisa; quem manda parar é a placa PARE (R-1).',
+        'A-37 "Altura limitada" avisa que adiante vem a R-15 "Altura máxima permitida".',
       ],
     },
     sources: [
@@ -389,7 +390,7 @@ export const WORLD2_QUESTIONS: Question[] = [
       { id: 'a', text: 'Só a placa R-4a, que já proíbe os dois movimentos', whyWrong: 'O manual diz que a R-4a não implica proibição de retorno.' },
       { id: 'b', text: 'As placas R-4a e R-5a' },
       { id: 'c', text: 'Só a placa R-5a, que já proíbe os dois movimentos', whyWrong: 'A R-5a proíbe o retorno. A conversão à esquerda é proibida pela R-4a.' },
-      { id: 'd', text: 'A placa R-26 "Siga em frente"', whyWrong: 'A R-26 obriga a seguir em frente. O manual prevê o par R-4a e R-5a para proibir os dois movimentos.' },
+      { id: 'd', text: 'A placa R-3 "Sentido proibido"', whyWrong: 'A R-3 proíbe entrar na via naquele sentido. O manual prevê o par R-4a e R-5a para proibir os dois movimentos.' },
     ],
     correct: 'b',
     difficulty: 2,
@@ -434,14 +435,14 @@ export const WORLD2_QUESTIONS: Question[] = [
     prompt: 'Numa rotatória com esta placa, em que sentido você deve circular?',
     visual: { kind: 'sign', sign: 'R-33', alt: 'Placa redonda com setas em círculo (R-33)' },
     options: [
-      { id: 'a', text: 'No sentido anti-horário' },
-      { id: 'b', text: 'No sentido horário', whyWrong: 'A R-33 obriga o movimento no sentido anti-horário.' },
+      { id: 'a', text: 'No sentido anti-horário (contrário do relógio)' },
+      { id: 'b', text: 'No sentido horário (como o relógio)', whyWrong: 'A R-33 obriga o movimento no sentido anti-horário (contrário do relógio).' },
       { id: 'c', text: 'No sentido que tiver menos trânsito', whyWrong: 'O sentido é obrigatório e não depende do movimento da hora.' },
-      { id: 'd', text: 'Em qualquer sentido, desde que devagar', whyWrong: 'A placa é de obrigação: só um sentido é permitido, o anti-horário.' },
+      { id: 'd', text: 'Em qualquer sentido, desde que devagar', whyWrong: 'A placa é de obrigação: só um sentido é permitido, o anti-horário (contrário do relógio).' },
     ],
     correct: 'a',
     difficulty: 1,
-    explanation: 'A R-33 "Sentido de circulação na rotatória" assinala a obrigatoriedade do movimento no sentido anti-horário.',
+    explanation: 'A R-33 "Sentido de circulação na rotatória" assinala a obrigatoriedade do movimento no sentido anti-horário (contrário do relógio).',
     mnemonic: 'Rotatória: contra o ponteiro do relógio.',
     sources: [{ sourceId: 'mbst1', locator: 'R-33 — Significado' }],
     verifiedAt: V,
@@ -459,7 +460,7 @@ export const WORLD2_QUESTIONS: Question[] = [
       { id: 'r4a', left: 'R-4a', leftVisual: { kind: 'sign', sign: 'R-4a', alt: 'Seta virando à esquerda, riscada' }, right: 'Proibido virar à esquerda' },
       { id: 'r5a', left: 'R-5a', leftVisual: { kind: 'sign', sign: 'R-5a', alt: 'Seta em U para a esquerda, riscada' }, right: 'Proibido retornar à esquerda' },
       { id: 'r26', left: 'R-26', leftVisual: { kind: 'sign', sign: 'R-26', alt: 'Seta reta para cima, sem risco' }, right: 'Siga em frente' },
-      { id: 'r33', left: 'R-33', leftVisual: { kind: 'sign', sign: 'R-33', alt: 'Setas em círculo' }, right: 'Circular no sentido anti-horário' },
+      { id: 'r33', left: 'R-33', leftVisual: { kind: 'sign', sign: 'R-33', alt: 'Setas em círculo' }, right: 'Circular no sentido anti-horário (contrário do relógio)' },
     ],
     whyWrong: 'Seta virando é conversão; seta em "U" é retorno; risco vermelho proíbe; sem risco, obriga.',
     difficulty: 2,
@@ -623,7 +624,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     prompt: 'O que esta placa adverte?',
     visual: { kind: 'sign', sign: 'A-12', alt: 'Losango amarelo com setas formando um círculo' },
     options: [
-      { id: 'a', text: 'É obrigatório circular no sentido anti-horário a partir daqui', whyWrong: 'Essa ordem é da R-33, que é redonda. A placa amarela só avisa.' },
+      { id: 'a', text: 'É obrigatório circular no sentido anti-horário (contrário do relógio) a partir daqui', whyWrong: 'Essa ordem é da R-33, que é redonda. A placa amarela só avisa.' },
       { id: 'b', text: 'Há uma rotatória adiante' },
       { id: 'c', text: 'Pista escorregadia', whyWrong: 'Pista escorregadia é a A-28, com outro desenho.' },
       { id: 'd', text: 'Proibido fazer retorno', whyWrong: 'Proibição de retorno é placa de regulamentação, redonda (R-5a ou R-5b).' },
@@ -632,7 +633,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     difficulty: 2,
     explanation:
       'A A-12 "Interseção em círculo" adverte a existência, adiante, de uma rotatória, na qual a circulação é feita no ' +
-      'sentido anti-horário.',
+      'sentido anti-horário (contrário do relógio).',
     mnemonic: 'Setas em roda no amarelo: rotatória chegando.',
     sources: [{ sourceId: 'mbst2', locator: 'A-12 — Significado' }],
     verifiedAt: V,
@@ -1206,11 +1207,11 @@ export const WORLD2_QUESTIONS: Question[] = [
     objective: 'Lembrar o par de placas que proíbe conversão e retorno',
     prompt: 'Complete:',
     sentence: 'Para proibir virar e também retornar à esquerda, usam-se as placas R-4a e ___.',
-    bank: ['R-5a', 'R-26', 'R-33'],
+    bank: ['R-5a', 'R-3', 'R-7'],
     answer: 'R-5a',
     whyWrong: {
-      'R-26': 'A R-26 obriga a seguir em frente; não proíbe o retorno.',
-      'R-33': 'A R-33 é o sentido de circulação na rotatória.',
+      'R-3': 'A R-3 é o sentido proibido: proíbe entrar na via, não o retorno.',
+      'R-7': 'A R-7 proíbe ultrapassar; não proíbe o retorno.',
     },
     difficulty: 2,
     explanation: 'O manual manda usar as placas R-4a e R-5a para proibir os dois movimentos à esquerda.',
@@ -1227,12 +1228,13 @@ export const WORLD2_QUESTIONS: Question[] = [
     objective: 'Reconhecer a forma e a cor padrão da advertência',
     prompt: 'Qual é a forma e a cor padrão das placas de advertência?',
     options: [
-      { id: 'a', text: 'Redonda, com borda vermelha', whyWrong: 'Redonda com vermelho é a placa de regulamentação, que dá ordens.' },
-      { id: 'b', text: 'Quadrada com uma ponta para cima (losango), amarela com preto' },
-      { id: 'c', text: 'Octogonal e vermelha', whyWrong: 'Octogonal vermelha é a R-1 "Parada obrigatória".' },
-      { id: 'd', text: 'Retangular e verde', whyWrong: 'Retangular verde é placa de indicação de destino.' },
+      { id: 'a', text: 'Redonda, com borda vermelha', visual: { kind: 'sign', sign: 'forma-redonda', alt: 'Forma redonda, branca com borda vermelha' }, whyWrong: 'Redonda com vermelho é a placa de regulamentação, que dá ordens.' },
+      { id: 'b', text: 'Quadrada com uma ponta para cima (losango), amarela com preto', visual: { kind: 'sign', sign: 'forma-losango', alt: 'Forma de losango, amarela com borda preta' } },
+      { id: 'c', text: 'Octogonal e vermelha', visual: { kind: 'sign', sign: 'forma-octogono', alt: 'Forma de octógono vermelho, com 8 lados' }, whyWrong: 'Octogonal vermelha é a R-1 "Parada obrigatória".' },
+      { id: 'd', text: 'Retangular e verde', visual: { kind: 'sign', sign: 'forma-retangulo-verde', alt: 'Forma retangular verde com borda branca' }, whyWrong: 'Retangular verde é placa de indicação de destino.' },
     ],
     correct: 'b',
+    layout: 'grid',
     difficulty: 1,
     explanation:
       'As placas de advertência são quadradas, com uma diagonal na vertical (losango), fundo amarelo e símbolos pretos. ' +

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { GLOSSARY, HINT_CARDS, QUESTION_BY_ID } from '../content';
 import { buildHintIndex } from '../content/glossary';
-import { HINT_DELAY_S, hintReveal, type HintReveal } from '../content/hints';
+import { SIGN_IN_HINT, hintDelay, hintReveal, type HintReveal } from '../content/hints';
 import { SOURCES } from '../content/sources';
 import type { ConceptCard, SourceRef } from '../content/types';
 import { Exercise, isAnswerReady, typeLabel } from '../components/Exercises';
@@ -113,7 +113,10 @@ export function LessonPlayer({
     () => buildHintIndex(GLOSSARY, { lessonId: s.lessonId, seenCardIds: seenCards ? seenCards.split(',') : [], completedLessonIds: doneLessons ? doneLessons.split(',') : [] }),
     [s.lessonId, seenCards, doneLessons],
   );
-  const hints = useMemo(() => ({ index: hintIndex, questionId: q?.id }), [hintIndex, q?.id]);
+  // nas questões em que o desenho entrega a resposta, a placa só aparece depois da Dica
+  const hideSigns = Boolean(q && SIGN_IN_HINT.has(q.id)) && hintStep === 0 && !fb;
+  const hints = useMemo(() => ({ index: hintIndex, questionId: q?.id, hideSigns }), [hintIndex, q?.id, hideSigns]);
+  const delay = q ? hintDelay(q.id) : 0;
 
   // dica da questão: cartão que a ensina + o que pode ser eliminado (sem dica nas questões de "↻ Revisão")
   const hintCard = allowHints && q && item?.kind === 'question' && !item.retry ? HINT_CARDS[q.id] : undefined;
@@ -140,12 +143,12 @@ export function LessonPlayer({
     setMoreFb(false);
   }, [s.index]);
 
-  // a dica só libera depois de HINT_DELAY_S segundos na questão
+  // a dica só libera depois de `delay` segundos na questão
   useEffect(() => {
-    if (!hintCard || fb || elapsed >= HINT_DELAY_S) return;
+    if (!hintCard || fb || elapsed >= delay) return;
     const t = setTimeout(() => setElapsed((e) => e + 1), 1000);
     return () => clearTimeout(t);
-  }, [hintCard, fb, elapsed]);
+  }, [hintCard, fb, elapsed, delay]);
 
   // Aula desbloqueada (pedido do dono, 16/11/2026): o cartão aberto fica para rever em Revisar › Aulas.
   // Na primeira vez que um cartão com vídeo aparece, um aviso curto parecido com uma conquista.
@@ -362,7 +365,7 @@ export function LessonPlayer({
                 <NewWordTag texts={[q.prompt, q.type === 'truefalse' ? q.statement : q.type === 'fill' ? q.sentence : '']} />
                 {hintCard && !fb && (
                   <HintButton
-                    left={HINT_DELAY_S - elapsed}
+                    left={delay - elapsed}
                     step={hintStep}
                     hasMore={Boolean(reveal)}
                     onClick={() => (hintStep === 0 ? setConfirmHint(true) : moreHint())}
@@ -373,7 +376,7 @@ export function LessonPlayer({
               <h1 id="q-title" className="q-title" tabIndex={-1}><TermText text={q.prompt} /></h1>
               {progress.prefs.readAloud && !fb && <SpeakButton text={speechText(q, seed)} />}
               {howto && !fb && <p className="howto" id="q-howto">👆 {howto}</p>}
-              {hintCard && hintStep > 0 && <HintBox title={hintCard.title} remember={hintCard.remember!} reveal={hintStep > 1 ? reveal : null} />}
+              {hintCard && hintStep > 0 && <HintBox title={hintCard.title} remember={hintCard.remember!} reveal={hintStep > 1 ? reveal : null} signs={SIGN_IN_HINT.has(q.id)} />}
               <Exercise
                 q={q}
                 seed={seed}
@@ -553,13 +556,14 @@ function revealText(r: HintReveal): string {
   }
 }
 
-function HintBox({ title, remember, reveal }: { title: string; remember: string; reveal: HintReveal | null }) {
+function HintBox({ title, remember, reveal, signs }: { title: string; remember: string; reveal: HintReveal | null; signs?: boolean }) {
   return (
     <div className="hint-box" role="note" aria-label="Dica" aria-live="polite">
       <Lumi mood="think" size={56} />
       <div className="grow">
         <p className="hint-head">💡 Lembre do cartão “{title}”</p>
         <p>{remember}</p>
+        {signs && <p className="hint-reveal">As placas da questão agora aparecem com o desenho.</p>}
         {reveal && <p className="hint-reveal">{revealText(reveal)}</p>}
       </div>
     </div>

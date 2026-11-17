@@ -3,6 +3,7 @@ import { Lumi } from './Lumi';
 import { Visual } from './Visual';
 import { SourceList } from '../screens/LessonPlayer';
 import { VideoConceito } from './VideoConceito';
+import { SignInline } from './TermText';
 
 /** Blocos de um cartão de conceito, na ordem em que aparecem. */
 export type CardBlock = 'body' | 'terms' | 'points' | 'example' | 'video' | 'resumo' | 'guardar';
@@ -82,7 +83,7 @@ export function ConceptBlocks({ card, show, sources = true, lumiSize = 92 }: { c
         <>
           <div className="bubble-row">
             <Lumi mood="wave" size={lumiSize} />
-            <p className="bubble">{card.body}</p>
+            <p className="bubble"><SignInline text={card.body} always /></p>
           </div>
           {card.visual && (
             <div className="q-visual pop-in">
@@ -97,7 +98,7 @@ export function ConceptBlocks({ card, show, sources = true, lumiSize = 92 }: { c
           <h2 className="c-head">📝 Resumo</h2>
           <ul>
             {card.video.resumo.map((r, i) => (
-              <li key={i}>{r}</li>
+              <li key={i}><SignInline text={r} always /></li>
             ))}
           </ul>
         </div>
@@ -120,7 +121,7 @@ export function ConceptBlocks({ card, show, sources = true, lumiSize = 92 }: { c
           <h2 className="c-head">🧭 Passo a passo</h2>
           <ol>
             {card.points.map((p, i) => (
-              <li key={i}>{p}</li>
+              <li key={i}><SignInline text={p} always /></li>
             ))}
           </ol>
         </div>
@@ -128,19 +129,19 @@ export function ConceptBlocks({ card, show, sources = true, lumiSize = 92 }: { c
       {has('example') && card.example && (
         <div className="c-box c-example">
           <h2 className="c-head">🚗 Na prática</h2>
-          <p>{card.example}</p>
+          <p><SignInline text={card.example} always /></p>
         </div>
       )}
       {has('example') && card.remember && (
         <div className="c-box c-remember">
           <h2 className="c-head">💡 Para guardar</h2>
-          <p>{card.remember}</p>
+          <p><SignInline text={card.remember} always /></p>
         </div>
       )}
       {has('guardar') && card.remember && (
         <div className="c-box c-remember">
           <h2 className="c-head">💡 Para guardar</h2>
-          <p>{card.remember}</p>
+          <p><SignInline text={card.remember} always /></p>
         </div>
       )}
       {sources && <p className="source-line"><SourceList refs={card.sources} /></p>}

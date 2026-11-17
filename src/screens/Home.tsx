@@ -126,7 +126,7 @@ function WorldPath({ world, index, prev, onStart }: { world: World; index: numbe
 
   return (
     <section className={`world ${locked ? 'is-locked' : ''}`} aria-labelledby={`${world.id}-title`} style={{ ['--world-delay' as string]: `${index * 80}ms` }}>
-      <header className={`unit-header ${locked ? 'locked' : ''} ${isComplete ? 'complete' : ''}`}>
+      <header className={`unit-header ${locked ? 'locked' : ''} ${isComplete ? 'is-done' : ''}`}>
         <div className="unit-badge" aria-hidden="true">
           {isComplete ? <IconTrophy size={30} /> : <IconRoad size={30} />}
         </div>

@@ -279,7 +279,7 @@ describe('fluxo principal', () => {
     expect(screen.getByRole('heading', { name: 'O que é um sinal de trânsito?' })).toBeInTheDocument();
   });
 
-  it('dica: só libera após 60 s, pede confirmação e não conta como acerto de primeira', async () => {
+  it('dica: só libera após 20 s, pede confirmação e não conta como acerto de primeira', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     const storage = memoryStorage();
     storage.setItem('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true }));
@@ -287,8 +287,8 @@ describe('fluxo principal', () => {
     await user.click(screen.getByRole('button', { name: /^Quem manda no trânsito\?/ }));
     await passCard(user);
 
-    expect(screen.getByRole('button', { name: /Dica em 60s/ })).toBeDisabled();
-    for (let i = 0; i < 60; i++) await act(async () => void vi.advanceTimersByTime(1000));
+    expect(screen.getByRole('button', { name: /Dica em 20s/ })).toBeDisabled();
+    for (let i = 0; i < 20; i++) await act(async () => void vi.advanceTimersByTime(1000));
     await user.click(screen.getByRole('button', { name: /^💡 Dica$/ }));
 
     // confirmação avisando que a pontuação cai

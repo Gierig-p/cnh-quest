@@ -11,6 +11,7 @@ const OFFICIAL: Partial<Record<SignCode, string>> = {
   'R-1': 'R-1', 'R-2': 'R-2', 'R-3': 'R-3', 'R-4a': 'R-4a', 'R-5a': 'R-5a', 'R-6a': 'R-6a', 'R-6c': 'R-6c',
   'R-7': 'R-7', 'R-26': 'R-26', 'R-33': 'R-33',
   'A-12': 'A-12', 'A-14': 'A-14', 'A-15': 'A-15', 'A-18': 'A-18', 'A-24': 'A-24', 'A-32b': 'A-32b', 'A-41': 'A-41',
+  'R-15': 'R-15', 'A-37': 'A-37',
 };
 const SPEEDS = [20, 40, 50, 60, 80];
 
@@ -266,6 +267,45 @@ function render(code: SignCode, speed: number) {
           {[35, -35].map((a) => (
             <rect key={a} x="8" y="41" width="84" height="18" rx="3" transform={`rotate(${a} 50 50)`} fill={YELLOW} stroke={BLACK} strokeWidth="3.5" />
           ))}
+        </>
+      );
+    case 'R-15':
+      return ring(
+        <>
+          <path d="M50 14 L42 26 H58 Z M50 86 L42 74 H58 Z" fill={BLACK} />
+          <text x="50" y="58" textAnchor="middle" fontSize="20" fontWeight="900" fill={BLACK} fontFamily="Arial, sans-serif">3,5 m</text>
+        </>,
+      );
+    case 'A-37':
+      return diamond(
+        <>
+          <path d="M50 22 L43 32 H57 Z M50 78 L43 68 H57 Z" fill={BLACK} />
+          <text x="50" y="56" textAnchor="middle" fontSize="15" fontWeight="900" fill={BLACK} fontFamily="Arial, sans-serif">3,5 m</text>
+        </>,
+      );
+    case 'forma-redonda':
+      return ring();
+    case 'forma-losango':
+      return diamond(null);
+    case 'forma-octogono': {
+      const pts = Array.from({ length: 8 }, (_, i) => {
+        const a = (Math.PI / 8) * (2 * i + 1);
+        return `${50 + 47 * Math.cos(a)},${50 + 47 * Math.sin(a)}`;
+      }).join(' ');
+      return <polygon points={pts} fill={RED} />;
+    }
+    case 'forma-triangulo':
+      return (
+        <>
+          <polygon points="6,14 94,14 50,92" fill={RED} strokeLinejoin="round" stroke={RED} strokeWidth="4" />
+          <polygon points="22,23 78,23 50,72" fill="#fff" />
+        </>
+      );
+    case 'forma-retangulo-verde':
+      return (
+        <>
+          <rect x="4" y="20" width="92" height="60" rx="7" fill={GREEN} />
+          <rect x="8" y="24" width="84" height="52" rx="5" fill="none" stroke="#fff" strokeWidth="2.5" />
         </>
       );
     case 'IND-destino':

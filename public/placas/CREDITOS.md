@@ -6,9 +6,9 @@ Os arquivos foram usados sem alteração; só o nome do arquivo mudou.
 
 | Arquivo | Original no Commons | Autor | Licença |
 | --- | --- | --- | --- |
-| R-1, R-2, R-3, R-4a, R-5a, R-6a, R-6c, R-7, R-26, R-33, R-19-80 | `Brasil R-*.svg` | Amateria1121 | CC BY-SA 3.0 |
+| R-1, R-2, R-3, R-4a, R-5a, R-6a, R-6c, R-7, R-15, R-26, R-33, R-19-80 | `Brasil R-*.svg` | Amateria1121 | CC BY-SA 3.0 |
 | R-19-20, R-19-40, R-19-50, R-19-60 | `Brasil R-19 (NN).svg` | มองโกเลีย๔๔ | CC BY-SA 4.0 |
-| A-12, A-14, A-15, A-18, A-24, A-32b, A-41 (arquivo `Brasil A-41a.svg`) | `Brasil A-*.svg` | DNIT (Departamento Nacional de Infraestrutura de Transportes) | Domínio público |
+| A-12, A-14, A-15, A-18, A-24, A-32b, A-37, A-41 (arquivo `Brasil A-41a.svg`) | `Brasil A-*.svg` | DNIT (Departamento Nacional de Infraestrutura de Transportes) | Domínio público |
 
 - CC BY-SA 3.0: https://creativecommons.org/licenses/by-sa/3.0/
 - CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0/

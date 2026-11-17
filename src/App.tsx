@@ -122,6 +122,9 @@ export default function App() {
         nextLabel={nextLabel}
         onContinue={() => (nextRoundHere > 1 ? startLesson(route.lesson!) : route.lesson && rec && !nextIsSame ? startLesson(rec.lesson) : go(route.back))}
         onRetry={route.lesson ? () => startLesson(route.lesson!, route.back, route.round) : undefined}
+        // o botão principal leva adiante (próxima rodada/lição): este volta para a trilha (pedido do dono, 16/11/2026)
+        backLabel={nextRoundHere > 1 || (route.lesson && rec && !nextIsSame) ? (route.back === 'home' ? 'Voltar para a trilha' : 'Voltar') : undefined}
+        onBack={() => go(route.back)}
       />
     );
   }

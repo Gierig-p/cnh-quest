@@ -1,6 +1,7 @@
 /**
  * Vídeo do cartão c2-advertencia-exemplos ("Avisos de antes"), Mundo 2, lote 1 de 15/11/2026.
- * Placas amarelas que avisam o que vem depois: semáforo (A-14), PARE (A-15), rotatória (A-12) e o X do trilho (A-41).
+ * Placas amarelas que avisam o que vem depois: semáforo (A-14), PARE (A-15), rotatória (A-12), o X do trilho (A-41)
+ * e a altura limitada (A-37) antes da altura máxima permitida (R-15), trecho incluído em 16/11/2026.
  * Tempos em content/videos/avisos.json.
  */
 import { camLook, rect, type Obj, type Part } from './engine';
@@ -39,7 +40,10 @@ const TRILHO: Part[] = [
 ];
 const A41 = { x: 4.3, y: YT + 3.2, code: 'A-41' as const, face: 0 };
 const R1T = { x: -4.3, y: YT + 3.2, code: 'R-1' as const, face: 0 };
-type Poste = typeof A14 | typeof A15 | typeof R1 | typeof A12 | typeof A41 | typeof R1T;
+/* altura limitada: o aviso (A-37) e, lá na frente, a ordem (R-15) */
+const A37 = { x: 4.3, y: -3, code: 'A-37' as const, face: 0 };
+const R15 = { x: 4.3, y: CY + 4.4, code: 'R-15' as const, face: 0 };
+type Poste = typeof A14 | typeof A15 | typeof R1 | typeof A12 | typeof A41 | typeof R1T | typeof A37 | typeof R15;
 
 const balao = (pr: Pr, p: Poste, o: number, dx = 46, dy = -8) =>
   o > 0.01 ? <g opacity={o}><SignCallout at={pr(signTop(p))} code={p.code} dx={dx} dy={dy} size={36} /></g> : null;
@@ -151,7 +155,25 @@ function trecho(k: number, lt: number): Quadro {
         ),
       };
     }
-    // 6. para guardar
+    // 6. A-37 avisa a altura limitada; adiante, a R-15 com a altura máxima permitida
+    case 6: {
+      const y = lerp(5, CY + 7, 1 - (1 - Math.min(1, lt / 6.4)) ** 2);
+      return {
+        cam: CAM,
+        ground: CRUZ,
+        objs: [...BAIRRO, signPost(A37), signPost(R15), eu(y)],
+        over: (pr) => (
+          <>
+            {voce(pr, 1.75, y)}
+            {balao(pr, A37, ease((lt - 0.2) / 0.3), 44, -10)}
+            {tag(fixo, [160, 186, 0], 'Altura limitada adiante', janela(lt, 0.6, 3.0, 0.2))}
+            {balao(pr, R15, ease((lt - 3.0) / 0.3), 44, -6)}
+            {tag(fixo, [160, 186, 0], 'Altura máxima permitida', ease((lt - 3.2) / 0.3))}
+          </>
+        ),
+      };
+    }
+    // 7. para guardar
     default: {
       const f = fundo(lt);
       return {

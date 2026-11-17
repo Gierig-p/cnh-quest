@@ -134,7 +134,7 @@ function trecho(k: number, lt: number): Quadro {
           <>
             {voce(pr, p.x, p.y)}
             {rastro(pr, GIRO, VERDE, ease((lt - 0.2) / 0.4))}
-            {tag(fixo, [160, 186, 0], 'Anti-horário', janela(lt, 0.8, 3.0, 0.2))}
+            {tag(fixo, [160, 186, 0], 'Anti-horário (contrário do relógio)', janela(lt, 0.8, 3.0, 0.2))}
             {tag(pr, [ROT_C[0], ROT_C[1] + 1.5, 0.3], 'Ilha à esquerda', ease((lt - 3.2) / 0.3))}
           </>
         ),

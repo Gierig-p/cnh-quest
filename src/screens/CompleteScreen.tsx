@@ -33,6 +33,8 @@ export function CompleteScreen({
   nextLabel,
   onContinue,
   onRetry,
+  backLabel,
+  onBack,
 }: {
   title: string;
   result: SessionResult;
@@ -40,6 +42,9 @@ export function CompleteScreen({
   nextLabel: string;
   onContinue: () => void;
   onRetry?: () => void;
+  /** botão extra para voltar sem seguir adiante (só quando o principal leva a outra lição/rodada) */
+  backLabel?: string;
+  onBack?: () => void;
 }) {
   const { progress } = useApp();
   const play = useSound();
@@ -179,6 +184,7 @@ export function CompleteScreen({
 
         <div className="stack complete-actions">
           <button className="btn wide" autoFocus onClick={() => { play('tap'); onContinue(); }}>{nextLabel}</button>
+          {backLabel && onBack && <button className="btn ghost wide" onClick={() => { play('tap'); onBack(); }}>{backLabel}</button>}
           {onRetry && <button className="btn ghost wide" onClick={onRetry}>Refazer lição</button>}
         </div>
       </div>

@@ -6,8 +6,26 @@ import type { ConceptCard, Question, World } from './types';
  * já verificados — o "Para guardar" do cartão e o "por que está errada" das alternativas.
  */
 
-/** Segundos na questão antes de a dica liberar. */
-export const HINT_DELAY_S = 60;
+/** Segundos na questão antes de a dica liberar (pedido do dono, 16/11/2026: era 60). */
+export const HINT_DELAY_S = 20;
+
+/**
+ * Questões em que ver o desenho da placa entregaria a resposta (cor, tipo da placa, qual placa é).
+ * Nelas a miniatura e o balão da placa ficam escondidos e viram parte da Dica,
+ * que já começa liberada (pedido do dono, 16/11/2026).
+ */
+export const SIGN_IN_HINT: ReadonlySet<string> = new Set([
+  'w1-l3-q1', // qual destas placas é de advertência (a amarela)
+  'w1-l3-q15', // idem
+  'w2-l1-q2', // R-4a + R-5a (o desenho do retorno)
+  'w2-l1-q9', // idem, lacuna
+  'w2-l2-q2', // cor da placa A-24
+  'w2-l2-q4', // A-15 tem o PARE desenhado
+  'w2-l2-q8', // R-15 tem o desenho da altura
+]);
+
+/** Segundos até a dica liberar nesta questão. */
+export const hintDelay = (questionId: string) => (SIGN_IN_HINT.has(questionId) ? 0 : HINT_DELAY_S);
 
 /** Cartão de conceito que ensina cada questão: o último cartão antes dela na lição de origem. */
 export function buildHintCards(worlds: World[]): Record<string, ConceptCard> {

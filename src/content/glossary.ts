@@ -1,4 +1,5 @@
-import type { TermDef, World } from './types';
+import { SIGN_NAMES, cardSigns } from './signs';
+import type { SignCode, TermDef, World } from './types';
 
 /**
  * Glossário montado a partir das "Palavras novas" dos cartões de conceito.
@@ -7,12 +8,20 @@ import type { TermDef, World } from './types';
 export interface GlossaryEntry extends TermDef {
   lessonId: string;
   cardId: string;
+  /** a entrada é uma placa: o código vira miniatura e o balão mostra o desenho com o nome oficial */
+  sign?: SignCode;
 }
 
 export function buildGlossary(worlds: World[]): GlossaryEntry[] {
   return worlds.flatMap((w) =>
     w.lessons.flatMap((l) =>
-      l.steps.flatMap((s) => (s.kind === 'concept' ? (s.card.terms ?? []).map((t) => ({ ...t, lessonId: l.id, cardId: s.card.id })) : [])),
+      l.steps.flatMap((s) => {
+        if (s.kind !== 'concept') return [];
+        const terms = (s.card.terms ?? []).map((t) => ({ ...t, lessonId: l.id, cardId: s.card.id }));
+        // placas apresentadas com imagem no cartão (signs.ts)
+        const signs = cardSigns(s.card).map((code) => ({ term: code, meaning: SIGN_NAMES[code] ?? '', sign: code, lessonId: l.id, cardId: s.card.id }));
+        return [...terms, ...signs];
+      }),
     ),
   );
 }
@@ -24,6 +33,7 @@ export interface TermHint {
   /** ensinada na lição atual: destaque roxo "palavra nova" */
   isNew: boolean;
   skipIn: string[];
+  sign?: SignCode;
 }
 
 export interface HintIndex {
@@ -31,6 +41,8 @@ export interface HintIndex {
   byForm: Map<string, TermHint>;
   /** acha qualquer forma, a mais longa primeiro, só palavra inteira */
   pattern: RegExp | null;
+  /** placas já apresentadas ao aluno: nas alternativas e no banco de palavras ganham miniatura */
+  signs: Set<SignCode>;
 }
 
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -52,7 +64,7 @@ export function buildHintIndex(
   // a lição atual vem primeiro: se a palavra foi ensinada de novo aqui, vale a explicação daqui
   const ordered = [...available.filter((e) => e.lessonId === ctx.lessonId), ...available.filter((e) => e.lessonId !== ctx.lessonId)];
   for (const e of ordered) {
-    const hint: TermHint = { term: e.term, meaning: e.meaning, isNew: e.lessonId === ctx.lessonId, skipIn: e.skipIn ?? [] };
+    const hint: TermHint = { term: e.term, meaning: e.meaning, isNew: e.lessonId === ctx.lessonId, skipIn: e.skipIn ?? [], sign: e.sign };
     for (const form of [e.term, ...(e.aliases ?? [])]) {
       const key = form.toLocaleLowerCase('pt-BR');
       if (!byForm.has(key)) byForm.set(key, hint);
@@ -60,7 +72,8 @@ export function buildHintIndex(
   }
   const forms = [...byForm.keys()].sort((a, b) => b.length - a.length);
   const pattern = forms.length ? new RegExp(`(?<![\\p{L}\\p{N}])(${forms.map(escape).join('|')})(?![\\p{L}\\p{N}])`, 'giu') : null;
-  return { byForm, pattern };
+  const signs = new Set(available.flatMap((e) => (e.sign ? [e.sign] : [])));
+  return { byForm, pattern, signs };
 }
 
 export type TextPart = string | { text: string; hint: TermHint };

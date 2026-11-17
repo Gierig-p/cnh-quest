@@ -352,6 +352,7 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'A placa PARE desenhada no losango avisa que, adiante, existe uma placa PARE. Ela só avisa: quem manda parar é a placa PARE.',
       'As setas em círculo no losango avisam: tem uma rotatória adiante.',
       'O X amarelo marca o lugar onde a rua cruza o trilho do trem. Ele vem junto com a placa PARE ou com semáforo.',
+      'Esta placa amarela avisa: a altura adiante é limitada. Logo depois vem a placa redonda, com a altura máxima permitida. Veículo mais alto que isso não passa.',
       'Para guardar: a placa amarela conta antes o que vem pela frente.',
     ],
   },
