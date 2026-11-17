@@ -194,7 +194,7 @@ export function Cena({ parte, t, id = 'epc' }: { parte: Parte; t: number; id?: s
             <>
               {quadro(10, 44, 92, 74, e.qCabeca, (
                 <>
-                  {cabeca(46, 42, e.cabeca * 0.9)}
+                  {cabeca(46, 39, e.cabeca * 0.9)}
                   <text x={46} y={68} textAnchor="middle" fontSize={9.5} fontWeight={800} fill="#1d2430" fontFamily="Nunito, system-ui, sans-serif">Olha o ponto cego</text>
                 </>
               ))}

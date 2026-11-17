@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ESCOLHAS } from '../content/escolhas';
 import temposPoca from '../content/escolhas/w5-rua-1.json';
 import temposPontoCego from '../content/escolhas/w5-rua-4.json';
+import temposDistancia from '../content/escolhas/w5-rua-2.json';
 import { QUESTION_BY_ID } from '../content';
 import { startSession } from '../engine/session';
 import { LessonPlayer } from '../screens/LessonPlayer';
@@ -15,6 +16,7 @@ type Tempos = Record<string, { dur: number; falas: { ini: number; fim: number }[
 const CASOS: [string, Tempos, string][] = [
   ['w5-rua-1', temposPoca as Tempos, 'Freie antes da poça. Sobre a água, não freie.'],
   ['w5-rua-4', temposPontoCego as Tempos, 'Olhe o ponto cego.'],
+  ['w5-rua-2', temposDistancia as Tempos, 'Reduza e conte de novo.'],
 ];
 
 /** áudio de mentira: o teste controla o tempo (currentTime) */
@@ -124,14 +126,16 @@ describe.each(CASOS)('situação em vídeo de escolha %s', { timeout: 20000 }, (
   it('"Ver de novo" não trava de novo e "Ler o que aconteceu" mostra o texto', async () => {
     montar();
     await introAteOFim();
-    await escolherEVerificar('c');
-    ultimo().currentTime = T.c.dur;
+    // uma alternativa errada: o texto mostra a escolha e o jeito seguro
+    const errada = q.options.find((o) => o.id !== q.correct)!.id;
+    await escolherEVerificar(errada);
+    ultimo().currentTime = T[errada].dur;
     await waitFor(() => expect(continuar()).toBeEnabled());
     fireEvent.click(screen.getByRole('button', { name: 'Ver de novo' }));
     expect(continuar()).toBeEnabled();
     expect(screen.getByRole('button', { name: 'Pausar o vídeo' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Ler o que aconteceu' }));
-    expect(screen.getByText(def.quadros.escolha.c)).toBeInTheDocument();
+    expect(screen.getByText(def.quadros.escolha[errada])).toBeInTheDocument();
     expect(screen.getByText(def.quadros.seguro)).toBeInTheDocument();
   });
 

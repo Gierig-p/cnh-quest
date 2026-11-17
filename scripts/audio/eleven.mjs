@@ -96,8 +96,9 @@ export async function falaPausada(blocos, voz, destino, { entreFrases = 0.6, ent
 /**
  * Fala com tempos (vídeos dos cartões): cada fala é uma frase da legenda, gerada separada e juntada com `pausa` segundos
  * de silêncio. Devolve o início e o fim de cada fala (em segundos) e a duração total.
+ * `alvo` (opcional): { índice da fala: segundos } estica ou encolhe aquela fala até a duração pedida (ex.: contagem em tempo real).
  */
-export async function falaComTempos(falas, voz, destino, { pausa = 1.0, inicio = 0.6, velocidade = 0.9 } = {}) {
+export async function falaComTempos(falas, voz, destino, { pausa = 1.0, inicio = 0.6, velocidade = 0.9, alvo = {} } = {}) {
   const tmp = join(CACHE, 'tmp');
   mkdirSync(tmp, { recursive: true });
   const pecas = [];
@@ -109,11 +110,19 @@ export async function falaComTempos(falas, voz, destino, { pausa = 1.0, inicio =
       next_text: falas[k + 1],
       voice_settings: { stability: 0.6, similarity_boost: 0.75, style: 0, use_speaker_boost: true, speed: velocidade },
     });
-    const wav = join(tmp, `v${k}.wav`);
+    let wav = join(tmp, `v${k}.wav`);
     execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', mp3, '-af',
       'silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse',
       '-ar', '44100', '-ac', '1', wav]);
-    const dur = Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', wav]).toString().trim());
+    const medir = (f) => Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString().trim());
+    let dur = medir(wav);
+    if (alvo[k]) {
+      const fator = Math.min(2, Math.max(0.5, dur / alvo[k]));
+      const esticada = join(tmp, `v${k}_t.wav`);
+      execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', wav, '-af', `atempo=${fator.toFixed(4)}`, '-ar', '44100', '-ac', '1', esticada]);
+      wav = esticada;
+      dur = medir(wav);
+    }
     pecas.push({ wav, dur });
   }
   const tempos = [];

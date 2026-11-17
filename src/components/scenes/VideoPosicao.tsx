@@ -14,8 +14,7 @@ const VERDE = '#2fa36b';
 const LARANJA = '#ea7b2c';
 const PELE = '#d9a37a';
 const CAMISA = '#3f7fd0';
-const CALCA = '#2c3e5c';
-const BANCO = '#4a525d';
+const CALCA = '#3b5a8a';
 
 function fundo(lt: number, o = 0.5, over?: () => ReactNode): Quadro {
   const q = ruaFundo(lt);
@@ -28,17 +27,43 @@ function fundo(lt: number, o = 0.5, over?: () => ReactNode): Quadro {
 }
 
 type P = [number, number];
-/** joelho/cotovelo: ponto médio entre a e b, empurrado `k` px para o lado (sinal escolhe o lado) */
-function junta(a: P, b: P, k: number): P {
-  const mx = (a[0] + b[0]) / 2;
-  const my = (a[1] + b[1]) / 2;
+/** joelho/cotovelo: junta de dois ossos de tamanho fixo (l1, l2) entre a e b; `lado` escolhe para onde dobra */
+function ik(a: P, b: P, l1: number, l2: number, lado: number): P {
   const dx = b[0] - a[0];
   const dy = b[1] - a[1];
   const n = Math.hypot(dx, dy) || 1;
-  return [mx + (-dy / n) * k, my + (dx / n) * k];
+  const d = Math.min(n, l1 + l2 - 0.01);
+  const ux = dx / n;
+  const uy = dy / n;
+  const x = (l1 * l1 - l2 * l2 + d * d) / (2 * d);
+  const h = Math.sqrt(Math.max(0, l1 * l1 - x * x));
+  return [a[0] + ux * x - uy * h * lado, a[1] + uy * x + ux * h * lado];
 }
 
-const seg = (a: P, b: P, cor: string, w: number) => <line x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} stroke={cor} strokeWidth={w} strokeLinecap="round" />;
+/** membro afinando de `a` (largura wa) até `b` (largura wb), com pontas arredondadas */
+function membro(a: P, b: P, wa: number, wb: number, cor: string): ReactNode {
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  const n = Math.hypot(dx, dy) || 1;
+  const px = -dy / n;
+  const py = dx / n;
+  const pts = [
+    [a[0] + (px * wa) / 2, a[1] + (py * wa) / 2],
+    [b[0] + (px * wb) / 2, b[1] + (py * wb) / 2],
+    [b[0] - (px * wb) / 2, b[1] - (py * wb) / 2],
+    [a[0] - (px * wa) / 2, a[1] - (py * wa) / 2],
+  ];
+  return (
+    <g fill={cor}>
+      <circle cx={a[0]} cy={a[1]} r={wa / 2} />
+      <circle cx={b[0]} cy={b[1]} r={wb / 2} />
+      <polygon points={pts.map((q) => q.join(',')).join(' ')} />
+    </g>
+  );
+}
+
+/** ponto entre a e b (0 = a, 1 = b) */
+const entre = (a: P, b: P, f: number): P => [lerp(a[0], b[0], f), lerp(a[1], b[1], f)];
 
 interface Pose {
   /** 0 = banco longe, braços e pernas esticados; 1 = braços e pernas um pouco dobrados */
@@ -50,63 +75,184 @@ interface Pose {
   /** destaque (anel amarelo) em: braço, perna, costas, cabeça, pé */
   luz?: 'braco' | 'perna' | 'costas' | 'cabeca' | 'pe' | null;
   o?: number;
+  /** tempo do trecho: a paisagem passa pela janela */
+  lt?: number;
+}
+
+const JANELA = 'M54 52 Q56 47 64 47 L176 45 Q186 45 192 50 L236 90 L54 92 Z';
+
+/** paisagem vista pela janela lateral, andando para trás (o carro vai para a direita) */
+function paisagemJanela(lt: number): ReactNode {
+  const des = (lt * 46) % 90;
+  return (
+    <g clipPath="url(#vp-janela)">
+      <rect x={40} y={40} width={210} height={56} fill="url(#vp-ceu)" />
+      <path d="M40 76 Q80 70 120 74 Q170 69 250 73 L250 96 L40 96 Z" fill="#8cbf7f" />
+      {[0, 1, 2, 3].map((k) => {
+        const x = 40 + k * 90 - des;
+        return (
+          <g key={k}>
+            <rect x={x + 18} y={64} width={2.4} height={12} fill="#7a5235" />
+            <circle cx={x + 19} cy={61} r={8} fill="#4f9d4a" />
+            <circle cx={x + 24} cy={65} r={5.5} fill="#5aa953" />
+            <rect x={x + 58} y={70} width={1.6} height={8} fill="#c9cdd2" />
+            <rect x={x + 55} y={66} width={8} height={5} rx={1} fill="#1f7a4d" />
+          </g>
+        );
+      })}
+      <rect x={40} y={82} width={210} height={14} fill="#6b737d" />
+      {[0, 1, 2, 3, 4, 5, 6].map((k) => <rect key={k} x={40 + k * 40 - ((lt * 120) % 40)} y={86} width={18} height={1.6} fill="#ffffff" opacity={0.8} />)}
+      {/* reflexo no vidro */}
+      <path d="M64 47 L96 47 L70 92 L54 92 Z" fill="#ffffff" opacity={0.12} />
+    </g>
+  );
+}
+
+/** tênis (calçado preso) ou pé no chinelo, de lado; `u` vai do calcanhar para os dedos e `v` para cima */
+function calcado(calc: P, pe: P, tenis: boolean): ReactNode {
+  const dx = pe[0] - calc[0];
+  const dy = pe[1] - calc[1];
+  const n = Math.hypot(dx, dy) || 1;
+  const u: P = [dx / n, dy / n];
+  const v: P = [u[1], -u[0]];
+  const w = (al: number, up: number) => `${calc[0] + u[0] * al + v[0] * up} ${calc[1] + u[1] * al + v[1] * up}`;
+  if (tenis)
+    return (
+      <g>
+        <path d={`M${w(-7, 2)} Q${w(-8, 9)} ${w(-3, 10)} L${w(6, 8)} Q${w(16, 6)} ${w(22, 2.5)} Q${w(25, 0)} ${w(23, -2)} L${w(-6, -2)} Z`} fill="#f2f4f7" stroke="#8d97a3" strokeWidth={0.8} />
+        <path d={`M${w(-7, -1)} L${w(23.5, -1)} L${w(23, -4.5)} L${w(-6.5, -4.5)} Z`} fill="#5c6670" />
+        <path d={`M${w(-7, 4)} Q${w(-6, 9)} ${w(-2, 9.5)} L${w(0, 3)} Z`} fill={AZ} />
+        {[0, 1, 2].map((k) => <path key={k} d={`M${w(5 + k * 3.4, 8.4)} L${w(7 + k * 3.4, 5.4)}`} stroke={AZ} strokeWidth={1.4} strokeLinecap="round" />)}
+        <path d={`M${w(10, 1)} Q${w(16, 4)} ${w(21, 1.2)}`} fill="none" stroke="#c4cad2" strokeWidth={1} />
+      </g>
+    );
+  return (
+    <g>
+      <path d={`M${w(-6, 2)} Q${w(-7, 8)} ${w(-2, 8)} L${w(10, 5)} Q${w(20, 3.5)} ${w(22, 0.5)} Q${w(21, -1)} ${w(17, -1)} L${w(-5, -1)} Z`} fill={PELE} stroke="#a8754f" strokeWidth={0.8} />
+      <path d={`M${w(-9, -4)} L${w(25, -2)} L${w(25, -5)} L${w(-9, -7)} Z`} fill={LARANJA} />
+      <path d={`M${w(9, -2.5)} Q${w(12, 6)} ${w(15, -2.5)}`} fill="none" stroke={AZ} strokeWidth={2} />
+    </g>
+  );
 }
 
 /** cabine vista de lado, motorista olhando para a direita. Quadro em (20..300, 20..190). */
-function cabine({ dobra, apoio, tenis = 1, luz = null, o = 1 }: Pose): ReactNode {
+function cabine({ dobra, apoio, tenis = 1, luz = null, o = 1, lt = 0 }: Pose): ReactNode {
   if (o < 0.01) return null;
-  const bx = lerp(82, 112, dobra); // banco mais para trás quando esticado
+  const bx = lerp(162.5, 174.5, dobra); // banco mais para trás quando esticado
   const quadril: P = [bx - 12, 140];
-  const ombro: P = [bx - 22, 92];
-  const cabeca: P = [bx - 16, 72];
-  const mao: P = [204, 100];
-  const calc: P = [222, 176];
-  const pe: P = [236, 164];
-  const cotovelo = junta(ombro, mao, 26 * dobra);
-  const joelho = junta(quadril, calc, -20 * dobra - 2);
-  const hApoio = lerp(98, 72, apoio);
+  const ombro: P = [bx - 22, 93];
+  const H: P = [bx - 16, 70];
+  const mao: P = [210, 98];
+  const calc: P = [232, 176];
+  const pe: P = [248, 162];
+  // braço 34 + 36 e perna 46 + 46: medidas fixas, as juntas dobram de verdade
+  const cotovelo = ik(ombro, mao, 34, 36, 1);
+  const joelho = ik(quadril, calc, 46, 46, -1);
+  const hApoio = lerp(86, 70, apoio);
   const ring = (p: P, r = 18) => <circle cx={p[0]} cy={p[1]} r={r} fill="none" stroke="#ffd84a" strokeWidth={3} strokeDasharray="5 4" />;
+  const [hx, hy] = H;
   return (
     <g opacity={o}>
-      {/* painel, para-brisa e assoalho */}
-      <path d="M190 64 L262 50 L300 50 L300 120 L222 120 Z" fill="#2a2f36" />
-      <line x1={262} y1={50} x2={196} y2={22} stroke="#7fa6c9" strokeWidth={4} />
-      <rect x={30} y={178} width={270} height={10} fill="#1b1f25" />
-      {/* pedal */}
-      <line x1={250} y1={118} x2={248} y2={160} stroke="#8d97a3" strokeWidth={3} />
-      <rect x={240} y={154} width={16} height={10} rx={2} fill="#1b1f25" transform="rotate(-20 248 159)" />
-      {/* banco: assento e encosto (quase 90 graus) */}
-      <rect x={bx - 52} y={140} width={56} height={14} rx={6} fill={BANCO} />
-      <rect x={bx - 40} y={154} width={10} height={24} fill="#2a2f36" />
-      <path d={`M${bx - 52} 146 L${bx - 50} 82 L${bx - 36} 80 L${bx - 38} 146 Z`} fill={BANCO} />
-      {/* encosto de cabeça */}
-      <rect x={bx - 54} y={hApoio - 10} width={16} height={22} rx={6} fill="#5c6670" />
-      <line x1={bx - 46} y1={hApoio + 12} x2={bx - 46} y2={84} stroke="#8d97a3" strokeWidth={2} />
-      {/* volante e coluna */}
-      <line x1={204} y1={100} x2={226} y2={112} stroke="#5c6670" strokeWidth={5} />
-      <line x1={196} y1={82} x2={210} y2={118} stroke="#1b1f25" strokeWidth={7} strokeLinecap="round" />
-      {/* pernas */}
-      {seg(quadril, joelho, CALCA, 12)}
-      {seg(joelho, calc, CALCA, 10)}
-      {tenis > 0.5 ? (
-        <path d={`M${calc[0] - 6} ${calc[1] + 2} L${pe[0] + 4} ${pe[1]} L${pe[0] + 6} ${pe[1] + 6} L${calc[0] - 6} ${calc[1] + 8} Z`} fill="#f2f4f7" stroke="#8d97a3" />
-      ) : (
-        <>
-          <path d={`M${calc[0] - 4} ${calc[1]} L${pe[0] + 2} ${pe[1] - 2} L${pe[0] + 4} ${pe[1] + 2} L${calc[0] - 4} ${calc[1] + 4} Z`} fill={PELE} />
-          <path d={`M${calc[0] - 8} ${calc[1] + 6} L${pe[0] + 8} ${pe[1] + 6}`} stroke="#ea7b2c" strokeWidth={3} strokeLinecap="round" />
-        </>
-      )}
-      {/* tronco, braço, cabeça */}
-      {seg(quadril, ombro, CAMISA, 18)}
-      {seg(ombro, cotovelo, CAMISA, 9)}
-      {seg(cotovelo, mao, PELE, 7)}
-      <circle cx={cabeca[0]} cy={cabeca[1]} r={12} fill={PELE} />
-      <path d={`M${cabeca[0] - 12} ${cabeca[1] - 2} a12 12 0 0 1 24 -2 Z`} fill="#3a2a1f" />
-      <circle cx={cabeca[0] + 6} cy={cabeca[1] - 1} r={1.6} fill={TINTA} />
+      <defs>
+        <linearGradient id="vp-porta" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#5b6571" />
+          <stop offset="1" stopColor="#353c46" />
+        </linearGradient>
+        <linearGradient id="vp-ceu" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#7fb2e3" />
+          <stop offset="1" stopColor="#d4e7f7" />
+        </linearGradient>
+        <linearGradient id="vp-camisa" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#2f68b3" />
+          <stop offset="0.6" stopColor={CAMISA} />
+          <stop offset="1" stopColor="#5a95dd" />
+        </linearGradient>
+        <linearGradient id="vp-banco" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#3a414a" />
+          <stop offset="1" stopColor="#5a636e" />
+        </linearGradient>
+        <clipPath id="vp-janela">
+          <path d={JANELA} />
+        </clipPath>
+      </defs>
+      {/* lado de dentro da porta, com a janela */}
+      <path d="M24 188 L24 62 Q26 42 48 40 L190 37 Q200 37 206 42 L274 78 L298 80 L298 188 Z" fill="url(#vp-porta)" />
+      {paisagemJanela(lt)}
+      <path d={JANELA} fill="none" stroke="#1b1f25" strokeWidth={3.5} strokeLinejoin="round" />
+      {/* coluna do meio, apoio de braço, maçaneta e alto-falante */}
+      <rect x={128} y={44} width={7} height={50} fill="#262b32" />
+      <path d="M40 120 L190 116 Q198 116 198 122 L198 126 L40 130 Z" fill="#5c6670" />
+      <rect x={168} y={102} width={18} height={5} rx={2.5} fill="#8d97a3" />
+      <rect x={150} y={146} width={40} height={18} rx={5} fill="#2f353d" />
+      {[0, 1, 2, 3].map((k) => <line key={k} x1={155} y1={150 + k * 3.4} x2={185} y2={150 + k * 3.4} stroke="#4a525d" strokeWidth={1.2} strokeLinecap="round" />)}
+      {/* para-brisa e coluna da frente */}
+      <path d="M194 39 L206 40 L276 82 L264 84 Z" fill="#bcd6ee" opacity={0.85} />
+      <path d="M190 38 L262 84" stroke="#1b1f25" strokeWidth={4} strokeLinecap="round" />
+      {/* painel com o capô dos instrumentos */}
+      <path d="M214 98 Q218 88 236 84 Q250 76 266 80 L298 82 L298 128 L238 128 Q224 122 214 98 Z" fill="#23282f" />
+      <path d="M226 86 Q232 77 248 77 Q256 77 258 82" fill="none" stroke="#3a414a" strokeWidth={2} />
+      <path d="M236 84 Q250 76 298 82" fill="none" stroke="#4a525d" strokeWidth={1.4} />
+      {/* assoalho e tapete */}
+      <rect x={24} y={178} width={274} height={10} fill="#1b1f25" />
+      <rect x={150} y={176} width={110} height={4} rx={2} fill="#2f353d" />
+      {/* pedal do acelerador */}
+      <path d="M264 126 Q263 150 254 163" fill="none" stroke="#8d97a3" strokeWidth={3} strokeLinecap="round" />
+      <rect x={237} y={168} width={20} height={6} rx={2} fill="#2a2f36" stroke="#5c6670" transform="rotate(-41 247 171)" />
+      {/* banco de trás, mais escuro, atrás da coluna do meio */}
+      <path d="M30 152 Q28 124 36 100 Q40 94 50 95 Q60 96 62 104 Q60 128 64 152 Z" fill="#3a414a" />
+      <rect x={38} y={76} width={20} height={21} rx={7} fill="#3a414a" />
+      <rect x={46} y={95} width={2.2} height={6} fill="#6b737d" />
+      <path d="M28 150 Q28 140 38 139 L94 140 Q102 141 100 150 Q98 156 90 156 L36 157 Q28 156 28 150 Z" fill="#353c45" />
+      {/* banco: base, encosto de cabeça com hastes, encosto e assento com costura */}
+      <rect x={bx - 52} y={152} width={52} height={7} rx={2} fill="#262b32" />
+      <rect x={bx - 44} y={159} width={8} height={19} fill="#262b32" />
+      <rect x={bx - 22} y={159} width={8} height={19} fill="#262b32" />
+      {[-1, 1].map((k) => <rect key={k} x={bx - 49 + k * 4} y={hApoio + 8} width={2.4} height={Math.max(0, 94 - hApoio - 8)} fill="#aab3bd" />)}
+      <rect x={bx - 58} y={hApoio - 12} width={20} height={23} rx={8} fill="#5c6670" />
+      <rect x={bx - 55} y={hApoio - 9} width={6} height={17} rx={3} fill="#6b7580" />
+      <path d={`M${bx - 60} 150 Q${bx - 64} 120 ${bx - 56} 94 Q${bx - 52} 88 ${bx - 42} 90 Q${bx - 36} 92 ${bx - 34} 98 Q${bx - 36} 124 ${bx - 32} 150 Z`} fill="url(#vp-banco)" />
+      <path d={`M${bx - 54} 104 Q${bx - 57} 124 ${bx - 54} 144`} fill="none" stroke="#2a3038" strokeWidth={1.2} strokeDasharray="2 2" />
+      <path d={`M${bx - 62} 144 Q${bx - 62} 136 ${bx - 52} 135 L${bx + 2} 136 Q${bx + 12} 137 ${bx + 10} 146 Q${bx + 8} 153 ${bx} 153 L${bx - 56} 154 Q${bx - 62} 153 ${bx - 62} 144 Z`} fill="url(#vp-banco)" />
+      <path d={`M${bx - 54} 139 L${bx + 2} 140`} fill="none" stroke="#2a3038" strokeWidth={1.2} strokeDasharray="2 2" />
+      {/* pernas: coxa, joelho e canela, e o calçado */}
+      {membro(quadril, joelho, 17, 12.5, CALCA)}
+      {membro(joelho, entre(joelho, calc, 0.92), 12, 8.5, CALCA)}
+      <path d={`M${joelho[0] - 3} ${joelho[1] - 2} Q${joelho[0] + 2} ${joelho[1] - 6} ${joelho[0] + 6} ${joelho[1] - 1}`} fill="none" stroke="#5677aa" strokeWidth={1.4} />
+      {membro(entre(joelho, calc, 0.88), calc, 6.5, 6, tenis > 0.5 ? '#f2f4f7' : PELE)}
+      {calcado(calc, pe, tenis > 0.5)}
+      {/* pescoço, tronco com gola e cinto de segurança */}
+      <rect x={hx - 7} y={hy + 6} width={10} height={16} rx={3} fill={PELE} />
+      <path d={`M${bx - 30} 144 Q${bx - 36} 120 ${bx - 34} 100 Q${bx - 33} 88 ${bx - 24} 86 L${bx - 12} 86 Q${bx - 6} 92 ${bx - 6} 104 Q${bx - 4} 124 ${bx} 144 Z`} fill="url(#vp-camisa)" />
+      <path d={`M${bx - 24} 86 Q${bx - 18} 92 ${bx - 12} 86`} fill="none" stroke="#24548f" strokeWidth={1.6} />
+      <path d={`M${bx - 33} 84 L${bx - 2} 146`} stroke="#3a414a" strokeWidth={4.5} strokeLinecap="round" />
+      <path d={`M${bx - 33} 84 L${bx - 2} 146`} stroke="#59626d" strokeWidth={1.2} />
+      <path d={`M${bx - 30} 143 L${bx + 2} 145`} stroke="#3a414a" strokeWidth={4} strokeLinecap="round" />
+      <rect x={bx - 6} y={142} width={8} height={6} rx={1.5} fill="#aab3bd" />
+      {/* cabeça de perfil: rosto, cabelo, orelha, sobrancelha, olho e boca */}
+      <circle cx={hx} cy={hy} r={12} fill={PELE} />
+      <path d={`M${hx + 9} ${hy - 8} Q${hx + 12} ${hy - 4} ${hx + 11.5} ${hy - 2} L${hx + 15} ${hy + 3} Q${hx + 14.5} ${hy + 4.5} ${hx + 11.5} ${hy + 4.5} Q${hx + 12.5} ${hy + 7} ${hx + 11} ${hy + 8} Q${hx + 10} ${hy + 12} ${hx + 4} ${hy + 12.5} L${hx - 4} ${hy + 10} Z`} fill={PELE} />
+      <path d={`M${hx + 10.5} ${hy - 7} Q${hx + 6} ${hy - 15} ${hx - 4} ${hy - 13.5} Q${hx - 14} ${hy - 11} ${hx - 13} ${hy + 1} Q${hx - 12} ${hy + 8} ${hx - 7} ${hy + 10} L${hx - 5} ${hy + 2} Q${hx - 1} ${hy - 4} ${hx + 3} ${hy - 4} Q${hx + 8} ${hy - 4} ${hx + 10.5} ${hy - 7} Z`} fill="#3a2a1f" />
+      <path d={`M${hx - 9} ${hy - 9} Q${hx - 3} ${hy - 12} ${hx + 4} ${hy - 10}`} fill="none" stroke="#5a4130" strokeWidth={1} />
+      <ellipse cx={hx - 2} cy={hy + 2} rx={2.6} ry={3.6} fill="#cf9670" stroke="#a8754f" strokeWidth={0.7} />
+      <path d={`M${hx + 5} ${hy - 4} Q${hx + 8} ${hy - 5.5} ${hx + 10.5} ${hy - 4}`} fill="none" stroke="#3a2a1f" strokeWidth={1.3} strokeLinecap="round" />
+      <ellipse cx={hx + 8} cy={hy - 1} rx={2} ry={1.4} fill="#ffffff" />
+      <circle cx={hx + 8.8} cy={hy - 1} r={1.05} fill={TINTA} />
+      <path d={`M${hx + 9} ${hy + 7.5} L${hx + 11.3} ${hy + 7.3}`} stroke="#9b5f45" strokeWidth={1} strokeLinecap="round" />
+      {/* volante de lado e coluna da direção */}
+      <path d={`M${mao[0]} ${mao[1]} L244 114`} stroke="#1b1f25" strokeWidth={6} strokeLinecap="round" />
+      <ellipse cx={mao[0]} cy={mao[1]} rx={5} ry={22} transform={`rotate(-22 ${mao[0]} ${mao[1]})`} fill="none" stroke="#1b1f25" strokeWidth={5} />
+      <ellipse cx={mao[0] + 3} cy={mao[1] + 1} rx={3} ry={6} transform={`rotate(-22 ${mao[0]} ${mao[1]})`} fill="#2a2f36" />
+      {/* braço: manga, antebraço e mão fechada no volante */}
+      {membro(ombro, entre(ombro, cotovelo, 0.55), 12, 10.5, CAMISA)}
+      {membro(entre(ombro, cotovelo, 0.5), cotovelo, 8.5, 7.5, PELE)}
+      {membro(cotovelo, mao, 7.5, 6, PELE)}
+      <path d={`M${ombro[0] - 5} ${ombro[1] - 4} Q${ombro[0] + 2} ${ombro[1] - 7} ${ombro[0] + 6} ${ombro[1] - 2}`} fill="none" stroke="#5a95dd" strokeWidth={1.5} />
+      <circle cx={mao[0] - 1} cy={mao[1]} r={4.8} fill={PELE} stroke="#a8754f" strokeWidth={0.8} />
+      <path d={`M${mao[0] + 1} ${mao[1] - 4} Q${mao[0] + 5} ${mao[1] - 1} ${mao[0] + 2} ${mao[1] + 4}`} fill="none" stroke="#a8754f" strokeWidth={0.8} />
       {luz === 'braco' && ring(cotovelo)}
       {luz === 'perna' && ring(joelho)}
-      {luz === 'costas' && ring([bx - 40, 116], 22)}
-      {luz === 'cabeca' && ring([bx - 46, hApoio], 16)}
+      {luz === 'costas' && ring([bx - 40, 120], 22)}
+      {luz === 'cabeca' && ring([bx - 48, hApoio], 16)}
       {luz === 'pe' && ring(calc, 14)}
     </g>
   );
@@ -160,9 +306,9 @@ function trecho(k: number, lt: number, d: number): Quadro {
     case 0:
       return fundo(lt, 0.6, () => (
         <>
-          {cabine({ dobra: 1, apoio: 1, o: surge(lt, 0.1) })}
+          {cabine({ dobra: 1, apoio: 1, o: surge(lt, 0.1), lt })}
           {chip(120, 30, 'Cansa menos', VERDE, surge(lt, 1.6), 10)}
-          {chip(230, 140, 'Pronto para reagir', AZ, surge(lt, 2.6), 10)}
+          {chip(92, 172, 'Pronto para reagir', AZ, surge(lt, 2.6), 10)}
         </>
       ));
     // 1. braços e pernas um pouco dobrados, sem esticar
@@ -170,7 +316,7 @@ function trecho(k: number, lt: number, d: number): Quadro {
       const dob = surge(lt, 0.5, 1.0);
       return fundo(lt, 0.6, () => (
         <>
-          {cabine({ dobra: dob, apoio: 1, luz: lt > 0.3 ? (Math.floor(lt * 2) % 2 ? 'braco' : 'perna') : null })}
+          {cabine({ dobra: dob, apoio: 1, luz: lt > 0.3 ? (Math.floor(lt * 2) % 2 ? 'braco' : 'perna') : null, lt })}
           {nao(160, 30, 9, (1 - dob) * surge(lt, 0.1))}
           {chip(160, 30, 'Um pouco dobrados', VERDE, dob, 10)}
         </>
@@ -180,7 +326,7 @@ function trecho(k: number, lt: number, d: number): Quadro {
     case 2:
       return fundo(lt, 0.6, () => (
         <>
-          {cabine({ dobra: 1, apoio: 1, luz: 'costas' })}
+          {cabine({ dobra: 1, apoio: 1, luz: 'costas', lt })}
           {quadro(16, 154, 80, 24, surge(lt, 1.6), <text x={40} y={16} textAnchor="middle" fontSize={11} fontWeight={800} fill={TINTA}>≈ 90°</text>)}
           {chip(170, 30, 'Costas bem apoiadas', VERDE, surge(lt, 0.3), 10)}
         </>
@@ -190,9 +336,9 @@ function trecho(k: number, lt: number, d: number): Quadro {
       const ap = surge(lt, 0.6, 1.2);
       return fundo(lt, 0.6, () => (
         <>
-          {cabine({ dobra: 1, apoio: ap, luz: 'cabeca' })}
+          {cabine({ dobra: 1, apoio: ap, luz: 'cabeca', lt })}
           {chip(170, 30, 'Na altura dos olhos', VERDE, surge(lt, 1.6), 10)}
-          {chip(230, 140, 'Protege o pescoço', AZ, surge(lt, 3.0), 10)}
+          {chip(92, 172, 'Protege o pescoço', AZ, surge(lt, 3.0), 10)}
         </>
       ));
     }
@@ -211,7 +357,7 @@ function trecho(k: number, lt: number, d: number): Quadro {
     case 5:
       return fundo(lt, 0.6, () => (
         <>
-          {cabine({ dobra: 1, apoio: 1, luz: 'pe' })}
+          {cabine({ dobra: 1, apoio: 1, luz: 'pe', lt })}
           {chip(150, 30, 'Calcanhar no assoalho', VERDE, surge(lt, 0.3), 10)}
           {chip(150, 54, 'Não descanse o pé no pedal', LARANJA, surge(lt, 3.0), 10)}
         </>
@@ -232,7 +378,7 @@ function trecho(k: number, lt: number, d: number): Quadro {
       const dob = surge(lt, 1.4, 1.6);
       return fundo(lt, 0.6, () => (
         <>
-          {cabine({ dobra: dob, apoio: 0, tenis: 0, luz: dob > 0.05 && dob < 0.95 ? 'braco' : null })}
+          {cabine({ dobra: dob, apoio: 0, tenis: 0, luz: dob > 0.05 && dob < 0.95 ? 'braco' : null, lt })}
           {chip(60, 30, 'Léo', AZ, surge(lt, 0.2), 11)}
           {chip(180, 30, 'Ajusta o banco', VERDE, surge(lt, 1.2), 10)}
           {visto(250, 30, surge(lt, 3.2), 9)}
@@ -245,7 +391,7 @@ function trecho(k: number, lt: number, d: number): Quadro {
       const tn = lt > 2.4 ? 1 : 0;
       return fundo(lt, 0.6, () => (
         <>
-          {cabine({ dobra: 1, apoio: ap, tenis: tn, luz: lt < 2.2 ? 'cabeca' : 'pe' })}
+          {cabine({ dobra: 1, apoio: ap, tenis: tn, luz: lt < 2.2 ? 'cabeca' : 'pe', lt })}
           {chip(170, 30, 'Encosto na altura dos olhos', VERDE, surge(lt, 0.6), 9.5)}
           {chip(150, 54, 'Chinelo → tênis', VERDE, surge(lt, 2.4), 10)}
         </>

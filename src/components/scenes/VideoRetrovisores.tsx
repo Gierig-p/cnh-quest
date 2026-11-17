@@ -71,29 +71,120 @@ function espelhoInterno(x: number, y: number, o = 1, { objeto = 0, farol = 0, to
   );
 }
 
-/** espelho externo esquerdo: a lateral do seu carro aparece na borda de dentro */
+/** espelho externo esquerdo: carcaça na cor do carro, vidro com céu, pista em perspectiva e reflexo;
+ *  a lateral do seu carro aparece na borda de dentro (`lateral`) */
 export function espelhoExterno(x: number, y: number, o = 1, lateral = 1): ReactNode {
   if (o < 0.01) return null;
+  // contorno do vidro (o mesmo recorta a cena refletida)
+  const vidro = 'M9 15 Q11 8 30 8 L104 8 Q115 8 115 19 L115 64 Q115 76 103 76 L24 76 Q9 76 9 61 Z';
   return (
     <g opacity={o} transform={`translate(${x} ${y})`}>
-      <path d="M0 10 Q4 0 30 0 L110 0 Q124 0 124 16 L124 70 Q124 84 108 84 L20 84 Q0 84 0 64 Z" fill="#20262e" />
-      <path d="M8 14 Q10 7 30 7 L106 7 Q116 7 116 18 L116 66 Q116 77 104 77 L22 77 Q8 77 8 62 Z" fill="#9fc3e6" />
-      <path d="M8 60 L116 40 L116 77 L8 77 Z" fill="#6b747f" opacity={0.9} />
-      <rect x={30} y={34} width={22} height={14} rx={3} fill="#e9a47c" />
-      <path d={`M${116 - 26 * lateral} 7 L116 7 L116 77 L${116 - 26 * lateral} 77 Z`} fill={VOCE} opacity={lateral} stroke="#8d97a3" />
+      <defs>
+        <linearGradient id="rv-carcaca" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#4b5563" />
+          <stop offset="0.55" stopColor="#262c35" />
+          <stop offset="1" stopColor="#14181e" />
+        </linearGradient>
+        <linearGradient id="rv-ceu" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#7fb2e3" />
+          <stop offset="1" stopColor="#cfe3f5" />
+        </linearGradient>
+        <linearGradient id="rv-pista" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#8a929c" />
+          <stop offset="1" stopColor="#5b636d" />
+        </linearGradient>
+        <linearGradient id="rv-brilho" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#ffffff" stopOpacity={0.55} />
+          <stop offset="0.45" stopColor="#ffffff" stopOpacity={0.08} />
+          <stop offset="1" stopColor="#ffffff" stopOpacity={0} />
+        </linearGradient>
+        <linearGradient id="rv-lataria" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0.6" stopColor="#1d2430" stopOpacity={0.05} />
+          <stop offset="0.8" stopColor="#1d2430" stopOpacity={0.3} />
+          <stop offset="1" stopColor="#1d2430" stopOpacity={0.45} />
+        </linearGradient>
+        <clipPath id="rv-vidro">
+          <path d={vidro} />
+        </clipPath>
+      </defs>
+      {/* braço que prende o espelho na porta */}
+      <path d="M112 50 L132 46 L134 66 L112 68 Z" fill="#1d2229" />
+      {/* sombra e carcaça */}
+      <path d="M2 13 Q6 2 30 2 L110 2 Q126 2 126 18 L126 72 Q126 88 109 88 L21 88 Q2 88 2 68 Z" fill="#0006" />
+      <path d="M0 10 Q4 0 30 0 L110 0 Q124 0 124 16 L124 70 Q124 84 108 84 L20 84 Q0 84 0 64 Z" fill="url(#rv-carcaca)" />
+      <path d="M6 9 Q9 3 30 3 L108 3 Q119 3 120 12" fill="none" stroke="#ffffff" strokeOpacity={0.25} strokeWidth={1.5} />
+      {/* moldura de borracha */}
+      <path d={vidro} fill="#0b0e12" transform="translate(-1.5 -1.5) scale(1.026)" />
+      {/* o que o espelho mostra */}
+      <g clipPath="url(#rv-vidro)">
+        <rect x={0} y={0} width={124} height={84} fill="url(#rv-ceu)" />
+        <path d="M0 40 Q30 34 60 38 Q90 33 124 37 L124 46 L0 46 Z" fill="#7fae74" />
+        <path d="M-6 44 L124 44 L124 84 L-6 84 Z" fill="#8bbb7d" />
+        <path d="M18 44 L96 44 L150 84 L-40 84 Z" fill="url(#rv-pista)" />
+        {/* faixas: tracejado do meio e borda */}
+        <path d="M57 44 L52 84" stroke="#ffffff" strokeWidth={1.6} strokeDasharray="5 5" />
+        <path d="M22 44 L-30 84" stroke="#ffffff" strokeWidth={1.4} />
+        {/* carro bem lá atrás, na outra faixa */}
+        <g transform="translate(36 41)">
+          <rect x={0} y={0} width={13} height={8} rx={2} fill="#c76b4a" />
+          <rect x={2} y={1} width={9} height={3} rx={1} fill="#2b3440" opacity={0.85} />
+          <rect x={0.5} y={6} width={3} height={1.4} fill="#fff3c4" />
+          <rect x={9.5} y={6} width={3} height={1.4} fill="#fff3c4" />
+        </g>
+        {/* lateral do seu carro, na borda de dentro */}
+        <g opacity={lateral}>
+          <path d={`M${116 - 28 * lateral} 8 Q${112 - 26 * lateral} 40 ${118 - 30 * lateral} 84 L124 84 L124 0 Z`} fill={VOCE} />
+          <path d={`M${116 - 28 * lateral} 8 Q${112 - 26 * lateral} 40 ${118 - 30 * lateral} 84 L124 84 L124 0 Z`} fill="url(#rv-lataria)" />
+          <path d={`M${116 - 24 * lateral} 30 Q${113 - 22 * lateral} 46 ${117 - 25 * lateral} 70`} fill="none" stroke="#8d97a3" strokeWidth={1.6} />
+          <circle cx={120 - 18 * lateral} cy={52} r={2} fill="#8d97a3" />
+        </g>
+        {/* reflexo do vidro convexo */}
+        <path d="M9 8 L60 8 L22 76 L9 76 Z" fill="url(#rv-brilho)" />
+      </g>
     </g>
   );
 }
 
-/** cabeça vista de cima, virando `a` radianos para a esquerda */
+/** cabeça vista de cima (motorista no banco), virando `a` radianos para a esquerda:
+ *  os ombros ficam parados, a cabeça gira e o cone mostra para onde o olhar vai */
 export function cabeca(x: number, y: number, a: number, o = 1): ReactNode {
   if (o < 0.01) return null;
   return (
-    <g opacity={o} transform={`translate(${x} ${y}) rotate(${(-a * 180) / Math.PI})`}>
-      <circle cx={0} cy={0} r={18} fill="#d9a37a" />
-      <path d="M-18 4 A18 18 0 0 0 18 4 L14 12 L-14 12 Z" fill="#3a2a1f" />
-      <path d="M-6 -17 L0 -26 L6 -17 Z" fill="#d9a37a" />
-      <path d="M-14 -40 L0 -20 L14 -40" fill="none" stroke="#ffd84a" strokeWidth={2} strokeDasharray="4 3" />
+    <g opacity={o} transform={`translate(${x} ${y}) scale(0.8)`}>
+      <defs>
+        <radialGradient id="rv-cabelo" cx="0.45" cy="0.6" r="0.6">
+          <stop offset="0" stopColor="#5a4130" />
+          <stop offset="1" stopColor="#2e2118" />
+        </radialGradient>
+        <radialGradient id="rv-pele" cx="0.5" cy="0.3" r="0.7">
+          <stop offset="0" stopColor="#f0c39c" />
+          <stop offset="1" stopColor="#cf9670" />
+        </radialGradient>
+        <linearGradient id="rv-olhar" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stopColor="#ffd84a" stopOpacity={0.75} />
+          <stop offset="1" stopColor="#ffd84a" stopOpacity={0} />
+        </linearGradient>
+      </defs>
+      {/* ombros e encosto do banco */}
+      <rect x={-30} y={2} width={60} height={20} rx={10} fill="#3b4656" />
+      <path d="M-27 10 Q-27 2 -16 1 L16 1 Q27 2 27 10 Q27 17 16 18 L-16 18 Q-27 17 -27 10 Z" fill="#2f78c4" />
+      <path d="M-8 1 L0 9 L8 1 Z" fill="#245f9c" />
+      <path d="M-24 9 Q-24 4 -16 3" fill="none" stroke="#ffffff" strokeOpacity={0.3} strokeWidth={1.4} />
+      <g transform={`rotate(${(-a * 180) / Math.PI})`}>
+        {/* para onde o olhar vai */}
+        <path d="M-5 -14 L-17 -42 Q0 -48 17 -42 L5 -14 Z" fill="url(#rv-olhar)" />
+        {/* orelhas */}
+        <ellipse cx={-14.5} cy={-1} rx={3} ry={5} fill="#d9a37a" stroke="#b9805a" strokeWidth={0.8} />
+        <ellipse cx={14.5} cy={-1} rx={3} ry={5} fill="#d9a37a" stroke="#b9805a" strokeWidth={0.8} />
+        {/* rosto (parte da frente) e cabelo (parte de trás) */}
+        <ellipse cx={0} cy={-1} rx={14} ry={16} fill="url(#rv-pele)" />
+        <path d="M-14.2 -2 Q-13 -10.5 0 -10.5 Q13 -10.5 14.2 -2 Q14 8 9 12.5 Q0 16.5 -9 12.5 Q-14 8 -14 -3 Z" fill="url(#rv-cabelo)" />
+        <path d="M-9 -7 Q-1 -9.5 7 -7.5 M-11 -3 Q0 -9 10 -6 M-10 2 Q0 -1 10 1" fill="none" stroke="#7a5a42" strokeWidth={0.9} strokeLinecap="round" opacity={0.7} />
+        <circle cx={2} cy={2} r={1.4} fill="#7a5a42" opacity={0.8} />
+        {/* testa, sobrancelhas e nariz */}
+        <path d="M-7 -13.5 Q-3.5 -15.5 -1 -14 M1 -14 Q3.5 -15.5 7 -13.5" fill="none" stroke="#2e2118" strokeWidth={1.6} strokeLinecap="round" />
+        <path d="M-2.6 -16 Q0 -21.5 2.6 -16 Z" fill="#d9a37a" stroke="#b9805a" strokeWidth={0.8} />
+      </g>
     </g>
   );
 }

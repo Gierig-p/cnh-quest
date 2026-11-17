@@ -14,6 +14,7 @@ const VOZ = '2CECaLAGTS5NRGxgbcxr';
 /** o mesmo pedido de situacoes.ts (mesmo texto: sai do cache, sem gastar créditos) */
 const FUNDO: Record<string, string> = {
   'motor de veículo bem perto': 'busy avenue heard from inside a moving car, steady traffic passing, road noise, a motorcycle engine humming close by on the left side',
+  'barulho da estrada': 'driving on a highway on a sunny day heard from inside a car, steady tire and road noise, a truck engine rumbling ahead',
   'chuva forte': 'heavy rain drumming on the roof and windshield of a car, wipers moving, muffled city traffic, daytime',
 };
 
@@ -21,6 +22,9 @@ const FUNDO: Record<string, string> = {
 const EXTRA: Record<string, [string, number]> = {
   'buzina curta': ['a single short car horn beep, close, dry, no music', 1],
 };
+
+/** falas que precisam durar o tempo real (a contagem dos dois segundos: "conte devagar") */
+const DURACAO: Record<string, number> = { 'Cinquenta e um, cinquenta e dois.': 2.0 };
 
 const TMP = join(RAIZ, '_tmp_escolhas');
 const ff = (args: string[]) => execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...args]);
@@ -39,7 +43,11 @@ for (const [qid, e] of Object.entries(ESCOLHAS)) {
     const voz = join(TMP, `${parte}.mp3`);
     const extra = e.somRamo?.[parte];
     // com som extra, a fala começa depois dele
-    const r = await falaComTempos(falas, VOZ, voz, { pausa: 0.7, inicio: extra ? 1.5 : 0.6 });
+    const r = await falaComTempos(falas, VOZ, voz, {
+      pausa: 0.7,
+      inicio: extra ? 1.5 : 0.6,
+      alvo: Object.fromEntries(falas.flatMap((f, i) => (DURACAO[f] ? [[i, DURACAO[f]]] : []))),
+    });
     tempos[parte] = r;
     const destino = join(out, `${parte}.mp3`);
     if (extra) {

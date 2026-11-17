@@ -24,6 +24,7 @@ interface EscolhaMod {
 const carregar: Record<string, () => Promise<EscolhaMod>> = {
   'w5-rua-1': () => import('./scenes/EscolhaPoca') as unknown as Promise<EscolhaMod>,
   'w5-rua-4': () => import('./scenes/EscolhaPontoCego') as unknown as Promise<EscolhaMod>,
+  'w5-rua-2': () => import('./scenes/EscolhaDistancia') as unknown as Promise<EscolhaMod>,
 };
 const cache: Record<string, EscolhaMod> = {};
 

@@ -28,6 +28,8 @@ export interface EscolhaDef {
   };
 }
 
+/** a contagem é a do cartão verificado "A regra dos dois segundos" (world5.ts) */
+const SEGURO_DISTANCIA = ['Reduza e conte de novo.', 'Cinquenta e um, cinquenta e dois.', 'Só depois passe pela placa.'];
 const SEGURO_PONTO_CEGO = ['Olhe o ponto cego.', 'Só mude de faixa se estiver livre.'];
 const SEGURO_POCA = ['Freie antes da poça. Sobre a água, não freie.', 'Segure firme o volante.'];
 
@@ -73,6 +75,27 @@ export const ESCOLHAS: Record<string, EscolhaDef> = {
         d: 'Você vira um pouco a cabeça e olha o ponto cego. Tem uma moto ali. Você continua na sua faixa e espera a moto passar.',
       },
       seguro: 'Jeito seguro: vire um pouco a cabeça e olhe o ponto cego. Só mude de faixa se estiver livre.',
+    },
+  },
+  'w5-rua-2': {
+    som: 'barulho da estrada',
+    intro: ['Você segue um caminhão na rodovia, num dia de sol.', 'O caminhão passa pela placa.', 'Cinquenta e um...', 'Seu carro já chegou à placa.', 'O que você faz?'],
+    ramos: {
+      a: ['Você mantém a velocidade.', 'Essa escolha aumenta o perigo.', ...SEGURO_DISTANCIA],
+      b: ['Você pisca o farol para o caminhão.', 'Essa escolha aumenta o perigo.', ...SEGURO_DISTANCIA],
+      c: ['Boa escolha. Você tira o pé e a distância aumenta.', 'Cinquenta e um, cinquenta e dois.', 'Só depois você passa pela placa.', 'Passou antes? Tire o pé e conte de novo.'],
+      d: ['Você encosta ainda mais no caminhão.', 'Essa escolha aumenta o perigo.', ...SEGURO_DISTANCIA],
+    },
+    corte: 2,
+    quadros: {
+      intro: 'Você segue um caminhão na rodovia, num dia de sol. O caminhão passa pela placa e você conta: cinquenta e um... e o seu carro já chegou à placa.',
+      escolha: {
+        a: 'Você mantém a velocidade e a distância continua curta. A cena para: essa escolha aumenta o perigo.',
+        b: 'Você pisca o farol para o caminhão, mas a distância não aumenta: quem precisa ajustar é você. A cena para: essa escolha aumenta o perigo.',
+        c: 'Você tira o pé e a distância aumenta. O caminhão passa pela placa seguinte e você conta: cinquenta e um, cinquenta e dois. Só depois o seu carro passa pela placa.',
+        d: 'Você chega ainda mais perto do caminhão e sobra menos tempo para reagir. A cena para: essa escolha aumenta o perigo.',
+      },
+      seguro: 'Jeito seguro: reduza e conte de novo, "cinquenta e um, cinquenta e dois". Só depois da contagem passe pela placa.',
     },
   },
 };
