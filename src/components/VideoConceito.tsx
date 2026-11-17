@@ -69,6 +69,12 @@ const carregar: Record<VideoId, () => Promise<VideoDef>> = {
   'crimes-perigo': () => import('./scenes/VideoCrimesPerigo').then(paraDef),
   'auto-notificacao': () => import('./scenes/VideoAutoNotificacao').then(paraDef),
   'defesa-recurso': () => import('./scenes/VideoDefesaRecurso').then(paraDef),
+  defensiva: () => import('./scenes/VideoDefensiva').then(paraDef),
+  fatores: () => import('./scenes/VideoFatores').then(paraDef),
+  manutencao: () => import('./scenes/VideoManutencao').then(paraDef),
+  'freios-luzes': () => import('./scenes/VideoFreiosLuzes').then(paraDef),
+  posicao: () => import('./scenes/VideoPosicao').then(paraDef),
+  retrovisores: () => import('./scenes/VideoRetrovisores').then(paraDef),
 };
 
 const cache: Partial<Record<VideoId, VideoDef>> = {};

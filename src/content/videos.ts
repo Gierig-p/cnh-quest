@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores' | 'marcas-linhas' | 'marcas-transversais' | 'semaforo' | 'semaforo-pisca' | 'naturezas' | 'penalidades' | 'suspensao' | 'cassacao' | 'velocidade-sinal' | 'celular-cinto' | 'alcool' | 'recusa-racha' | 'crimes-vitima' | 'crimes-perigo' | 'auto-notificacao' | 'defesa-recurso';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores' | 'marcas-linhas' | 'marcas-transversais' | 'semaforo' | 'semaforo-pisca' | 'naturezas' | 'penalidades' | 'suspensao' | 'cassacao' | 'velocidade-sinal' | 'celular-cinto' | 'alcool' | 'recusa-racha' | 'crimes-vitima' | 'crimes-perigo' | 'auto-notificacao' | 'defesa-recurso' | 'defensiva' | 'fatores' | 'manutencao' | 'freios-luzes' | 'posicao' | 'retrovisores';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -637,6 +637,102 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Um exemplo: chegou uma multa grave de cento e noventa e cinco reais e vinte e três centavos, e você não vai recorrer.',
       'Pagando até o vencimento, você paga oitenta por cento: cento e cinquenta e seis reais e dezoito centavos.',
       'Para guardar: defesa prévia, JARI, CETRAN. Pagou em dia: vinte por cento de desconto.',
+    ],
+  },
+  // cartão c5-defensiva (manual de direção defensiva DENATRAN 2005, p. 12 e 13)
+  defensiva: {
+    falas: [
+      'Direção defensiva é dirigir prevendo o perigo antes que ele aconteça.',
+      'Quem dirige assim enxerga o risco cedo e tem tempo de tomar a decisão certa.',
+      'É reconhecer antes as situações de perigo e prever o que pode acontecer com você, com quem está no veículo e com os outros na via.',
+      'Sinistro de trânsito não acontece por acaso, por azar ou por destino.',
+      'Na grande maioria dos sinistros existe o fator humano: falha de quem dirige ou de quem anda a pé.',
+      'Se o perigo podia ser previsto, o sinistro podia ser evitado.',
+      'Um exemplo: uma bola rola para a rua entre dois carros estacionados.',
+      'Quem dirige na defensiva tira o pé e se prepara para parar.',
+      'Pode vir uma criança correndo atrás dela.',
+      'Para guardar: prever o perigo é o primeiro passo para evitá-lo.',
+    ],
+  },
+  // cartão c5-fatores (manual DENATRAN 2005, p. 13, 46 e 47; CTB art. 29, § 2º)
+  fatores: {
+    falas: [
+      'Os riscos do trânsito vêm de cinco lugares. Olhar para cada um deles ajuda a perceber o perigo mais cedo.',
+      'O veículo: freios, pneus, luzes e outros equipamentos precisam estar bons.',
+      'O condutor: atenção, sono, álcool e emoções mudam o jeito de dirigir.',
+      'A via: curvas, buracos, obras e cruzamentos pedem mais cuidado.',
+      'O ambiente: chuva, neblina, vento e a luz do sol mudam a visão e a aderência.',
+      'Aderência é o agarre do pneu no chão. Com pouca aderência, o veículo escorrega.',
+      'E o comportamento das pessoas: o que você e os outros fazem na via.',
+      'Pela lei, o veículo maior responde pela segurança do menor, e o motorizado pelo não motorizado.',
+      'E todos juntos respondem pelo pedestre.',
+      'Um exemplo: dirigindo um caminhão, Jorge vai passar por um ciclista. Ele reduz e deixa bastante espaço. O maior cuida do menor.',
+      'Para guardar: veículo, condutor, via, ambiente e pessoas.',
+    ],
+  },
+  // cartão c5-manutencao (manual DENATRAN 2005, p. 14 a 17; CTB art. 230, XVIII)
+  manutencao: {
+    falas: [
+      'Todo veículo se desgasta com o uso.',
+      'A manutenção preventiva revisa e troca as peças antes que elas falhem no meio do caminho.',
+      'Siga os prazos do manual do proprietário e use profissionais habilitados.',
+      'Antes de sair, confira o combustível, os níveis de óleo e de água e se as luzes acendem.',
+      'Pneu murcho gasta mais rápido, deixa o veículo instável, aumenta o consumo e escorrega mais na água.',
+      'Os sulcos do pneu tiram a água de baixo dele. O manual de direção defensiva orienta que eles tenham pelo menos um vírgula seis milímetro de profundidade.',
+      'Volante vibrando pode ser o balanceamento das rodas.',
+      'Veículo puxando para um lado pode ser a calibragem ou o alinhamento.',
+      'O estepe, o pneu reserva, também precisa dessas conferências.',
+      'Andar com o veículo em mau estado de conservação, comprometendo a segurança, é infração grave.',
+      'Um exemplo: antes de viajar, Rita calibra os pneus com a pressão para carro carregado, como manda o fabricante, e confere o estepe.',
+      'Para guardar: revisar antes evita quebrar no caminho.',
+    ],
+  },
+  // cartão c5-freios-luzes (manual DENATRAN 2005, p. 19 a 21)
+  'freios-luzes': {
+    falas: [
+      'Freios, direção, amortecedores e luzes ajudam você a fugir do perigo. Se um deles falha, o risco aumenta.',
+      'Freio gasto precisa de mais distância para parar.',
+      'Confira o nível do fluido e procure manchas embaixo do veículo.',
+      'Freio a lona, comum nas rodas de trás, pode perder força por um momento quando molha numa poça.',
+      'Então reduza e pise no freio algumas vezes, até ele voltar ao normal.',
+      'ABS é o freio que não deixa as rodas travarem numa freada forte. Se a luz do ABS acender no painel, há problema no sistema.',
+      'Amortecedores gastos podem fazer o veículo perder o controle e capotar, principalmente em curvas e freadas.',
+      'Folga na direção faz o veículo puxar para um lado.',
+      'Luz de freio queimada: quem vem atrás não percebe que você está freando.',
+      'Seta queimada: ninguém entende a sua manobra.',
+      'Um exemplo: depois de passar por uma rua alagada, Caio sente o freio fraco. Ele reduz e pisa no freio algumas vezes até o freio voltar ao normal.',
+      'Para guardar: freio bom para parar. Luz boa para ser visto.',
+    ],
+  },
+  // cartão c5-posicao (manual DENATRAN 2005, p. 22 e 23)
+  posicao: {
+    falas: [
+      'A posição certa ao dirigir cansa menos e deixa você pronto para reagir rápido.',
+      'Braços e pernas um pouco dobrados, sem esticar.',
+      'Costas bem apoiadas no assento e no encosto, perto de noventa graus.',
+      'O encosto de cabeça fica, de preferência, na altura dos olhos. Ele protege o pescoço numa batida.',
+      'Mãos no volante como os ponteiros do relógio às nove horas e quinze minutos.',
+      'Calcanhares apoiados no assoalho, o piso do veículo. Não descanse os pés nos pedais.',
+      'Calçado bem preso ao pé, para pisar nos pedais rápido e com segurança.',
+      'Um exemplo: antes de sair, Léo ajusta o banco até os braços ficarem um pouco dobrados.',
+      'Ele sobe o encosto de cabeça até a altura dos olhos e troca o chinelo por um tênis.',
+      'Para guardar: mãos às nove e quinze, braços dobrados, costas apoiadas.',
+    ],
+  },
+  // cartão c5-retrovisores (manual DENATRAN 2005, p. 23, 24 e 44)
+  retrovisores: {
+    falas: [
+      'Quanto mais você enxerga em volta, mais cedo percebe o perigo. Os espelhos ajudam, mas não mostram tudo.',
+      'Retrovisor interno: ajuste para ver todo o vidro de trás. Não coloque objetos que tampem a visão.',
+      'Retrovisores externos: ajuste até ver a lateral traseira do seu próprio veículo.',
+      'Mesmo assim sobram pontos cegos: áreas em volta do veículo que você não vê pelos espelhos.',
+      'Antes de manobrar, mexa a cabeça para ver por outro ângulo e olhe pela lateral.',
+      'Preste atenção também ao barulho do motor dos outros veículos.',
+      'Só faça a manobra se tiver certeza de que não vai causar um sinistro.',
+      'Se o farol de quem vem atrás ofuscar pelo retrovisor interno, ajuste o espelho para desviar a luz.',
+      'Um exemplo: antes de passar para a faixa da esquerda, Ana olha o retrovisor, vira um pouco a cabeça e vê uma moto que estava no ponto cego.',
+      'Ela espera a moto passar.',
+      'Para guardar: espelho, cabeça e só depois a manobra.',
     ],
   },
 };

@@ -21,7 +21,7 @@ const VOCE = '#e9eef3';
 /* ---------------- peças ---------------- */
 
 /** bola de futebol no chão */
-function bola(x: number, y: number, r = 0.28): Obj {
+export function bola(x: number, y: number, r = 0.28): Obj {
   const perfil: V2[] = Array.from({ length: 9 }, (_, i) => {
     const a = -Math.PI / 2 + (i / 8) * Math.PI;
     return [Math.max(0.001, Math.cos(a) * r), r + Math.sin(a) * r];
@@ -109,16 +109,17 @@ function neblina(id: string): ReactNode {
 
 /* ---------------- 1. pensar antes ---------------- */
 
-/** rua de bairro com carros estacionados dos dois lados; uma bola sai rolando entre dois deles */
-export function BolaCarros(p: CenaProps) {
-  const a = 3.6, c = 6.2;
-  const ground: Part[] = [
-    ...grassPatches(-40, -50, 40, 40, 4),
-    ...asphalt(-a, -50, a, 40, 6),
-    ...sidewalk(a, -50, c, 40),
-    ...sidewalk(-c, -50, -a, 40),
-  ];
-  const objs: Obj[] = [
+/** rua de bairro com casas e carros estacionados dos dois lados (usada também no vídeo c5-defensiva) */
+export const BAIRRO_A = 3.6;
+export const BAIRRO_CHAO: Part[] = [
+  ...grassPatches(-40, -50, 40, 40, 4),
+  ...asphalt(-3.6, -50, 3.6, 40, 6),
+  ...sidewalk(3.6, -50, 6.2, 40),
+  ...sidewalk(-6.2, -50, -3.6, 40),
+];
+export const BAIRRO_OBJS: Obj[] = (() => {
+  const c = 6.2;
+  return [
     house(c + 1.5, -30, c + 8, -21, '#f3e3b8', '#c8553d', 'w'),
     house(c + 1.5, -18, c + 8, -9, '#cfe7c4', '#8b5a3c', 'w'),
     house(c + 1.5, -6, c + 8, 3, '#d9e3f0', '#c8553d', 'w'),
@@ -135,6 +136,13 @@ export function BolaCarros(p: CenaProps) {
     car({ x: -2.6, y: -8, heading: Math.PI, color: '#e0412f' }),
     car({ x: -2.6, y: -14, heading: Math.PI, color: '#8f98a3' }),
     car({ x: -2.6, y: -21, heading: Math.PI, color: '#f2c21b' }),
+  ];
+})();
+
+export function BolaCarros(p: CenaProps) {
+  const ground = BAIRRO_CHAO;
+  const objs: Obj[] = [
+    ...BAIRRO_OBJS,
     bola(1.2, -9.3),
     car({ x: 0, y: 3, color: VOCE }),
   ];

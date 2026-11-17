@@ -39,6 +39,15 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
       'Uma bola rola para a rua entre dois carros estacionados. Quem dirige na defensiva tira o pé e se prepara para ' +
       'parar: pode vir uma criança correndo atrás dela.',
     remember: 'Prever o perigo é o primeiro passo para evitá-lo.',
+    video: {
+      id: 'defensiva',
+      resumo: [
+        'Direção defensiva é dirigir prevendo o perigo antes que ele aconteça.',
+        'Sinistro não é acaso, azar ou destino: quase sempre existe o fator humano.',
+        'Se o perigo podia ser previsto, o sinistro podia ser evitado.',
+        'Bola rolando para a rua? Tire o pé e prepare-se para parar: pode vir uma criança atrás.',
+      ],
+    },
     sources: dd('p. 12', 'p. 13'),
   },
   fatores: {
@@ -60,6 +69,14 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
     example:
       'Dirigindo um caminhão, Jorge vai passar por um ciclista. Ele reduz e deixa bastante espaço: o maior cuida do menor.',
     remember: 'Veículo, condutor, via, ambiente e pessoas.',
+    video: {
+      id: 'fatores',
+      resumo: [
+        'O risco vem de cinco lugares: veículo, condutor, via, ambiente e pessoas.',
+        'Chuva, neblina, vento e sol mudam a visão e a aderência, o agarre do pneu no chão.',
+        'Pela lei, o maior cuida do menor, o motorizado do não motorizado, e todos do pedestre.',
+      ],
+    },
     sources: [...dd('p. 13', 'p. 46 e 47'), ...ctb('art. 29, § 2º')],
   },
 
@@ -88,6 +105,16 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
     example:
       'Antes de viajar, Rita calibra os pneus com a pressão para carro carregado, como manda o fabricante, e confere o estepe.',
     remember: 'Revisar antes evita quebrar no caminho.',
+    video: {
+      id: 'manutencao',
+      resumo: [
+        'Manutenção preventiva: revisar e trocar peças nos prazos do fabricante, antes de quebrar.',
+        'Antes de sair: combustível, óleo, água e luzes.',
+        'Pneu calibrado e com sulcos de pelo menos 1,6 mm. Confira também o estepe.',
+        'Volante vibrando: balanceamento. Puxando para um lado: calibragem ou alinhamento.',
+        'Veículo em mau estado, comprometendo a segurança: infração grave.',
+      ],
+    },
     sources: [...dd('p. 14', 'p. 15', 'p. 16', 'p. 17'), ...ctb('art. 230, XVIII')],
   },
   freiosLuzes: {
@@ -112,6 +139,16 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
       'Depois de passar por uma rua alagada, Caio sente o freio fraco. Ele reduz e pisa no freio algumas vezes até o ' +
       'freio voltar ao normal.',
     remember: 'Freio bom para parar. Luz boa para ser visto.',
+    video: {
+      id: 'freios-luzes',
+      resumo: [
+        'Freio gasto precisa de mais distância para parar. Confira o fluido e procure manchas embaixo do veículo.',
+        'Freio a lona molhado: reduza e pise no freio algumas vezes até voltar ao normal.',
+        'Luz do ABS acesa no painel: problema no sistema.',
+        'Amortecedor gasto pode fazer perder o controle. Folga na direção puxa para um lado.',
+        'Luz de freio ou seta queimada: os outros não entendem o que você faz.',
+      ],
+    },
     sources: dd('p. 19', 'p. 20', 'p. 21'),
   },
 
@@ -136,6 +173,16 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
       'Antes de sair, Léo ajusta o banco até os braços ficarem um pouco dobrados, sobe o encosto de cabeça até a ' +
       'altura dos olhos e troca o chinelo por um tênis.',
     remember: 'Mãos às 9 e 15, braços dobrados, costas apoiadas.',
+    video: {
+      id: 'posicao',
+      resumo: [
+        'Braços e pernas um pouco dobrados. Costas apoiadas, perto de 90 graus.',
+        'Encosto de cabeça de preferência na altura dos olhos.',
+        'Mãos no volante às 9 horas e 15 minutos.',
+        'Calcanhares no assoalho, sem descansar os pés nos pedais.',
+        'Calçado bem preso ao pé.',
+      ],
+    },
     sources: dd('p. 22', 'p. 23'),
   },
   retrovisores: {
@@ -159,6 +206,16 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
       'Antes de passar para a faixa da esquerda, Ana olha o retrovisor, vira um pouco a cabeça e vê uma moto que ' +
       'estava no ponto cego. Ela espera a moto passar.',
     remember: 'Espelho, cabeça e só depois a manobra.',
+    video: {
+      id: 'retrovisores',
+      resumo: [
+        'Retrovisor interno: ver todo o vidro de trás, sem objetos na frente.',
+        'Retrovisores externos: ver a lateral traseira do seu próprio veículo.',
+        'Sobram pontos cegos: mexa a cabeça e olhe pela lateral antes de manobrar.',
+        'Preste atenção ao barulho do motor dos outros veículos.',
+        'Farol de trás ofuscando: ajuste o retrovisor interno.',
+      ],
+    },
     sources: dd('p. 23', 'p. 24', 'p. 44'),
   },
 
