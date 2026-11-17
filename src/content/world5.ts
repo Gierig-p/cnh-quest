@@ -239,6 +239,15 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
       'A 80 km/h, Bia vê um carro parado à frente. Só no segundo em que ela percebe o problema, o carro dela já ' +
       'andou uns 22 metros.',
     remember: 'A 80 km/h: 22 metros a cada segundo.',
+    video: {
+      id: 'reacao',
+      resumo: [
+        'Entre ver o perigo e parar, o veículo continua andando.',
+        'O cérebro leva alguns décimos de segundo só para registrar o que vê.',
+        'A 80 km/h: cerca de 22 metros por segundo; para parar, pelo menos 44 metros.',
+        'Sem concentração, o tempo de reação aumenta.',
+      ],
+    },
     sources: dd('p. 18', 'p. 24', 'p. 25'),
   },
   distracao: {
@@ -263,6 +272,15 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
     example:
       'Pedro dormiu só três horas. Em vez de pegar a estrada cansado, ele descansa antes e sai mais tarde.',
     remember: 'Cabeça no trânsito: olhos girando, celular guardado.',
+    video: {
+      id: 'distracao',
+      resumo: [
+        'Álcool, drogas, alguns remédios e sono tiram a atenção.',
+        'Discussão forte e comida pesada também atrapalham.',
+        'Celular (mesmo no viva-voz), som alto, animal e objetos soltos distraem.',
+        'Olhe em sequência: painel, espelhos, veículos em volta e pedestres.',
+      ],
+    },
     sources: [...dd('p. 24', 'p. 25', 'p. 26', 'p. 27'), ...ctb('art. 252, III')],
   },
 
@@ -288,6 +306,15 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
       'Na rodovia, o carro da frente passa por uma placa. Ana conta "cinquenta e um, cinquenta e dois" e só depois ' +
       'passa pela placa. A distância está boa.',
     remember: 'Pista seca: 2 segundos. Chuva ou veículo grande: 3.',
+    video: {
+      id: 'dois-segundos',
+      resumo: [
+        'Escolha um ponto fixo na beira da via, como um poste.',
+        'O veículo da frente passou por ele? Conte "cinquenta e um, cinquenta e dois".',
+        'Passou pelo ponto antes de terminar? Reduza e conte de novo.',
+        'Chuva ou veículo com mais de 6 metros: conte até três.',
+      ],
+    },
     sources: [...dd('p. 49', 'p. 50', 'p. 51'), ...ctb('art. 29, II')],
   },
   velocidadeVia: {

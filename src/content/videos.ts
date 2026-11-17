@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores' | 'marcas-linhas' | 'marcas-transversais' | 'semaforo' | 'semaforo-pisca' | 'naturezas' | 'penalidades' | 'suspensao' | 'cassacao' | 'velocidade-sinal' | 'celular-cinto' | 'alcool' | 'recusa-racha' | 'crimes-vitima' | 'crimes-perigo' | 'auto-notificacao' | 'defesa-recurso' | 'defensiva' | 'fatores' | 'manutencao' | 'freios-luzes' | 'posicao' | 'retrovisores';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores' | 'marcas-linhas' | 'marcas-transversais' | 'semaforo' | 'semaforo-pisca' | 'naturezas' | 'penalidades' | 'suspensao' | 'cassacao' | 'velocidade-sinal' | 'celular-cinto' | 'alcool' | 'recusa-racha' | 'crimes-vitima' | 'crimes-perigo' | 'auto-notificacao' | 'defesa-recurso' | 'defensiva' | 'fatores' | 'manutencao' | 'freios-luzes' | 'posicao' | 'retrovisores' | 'reacao' | 'distracao' | 'dois-segundos';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -733,6 +733,52 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Um exemplo: antes de passar para a faixa da esquerda, Ana olha o retrovisor, vira um pouco a cabeça e vê uma moto que estava no ponto cego.',
       'Ela espera a moto passar.',
       'Para guardar: espelho, cabeça e só depois a manobra.',
+    ],
+  },
+  // cartão c5-reacao (manual DENATRAN 2005, p. 18, 24 e 25)
+  reacao: {
+    falas: [
+      'Entre ver um perigo e o veículo parar, passa um tempo. E, nesse tempo, o veículo continua andando.',
+      'Tempo de reação é o tempo entre perceber o perigo e começar a agir, como pisar no freio.',
+      'O cérebro leva alguns décimos de segundo só para registrar o que os olhos veem.',
+      'A oitenta quilômetros por hora, o veículo anda cerca de vinte e dois metros em um único segundo.',
+      'Nessa velocidade, entre perceber o problema, decidir frear, pisar no pedal e o veículo parar, são precisos pelo menos quarenta e quatro metros.',
+      'Sem concentração total, o tempo de reação aumenta, e o que era risco vira perigo.',
+      'Bater num poste a oitenta quilômetros por hora é como cair de um prédio de nove andares.',
+      'Um exemplo: a oitenta quilômetros por hora, Bia vê um carro parado à frente.',
+      'Só no segundo em que ela percebe o problema, o carro dela já andou uns vinte e dois metros.',
+      'Para guardar: a oitenta quilômetros por hora, vinte e dois metros a cada segundo.',
+    ],
+  },
+  // cartão c5-distracao (manual DENATRAN 2005, p. 24 a 27; CTB art. 252, III)
+  distracao: {
+    falas: [
+      'Muita coisa diminui a concentração e deixa os reflexos mais lentos. Às vezes, sem você perceber.',
+      'Álcool e drogas tiram a atenção, pioram a coordenação e mudam o comportamento.',
+      'Remédio que altera o comportamento, segundo o médico, também atrapalha.',
+      'Sono: ficar muito tempo acordado, dormir pouco ou dormir mal.',
+      'Discussão forte pouco antes de dirigir, e comida muito pesada, que dá sono.',
+      'Celular, mesmo no viva-voz. E som tão alto que você não ouve o próprio veículo nem os outros.',
+      'Animal solto e objetos soltos dentro do veículo.',
+      'Para manter a atenção, olhe em sequência: painel, espelhos, veículos em volta e pedestres, principalmente perto dos cruzamentos.',
+      'Dirigir com incapacidade física ou mental temporária que comprometa a segurança é infração.',
+      'Um exemplo: Pedro dormiu só três horas. Em vez de pegar a estrada cansado, ele descansa antes e sai mais tarde.',
+      'Para guardar: cabeça no trânsito, olhos girando, celular guardado.',
+    ],
+  },
+  // cartão c5-dois-segundos (manual DENATRAN 2005, p. 49 a 51; CTB art. 29, II)
+  'dois-segundos': {
+    falas: [
+      'Manter distância do veículo da frente dá tempo para reagir e para o seu veículo parar antes de bater.',
+      'Escolha um ponto fixo na beira da via, como um poste.',
+      'Quando o veículo da frente passar por ele, conte devagar: cinquenta e um, cinquenta e dois.',
+      'Se você passar pelo ponto depois de terminar a contagem, a distância está segura.',
+      'Passou antes de terminar? Reduza e conte de novo.',
+      'Na chuva, ou dirigindo veículo com mais de seis metros, conte até três: cinquenta e um, cinquenta e dois, cinquenta e três.',
+      'A lei manda guardar distância de segurança na frente e dos lados.',
+      'Um exemplo: na rodovia, o carro da frente passa por uma placa.',
+      'Ana conta cinquenta e um, cinquenta e dois, e só depois passa pela placa. A distância está boa.',
+      'Para guardar: pista seca, dois segundos. Chuva ou veículo grande, três.',
     ],
   },
 };
