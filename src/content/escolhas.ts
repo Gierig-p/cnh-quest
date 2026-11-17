@@ -32,6 +32,7 @@ export interface EscolhaDef {
 const SEGURO_DISTANCIA = ['Reduza e conte de novo.', 'Cinquenta e um, cinquenta e dois.', 'Só depois passe pela placa.'];
 const SEGURO_PONTO_CEGO = ['Olhe o ponto cego.', 'Só mude de faixa se estiver livre.'];
 const SEGURO_NEBLINA = ['Use a luz baixa. Reduza e aumente a distância.', 'Se não der para seguir, pare num local seguro.'];
+const SEGURO_BOLA = ['Reduza e prepare-se para parar.', 'Pode vir uma criança atrás da bola.'];
 const SEGURO_SONO = ['Pare num local seguro.', 'Descanse antes de seguir.'];
 const SEGURO_POCA = ['Freie antes da poça. Sobre a água, não freie.', 'Segure firme o volante.'];
 
@@ -140,6 +141,28 @@ export const ESCOLHAS: Record<string, EscolhaDef> = {
         d: 'Você cola no carro da frente para seguir as luzes dele. Na neblina, a distância deve aumentar, não diminuir. A cena para: essa escolha aumenta o perigo.',
       },
       seguro: 'Jeito seguro: use a luz baixa, reduza e aumente a distância. Se não der para seguir, pare num local seguro, como um posto.',
+    },
+  },
+  'w5-rua-6': {
+    som: 'barulho do bairro',
+    somRamo: { b: 'buzina curta' },
+    intro: ['Você passa por uma rua de bairro.', 'Há carros estacionados dos dois lados.', 'Uma bola sai rolando para a rua, de trás de um carro.', 'O que você faz?'],
+    ramos: {
+      a: ['Boa escolha. Você tira o pé e freia.', 'E se prepara para parar antes da bola.', 'Pode vir uma criança atrás dela.', 'Bola na rua? Criança logo atrás.'],
+      b: ['Você buzina e segue na mesma velocidade.', 'Essa escolha aumenta o perigo.', ...SEGURO_BOLA],
+      c: ['Você acelera para passar antes da bola.', 'Essa escolha aumenta o perigo.', ...SEGURO_BOLA],
+      d: ['Você desvia para a contramão sem diminuir.', 'Essa escolha aumenta o perigo.', ...SEGURO_BOLA],
+    },
+    corte: 2,
+    quadros: {
+      intro: 'Você passa por uma rua de bairro com carros estacionados dos dois lados. Uma bola sai rolando para a rua, de trás de um carro.',
+      escolha: {
+        a: 'Você tira o pé, freia e para antes da bola, de olho no espaço entre os carros de onde ela saiu: pode vir uma criança atrás dela.',
+        b: 'Você buzina e segue na mesma velocidade. A buzina não para uma criança correndo atrás da bola. A cena para: essa escolha aumenta o perigo.',
+        c: 'Você acelera para passar antes da bola. Acelerar tira o tempo de reagir se alguém aparecer. A cena para: essa escolha aumenta o perigo.',
+        d: 'Você desvia para a contramão sem diminuir. Desviar sem reduzir cria outro perigo e não protege quem vier atrás da bola. A cena para: essa escolha aumenta o perigo.',
+      },
+      seguro: 'Jeito seguro: reduza e prepare-se para parar. Pode vir uma criança atrás da bola.',
     },
   },
 };

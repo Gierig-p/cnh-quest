@@ -17,6 +17,7 @@ const FUNDO: Record<string, string> = {
   'barulho da estrada': 'driving on a highway on a sunny day heard from inside a car, steady tire and road noise, a truck engine rumbling ahead',
   'noite na estrada': 'driving on an empty country highway at night heard from inside a car, low steady engine and tire hum, very quiet, faint crickets outside',
   'neblina na serra': 'driving slowly down a mountain road in the early morning heard from inside a car, soft engine and tire noise, quiet damp air, distant birds, no rain',
+  'barulho do bairro': 'quiet residential street ambience, light breeze, a distant dog barking once, calm',
   'chuva forte': 'heavy rain drumming on the roof and windshield of a car, wipers moving, muffled city traffic, daytime',
 };
 
