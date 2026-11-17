@@ -72,7 +72,7 @@ function espelhoInterno(x: number, y: number, o = 1, { objeto = 0, farol = 0, to
 }
 
 /** espelho externo esquerdo: a lateral do seu carro aparece na borda de dentro */
-function espelhoExterno(x: number, y: number, o = 1, lateral = 1): ReactNode {
+export function espelhoExterno(x: number, y: number, o = 1, lateral = 1): ReactNode {
   if (o < 0.01) return null;
   return (
     <g opacity={o} transform={`translate(${x} ${y})`}>
@@ -86,7 +86,7 @@ function espelhoExterno(x: number, y: number, o = 1, lateral = 1): ReactNode {
 }
 
 /** cabeça vista de cima, virando `a` radianos para a esquerda */
-function cabeca(x: number, y: number, a: number, o = 1): ReactNode {
+export function cabeca(x: number, y: number, a: number, o = 1): ReactNode {
   if (o < 0.01) return null;
   return (
     <g opacity={o} transform={`translate(${x} ${y}) rotate(${(-a * 180) / Math.PI})`}>
@@ -99,7 +99,7 @@ function cabeca(x: number, y: number, a: number, o = 1): ReactNode {
 }
 
 /** ondas de som saindo de um ponto */
-function ondas(x: number, y: number, lt: number, o = 1): ReactNode {
+export function ondas(x: number, y: number, lt: number, o = 1): ReactNode {
   if (o < 0.01) return null;
   return (
     <g opacity={o} fill="none" stroke="#ffd84a" strokeWidth={2.4} strokeLinecap="round">

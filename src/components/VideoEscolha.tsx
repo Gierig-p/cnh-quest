@@ -23,6 +23,7 @@ interface EscolhaMod {
 
 const carregar: Record<string, () => Promise<EscolhaMod>> = {
   'w5-rua-1': () => import('./scenes/EscolhaPoca') as unknown as Promise<EscolhaMod>,
+  'w5-rua-4': () => import('./scenes/EscolhaPontoCego') as unknown as Promise<EscolhaMod>,
 };
 const cache: Record<string, EscolhaMod> = {};
 
@@ -261,6 +262,7 @@ export function VideoEscolha({ q, picked, onPronto, onFim }: Props) {
           </div>
           <figcaption className="video-legenda" aria-live="polite">
             {!(estado === 'parado' && parte === 'intro') && <span className="video-som">[{def.som}]</span>}
+            {parte !== 'intro' && k <= 0 && def.somRamo?.[parte] && <span className="video-som">[{def.somRamo[parte]}]</span>}
             {legenda}
           </figcaption>
         </figure>

@@ -11,6 +11,8 @@
 export interface EscolhaDef {
   /** som de fundo mostrado na legenda, entre colchetes */
   som: string;
+  /** som extra no começo de um final (ex.: buzina), mostrado na legenda junto da primeira fala */
+  somRamo?: Record<string, string>;
   /** falas da introdução; a última é a pergunta, e o vídeo para nela */
   intro: string[];
   /** falas de cada final, pelo ID da alternativa */
@@ -26,6 +28,7 @@ export interface EscolhaDef {
   };
 }
 
+const SEGURO_PONTO_CEGO = ['Olhe o ponto cego.', 'Só mude de faixa se estiver livre.'];
 const SEGURO_POCA = ['Freie antes da poça. Sobre a água, não freie.', 'Segure firme o volante.'];
 
 export const ESCOLHAS: Record<string, EscolhaDef> = {
@@ -48,6 +51,28 @@ export const ESCOLHAS: Record<string, EscolhaDef> = {
         d: 'Você começa a ir para a outra faixa sem olhar, e vem um carro nela. A cena para antes de você entrar: essa escolha aumenta o perigo.',
       },
       seguro: 'Jeito seguro: freie antes da poça. Sobre a água, não freie. Segure firme o volante.',
+    },
+  },
+  'w5-rua-4': {
+    som: 'motor de veículo bem perto',
+    somRamo: { b: 'buzina curta' },
+    intro: ['Você quer ir para a faixa da esquerda.', 'O espelho parece livre, mas há barulho de motor bem perto.', 'O que você faz?'],
+    ramos: {
+      a: ['Você confia no espelho e muda de faixa.', 'Essa escolha aumenta o perigo.', ...SEGURO_PONTO_CEGO],
+      b: ['Você buzina e muda de faixa.', 'Essa escolha aumenta o perigo.', ...SEGURO_PONTO_CEGO],
+      c: ['Você muda de faixa bem rápido.', 'Essa escolha aumenta o perigo.', ...SEGURO_PONTO_CEGO],
+      d: ['Boa escolha. Você vira um pouco a cabeça e olha o ponto cego.', 'Tem uma moto ali. Você espera na sua faixa.', 'Espelho, cabeça e só depois a manobra.'],
+    },
+    corte: 2,
+    quadros: {
+      intro: 'Você está na faixa do meio de uma avenida e quer ir para a faixa da esquerda. O espelho parece livre, mas há barulho de motor bem perto.',
+      escolha: {
+        a: 'Você começa a ir para a esquerda só olhando o espelho. A cena para logo no começo: havia uma moto no ponto cego. Essa escolha aumenta o perigo.',
+        b: 'Você buzina e começa a ir para a esquerda. A buzina não tira a moto do ponto cego. A cena para logo no começo: essa escolha aumenta o perigo.',
+        c: 'Você começa a ir para a esquerda bem rápido. A cena para logo no começo: havia uma moto no ponto cego. Essa escolha aumenta o perigo.',
+        d: 'Você vira um pouco a cabeça e olha o ponto cego. Tem uma moto ali. Você continua na sua faixa e espera a moto passar.',
+      },
+      seguro: 'Jeito seguro: vire um pouco a cabeça e olhe o ponto cego. Só mude de faixa se estiver livre.',
     },
   },
 };

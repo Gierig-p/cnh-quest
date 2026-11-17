@@ -1,7 +1,8 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ESCOLHAS } from '../content/escolhas';
-import tempos from '../content/escolhas/w5-rua-1.json';
+import temposPoca from '../content/escolhas/w5-rua-1.json';
+import temposPontoCego from '../content/escolhas/w5-rua-4.json';
 import { QUESTION_BY_ID } from '../content';
 import { startSession } from '../engine/session';
 import { LessonPlayer } from '../screens/LessonPlayer';
@@ -9,10 +10,12 @@ import { AppStateProvider } from '../state/AppState';
 import { createLocalStore } from '../storage/progressStore';
 import type { ChoiceQuestion } from '../content/types';
 
-const QID = 'w5-rua-1';
-const q = QUESTION_BY_ID[QID] as ChoiceQuestion;
-const def = ESCOLHAS[QID];
-const T = tempos as Record<string, { dur: number; falas: { ini: number; fim: number }[] }>;
+type Tempos = Record<string, { dur: number; falas: { ini: number; fim: number }[] }>;
+/** cada situação em vídeo e a primeira fala do "jeito seguro" nos finais errados */
+const CASOS: [string, Tempos, string][] = [
+  ['w5-rua-1', temposPoca as Tempos, 'Freie antes da poça. Sobre a água, não freie.'],
+  ['w5-rua-4', temposPontoCego as Tempos, 'Olhe o ponto cego.'],
+];
 
 /** áudio de mentira: o teste controla o tempo (currentTime) */
 class FakeAudio {
@@ -44,42 +47,46 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-function montar(motion: 'full' | 'reduce' = 'full', vezes = 1) {
-  const m = new Map<string, string>();
-  m.set('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true, prefs: { sound: false, hearts: false, motion, examConfig: 'federal' } }));
-  const storage = { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v), removeItem: (k: string) => void m.delete(k) } as Storage;
-  const steps = Array.from({ length: vezes }, () => ({ kind: 'question' as const, questionId: QID }));
-  const onFinish = vi.fn();
-  const r = render(
-    <AppStateProvider store={createLocalStore(storage)}>
-      <LessonPlayer initial={startSession({ id: 't', steps })} practice={false} allowHints={false} onExit={() => {}} onFinish={onFinish} />
-    </AppStateProvider>,
-  );
-  return { ...r, onFinish, storage: m };
-}
+// cada teste monta a lição inteira; com a suíte toda rodando, 5 s pode não bastar
+describe.each(CASOS)('situação em vídeo de escolha %s', { timeout: 20000 }, (QID, T, SEGURO) => {
+  const q = QUESTION_BY_ID[QID] as ChoiceQuestion;
+  const def = ESCOLHAS[QID];
 
-const continuar = () => screen.getByRole('button', { name: 'Continuar' });
+  function montar(motion: 'full' | 'reduce' = 'full', vezes = 1) {
+    const m = new Map<string, string>();
+    m.set('cnhquest:progress:v1', JSON.stringify({ version: 1, onboarded: true, prefs: { sound: false, hearts: false, motion, examConfig: 'federal' } }));
+    const storage = { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v), removeItem: (k: string) => void m.delete(k) } as Storage;
+    const steps = Array.from({ length: vezes }, () => ({ kind: 'question' as const, questionId: QID }));
+    const onFinish = vi.fn();
+    const r = render(
+      <AppStateProvider store={createLocalStore(storage)}>
+        <LessonPlayer initial={startSession({ id: 't', steps })} practice={false} allowHints={false} onExit={() => {}} onFinish={onFinish} />
+      </AppStateProvider>,
+    );
+    return { ...r, onFinish, storage: m };
+  }
 
-/** toca a introdução até a pergunta */
-async function introAteOFim() {
-  const play = await screen.findByRole('button', { name: 'Tocar o vídeo' });
-  await waitFor(() => expect(play).toBeEnabled());
-  expect(screen.queryAllByRole('radio')).toHaveLength(0);
-  fireEvent.click(play);
-  expect(ultimo().src).toMatch(/audio\/escolhas\/w5-rua-1\/intro\.mp3$/);
-  ultimo().currentTime = T.intro.dur;
-  await screen.findByText('Escolha uma resposta abaixo e toque em Verificar.');
-}
+  const continuar = () => screen.getByRole('button', { name: 'Continuar' });
 
-async function escolherEVerificar(id: string) {
-  const texto = q.options.find((o) => o.id === id)!.text;
-  fireEvent.click(screen.getByRole('radio', { name: texto }));
-  // marcar não verifica: nenhum final começa
-  expect(FakeAudio.todos.filter((a) => !a.src.endsWith('intro.mp3'))).toHaveLength(0);
-  fireEvent.click(screen.getByRole('button', { name: 'Verificar' }));
-}
+  /** toca a introdução até a pergunta */
+  async function introAteOFim() {
+    const play = await screen.findByRole('button', { name: 'Tocar o vídeo' });
+    await waitFor(() => expect(play).toBeEnabled());
+    expect(screen.queryAllByRole('radio')).toHaveLength(0);
+    fireEvent.click(play);
+    expect(ultimo().src).toMatch(new RegExp(`audio/escolhas/${QID}/intro[.]mp3$`));
+    ultimo().currentTime = T.intro.dur;
+    await screen.findByText('Escolha uma resposta abaixo e toque em Verificar.');
+  }
 
-describe('situação em vídeo de escolha (piloto da poça)', () => {
+  async function escolherEVerificar(id: string) {
+    const texto = q.options.find((o) => o.id === id)!.text;
+    fireEvent.click(screen.getByRole('radio', { name: texto }));
+    // marcar não verifica: nenhum final começa
+    expect(FakeAudio.todos.filter((a) => !a.src.endsWith('intro.mp3'))).toHaveLength(0);
+    fireEvent.click(screen.getByRole('button', { name: 'Verificar' }));
+  }
+
   it('o catálogo e os tempos do áudio batem (introdução e um final por alternativa)', () => {
     expect(Object.keys(def.ramos).sort()).toEqual(q.options.map((o) => o.id).sort());
     expect(T.intro.falas).toHaveLength(def.intro.length);
@@ -90,7 +97,7 @@ describe('situação em vídeo de escolha (piloto da poça)', () => {
       expect(T[id].dur).toBeGreaterThan(T[id].falas[falas.length - 1].fim);
     }
     // os finais errados têm o corte para o jeito seguro
-    for (const id of q.options.map((o) => o.id).filter((x) => x !== q.correct)) expect(def.ramos[id][def.corte]).toBe('Freie antes da poça. Sobre a água, não freie.');
+    for (const id of q.options.map((o) => o.id).filter((x) => x !== q.correct)) expect(def.ramos[id][def.corte]).toBe(SEGURO);
   });
 
   it.each(['a', 'b', 'c', 'd'])('alternativa %s: toca o final dela, e o Continuar só libera no fim', async (id) => {
@@ -106,11 +113,11 @@ describe('situação em vídeo de escolha (piloto da poça)', () => {
     // errado: depois do corte vem o jeito seguro
     if (id !== q.correct) {
       ultimo().currentTime = T[id].falas[def.corte].ini + 0.1;
-      expect(await screen.findByText('Freie antes da poça. Sobre a água, não freie.')).toBeInTheDocument();
+      expect(await screen.findByText(SEGURO)).toBeInTheDocument();
     }
     ultimo().currentTime = T[id].dur;
     await waitFor(() => expect(continuar()).toBeEnabled());
-    expect(screen.getByText(q.mnemonic, { exact: false })).toBeInTheDocument();
+    expect(screen.getAllByText(q.mnemonic, { exact: false }).length).toBeGreaterThan(0);
     await waitFor(() => expect(continuar()).toHaveFocus());
   });
 
