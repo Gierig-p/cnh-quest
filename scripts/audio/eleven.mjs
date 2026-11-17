@@ -51,7 +51,7 @@ export async function fala(texto, voz, destino) {
   });
   mkdirSync(dirname(destino), { recursive: true });
   // mono 64 kbps (metade do tamanho, a voz não perde nada) e volume de celular (-16 LUFS)
-  execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', mp3,
+  execFileSync('ffmpeg', ['-hide_banner', '-nostdin', '-loglevel', 'error', '-y', '-i', mp3,
     '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-ar', '44100', '-ac', '1', '-b:a', '64k', destino]);
   return destino;
 }
@@ -77,7 +77,7 @@ export async function falaPausada(blocos, voz, destino, { entreFrases = 0.6, ent
     }));
   }
   // cada frase: corta o silêncio das pontas e põe a pausa certa antes dela
-  const args = ['-hide_banner', '-loglevel', 'error', '-y'];
+  const args = ['-hide_banner', '-nostdin', '-loglevel', 'error', '-y'];
   partes.forEach((p) => args.push('-i', p));
   const filtros = partes.map((_, k) => {
     const pausa = k === 0 ? 0 : todas[k].novoBloco ? entreBlocos : entreFrases;
@@ -111,7 +111,7 @@ export async function falaComTempos(falas, voz, destino, { pausa = 1.0, inicio =
       voice_settings: { stability: 0.6, similarity_boost: 0.75, style: 0, use_speaker_boost: true, speed: velocidade },
     });
     let wav = join(tmp, `v${k}.wav`);
-    execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', mp3, '-af',
+    execFileSync('ffmpeg', ['-hide_banner', '-nostdin', '-loglevel', 'error', '-y', '-i', mp3, '-af',
       'silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse',
       '-ar', '44100', '-ac', '1', wav]);
     const medir = (f) => Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString().trim());
@@ -119,7 +119,7 @@ export async function falaComTempos(falas, voz, destino, { pausa = 1.0, inicio =
     if (alvo[k]) {
       const fator = Math.min(2, Math.max(0.5, dur / alvo[k]));
       const esticada = join(tmp, `v${k}_t.wav`);
-      execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', wav, '-af', `atempo=${fator.toFixed(4)}`, '-ar', '44100', '-ac', '1', esticada]);
+      execFileSync('ffmpeg', ['-hide_banner', '-nostdin', '-loglevel', 'error', '-y', '-i', wav, '-af', `atempo=${fator.toFixed(4)}`, '-ar', '44100', '-ac', '1', esticada]);
       wav = esticada;
       dur = medir(wav);
     }
@@ -127,7 +127,7 @@ export async function falaComTempos(falas, voz, destino, { pausa = 1.0, inicio =
   }
   const tempos = [];
   let t = inicio;
-  const args = ['-hide_banner', '-loglevel', 'error', '-y'];
+  const args = ['-hide_banner', '-nostdin', '-loglevel', 'error', '-y'];
   const fil = [];
   pecas.forEach((p, k) => {
     args.push('-i', p.wav);

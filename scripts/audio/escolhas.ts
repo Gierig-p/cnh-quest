@@ -15,6 +15,7 @@ const VOZ = '2CECaLAGTS5NRGxgbcxr';
 const FUNDO: Record<string, string> = {
   'motor de veículo bem perto': 'busy avenue heard from inside a moving car, steady traffic passing, road noise, a motorcycle engine humming close by on the left side',
   'barulho da estrada': 'driving on a highway on a sunny day heard from inside a car, steady tire and road noise, a truck engine rumbling ahead',
+  'noite na estrada': 'driving on an empty country highway at night heard from inside a car, low steady engine and tire hum, very quiet, faint crickets outside',
   'chuva forte': 'heavy rain drumming on the roof and windshield of a car, wipers moving, muffled city traffic, daytime',
 };
 
@@ -27,7 +28,7 @@ const EXTRA: Record<string, [string, number]> = {
 const DURACAO: Record<string, number> = { 'Cinquenta e um, cinquenta e dois.': 2.0 };
 
 const TMP = join(RAIZ, '_tmp_escolhas');
-const ff = (args: string[]) => execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...args]);
+const ff = (args: string[]) => execFileSync('ffmpeg', ['-hide_banner', '-nostdin', '-loglevel', 'error', '-y', ...args]);
 
 const pedidas = process.argv.slice(2);
 mkdirSync(TMP, { recursive: true });

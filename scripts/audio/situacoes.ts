@@ -40,7 +40,7 @@ const SONS: Record<string, Som> = {
 const TMP = join(RAIZ, '_tmp_situacoes');
 const OUT = join(RAIZ, 'public', 'audio', 'situacoes');
 
-const ff = (args: string[]) => execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...args]);
+const ff = (args: string[]) => execFileSync('ffmpeg', ['-hide_banner', '-nostdin', '-loglevel', 'error', '-y', ...args]);
 const dur = (f: string) =>
   Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString().trim());
 

@@ -4,6 +4,7 @@ import { ESCOLHAS } from '../content/escolhas';
 import temposPoca from '../content/escolhas/w5-rua-1.json';
 import temposPontoCego from '../content/escolhas/w5-rua-4.json';
 import temposDistancia from '../content/escolhas/w5-rua-2.json';
+import temposSono from '../content/escolhas/w5-rua-3.json';
 import { QUESTION_BY_ID } from '../content';
 import { startSession } from '../engine/session';
 import { LessonPlayer } from '../screens/LessonPlayer';
@@ -17,6 +18,7 @@ const CASOS: [string, Tempos, string][] = [
   ['w5-rua-1', temposPoca as Tempos, 'Freie antes da poça. Sobre a água, não freie.'],
   ['w5-rua-4', temposPontoCego as Tempos, 'Olhe o ponto cego.'],
   ['w5-rua-2', temposDistancia as Tempos, 'Reduza e conte de novo.'],
+  ['w5-rua-3', temposSono as Tempos, 'Pare num local seguro.'],
 ];
 
 /** áudio de mentira: o teste controla o tempo (currentTime) */
@@ -192,12 +194,14 @@ describe.each(CASOS)('situação em vídeo de escolha %s', { timeout: 20000 }, (
     montar('reduce');
     expect(await screen.findAllByRole('radio')).toHaveLength(q.options.length);
     expect(screen.getByText(def.quadros.intro)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('radio', { name: q.options.find((o) => o.id === 'b')!.text }));
+    // uma alternativa errada: mostra a escolha e o jeito seguro
+    const errada = q.options.find((o) => o.id !== q.correct)!;
+    fireEvent.click(screen.getByRole('radio', { name: errada.text }));
     fireEvent.click(screen.getByRole('button', { name: 'Verificar' }));
     await waitFor(() => expect(continuar()).toBeEnabled());
     expect(screen.getByText('Sua escolha')).toBeInTheDocument();
     expect(screen.getByText('Jeito seguro')).toBeInTheDocument();
-    expect(screen.getByText(def.quadros.escolha.b)).toBeInTheDocument();
+    expect(screen.getByText(def.quadros.escolha[errada.id])).toBeInTheDocument();
     expect(FakeAudio.todos).toHaveLength(0);
   });
 

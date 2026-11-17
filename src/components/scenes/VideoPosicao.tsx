@@ -77,13 +77,53 @@ interface Pose {
   o?: number;
   /** tempo do trecho: a paisagem passa pela janela */
   lt?: number;
+  /** cena de noite (céu escuro, cabine na penumbra, painel aceso); `parado` = a paisagem não anda */
+  noite?: boolean;
+  parado?: boolean;
+  /** pálpebra: 0 = olho aberto, 1 = fechado */
+  olho?: number;
+  /** bocejo: 0 = boca fechada, 1 = bem aberta */
+  boca?: number;
+  /** vidro da janela: 0 = fechado, 1 = aberto (com vento entrando) */
+  vidro?: number;
 }
 
 const JANELA = 'M54 52 Q56 47 64 47 L176 45 Q186 45 192 50 L236 90 L54 92 Z';
 
 /** paisagem vista pela janela lateral, andando para trás (o carro vai para a direita) */
-function paisagemJanela(lt: number): ReactNode {
+function paisagemJanela(lt: number, noite = false, vidro = 0): ReactNode {
   const des = (lt * 46) % 90;
+  if (noite)
+    return (
+      <g clipPath="url(#vp-janela)">
+        <rect x={40} y={40} width={210} height={56} fill="url(#vp-ceu-noite)" />
+        {[[70, 52], [98, 58], [122, 50], [150, 56], [188, 53], [212, 60], [84, 63]].map(([x, y], k) => <circle key={k} cx={x} cy={y} r={0.8} fill="#ffffff" opacity={0.75} />)}
+        <circle cx={204} cy={56} r={5} fill="#f4efd2" />
+        <circle cx={206.5} cy={54.5} r={4.2} fill="#1c2b4f" />
+        <path d="M40 78 Q80 73 120 76 Q170 72 250 75 L250 96 L40 96 Z" fill="#14231f" />
+        {[0, 1, 2, 3].map((k) => {
+          const x = 40 + k * 90 - des;
+          return (
+            <g key={k} fill="#0f1b17">
+              <rect x={x + 18} y={66} width={2.4} height={11} />
+              <circle cx={x + 19} cy={63} r={8} />
+              <circle cx={x + 24} cy={67} r={5.5} />
+            </g>
+          );
+        })}
+        <rect x={40} y={83} width={210} height={13} fill="#20252d" />
+        {[0, 1, 2, 3, 4, 5, 6].map((k) => <rect key={k} x={40 + k * 40 - ((lt * 120) % 40)} y={87} width={18} height={1.4} fill="#c9c3a0" opacity={0.45} />)}
+        {/* vidro: desce quando a janela abre; com ela aberta, riscos de vento */}
+        <path d={`M64 ${47 + vidro * 45} L96 ${47 + vidro * 45} L${70 + vidro * 0} 92 L54 92 Z`} fill="#ffffff" opacity={0.07 * (1 - vidro)} />
+        {vidro > 0.02 && <line x1={54} y1={47 + vidro * 45} x2={236} y2={47 + vidro * 45} stroke="#8ea3bd" strokeWidth={1.4} opacity={0.8} />}
+        {vidro > 0.4 &&
+          [0, 1, 2, 3].map((k) => {
+            const x = 230 - ((lt * 160 + k * 47) % 190);
+            const y = 56 + k * 8;
+            return <path key={k} d={`M${x} ${y} q12 -3 24 0`} fill="none" stroke="#dfe8f3" strokeWidth={1.2} strokeLinecap="round" opacity={0.7 * vidro} />;
+          })}
+      </g>
+    );
   return (
     <g clipPath="url(#vp-janela)">
       <rect x={40} y={40} width={210} height={56} fill="url(#vp-ceu)" />
@@ -136,7 +176,7 @@ function calcado(calc: P, pe: P, tenis: boolean): ReactNode {
 }
 
 /** cabine vista de lado, motorista olhando para a direita. Quadro em (20..300, 20..190). */
-function cabine({ dobra, apoio, tenis = 1, luz = null, o = 1, lt = 0 }: Pose): ReactNode {
+export function cabine({ dobra, apoio, tenis = 1, luz = null, o = 1, lt = 0, noite = false, parado = false, olho = 0, boca = 0, vidro = 0 }: Pose): ReactNode {
   if (o < 0.01) return null;
   const bx = lerp(162.5, 174.5, dobra); // banco mais para trás quando esticado
   const quadril: P = [bx - 12, 140];
@@ -171,13 +211,21 @@ function cabine({ dobra, apoio, tenis = 1, luz = null, o = 1, lt = 0 }: Pose): R
           <stop offset="0" stopColor="#3a414a" />
           <stop offset="1" stopColor="#5a636e" />
         </linearGradient>
+        <linearGradient id="vp-ceu-noite" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#0b1633" />
+          <stop offset="1" stopColor="#24365f" />
+        </linearGradient>
+        <radialGradient id="vp-painel">
+          <stop offset="0" stopColor="#8fd6ff" stopOpacity="0.55" />
+          <stop offset="1" stopColor="#8fd6ff" stopOpacity="0" />
+        </radialGradient>
         <clipPath id="vp-janela">
           <path d={JANELA} />
         </clipPath>
       </defs>
       {/* lado de dentro da porta, com a janela */}
       <path d="M24 188 L24 62 Q26 42 48 40 L190 37 Q200 37 206 42 L274 78 L298 80 L298 188 Z" fill="url(#vp-porta)" />
-      {paisagemJanela(lt)}
+      {paisagemJanela(parado ? 0 : lt, noite, vidro)}
       <path d={JANELA} fill="none" stroke="#1b1f25" strokeWidth={3.5} strokeLinejoin="round" />
       {/* coluna do meio, apoio de braço, maçaneta e alto-falante */}
       <rect x={128} y={44} width={7} height={50} fill="#262b32" />
@@ -237,7 +285,19 @@ function cabine({ dobra, apoio, tenis = 1, luz = null, o = 1, lt = 0 }: Pose): R
       <path d={`M${hx + 5} ${hy - 4} Q${hx + 8} ${hy - 5.5} ${hx + 10.5} ${hy - 4}`} fill="none" stroke="#3a2a1f" strokeWidth={1.3} strokeLinecap="round" />
       <ellipse cx={hx + 8} cy={hy - 1} rx={2} ry={1.4} fill="#ffffff" />
       <circle cx={hx + 8.8} cy={hy - 1} r={1.05} fill={TINTA} />
-      <path d={`M${hx + 9} ${hy + 7.5} L${hx + 11.3} ${hy + 7.3}`} stroke="#9b5f45" strokeWidth={1} strokeLinecap="round" />
+      {olho > 0.02 && (
+        <>
+          {/* pálpebra caindo sobre o olho, com a linha dos cílios na borda */}
+          <rect x={hx + 5.6} y={hy - 2.8} width={5.2} height={0.4 + 2.9 * olho} fill={PELE} />
+          <path d={`M${hx + 5.8} ${hy - 2.4 + 2.9 * olho} Q${hx + 8} ${hy - 1.6 + 2.9 * olho} ${hx + 10.4} ${hy - 2.4 + 2.9 * olho}`} fill="none" stroke="#3a2a1f" strokeWidth={0.9} strokeLinecap="round" />
+          <path d={`M${hx + 6.2} ${hy + 1.6} Q${hx + 8} ${hy + 2.6} ${hx + 9.8} ${hy + 1.8}`} fill="none" stroke="#b7835f" strokeWidth={0.6} />
+        </>
+      )}
+      {boca > 0.05 ? (
+        <ellipse cx={hx + 9.6} cy={hy + 7.4 + boca * 0.6} rx={1.4 + boca * 0.5} ry={0.5 + boca * 2.2} fill="#6b2f2a" stroke="#9b5f45" strokeWidth={0.6} />
+      ) : (
+        <path d={`M${hx + 9} ${hy + 7.5} L${hx + 11.3} ${hy + 7.3}`} stroke="#9b5f45" strokeWidth={1} strokeLinecap="round" />
+      )}
       {/* volante de lado e coluna da direção */}
       <path d={`M${mao[0]} ${mao[1]} L244 114`} stroke="#1b1f25" strokeWidth={6} strokeLinecap="round" />
       <ellipse cx={mao[0]} cy={mao[1]} rx={5} ry={22} transform={`rotate(-22 ${mao[0]} ${mao[1]})`} fill="none" stroke="#1b1f25" strokeWidth={5} />
@@ -249,6 +309,14 @@ function cabine({ dobra, apoio, tenis = 1, luz = null, o = 1, lt = 0 }: Pose): R
       <path d={`M${ombro[0] - 5} ${ombro[1] - 4} Q${ombro[0] + 2} ${ombro[1] - 7} ${ombro[0] + 6} ${ombro[1] - 2}`} fill="none" stroke="#5a95dd" strokeWidth={1.5} />
       <circle cx={mao[0] - 1} cy={mao[1]} r={4.8} fill={PELE} stroke="#a8754f" strokeWidth={0.8} />
       <path d={`M${mao[0] + 1} ${mao[1] - 4} Q${mao[0] + 5} ${mao[1] - 1} ${mao[0] + 2} ${mao[1] + 4}`} fill="none" stroke="#a8754f" strokeWidth={0.8} />
+      {noite && (
+        <>
+          {/* penumbra da cabine e a luz fria do painel */}
+          <path d="M24 188 L24 62 Q26 42 48 40 L190 37 Q200 37 206 42 L274 78 L298 80 L298 188 Z" fill="#0a1430" opacity={0.42} />
+          <ellipse cx={250} cy={88} rx={30} ry={14} fill="url(#vp-painel)" />
+          <path d="M238 86 Q250 80 262 84" fill="none" stroke="#8fd6ff" strokeWidth={1.6} opacity={0.8} />
+        </>
+      )}
       {luz === 'braco' && ring(cotovelo)}
       {luz === 'perna' && ring(joelho)}
       {luz === 'costas' && ring([bx - 40, 120], 22)}

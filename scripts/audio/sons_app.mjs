@@ -48,7 +48,7 @@ export const SONS = {
   },
 };
 
-const ff = (args) => execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...args]);
+const ff = (args) => execFileSync('ffmpeg', ['-hide_banner', '-nostdin', '-loglevel', 'error', '-y', ...args]);
 
 /** Mede um arquivo com o ffmpeg (o resultado sai no stderr). */
 function medir(arq, filtro, re) {
