@@ -10,6 +10,7 @@ import { IconAula, IconCheck, IconClose, IconHeart, IconSparkle, IconWrong } fro
 import { Lumi } from '../components/Lumi';
 import { NarrationButton } from '../components/NarrationButton';
 import { SituationBox } from '../components/SituationBox';
+import { temEscolha } from '../content/escolhas';
 import { SpeakButton, speechText } from '../components/SpeakButton';
 import { TermHintsContext, TermText, useHasNewTerm } from '../components/TermText';
 import { ConceptBlocks, cardParts } from '../components/ConceptView';
@@ -78,6 +79,8 @@ export function LessonPlayer({
   const [s, setS] = useState(initial);
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [fb, setFb] = useState<Feedback | null>(null);
+  // situação em vídeo de escolha: o "Continuar" só libera quando o final do vídeo termina
+  const [videoFim, setVideoFim] = useState(false);
   const [confirmQuit, setConfirmQuit] = useState(false);
   const [heartHit, setHeartHit] = useState(false);
   // botão "Dica": 0 = não usada, 1 = "Para guardar" do cartão, 2 = elimina/revela uma parte
@@ -105,6 +108,13 @@ export function LessonPlayer({
 
   const item = currentItem(s);
   const q = item?.kind === 'question' ? QUESTION_BY_ID[item.questionId] : undefined;
+  const escolha = q ? temEscolha(q.id) : false;
+  const esperaVideo = Boolean(fb && escolha && !videoFim);
+  const aoFimDoVideo = useCallback(() => {
+    setVideoFim(true);
+    // o vídeo acabou: o foco vai para o Continuar, que acabou de liberar
+    requestAnimationFrame(() => footRef.current?.querySelector<HTMLButtonElement>('.btn')?.focus({ preventScroll: true }));
+  }, []);
 
   // dicas de palavras: só as já ensinadas (lições concluídas + cartões já vistos nesta sessão)
   const seenCards = s.queue.slice(0, s.index).flatMap((it) => (it.kind === 'concept' ? [it.card.id] : [])).join();
@@ -198,6 +208,13 @@ export function LessonPlayer({
       later(() => setHeartHit(false), 450);
     }
     requestAnimationFrame(() => {
+      // vídeo de escolha: o foco e a tela ficam no vídeo, que agora mostra o final da escolha
+      const video = mainRef.current?.querySelector<HTMLElement>('.video-escolha');
+      if (video) {
+        video.focus({ preventScroll: true });
+        video.scrollIntoView?.({ block: 'nearest' });
+        return;
+      }
       const foot = footRef.current;
       if (!foot) return;
       foot.querySelector<HTMLButtonElement>('.btn')?.focus({ preventScroll: true });
@@ -248,6 +265,7 @@ export function LessonPlayer({
     }
     cancelLater();
     setFb(null);
+    setVideoFim(false);
     setAnswer(null);
     setS((prev) => advance(prev));
   }, [cancelLater, part, parts.length]);
@@ -280,12 +298,13 @@ export function LessonPlayer({
       if (e.target instanceof HTMLButtonElement && e.target.getAttribute('role') !== 'radio') return;
       e.preventDefault();
       if (!item) return;
-      if (item.kind !== 'question' || fb) next();
-      else check();
+      if (item.kind !== 'question' || fb) {
+        if (!esperaVideo) next();
+      } else check();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [item, fb, check, next, confirmQuit, confirmHint, showCard]);
+  }, [item, fb, check, next, confirmQuit, confirmHint, showCard, esperaVideo]);
 
   if (!item) return null;
   const ratio = progressRatio(s);
@@ -372,7 +391,7 @@ export function LessonPlayer({
                   />
                 )}
               </div>
-              {q.situation && <SituationBox questionId={q.id} lines={q.situation} />}
+              {q.situation && !escolha && <SituationBox questionId={q.id} lines={q.situation} />}
               <h1 id="q-title" className="q-title" tabIndex={-1}><TermText text={q.prompt} /></h1>
               {progress.prefs.readAloud && !fb && <SpeakButton text={speechText(q, seed)} />}
               {howto && !fb && <p className="howto" id="q-howto">👆 {howto}</p>}
@@ -383,6 +402,7 @@ export function LessonPlayer({
                 answer={answer}
                 onAnswer={onAnswer}
                 checked={fb ? { correct: fb.correct } : null}
+                onVideoFim={aoFimDoVideo}
                 eliminated={hintStep > 1 ? (reveal?.kind === 'eliminate-option' ? reveal.optionId : reveal?.kind === 'eliminate-word' ? reveal.word : undefined) : undefined}
               />
             </section>
@@ -423,6 +443,7 @@ export function LessonPlayer({
                     </p>
                   )}
                   {!lastCorrect && fb.whyWrong && <p>Por que a sua não: {fb.whyWrong}</p>}
+                  {esperaVideo && <p className="fb-espera">▶ Veja o final do vídeo. O Continuar libera quando ele terminar.</p>}
                   <p>{q.explanation}</p>
                   {moreFb && (
                     <div id="fb-more">
@@ -470,6 +491,7 @@ export function LessonPlayer({
             )}
             <button
               className={`btn ${fb && !fb.correct ? 'red' : ''}`}
+              disabled={esperaVideo}
               onClick={() => {
                 play('transition');
                 next();

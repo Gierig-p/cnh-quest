@@ -5,6 +5,8 @@ import { seededShuffle } from '../engine/grading';
 import { Visual } from './Visual';
 import { SignInline, TermText } from './TermText';
 import { useSound } from '../ui/hooks';
+import { temEscolha } from '../content/escolhas';
+import { VideoEscolha } from './VideoEscolha';
 
 export interface ExerciseProps<Q extends Question> {
   q: Q;
@@ -16,6 +18,8 @@ export interface ExerciseProps<Q extends Question> {
   checked: null | { correct: boolean };
   /** alternativa (escolha) ou palavra (lacuna) riscada pela dica */
   eliminated?: string;
+  /** situação em vídeo de escolha: o final do vídeo terminou (libera o "Continuar") */
+  onVideoFim?: () => void;
 }
 
 export function Exercise(props: ExerciseProps<Question>) {
@@ -155,18 +159,23 @@ function RadioGroup({
 
 /* ---------- escolha ---------- */
 
-function ChoiceEx({ q, seed, answer, onAnswer, checked, eliminated }: ExerciseProps<ChoiceQuestion>) {
+function ChoiceEx({ q, seed, answer, onAnswer, checked, eliminated, onVideoFim }: ExerciseProps<ChoiceQuestion>) {
   const opts = useMemo(() => seededShuffle(q.options, seed), [q, seed]);
   const selected = answer?.type === 'choice' ? answer.optionId : null;
   const grid = q.layout === 'grid';
+  // situação em vídeo de escolha: as alternativas só aparecem quando o vídeo chega na pergunta
+  const escolha = temEscolha(q.id);
+  const [pronto, setPronto] = useState(!escolha);
   return (
     <>
-      {q.visual && (
+      {escolha ? (
+        <VideoEscolha q={q} picked={checked ? selected : null} onPronto={() => setPronto(true)} onFim={() => onVideoFim?.()} />
+      ) : q.visual && (
         <div className="q-visual">
           <Visual v={q.visual} size={180} checked={checked} />
         </div>
       )}
-      <RadioGroup
+      {(pronto || checked) && <RadioGroup
         label={q.prompt}
         layout={grid ? 'grid' : 'list'}
         locked={Boolean(checked)}
@@ -180,7 +189,7 @@ function ChoiceEx({ q, seed, answer, onAnswer, checked, eliminated }: ExercisePr
           label: grid ? <span className="opt-caption">{o.text}</span> : o.visual ? o.text : <SignInline text={o.text} />,
           visual: o.visual ? <Visual v={o.visual} size={grid ? 96 : 56} /> : undefined,
         }))}
-      />
+      />}
     </>
   );
 }
