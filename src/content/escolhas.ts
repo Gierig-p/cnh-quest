@@ -31,6 +31,7 @@ export interface EscolhaDef {
 /** a contagem é a do cartão verificado "A regra dos dois segundos" (world5.ts) */
 const SEGURO_DISTANCIA = ['Reduza e conte de novo.', 'Cinquenta e um, cinquenta e dois.', 'Só depois passe pela placa.'];
 const SEGURO_PONTO_CEGO = ['Olhe o ponto cego.', 'Só mude de faixa se estiver livre.'];
+const SEGURO_NEBLINA = ['Use a luz baixa. Reduza e aumente a distância.', 'Se não der para seguir, pare num local seguro.'];
 const SEGURO_SONO = ['Pare num local seguro.', 'Descanse antes de seguir.'];
 const SEGURO_POCA = ['Freie antes da poça. Sobre a água, não freie.', 'Segure firme o volante.'];
 
@@ -118,6 +119,27 @@ export const ESCOLHAS: Record<string, EscolhaDef> = {
         d: 'Você abre a janela e continua do mesmo jeito. O vento no rosto não resolve o sono: os olhos continuam pesados. A cena para: essa escolha aumenta o perigo.',
       },
       seguro: 'Jeito seguro: pare num local seguro, fora da pista, e descanse antes de seguir.',
+    },
+  },
+  'w5-rua-5': {
+    som: 'neblina na serra',
+    intro: ['De manhã cedo, você desce a serra.', 'De repente, a neblina fecha.', 'Você mal enxerga a traseira do carro da frente.', 'O que você faz?'],
+    ramos: {
+      a: ['Você acende a luz alta.', 'Essa escolha aumenta o perigo.', ...SEGURO_NEBLINA],
+      b: ['Você para no meio da pista.', 'Essa escolha aumenta o perigo.', ...SEGURO_NEBLINA],
+      c: ['Boa escolha. Você acende a luz baixa e reduz.', 'E aumenta a distância do carro da frente.', 'Se não der para seguir, pare num local seguro.', 'Neblina: luz baixa, nunca alta.'],
+      d: ['Você cola no carro da frente.', 'Essa escolha aumenta o perigo.', ...SEGURO_NEBLINA],
+    },
+    corte: 2,
+    quadros: {
+      intro: 'De manhã cedo, você desce a serra. De repente, a neblina fecha e você mal enxerga a traseira do carro da frente.',
+      escolha: {
+        a: 'Você acende a luz alta. A luz reflete nas gotinhas da neblina e você enxerga ainda menos. A cena para: essa escolha aumenta o perigo.',
+        b: 'Você para no meio da pista. Parado ali, quem vem atrás pode não ver você. A cena para: essa escolha aumenta o perigo.',
+        c: 'Você acende a luz baixa, reduz e deixa a distância do carro da frente aumentar. Se não der para seguir, você para num local seguro, como um posto.',
+        d: 'Você cola no carro da frente para seguir as luzes dele. Na neblina, a distância deve aumentar, não diminuir. A cena para: essa escolha aumenta o perigo.',
+      },
+      seguro: 'Jeito seguro: use a luz baixa, reduza e aumente a distância. Se não der para seguir, pare num local seguro, como um posto.',
     },
   },
 };

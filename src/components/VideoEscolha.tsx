@@ -26,6 +26,7 @@ const carregar: Record<string, () => Promise<EscolhaMod>> = {
   'w5-rua-4': () => import('./scenes/EscolhaPontoCego') as unknown as Promise<EscolhaMod>,
   'w5-rua-2': () => import('./scenes/EscolhaDistancia') as unknown as Promise<EscolhaMod>,
   'w5-rua-3': () => import('./scenes/EscolhaSono') as unknown as Promise<EscolhaMod>,
+  'w5-rua-5': () => import('./scenes/EscolhaNeblina') as unknown as Promise<EscolhaMod>,
 };
 const cache: Record<string, EscolhaMod> = {};
 

@@ -5,6 +5,7 @@ import temposPoca from '../content/escolhas/w5-rua-1.json';
 import temposPontoCego from '../content/escolhas/w5-rua-4.json';
 import temposDistancia from '../content/escolhas/w5-rua-2.json';
 import temposSono from '../content/escolhas/w5-rua-3.json';
+import temposNeblina from '../content/escolhas/w5-rua-5.json';
 import { QUESTION_BY_ID } from '../content';
 import { startSession } from '../engine/session';
 import { LessonPlayer } from '../screens/LessonPlayer';
@@ -19,6 +20,7 @@ const CASOS: [string, Tempos, string][] = [
   ['w5-rua-4', temposPontoCego as Tempos, 'Olhe o ponto cego.'],
   ['w5-rua-2', temposDistancia as Tempos, 'Reduza e conte de novo.'],
   ['w5-rua-3', temposSono as Tempos, 'Pare num local seguro.'],
+  ['w5-rua-5', temposNeblina as Tempos, 'Use a luz baixa. Reduza e aumente a distância.'],
 ];
 
 /** áudio de mentira: o teste controla o tempo (currentTime) */
