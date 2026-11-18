@@ -141,7 +141,7 @@ function trecho(k: number, lt: number): Quadro {
         person(RA + 0.6, YP - 0.2, AGENTE, 0, Math.PI, 1.25),
         utilitario({ x: XV, y: yt, tipo: 'caminhao' }),
         car({ x: XV, y: yc, color: VOCE }),
-      ], YP);
+      ], YP, 99); // sem o carro do fundo: o seu carro aqui é o que vai rebocado (senão aparecem dois)
       return { ...q, cam: camLook(1.2, YP - 5, 0, -26, 38, 11), over: (pr) => (
         <>
           <line {...linha(pr([XV, yt + 3.8, 0.7]), pr([XV, yc - 2.2, 0.5]))} stroke="#22262c" strokeWidth={2} />

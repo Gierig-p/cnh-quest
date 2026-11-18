@@ -112,6 +112,29 @@ export type SceneId =
   | 'rodovia-dupla-caminhao'
   | 'rodovia-placa-100'
   | 'crianca-carro'
+  // situações "Na rua" do Mundo 3 (18/11)
+  | 'rodovia-esquerda-carro-atras'
+  | 'subida-caminhao'
+  | 'chuva-cidade'
+  | 'crianca-carro-menina'
+  // questões dos Mundos 1 e 2 sem imagem (18/11)
+  | 'rua-sinais'
+  | 'rua-sinais-propaganda'
+  | 'semaforo-placa'
+  | 'placa-apagada'
+  | 'placa-torta'
+  | 'faixa-semaforo'
+  | 'avenida-cidade'
+  | 'cruzamento-sem-pintura'
+  | 'cruzamento-sem-pintura-semaforo'
+  | 'semaforo-costas'
+  | 'estrada-placas-costas'
+  | 'obra-placa-costas'
+  | 'mao-unica'
+  | 'agente-autuando'
+  | 'notificacao-casa'
+  | 'oficina-carro'
+  | 'carro-porta-aberta'
   // Mundo 4 (16/11)
   | 'radar-60'
   | 'avanca-vermelho'
@@ -136,7 +159,20 @@ export type SceneId =
   | 'poca-rodovia'
   | 'granizo'
   | 'neblina-serra'
-  | 'farol-alto-frente';
+  | 'farol-alto-frente'
+  // Mundo 6
+  | 'tres-ajudantes'
+  | 'sinistro-avenida-60'
+  | 'sinistro-avenida'
+  | 'sinistro-curva'
+  | 'sinistro-curva-noite'
+  | 'curiosos-pista'
+  | 'vazamento-combustivel'
+  | 'vazamento-curiosos'
+  | 'cabo-carro'
+  | 'cabo-carro-curioso'
+  | 'caminhao-gas'
+  | 'batida-cruzamento';
 
 /**
  * Uma linha da situação narrada ("Na rua"): uma fala do narrador ou um som.

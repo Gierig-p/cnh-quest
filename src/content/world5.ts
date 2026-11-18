@@ -435,6 +435,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Fundamentos',
     objective: 'Saber o que é direção defensiva',
     prompt: 'O que é direção defensiva?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros passando' },
     options: [
       { id: 'a', text: 'Dirigir devagar o tempo todo, em qualquer situação', whyWrong: 'Não é só ir devagar. É reconhecer o perigo antes e tomar a decisão certa.' },
       { id: 'b', text: 'Dirigir reconhecendo antes as situações de perigo e prevendo o que pode acontecer' },
@@ -455,6 +456,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Fundamentos',
     objective: 'Saber que sinistro não é obra do acaso',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'sinistro-moto', alt: 'Moto caída na rua, com o seu carro parado logo atrás' },
     statement: 'A maioria dos sinistros de trânsito acontece por azar, e ninguém poderia evitar.',
     answer: false,
     whyWrong: 'Sinistro não acontece por acaso. Na grande maioria há falha humana, e o que pode ser previsto pode ser evitado.',
@@ -470,6 +472,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Fundamentos',
     objective: 'Saber que o fator humano está na maioria dos sinistros',
     prompt: 'O que está presente na grande maioria dos sinistros de trânsito?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros passando' },
     options: [
       { id: 'a', text: 'O fator humano: falha de quem dirige ou de quem anda a pé' },
       { id: 'b', text: 'Defeito de fábrica do veículo', whyWrong: 'Defeitos acontecem, mas o que aparece na grande maioria é a falha humana.' },
@@ -490,6 +493,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Fundamentos',
     objective: 'Ligar previsão a prevenção',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas e carros' },
     sentence: 'Se o perigo podia ser ___, o sinistro podia ser evitado.',
     bank: ['previsto', 'multado', 'sorteado', 'ignorado'],
     answer: 'previsto',
@@ -531,6 +535,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Fundamentos',
     objective: 'Saber quem a direção defensiva protege',
     prompt: 'Quem dirige na defensiva prevê o que pode acontecer com quem?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros passando' },
     options: [
       { id: 'a', text: 'Só consigo mesmo', whyWrong: 'A previsão vale para todos: você, quem está no veículo e os outros na via.' },
       { id: 'b', text: 'Só com os passageiros', whyWrong: 'Inclui também você, o veículo e os outros usuários da via.' },
@@ -553,6 +558,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Fatores de risco',
     objective: 'Saber os cinco fatores de risco',
     prompt: 'Os riscos do trânsito estão ligados a quais elementos?',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas e carros' },
     options: [
       { id: 'a', text: 'Só ao veículo e à velocidade', whyWrong: 'São cinco elementos: veículo, condutor, via, ambiente e comportamento das pessoas.' },
       { id: 'b', text: 'Veículo, condutor, via, ambiente e comportamento das pessoas' },
@@ -573,6 +579,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Fatores de risco',
     objective: 'Classificar o perigo pelo fator',
     prompt: 'Ligue cada perigo ao fator de onde ele vem:',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas e carros' },
     pairs: [
       { id: 'pneu', left: 'Pneu careca', right: 'Veículo' },
       { id: 'sono', left: 'Motorista com sono', right: 'Condutor' },
@@ -592,6 +599,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Fatores de risco',
     objective: 'Saber quem responde pela segurança de quem',
     prompt: 'Pelo CTB, quem responde pela segurança de quem?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros passando' },
     options: [
       { id: 'a', text: 'Os pedestres respondem pela segurança dos veículos', whyWrong: 'É o contrário: todos os veículos respondem pela segurança dos pedestres.' },
       { id: 'b', text: 'Cada um responde só pela própria segurança', whyWrong: 'A lei cria uma ordem: o maior cuida do menor, e todos cuidam do pedestre.' },
@@ -612,6 +620,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Fatores de risco',
     objective: 'Reconhecer o fator ambiente',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples' },
     statement: 'Chuva, neblina e sol baixo no rosto são riscos que vêm do ambiente.',
     answer: true,
     whyWrong: 'Clima e luz são o ambiente: eles mudam a visão e a aderência.',
@@ -648,6 +657,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Fatores de risco',
     objective: 'Reconhecer o fator condutor',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'estrada-escura', alt: 'De madrugada, numa estrada sem iluminação' },
     sentence: 'Sono, álcool e emoções fortes são riscos ligados ao ___.',
     bank: ['condutor', 'ambiente', 'veículo', 'semáforo'],
     answer: 'condutor',
@@ -670,6 +680,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Manutenção',
     objective: 'Saber o que é manutenção preventiva',
     prompt: 'O que é manutenção preventiva?',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     options: [
       { id: 'a', text: 'Consertar o veículo só depois que ele quebra', whyWrong: 'Isso é conserto. A preventiva é feita antes de quebrar.' },
       { id: 'b', text: 'Revisar e trocar peças nos prazos do fabricante, antes que falhem' },
@@ -690,6 +701,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Manutenção',
     objective: 'Saber a profundidade mínima do sulco',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     sentence: 'O manual de direção defensiva orienta que o sulco do pneu tenha, no mínimo, ___ de profundidade.',
     bank: ['1,6 mm', '0,5 mm', '1,6 cm', '5 cm'],
     answer: '1,6 mm',
@@ -710,6 +722,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Manutenção',
     objective: 'Saber o efeito do pneu murcho',
     prompt: 'O que acontece quando o pneu está murcho, abaixo da calibragem certa?',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     options: [
       { id: 'a', text: 'Fica mais aderente na chuva', whyWrong: 'É o contrário: o pneu murcho perde aderência no piso molhado.' },
       { id: 'b', text: 'O veículo gasta menos combustível', whyWrong: 'O pneu murcho aumenta o consumo.' },
@@ -730,6 +743,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Manutenção',
     objective: 'Ligar o sintoma à causa provável',
     prompt: 'Ligue cada sinal ao que ele pode indicar:',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     pairs: [
       { id: 'vibra', left: 'Volante vibrando', right: 'Problema no balanceamento das rodas' },
       { id: 'puxa', left: 'Veículo puxando para um lado', right: 'Problema na calibragem ou no alinhamento' },
@@ -749,6 +763,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Manutenção',
     objective: 'Lembrar de conferir o estepe',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     statement: 'O estepe não precisa ser calibrado nem conferido, porque quase nunca é usado.',
     answer: false,
     whyWrong: 'As mesmas recomendações dos pneus valem para o estepe. Na hora em que você precisar dele, ele tem que estar bom.',
@@ -764,6 +779,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Manutenção',
     objective: 'Saber a natureza da infração por mau estado de conservação',
     prompt: 'Conduzir o veículo em mau estado de conservação, comprometendo a segurança, é infração de qual natureza?',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     options: [
       { id: 'a', text: 'Leve', whyWrong: 'É mais séria: o art. 230, XVIII, a classifica como grave.' },
       { id: 'b', text: 'Média', whyWrong: 'É grave, com retenção do veículo para regularizar.' },
@@ -784,6 +800,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Manutenção',
     objective: 'Saber para que servem os sulcos do pneu',
     prompt: 'Para que servem os sulcos do pneu?',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     options: [
       { id: 'a', text: 'Deixar o pneu mais bonito', whyWrong: 'Os sulcos têm função de segurança, não de enfeite.' },
       { id: 'b', text: 'Fazer o veículo andar mais rápido', whyWrong: 'Os sulcos servem para escoar a água, não para dar velocidade.' },
@@ -806,6 +823,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Freios e luzes',
     objective: 'Recuperar o freio depois de uma poça',
     prompt: 'Depois de passar por uma poça funda, o freio parece fraco. O que fazer?',
+    visual: { kind: 'scene', scene: 'poca-rodovia', alt: 'Chuva na rodovia e uma poça grande na sua faixa, lá na frente' },
     options: [
       { id: 'a', text: 'Reduzir a velocidade e pisar no freio algumas vezes até ele voltar ao normal' },
       { id: 'b', text: 'Acelerar para o freio secar mais rápido', whyWrong: 'Acelerar com freio fraco aumenta o perigo.' },
@@ -826,6 +844,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Freios e luzes',
     objective: 'Saber o risco da luz de freio queimada',
     prompt: 'Qual é o risco de dirigir com a luz de freio queimada?',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     options: [
       { id: 'a', text: 'Nenhum, se for de dia', whyWrong: 'De dia ou de noite, quem vem atrás precisa ver que você está freando.' },
       { id: 'b', text: 'Quem vem atrás não percebe que você está freando e tem menos tempo para parar' },
@@ -846,6 +865,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Freios e luzes',
     objective: 'Saber o risco dos amortecedores gastos',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     statement: 'Amortecedores gastos podem fazer o veículo perder o controle e até capotar em curvas e freadas.',
     answer: true,
     whyWrong: 'Amortecedores mantêm a estabilidade. Gastos, podem levar à perda de controle, principalmente em curvas e freadas.',
@@ -861,6 +881,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Freios e luzes',
     objective: 'Saber o que faz o freio ABS',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     sentence: 'O freio ___ evita que as rodas travem numa freada forte.',
     bank: ['ABS', 'de mão', 'a lona', 'motor'],
     answer: 'ABS',
@@ -881,6 +902,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Freios e luzes',
     objective: 'Saber o efeito dos freios gastos',
     prompt: 'O que acontece quando os freios estão gastos?',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     options: [
       { id: 'a', text: 'O veículo para mais rápido', whyWrong: 'É o contrário: freio gasto perde eficiência.' },
       { id: 'b', text: 'O consumo de combustível cai', whyWrong: 'O desgaste dos freios não reduz o consumo.' },
@@ -901,6 +923,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Freios e luzes',
     objective: 'Saber o risco da seta queimada',
     prompt: 'Com a seta (pisca-pisca) queimada, qual é o problema?',
+    visual: { kind: 'scene', scene: 'oficina-carro', alt: 'Carro parado em frente a uma oficina, com o mecânico olhando a roda' },
     options: [
       { id: 'a', text: 'A buzina para de funcionar', whyWrong: 'A seta não tem ligação com a buzina.' },
       { id: 'b', text: 'Os outros não entendem a sua manobra, o que pode causar sinistro' },
@@ -923,6 +946,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Posição ao dirigir',
     objective: 'Saber a posição das mãos no volante',
     prompt: 'Qual é a posição das mãos no volante recomendada pelo manual de direção defensiva?',
+    visual: { kind: 'scene', scene: 'carro-porta-aberta', alt: 'Motorista ao lado do carro, com a porta aberta' },
     options: [
       { id: 'a', text: 'As duas juntas no alto, às 12 horas', whyWrong: 'Mãos juntas no alto dão menos controle. O recomendado é 9 horas e 15 minutos.' },
       { id: 'b', text: 'Uma mão só, na parte de baixo', whyWrong: 'Segure com as duas mãos, às 9 horas e 15 minutos.' },
@@ -943,6 +967,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Posição ao dirigir',
     objective: 'Saber a altura do encosto de cabeça',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'carro-porta-aberta', alt: 'Motorista ao lado do carro, com a porta aberta' },
     sentence: 'O encosto de cabeça deve ficar, de preferência, na altura dos ___.',
     bank: ['olhos', 'ombros', 'cotovelos', 'joelhos'],
     answer: 'olhos',
@@ -963,6 +988,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Posição ao dirigir',
     objective: 'Saber que os braços ficam um pouco dobrados',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'carro-porta-aberta', alt: 'Motorista ao lado do carro, com a porta aberta' },
     statement: 'Para dirigir bem, os braços devem ficar totalmente esticados até o volante.',
     answer: false,
     whyWrong: 'Braços e pernas devem ficar ligeiramente dobrados. Assim você evita tensão e tem mais controle.',
@@ -978,6 +1004,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Posição ao dirigir',
     objective: 'Saber onde apoiar os pés',
     prompt: 'Onde ficam os pés quando você não está usando os pedais?',
+    visual: { kind: 'scene', scene: 'carro-porta-aberta', alt: 'Motorista ao lado do carro, com a porta aberta' },
     options: [
       { id: 'a', text: 'Descansando sobre o pedal da embreagem', whyWrong: 'Apoiar o pé no pedal sem usar atrapalha e desgasta. Deixe o calcanhar no assoalho.' },
       { id: 'b', text: 'Com os calcanhares apoiados no assoalho, fora dos pedais' },
@@ -998,6 +1025,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Posição ao dirigir',
     objective: 'Saber por que usar calçado preso ao pé',
     prompt: 'Por que dirigir com calçado bem preso aos pés?',
+    visual: { kind: 'scene', scene: 'carro-porta-aberta', alt: 'Motorista ao lado do carro, com a porta aberta' },
     options: [
       { id: 'a', text: 'Para acionar os pedais rápido e com segurança' },
       { id: 'b', text: 'Só por conforto, sem mudar a segurança', whyWrong: 'Muda a segurança: calçado solto pode escapar na hora de frear.' },
@@ -1018,6 +1046,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Posição ao dirigir',
     objective: 'Saber como apoiar as costas',
     prompt: 'Como as costas devem ficar no banco?',
+    visual: { kind: 'scene', scene: 'carro-porta-aberta', alt: 'Motorista ao lado do carro, com a porta aberta' },
     options: [
       { id: 'a', text: 'Inclinadas bem para trás, quase deitado', whyWrong: 'Quase deitado você perde visão e controle. Fique perto de 90 graus.' },
       { id: 'b', text: 'Afastadas do encosto, com o corpo para a frente', whyWrong: 'Apoie bem as costas no encosto.' },
@@ -1040,6 +1069,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Espelhos e ponto cego',
     objective: 'Saber ajustar os retrovisores externos',
     prompt: 'Como ajustar os retrovisores externos?',
+    visual: { kind: 'scene', scene: 'ponto-cego', alt: 'Avenida de três faixas, com uma moto logo atrás de você' },
     options: [
       { id: 'a', text: 'Até ver a lateral traseira do seu próprio veículo' },
       { id: 'b', text: 'Apontados para o chão, para ver as faixas', whyWrong: 'Assim você deixa de ver quem vem atrás.' },
@@ -1060,6 +1090,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Espelhos e ponto cego',
     objective: 'Saber o nome da área que o espelho não mostra',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'ponto-cego', alt: 'Avenida de três faixas, com uma moto logo atrás de você' },
     sentence: 'A área em volta do veículo que você não vê pelos espelhos se chama ___.',
     bank: ['ponto cego', 'ponto morto', 'acostamento', 'ponto fixo'],
     answer: 'ponto cego',
@@ -1101,6 +1132,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Espelhos e ponto cego',
     objective: 'Manter livre a visão do retrovisor interno',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'ponto-cego', alt: 'Avenida de três faixas, com uma moto logo atrás de você' },
     statement: 'Não tem problema empilhar bagagem até tampar o vidro de trás, porque os retrovisores externos bastam.',
     answer: false,
     whyWrong: 'Não coloque bagagens ou objetos que tampem a visão pelo retrovisor interno.',
@@ -1137,6 +1169,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Espelhos e ponto cego',
     objective: 'Usar a audição para perceber veículos',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'ponto-cego', alt: 'Avenida de três faixas, com uma moto logo atrás de você' },
     statement: 'Prestar atenção ao barulho dos motores ajuda a perceber veículos que estão do seu lado.',
     answer: true,
     whyWrong: 'O manual orienta ficar atento também ao barulho dos motores dos outros veículos antes de manobrar.',
@@ -1154,6 +1187,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Tempo de reação',
     objective: 'Saber o que é tempo de reação',
     prompt: 'O que é tempo de reação?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros passando' },
     options: [
       { id: 'a', text: 'O tempo entre perceber o perigo e começar a agir' },
       { id: 'b', text: 'O tempo que o veículo leva para ligar', whyWrong: 'Tempo de reação é da pessoa, não do motor.' },
@@ -1174,6 +1208,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Tempo de reação',
     objective: 'Saber quanto o veículo anda em 1 segundo a 80 km/h',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples' },
     sentence: 'A 80 km/h, um veículo percorre cerca de ___ em um segundo.',
     bank: ['22 metros', '8 metros', '80 metros', '2 metros'],
     answer: '22 metros',
@@ -1194,6 +1229,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Tempo de reação',
     objective: 'Saber a distância mínima para parar a 80 km/h',
     prompt: 'Segundo o manual de direção defensiva, a 80 km/h, quantos metros, no mínimo, são precisos para perceber o perigo e parar o veículo?',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples' },
     options: [
       { id: 'a', text: '4 metros', whyWrong: 'Bem mais: só em 1 segundo o veículo já anda uns 22 metros.' },
       { id: 'b', text: '10 metros', whyWrong: 'Não dá tempo: são pelo menos 44 metros.' },
@@ -1214,6 +1250,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Tempo de reação',
     objective: 'Saber que o cérebro demora para registrar a imagem',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros passando' },
     statement: 'Mesmo muito atento, o cérebro leva alguns décimos de segundo para registrar o que os olhos veem.',
     answer: true,
     whyWrong: 'Mesmo atento, há sempre um breve tempo em que você ainda não registrou o que viu.',
@@ -1229,6 +1266,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Tempo de reação',
     objective: 'Saber o efeito da falta de concentração na reação',
     prompt: 'O que acontece com o tempo de reação de quem dirige pouco concentrado?',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas e carros' },
     options: [
       { id: 'a', text: 'Diminui', whyWrong: 'É o contrário: sem concentração você demora mais para agir.' },
       { id: 'b', text: 'Não muda', whyWrong: 'Muda: a falta de concentração deixa a reação mais lenta.' },
@@ -1249,6 +1287,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Tempo de reação',
     objective: 'Ter noção da força de uma batida',
     prompt: 'Segundo o manual de direção defensiva, bater num poste a 80 km/h é como:',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros passando' },
     options: [
       { id: 'a', text: 'Tropeçar na calçada', whyWrong: 'O impacto é muito maior: como cair de um prédio de 9 andares.' },
       { id: 'b', text: 'Cair de um prédio de 9 andares' },
@@ -1270,6 +1309,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Atenção',
     objective: 'Saber que o viva-voz também distrai',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros passando' },
     statement: 'Falar ao celular no viva-voz não atrapalha a concentração, porque as mãos ficam no volante.',
     answer: false,
     whyWrong: 'Mesmo no viva-voz, a conversa tira a atenção da direção.',
@@ -1285,6 +1325,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Atenção',
     objective: 'Reconhecer o sono como fator de risco',
     prompt: 'Qual destes diminui a concentração e deixa os reflexos mais lentos?',
+    visual: { kind: 'scene', scene: 'estrada-escura', alt: 'De madrugada, numa estrada sem iluminação' },
     options: [
       { id: 'a', text: 'Ter feito a revisão do veículo', whyWrong: 'A revisão deixa o veículo mais seguro. Não afeta os seus reflexos.' },
       { id: 'b', text: 'Usar o cinto de segurança', whyWrong: 'O cinto protege, não tira a concentração.' },
@@ -1305,6 +1346,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Atenção',
     objective: 'Não dirigir sob efeito de remédio que altera o comportamento',
     prompt: 'O médico avisou que o seu remédio altera o comportamento. O que fazer?',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas e carros' },
     options: [
       { id: 'a', text: 'Dirigir só à noite', whyWrong: 'O horário não muda o efeito do remédio.' },
       { id: 'b', text: 'Tomar um café e dirigir normalmente', whyWrong: 'Café não corta o efeito do remédio.' },
@@ -1325,6 +1367,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Atenção',
     objective: 'Saber como manter a atenção ao dirigir',
     prompt: 'Para manter a atenção ao dirigir, o que fazer?',
+    visual: { kind: 'scene', scene: 'rodovia-dupla', alt: 'Rodovia de pista dupla' },
     options: [
       { id: 'a', text: 'Olhar fixo só para a frente o tempo todo', whyWrong: 'Olhar fixo faz você perder o que acontece nos lados e atrás.' },
       { id: 'b', text: 'Olhar em sequência o painel, os espelhos, os veículos em volta e os pedestres' },
@@ -1345,6 +1388,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Atenção',
     objective: 'Reconhecer animal e objetos soltos como distração',
     prompt: 'Levar um cachorro solto dentro do veículo é:',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas e carros' },
     options: [
       { id: 'a', text: 'Seguro, se ele for pequeno', whyWrong: 'Pequeno ou grande, solto ele tira a sua atenção.' },
       { id: 'b', text: 'Um fator que tira a atenção de quem dirige' },
@@ -1365,6 +1409,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Atenção',
     objective: 'Saber o risco do som alto',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros passando' },
     sentence: 'Ouvir som tão alto que você não escuta o próprio ___ diminui a atenção.',
     bank: ['veículo', 'rádio', 'celular', 'passageiro'],
     answer: 'veículo',
@@ -1385,6 +1430,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Atenção',
     objective: 'Saber que emoções fortes atrapalham',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas e carros' },
     statement: 'Uma discussão forte pouco antes de sair pode atrapalhar a concentração ao dirigir.',
     answer: true,
     whyWrong: 'Discussões fortes recentes estão entre os fatores que diminuem a concentração e retardam os reflexos.',
@@ -1402,6 +1448,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Distância de segurança',
     objective: 'Saber o tempo da distância em condições normais',
     prompt: 'Com pista seca e tempo bom, que distância manter do veículo da frente?',
+    visual: { kind: 'scene', scene: 'dois-segundos', alt: 'Na estrada, você segue um caminhão' },
     options: [
       { id: 'a', text: 'Meio segundo', whyWrong: 'Pouco demais para reagir. O manual indica cerca de 2 segundos.' },
       { id: 'b', text: 'Cerca de 2 segundos' },
@@ -1422,6 +1469,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Distância de segurança',
     objective: 'Ordenar os passos da regra dos dois segundos',
     prompt: 'Coloque os passos da regra dos dois segundos na ordem:',
+    visual: { kind: 'scene', scene: 'dois-segundos', alt: 'Na estrada, você segue um caminhão' },
     items: [
       { id: 'conta', text: 'Conte "cinquenta e um, cinquenta e dois"' },
       { id: 'confere', text: 'Veja se você passou pelo ponto só depois da contagem' },
@@ -1442,6 +1490,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Distância de segurança',
     objective: 'Saber aumentar a contagem na chuva',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'chuva-dia', alt: 'Rodovia com chuva durante o dia' },
     sentence: 'Na chuva, aumente a contagem para ___ segundos.',
     bank: ['3', '1', '2', '10'],
     answer: '3',
@@ -1483,6 +1532,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Distância de segurança',
     objective: 'Saber aumentar a contagem com veículo longo',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'rodovia-dupla-caminhao', alt: 'Você dirigindo um caminhão numa rodovia de pista dupla' },
     statement: 'Quem dirige veículo com mais de 6 metros de comprimento deve contar mais tempo: três segundos.',
     answer: true,
     whyWrong: 'Veículos com mais de 6 metros precisam de mais distância: três segundos.',
@@ -1498,6 +1548,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Distância de segurança',
     objective: 'Saber que a lei exige distância frontal e lateral',
     prompt: 'O CTB manda guardar distância de segurança de quais lados?',
+    visual: { kind: 'scene', scene: 'avenida-tres-faixas', alt: 'Avenida de três faixas no mesmo sentido' },
     options: [
       { id: 'a', text: 'Só atrás', whyWrong: 'A lei fala da distância na frente e dos lados.' },
       { id: 'b', text: 'Só na frente', whyWrong: 'Também dos lados: a lei pede distância frontal e lateral.' },
@@ -1520,6 +1571,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Velocidade e via',
     objective: 'Saber fazer uma curva com segurança',
     prompt: 'Como fazer uma curva com segurança?',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples' },
     options: [
       { id: 'a', text: 'Reduzir antes de entrar e girar o volante de forma suave' },
       { id: 'b', text: 'Frear forte no meio da curva', whyWrong: 'Freada forte dentro da curva tira a estabilidade. Reduza antes.' },
@@ -1540,6 +1592,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Velocidade e via',
     objective: 'Saber descer uma serra com segurança',
     prompt: 'Descendo uma serra, como você deve ir?',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples' },
     options: [
       { id: 'a', text: 'Em ponto morto, para economizar', whyWrong: 'Desengrenado você perde a força do motor para segurar o veículo, e é infração.' },
       { id: 'b', text: 'Com o motor desligado', whyWrong: 'Com o motor desligado os freios funcionam mal e a direção pode travar.' },
@@ -1560,6 +1613,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Velocidade e via',
     objective: 'Saber a natureza da infração de descer desengrenado',
     prompt: 'Transitar com o veículo desligado ou desengrenado em declive é infração de qual natureza?',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples' },
     options: [
       { id: 'a', text: 'Leve', whyWrong: 'É média, com retenção do veículo (art. 231, IX).' },
       { id: 'b', text: 'Média' },
@@ -1580,6 +1634,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Velocidade e via',
     objective: 'Saber frear antes do buraco, não em cima',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas e carros' },
     statement: 'Em cima de um buraco ou lombada, o certo é frear forte.',
     answer: false,
     whyWrong: 'Freie antes. Frear durante a passagem pelo buraco ou lombada aumenta o desequilíbrio do veículo.',
@@ -1616,6 +1671,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Velocidade e via',
     objective: 'Perceber que correr economiza pouco tempo',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'rodovia-dupla', alt: 'Rodovia de pista dupla' },
     sentence: 'Fazer 50 km a 100 km/h, em vez de 80 km/h, economiza só cerca de ___ minutos.',
     bank: ['7', '30', '60', '1'],
     answer: '7',
@@ -1638,6 +1694,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Chuva',
     objective: 'Saber quando a pista fica mais escorregadia',
     prompt: 'Quando a pista costuma ficar mais escorregadia?',
+    visual: { kind: 'scene', scene: 'chuva-dia', alt: 'Rodovia com chuva durante o dia' },
     options: [
       { id: 'a', text: 'No começo da chuva, quando a água se mistura com óleo e areia' },
       { id: 'b', text: 'Só depois de horas de chuva', whyWrong: 'O começo é o momento mais escorregadio, por causa do óleo e da areia.' },
@@ -1658,6 +1715,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Chuva',
     objective: 'Saber o que é aquaplanagem',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'poca-rodovia', alt: 'Chuva na rodovia e uma poça grande na sua faixa, lá na frente' },
     sentence: 'Na aquaplanagem, o pneu perde o contato com o chão e ___ sobre a água.',
     bank: ['flutua', 'afunda', 'esquenta', 'acelera'],
     answer: 'flutua',
@@ -1699,6 +1757,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Chuva',
     objective: 'Agir durante a aquaplanagem',
     prompt: 'O veículo está passando por cima de uma poça e começa a flutuar. O que fazer?',
+    visual: { kind: 'scene', scene: 'poca-rodovia', alt: 'Chuva na rodovia e uma poça grande na sua faixa, lá na frente' },
     options: [
       { id: 'a', text: 'Não frear e segurar firme o volante' },
       { id: 'b', text: 'Frear com toda a força', whyWrong: 'Sobre a poça, frear não é recomendado: as rodas travam e você perde o controle.' },
@@ -1719,6 +1778,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Chuva',
     objective: 'Saber frear com ABS',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'chuva-dia', alt: 'Rodovia com chuva durante o dia' },
     statement: 'Com freio ABS, numa freada de emergência na chuva, você pisa e mantém o pedal pressionado.',
     answer: true,
     whyWrong: 'Com ABS, aplique a força no pedal e mantenha-o pressionado: o sistema evita que as rodas travem.',
@@ -1755,6 +1815,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Chuva',
     objective: 'Saber como dirigir na chuva forte',
     prompt: 'Na chuva forte, o que fazer?',
+    visual: { kind: 'scene', scene: 'chuva-cidade', alt: 'De dia, numa avenida da cidade, debaixo de chuva forte' },
     options: [
       { id: 'a', text: 'Acender o pisca-alerta e seguir na velocidade normal', whyWrong: 'O pisca-alerta é para imobilização ou emergência. Na chuva: luz baixa, distância e velocidade menor.' },
       { id: 'b', text: 'Usar a luz alta para enxergar melhor', whyWrong: 'Na chuva, o CTB manda usar a luz baixa.' },
@@ -1777,6 +1838,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Neblina e luz',
     objective: 'Saber a luz certa na neblina',
     prompt: 'Sob neblina, qual luz usar?',
+    visual: { kind: 'scene', scene: 'neblina-serra', alt: 'Estrada de serra com neblina' },
     options: [
       { id: 'a', text: 'Luz baixa' },
       { id: 'b', text: 'Luz alta', whyWrong: 'A luz alta reflete nas gotinhas da neblina e você enxerga menos.' },
@@ -1797,6 +1859,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Neblina e luz',
     objective: 'Saber por que não usar luz alta na neblina',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'neblina-serra', alt: 'Estrada de serra com neblina' },
     statement: 'Na neblina, a luz alta ajuda a enxergar melhor.',
     answer: false,
     whyWrong: 'A luz alta reflete nas partículas de água e reduz ainda mais a visibilidade.',
@@ -1854,6 +1917,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Neblina e luz',
     objective: 'Ligar cada condição do ambiente à atitude certa',
     prompt: 'Ligue cada situação ao que fazer:',
+    visual: { kind: 'scene', scene: 'granizo', alt: 'Estrada com chuva de granizo' },
     pairs: [
       { id: 'vento', left: 'Vento forte', right: 'Observe a vegetação e reduza' },
       { id: 'fumaca', left: 'Fumaça de queimada', right: 'Não pare na pista' },
@@ -1873,6 +1937,7 @@ export const WORLD5_QUESTIONS: Question[] = [
     topic: 'Neblina e luz',
     objective: 'Saber perceber o vento forte',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples' },
     sentence: 'Para perceber vento forte na estrada, observe o movimento da ___ na beira da via.',
     bank: ['vegetação', 'sinalização', 'pista', 'calçada'],
     answer: 'vegetação',

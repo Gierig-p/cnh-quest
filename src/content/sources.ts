@@ -88,4 +88,11 @@ export const SOURCES: Record<string, Source> = {
     checkedAt: '2026-11-16',
     sha256: '77f749013b93a3a856b9f15f592ac099379bd4ee739e96b8c0f5af5b19a01d0a',
   },
+  ps2005: {
+    id: 'ps2005',
+    title: 'ABRAMET/DENATRAN — Noções de primeiros socorros no trânsito (2005)',
+    url: 'https://www.detran.pr.gov.br/arquivos/File/habilitacao/apostilas/primeirossocorros.pdf',
+    checkedAt: '2026-11-18',
+    sha256: '226fd7b96c4557a9ef4433243f85413d67d799378e86945b1b9079a9575ffdc8',
+  },
 };

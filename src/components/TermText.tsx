@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Fragment, type ReactNode } from 'react';
 import { splitTerms, type HintIndex, type TermHint } from '../content/glossary';
 import { SIGN_CODE_RE, SIGN_NAMES, isSignCode } from '../content/signs';
@@ -36,8 +37,10 @@ function Term({ text, hint }: { text: string; hint: TermHint }) {
     pinned.current = false;
     setOpen(false);
   };
-  const [shift, setShift] = useState(0);
+  // posição do balão na tela (fixa, fora de qualquer caixa que corte o conteúdo)
+  const [pos, setPos] = useState<{ left: number; top: number; above: boolean; maxH: number } | null>(null);
   const wrap = useRef<HTMLSpanElement>(null);
+  const btn = useRef<HTMLButtonElement>(null);
   const tip = useRef<HTMLSpanElement>(null);
   const id = useId();
 
@@ -45,7 +48,10 @@ function Term({ text, hint }: { text: string; hint: TermHint }) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close();
-    const onDown = (e: PointerEvent) => !wrap.current?.contains(e.target as Node) && close();
+    const onDown = (e: PointerEvent) => {
+      const t = e.target as Node;
+      if (!wrap.current?.contains(t) && !tip.current?.contains(t)) close();
+    };
     window.addEventListener('keydown', onKey);
     window.addEventListener('pointerdown', onDown);
     return () => {
@@ -54,20 +60,42 @@ function Term({ text, hint }: { text: string; hint: TermHint }) {
     };
   }, [open]);
 
-  // não deixa o balão sair da tela no celular
+  // coloca o balão dentro da tela: abaixo da palavra, ou acima se não couber
   useLayoutEffect(() => {
-    if (!open || !tip.current) return setShift(0);
-    const r = tip.current.getBoundingClientRect();
-    const gap = 12;
-    const w = window.innerWidth;
-    if (r.right > w - gap) setShift(w - gap - r.right);
-    else if (r.left < gap) setShift(gap - r.left);
+    if (!open) return setPos(null);
+    const place = () => {
+      if (!btn.current || !tip.current) return;
+      const rects = btn.current.getClientRects();
+      const r = rects.length ? rects[0] : btn.current.getBoundingClientRect();
+      const gap = 12;
+      const vw = document.documentElement.clientWidth || window.innerWidth;
+      const vh = window.innerHeight;
+      const tw = tip.current.offsetWidth;
+      const th = tip.current.scrollHeight;
+      const cx = r.left + r.width / 2;
+      const left = Math.max(gap, Math.min(cx - tw / 2, vw - gap - tw));
+      const below = vh - r.bottom - 10 - gap;
+      const aboveSpace = r.top - 10 - gap;
+      const above = th > below && aboveSpace > below;
+      const maxH = Math.max(80, above ? aboveSpace : below);
+      const h = Math.min(th, maxH);
+      const top = above ? r.top - 10 - h : r.bottom + 10;
+      setPos({ left, top, above, maxH });
+    };
+    place();
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
+    return () => {
+      window.removeEventListener('resize', place);
+      window.removeEventListener('scroll', place, true);
+    };
   }, [open]);
 
   return (
     <span className="term-wrap" ref={wrap} onMouseEnter={() => setOpen(true)} onMouseLeave={() => !pinned.current && setOpen(false)}>
       <button
         type="button"
+        ref={btn}
         className={`term ${hint.sign ? 'is-sign' : ''} ${hint.isNew ? 'is-new' : ''} ${open ? 'open' : ''}`}
         aria-expanded={open}
         aria-describedby={open ? id : undefined}
@@ -81,17 +109,30 @@ function Term({ text, hint }: { text: string; hint: TermHint }) {
         {hint.sign && <SignArt code={hint.sign} size={20} title="" />}
         {text}
       </button>
-      {open && (
-        <span className={`term-tip ${hint.sign ? 'is-sign' : ''}`} role="tooltip" id={id} ref={tip} style={{ ['--shift' as string]: `${shift}px` }}>
-          {hint.sign && (
-            <span className="term-tip-sign">
-              <SignArt code={hint.sign} size={88} title={`Placa ${hint.term}`} />
-            </span>
-          )}
-          <strong>{hint.term}</strong>
-          {hint.meaning}
-        </span>
-      )}
+      {open &&
+        createPortal(
+          <span
+            className={`term-tip ${hint.sign ? 'is-sign' : ''} ${pos?.above ? 'above' : ''}`}
+            role="tooltip"
+            id={id}
+            ref={tip}
+            style={{
+              left: pos?.left ?? 0,
+              top: pos?.top ?? 0,
+              maxHeight: pos?.maxH,
+              visibility: pos ? 'visible' : 'hidden',
+            }}
+          >
+            {hint.sign && (
+              <span className="term-tip-sign">
+                <SignArt code={hint.sign} size={88} title={`Placa ${hint.term}`} />
+              </span>
+            )}
+            <strong>{hint.term}</strong>
+            {hint.meaning}
+          </span>,
+          document.body,
+        )}
     </span>
   );
 }

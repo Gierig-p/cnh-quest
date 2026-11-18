@@ -323,6 +323,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Tipos de sinais',
     objective: 'Reconhecer os tipos de sinais previstos no CTB',
     prompt: 'Qual destes NÃO é um tipo de sinal de trânsito previsto no CTB?',
+    visual: { kind: 'scene', scene: 'rua-sinais-propaganda', alt: 'Cruzamento com placa, faixa pintada, semáforo, agente de trânsito, cones e um painel de propaganda na esquina' },
     options: [
       { id: 'a', text: 'Gestos do agente de trânsito', whyWrong: 'Gestos do agente e do condutor são sinais de trânsito (art. 87, VI).' },
       { id: 'b', text: 'Sinais sonoros, como o apito do agente', whyWrong: 'Sinais sonoros estão previstos no art. 87, V.' },
@@ -347,6 +348,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Hierarquia da sinalização',
     objective: 'Ordenar a prevalência da sinalização',
     prompt: 'Ordene do que vale MAIS para o que vale MENOS:',
+    visual: { kind: 'scene', scene: 'rua-sinais', alt: 'Cruzamento com agente de trânsito, semáforo, placa e faixa pintada no chão' },
     items: [
       { id: 'normas', text: 'Normas gerais de circulação' },
       { id: 'agente', text: 'Ordens do agente de trânsito' },
@@ -417,6 +419,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Hierarquia da sinalização',
     objective: 'Memorizar a regra de prevalência',
     prompt: 'Complete a regra:',
+    visual: { kind: 'scene', scene: 'semaforo-placa', alt: 'Semáforo e placa de PARE na mesma esquina, com o seu carro chegando' },
     sentence: 'As indicações do ___ prevalecem sobre os demais sinais.',
     bank: ['semáforo', 'acostamento', 'pedestre'],
     answer: 'semáforo',
@@ -438,6 +441,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Tipos de sinais',
     objective: 'Associar tipo de sinal a exemplo',
     prompt: 'Associe cada tipo de sinal a um exemplo:',
+    visual: { kind: 'scene', scene: 'rua-sinais', alt: 'Cruzamento com placa num poste, faixa pintada no chão, semáforo, agente de trânsito e cones' },
     pairs: [
       { id: 'v', left: 'Vertical', right: 'Placa de "Proibido estacionar"' },
       { id: 'h', left: 'Horizontal', right: 'Faixa de pedestres pintada' },
@@ -893,6 +897,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Tipos de sinais',
     objective: 'Classificar as placas como sinais verticais',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'rua-sinais', alt: 'Cruzamento com placa num poste, faixa pintada no chão, semáforo, agente de trânsito e cones' },
     sentence: 'As placas presas em postes são sinais ___.',
     bank: ['verticais', 'horizontais', 'luminosos', 'sonoros'],
     answer: 'verticais',
@@ -933,6 +938,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Sinalização insuficiente',
     objective: 'Saber quem responde pela sinalização',
     prompt: 'Quem responde pela falta ou pela colocação errada da sinalização numa via?',
+    visual: { kind: 'scene', scene: 'placa-torta', alt: 'Placa de rua torta, quase caindo, na calçada' },
     options: [
       { id: 'a', text: 'O motorista que passa por ali', whyWrong: 'O motorista não instala placas. O art. 90, § 1º, põe a responsabilidade no órgão de trânsito.' },
       { id: 'b', text: 'O dono do imóvel em frente à placa', whyWrong: 'A responsabilidade é do órgão ou entidade de trânsito com circunscrição sobre a via.' },
@@ -956,6 +962,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Sinalização insuficiente',
     objective: 'Lembrar a regra do art. 90',
     prompt: 'Complete a regra:',
+    visual: { kind: 'scene', scene: 'placa-apagada', alt: 'Placa de rua tão desbotada que não dá para ler' },
     sentence: 'Não há punição por desobedecer a uma sinalização ___ ou incorreta.',
     bank: ['insuficiente', 'nova', 'municipal'],
     answer: 'insuficiente',
@@ -995,6 +1002,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Pedestre',
     objective: 'Aplicar a regra da faixa com semáforo',
     prompt: 'Numa faixa de pedestres COM semáforo, o que vale para decidir quem passa?',
+    visual: { kind: 'scene', scene: 'faixa-semaforo', alt: 'Faixa de pedestres com semáforo; uma pessoa espera na calçada e você chega de carro' },
     options: [
       { id: 'a', text: 'O semáforo' },
       { id: 'b', text: 'Sempre o carro, porque é maior', whyWrong: 'O tamanho do veículo não dá preferência. Na faixa com semáforo, vale o semáforo.' },
@@ -1308,6 +1316,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Velocidade',
     objective: 'Associar o tipo de via urbana ao limite sem placa',
     prompt: 'Sem placa, na cidade: associe o tipo de via ao limite de velocidade.',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida larga da cidade, sem placa de velocidade' },
     pairs: [
       { id: 'rapido', left: 'Via de trânsito rápido', right: '80 km/h' },
       { id: 'arterial', left: 'Via arterial', right: '60 km/h' },
@@ -1376,6 +1385,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Tipos de sinais',
     objective: 'Classificar a faixa de pedestres como sinal horizontal',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'pedestre-faixa', alt: 'Pedestre atravessando na faixa pintada no chão' },
     statement: 'A faixa de pedestres pintada no chão é um sinal vertical.',
     answer: false,
     whyWrong: 'Pinturas no chão são a sinalização horizontal (art. 87, II). Vertical são as placas.',
@@ -1415,6 +1425,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Tipos de sinais',
     objective: 'Associar tipo de sinal a exemplo',
     prompt: 'Associe cada tipo de sinal a um exemplo:',
+    visual: { kind: 'scene', scene: 'rua-sinais', alt: 'Cruzamento com placa num poste, faixa pintada no chão, semáforo, agente de trânsito e cones' },
     pairs: [
       { id: 's', left: 'Sonoro', right: 'Apito do agente' },
       { id: 'a', left: 'Dispositivo auxiliar', right: 'Cones na pista' },
@@ -1459,6 +1470,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Hierarquia da sinalização',
     objective: 'Memorizar a regra de prevalência',
     prompt: 'Complete a regra:',
+    visual: { kind: 'scene', scene: 'rua-sinais', alt: 'Cruzamento com placa, faixa pintada, semáforo e agente de trânsito' },
     sentence: 'As ordens do ___ prevalecem sobre as normas de circulação e os outros sinais.',
     bank: ['agente de trânsito', 'semáforo', 'pedestre'],
     answer: 'agente de trânsito',
@@ -1480,6 +1492,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Hierarquia da sinalização',
     objective: 'Relacionar sinalização e regras gerais',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'semaforo-placa', alt: 'Semáforo e placa de PARE na mesma esquina, com o seu carro chegando' },
     statement: 'As regras gerais da lei valem mais que as placas e as pinturas no chão.',
     answer: false,
     whyWrong: 'É o contrário: as indicações dos sinais prevalecem sobre as demais normas de trânsito (art. 89, III).',
@@ -1497,6 +1510,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Hierarquia da sinalização',
     objective: 'Ordenar a prevalência da sinalização',
     prompt: 'Na ordem de quem manda mais, quem fica em 2º lugar, logo abaixo do agente de trânsito?',
+    visual: { kind: 'scene', scene: 'rua-sinais', alt: 'Cruzamento com placa, faixa pintada, semáforo e agente de trânsito' },
     options: [
       { id: 'a', text: 'As placas', whyWrong: 'As placas ficam abaixo do semáforo (art. 89, II).' },
       { id: 'b', text: 'As marcas pintadas no chão', whyWrong: 'As marcas no chão ficam abaixo do semáforo, junto com as placas (art. 89, II).' },
@@ -1519,6 +1533,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Sinalização insuficiente',
     objective: 'Entender o limite da proteção do art. 90',
     prompt: 'A placa de uma rua está apagada e não dá para ler o que ela diz. O que continua valendo ali?',
+    visual: { kind: 'scene', scene: 'placa-apagada', alt: 'Placa de rua tão desbotada que não dá para ler' },
     options: [
       { id: 'a', text: 'Nada: sem placa legível, cada um anda como quiser', whyWrong: 'O art. 90 só afasta a punição por aquele sinal. As regras gerais continuam valendo.' },
       { id: 'b', text: 'As regras gerais de trânsito' },
@@ -1540,6 +1555,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Sinalização insuficiente',
     objective: 'Saber quem responde pela sinalização',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'placa-torta', alt: 'Placa de rua torta, quase caindo, na calçada' },
     statement: 'O órgão de trânsito responsável pela via responde pela falta ou pela colocação errada das placas.',
     answer: true,
     whyWrong: 'É verdadeiro: o art. 90, § 1º, diz que o órgão ou entidade de trânsito com circunscrição sobre a via responde pela sinalização.',
@@ -1557,6 +1573,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Sinalização insuficiente',
     objective: 'Lembrar a regra do art. 90',
     prompt: 'Complete a regra:',
+    visual: { kind: 'scene', scene: 'placa-apagada', alt: 'Placa de rua tão desbotada que não dá para ler' },
     sentence: 'Se a sinalização é insuficiente ou incorreta, não há ___ por desobedecer a ela.',
     bank: ['punição', 'regras gerais', 'placas'],
     answer: 'punição',
@@ -2053,6 +2070,7 @@ export const WORLD1_QUESTIONS: Question[] = [
     topic: 'Velocidade',
     objective: 'Associar tipo de via urbana ao limite sem placa',
     prompt: 'Sem placa, na cidade: ordene as vias da MAIOR para a MENOR velocidade máxima.',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas dos dois lados, sem placa de velocidade' },
     items: [
       { id: 'local', text: 'Via local' },
       { id: 'arterial', text: 'Via arterial' },

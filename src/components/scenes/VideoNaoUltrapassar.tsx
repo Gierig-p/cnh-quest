@@ -3,12 +3,12 @@
  * Um trecho por fala (tempos em content/videos/nao-ultrapassar.json).
  * Aqui a estrada tem curva e subida: a pista é montada em tiras a partir da linha do meio.
  */
-import { box, camLook, chain, scale, flat, lines, rect, Rx, seg, T, tfObj, type Obj, type Part, type V2, type V3 } from './engine';
+import { box, camLook, flat, lines, rect, seg, type Obj, type Part, type V2, type V3 } from './engine';
 import { bench, building, bush, car, grassPatches, person, sidewalk, tree, zebra, asphalt } from './models';
 import { utilitario } from './veiculos';
 import { bairro, cruzamento } from './Mundo1';
 import { ACOST, campo, estrada } from './Mundo2';
-import { MENINO, RAPAZ, SENHORA, abrigo, onibus } from './Mundo3';
+import { MENINO, RAPAZ, SENHORA, SUBIDA, Y_TOPO, H, abrigo, altura, noMorro, onibus } from './Mundo3';
 import { VERMELHO, VOCE, ease, fazerVideo, janela, lerp, proibido, tag, type Quadro } from './videoBase';
 import tempos from '../../content/videos/nao-ultrapassar.json';
 
@@ -75,35 +75,7 @@ function contraCurva(s: number, cor = '#e0412f'): Obj {
 
 /* ---------------- subida: a pista sobe até o topo e some do outro lado ---------------- */
 
-const Y_PE = -6, Y_TOPO = -30, H = 4.2;
-const altura = (y: number) => (y > Y_PE ? 0 : y > Y_TOPO ? H * ease((Y_PE - y) / (Y_PE - Y_TOPO)) : Math.max(0, H - (Y_TOPO - y) * 0.25));
-const SUBIDA: Part[] = (() => {
-  const out: Part[] = [...grassPatches(-50, -70, 50, 40, 9)];
-  const tira = (ya: number, yb: number, x0: number, x1: number, c: string, z = 0) =>
-    ({ ...flat([[x0, ya], [x1, ya], [x1, yb], [x0, yb]], c), faces: [{ p: [[x0, ya, altura(ya) + z], [x1, ya, altura(ya) + z], [x1, yb, altura(yb) + z], [x0, yb, altura(yb) + z]] as V3[], c, n: [0, 0, 1] as V3 }] }) as Part;
-  // do fundo para a frente: o lado de lá do morro é pintado antes, e o topo o cobre
-  const ys: number[] = [];
-  for (let y = -60; y < 40; y += 2) ys.push(y);
-  ys.sort((a, b) => a - b);
-  for (const y of ys) {
-    const y1 = y + 2;
-    const k = 1 + (altura(y) - altura(y1)) * 0.35;
-    const g = scale('#7fbf6a', k);
-    out.push(tira(y, y1, -14, -4.2, g));
-    out.push(tira(y, y1, 4.2, 14, g));
-    out.push(tira(y, y1, -4.2, 4.2, '#c9b48a', 0.01));
-    out.push(tira(y, y1, -3.5, 3.5, '#5b636e', 0.02));
-    out.push(tira(y, y1, -0.08, 0.08, '#f2c21b', 0.03));
-  }
-  return out;
-})();
-/** carro no morro, inclinado como a pista */
-function noMorro(x: number, y: number, heading: number, cor: string): Obj {
-  const z = altura(y);
-  const incl = Math.atan2(altura(y - 0.5) - altura(y + 0.5), 1);
-  const ang = heading === 0 ? -incl : incl;
-  return tfObj(car({ x: 0, y: 0, heading, color: cor }), chain(T(x, y, z), Rx(ang)));
-}
+// a pista da subida (SUBIDA, altura, noMorro) mora em Mundo3.tsx, para a cena parada da w3-rua-2 usar a mesma
 
 /* ---------------- passagem de nível, ponte e faixa ---------------- */
 

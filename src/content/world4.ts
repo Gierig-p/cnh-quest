@@ -478,6 +478,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Natureza e pontos',
     objective: 'Saber os pontos da infração gravíssima',
     prompt: 'Quantos pontos uma infração gravíssima soma no registro do condutor?',
+    visual: { kind: 'scene', scene: 'agente-autuando', alt: 'Agente de trânsito ao lado de um carro encostado no meio-fio' },
     options: [
       { id: 'a', text: '3 pontos', whyWrong: '3 pontos é a infração leve.' },
       { id: 'b', text: '5 pontos', whyWrong: '5 pontos é a infração grave.' },
@@ -498,6 +499,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Natureza e pontos',
     objective: 'Saber o valor da multa grave',
     prompt: 'Qual é o valor da multa de uma infração grave, sem fator multiplicador?',
+    visual: { kind: 'scene', scene: 'agente-autuando', alt: 'Agente de trânsito ao lado de um carro encostado no meio-fio' },
     options: [
       { id: 'a', text: 'R$ 88,38', whyWrong: 'Esse é o valor da infração leve.' },
       { id: 'b', text: 'R$ 130,16', whyWrong: 'Esse é o valor da infração média.' },
@@ -518,6 +520,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Natureza e pontos',
     objective: 'Ordenar as naturezas da infração',
     prompt: 'Coloque as naturezas da infração em ordem, da menos séria para a mais séria:',
+    visual: { kind: 'scene', scene: 'agente-autuando', alt: 'Agente de trânsito ao lado de um carro encostado no meio-fio' },
     items: [
       { id: 'gravissima', text: 'Gravíssima' },
       { id: 'leve', text: 'Leve' },
@@ -538,6 +541,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Natureza e pontos',
     objective: 'Associar cada natureza aos seus pontos',
     prompt: 'Associe cada natureza aos pontos que ela soma:',
+    visual: { kind: 'scene', scene: 'agente-autuando', alt: 'Agente de trânsito ao lado de um carro encostado no meio-fio' },
     pairs: [
       { id: 'leve', left: 'Leve', right: '3 pontos' },
       { id: 'media', left: 'Média', right: '4 pontos' },
@@ -557,6 +561,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Natureza e pontos',
     objective: 'Entender o fator multiplicador',
     prompt: 'Algumas infrações gravíssimas têm "multa 3 vezes" ou "multa 10 vezes". O que isso significa?',
+    visual: { kind: 'scene', scene: 'agente-autuando', alt: 'Agente de trânsito ao lado de um carro encostado no meio-fio' },
     options: [
       { id: 'a', text: 'Que a pessoa recebe 3 ou 10 multas separadas', whyWrong: 'É uma multa só, com o valor multiplicado.' },
       { id: 'b', text: 'Que o valor da multa gravíssima é multiplicado por esse número' },
@@ -577,6 +582,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Natureza e pontos',
     objective: 'Saber os pontos da infração média',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'agente-autuando', alt: 'Agente de trânsito ao lado de um carro encostado no meio-fio' },
     sentence: 'Uma infração média soma ___ pontos.',
     bank: ['4', '3', '5', '7'],
     answer: '4',
@@ -597,6 +603,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Penalidades',
     objective: 'Distinguir penalidade de medida administrativa',
     prompt: 'Qual destas é uma medida administrativa, e não uma penalidade?',
+    visual: { kind: 'scene', scene: 'agente-autuando', alt: 'Agente de trânsito ao lado de um carro encostado no meio-fio' },
     options: [
       { id: 'a', text: 'Advertência por escrito', whyWrong: 'A advertência por escrito é uma penalidade (art. 256, I).' },
       { id: 'b', text: 'Multa', whyWrong: 'A multa é uma penalidade (art. 256, II).' },
@@ -617,6 +624,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Penalidades',
     objective: 'Saber quando cabe advertência por escrito',
     prompt: 'Em que caso a infração recebe advertência por escrito, em vez de multa?',
+    visual: { kind: 'scene', scene: 'agente-autuando', alt: 'Agente de trânsito ao lado de um carro encostado no meio-fio' },
     options: [
       { id: 'a', text: 'Infração leve ou média, sem outra infração nos últimos 12 meses' },
       { id: 'b', text: 'Qualquer infração, na primeira vez', whyWrong: 'Só vale para infração leve ou média.' },
@@ -637,6 +645,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Penalidades',
     objective: 'Saber que recolher a CNH é medida administrativa',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'agente-autuando', alt: 'Agente de trânsito ao lado de um carro encostado no meio-fio' },
     statement: 'Recolher a CNH é uma penalidade.',
     answer: false,
     whyWrong: 'Recolher a CNH é medida administrativa (art. 269, III). Penalidades são, por exemplo, a multa e a suspensão.',
@@ -673,6 +682,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Penalidades',
     objective: 'Saber o que é a remoção do veículo',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'agente-autuando', alt: 'Agente de trânsito ao lado de um carro encostado no meio-fio' },
     sentence: 'Quando o veículo é levado embora do local, acontece a ___ do veículo.',
     bank: ['remoção', 'retenção', 'cassação', 'advertência'],
     answer: 'remoção',
@@ -695,6 +705,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Suspensão',
     objective: 'Saber o limite de pontos sem gravíssima',
     prompt: 'Um condutor não cometeu nenhuma infração gravíssima em 12 meses. Com quantos pontos o direito de dirigir dele é suspenso?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: '20 pontos', whyWrong: '20 pontos é o limite de quem tem 2 ou mais gravíssimas.' },
       { id: 'b', text: '30 pontos', whyWrong: '30 pontos é o limite de quem tem 1 gravíssima.' },
@@ -715,6 +726,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Suspensão',
     objective: 'Saber o limite de pontos com duas gravíssimas',
     prompt: 'Em 12 meses, um condutor cometeu duas infrações gravíssimas. Qual é o limite de pontos dele?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: '20 pontos' },
       { id: 'b', text: '30 pontos', whyWrong: '30 é o limite de quem tem só 1 gravíssima.' },
@@ -735,6 +747,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Suspensão',
     objective: 'Saber o limite de pontos com uma gravíssima',
     prompt: 'Em 12 meses, um condutor cometeu uma só infração gravíssima. Com quantos pontos ele é suspenso?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: '20 pontos', whyWrong: '20 é para quem tem 2 ou mais gravíssimas.' },
       { id: 'b', text: '30 pontos' },
@@ -755,6 +768,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Suspensão',
     objective: 'Saber o período de contagem dos pontos',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     statement: 'Para a suspensão, contam os pontos somados num período de 12 meses.',
     answer: true,
     whyWrong: 'É verdadeiro: o art. 261, I, fala em atingir os pontos no período de 12 meses.',
@@ -770,6 +784,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Suspensão',
     objective: 'Saber o prazo da suspensão por pontos',
     prompt: 'Quando a suspensão vem pela soma de pontos, por quanto tempo ela dura, sem reincidência?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: 'De 1 a 3 meses', whyWrong: 'O prazo é maior: de 6 meses a 1 ano.' },
       { id: 'b', text: 'De 6 meses a 1 ano' },
@@ -790,6 +805,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Suspensão',
     objective: 'Saber o que é preciso para ter a CNH de volta',
     prompt: 'Depois de cumprir o prazo da suspensão, o que mais a pessoa precisa fazer para receber a CNH de volta?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: 'Refazer todos os exames, desde o início', whyWrong: 'Refazer todos os exames é para quem teve a CNH cassada.' },
       { id: 'b', text: 'Pagar uma nova multa gravíssima', whyWrong: 'Não há nova multa por cumprir a suspensão.' },
@@ -810,6 +826,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Suspensão',
     objective: 'Saber a regra de quem dirige em atividade remunerada',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     statement: 'Quem dirige em atividade remunerada só é suspenso ao chegar a 40 pontos, mesmo que tenha infrações gravíssimas.',
     answer: true,
     whyWrong: 'É verdadeiro: pelo art. 261, § 5º, o limite é de 40 pontos, qualquer que seja a natureza das infrações.',
@@ -825,6 +842,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Cassação',
     objective: 'Saber a consequência de dirigir suspenso',
     prompt: 'O que acontece com quem é flagrado dirigindo com o direito de dirigir suspenso?',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Fiscalização de trânsito à noite' },
     options: [
       { id: 'a', text: 'Recebe só uma advertência por escrito', whyWrong: 'Dirigir suspenso é muito mais sério: leva à cassação.' },
       { id: 'b', text: 'A suspensão recomeça do zero', whyWrong: 'A lei prevê a cassação da CNH, não um recomeço da suspensão.' },
@@ -845,6 +863,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Cassação',
     objective: 'Saber como voltar a dirigir depois da cassação',
     prompt: 'Depois de ter a CNH cassada, quando a pessoa pode pedir para voltar a dirigir?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: 'Depois de 2 anos, refazendo todos os exames' },
       { id: 'b', text: 'Depois de 6 meses, só com o curso de reciclagem', whyWrong: 'Isso lembra a suspensão. Na cassação, são 2 anos e todos os exames.' },
@@ -865,6 +884,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Cassação',
     objective: 'Diferenciar suspensão de cassação',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     statement: 'Suspensão e cassação são a mesma coisa.',
     answer: false,
     whyWrong: 'Na suspensão, a pessoa fica um tempo sem dirigir e recebe a CNH de volta. Na cassação, perde a habilitação e precisa refazer os exames.',
@@ -880,6 +900,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Cassação',
     objective: 'Reconhecer reincidência que leva à cassação',
     prompt: 'Qual destas situações leva à cassação da CNH?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: 'Chegar a 30 pontos com uma gravíssima', whyWrong: 'Isso leva à suspensão, não à cassação.' },
       { id: 'b', text: 'Ser flagrado de novo dirigindo sob efeito de álcool, dentro de 12 meses' },
@@ -900,6 +921,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Cassação',
     objective: 'Saber quem precisa fazer o curso de reciclagem',
     prompt: 'Quem é obrigado a fazer o curso de reciclagem?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: 'Quem recebeu uma multa leve', whyWrong: 'Uma multa leve não obriga ao curso.' },
       { id: 'b', text: 'Quem foi condenado por crime de trânsito' },
@@ -964,6 +986,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Velocidade',
     objective: 'Classificar o excesso de mais de 50%',
     prompt: 'O que acontece com quem dirige mais de 50% acima da velocidade máxima da via?',
+    visual: { kind: 'scene', scene: 'radar-60', alt: 'Avenida com radar e placa de velocidade' },
     options: [
       { id: 'a', text: 'Infração grave, só com multa', whyWrong: 'Acima de 50% é gravíssima, e há suspensão.' },
       { id: 'b', text: 'Infração média, com advertência', whyWrong: 'Média é até 20% acima.' },
@@ -1005,6 +1028,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Ultrapassagem proibida',
     objective: 'Saber a infração de ultrapassar sobre linha amarela contínua',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'linha-amarela-continua-carro', alt: 'Rodovia com linha amarela contínua e um carro à frente' },
     statement: 'Ultrapassar pela contramão sobre a linha amarela contínua é infração gravíssima.',
     answer: true,
     whyWrong: 'É verdadeiro: o art. 203, V, classifica como gravíssima, com multa 5 vezes maior.',
@@ -1020,6 +1044,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Velocidade',
     objective: 'Associar infrações e naturezas',
     prompt: 'Associe cada infração à sua natureza:',
+    visual: { kind: 'scene', scene: 'avanca-vermelho', alt: 'Cruzamento com semáforo vermelho e outro carro' },
     pairs: [
       { id: 'vermelho', left: 'Avançar o sinal vermelho', right: 'Gravíssima' },
       { id: 'dez', left: '10% acima da velocidade máxima', right: 'Média' },
@@ -1080,6 +1105,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Celular e distração',
     objective: 'Saber quando pode tirar a mão do volante',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     statement: 'Tirar uma das mãos do volante para trocar a marcha é infração.',
     answer: false,
     whyWrong: 'O art. 252, V, permite tirar a mão para fazer sinal de braço, trocar a marcha ou usar os comandos do carro.',
@@ -1116,6 +1142,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Capacete e criança',
     objective: 'Saber a natureza de levar criança sem segurança',
     prompt: 'Levar uma criança no carro sem seguir as regras de segurança para ela é infração:',
+    visual: { kind: 'scene', scene: 'crianca-carro', alt: 'Criança perto do carro, na calçada' },
     options: [
       { id: 'a', text: 'Leve', whyWrong: 'O art. 168 classifica como gravíssima.' },
       { id: 'b', text: 'Média', whyWrong: 'É gravíssima.' },
@@ -1136,6 +1163,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Capacete e criança',
     objective: 'Saber a natureza de dirigir sem cinto',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'fiscalizacao-cinto', alt: 'Agente fiscalizando os carros numa avenida' },
     sentence: 'Dirigir sem cinto de segurança é infração ___.',
     bank: ['grave', 'leve', 'média', 'gravíssima'],
     answer: 'grave',
@@ -1158,6 +1186,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Álcool',
     objective: 'Saber quanto álcool é permitido ao dirigir',
     prompt: 'Quanto álcool o motorista pode ter no corpo para dirigir sem cometer infração?',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Fiscalização de trânsito à noite' },
     options: [
       { id: 'a', text: 'Nenhum: qualquer quantidade já é infração' },
       { id: 'b', text: 'Até uma lata de cerveja', whyWrong: 'Não existe quantidade liberada. Qualquer concentração já é infração.' },
@@ -1178,6 +1207,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Álcool',
     objective: 'Saber as penalidades de dirigir sob efeito de álcool',
     prompt: 'Quais são as penalidades para quem dirige sob efeito de álcool?',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Fiscalização de trânsito à noite' },
     options: [
       { id: 'a', text: 'Infração grave e multa simples', whyWrong: 'É gravíssima, com multa multiplicada por 10.' },
       { id: 'b', text: 'Infração gravíssima, multa 10 vezes maior e suspensão do direito de dirigir por 12 meses' },
@@ -1198,6 +1228,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Álcool',
     objective: 'Entender a margem de tolerância do bafômetro',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Fiscalização de trânsito à noite' },
     statement: 'A margem de tolerância do bafômetro permite tomar um copo de cerveja antes de dirigir.',
     answer: false,
     whyWrong: 'A margem existe por causa do aparelho, definida pelo Contran. A lei pune qualquer concentração de álcool.',
@@ -1213,6 +1244,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Álcool',
     objective: 'Saber o que acontece na reincidência com álcool',
     prompt: 'Um condutor é flagrado dirigindo sob efeito de álcool pela segunda vez em 12 meses. O que acontece?',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Fiscalização de trânsito à noite' },
     options: [
       { id: 'a', text: 'A multa dobra e a CNH é cassada' },
       { id: 'b', text: 'Paga a mesma multa da primeira vez', whyWrong: 'Na reincidência em 12 meses, a multa dobra.' },
@@ -1233,6 +1265,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Álcool',
     objective: 'Saber o multiplicador da multa por álcool',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Fiscalização de trânsito à noite' },
     sentence: 'A multa por dirigir sob efeito de álcool é multiplicada por ___.',
     bank: ['10', '3', '5', '2'],
     answer: '10',
@@ -1295,6 +1328,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Recusa e racha',
     objective: 'Saber que a recusa não livra da punição',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Fiscalização de trânsito à noite' },
     statement: 'Quem se recusa a fazer o teste do bafômetro não pode ser punido.',
     answer: false,
     whyWrong: 'Recusar o teste é infração gravíssima, com as mesmas penalidades de dirigir sob efeito de álcool.',
@@ -1331,6 +1365,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Recusa e racha',
     objective: 'Reconhecer uma manobra perigosa',
     prompt: 'Qual destas atitudes é uma manobra perigosa, punida como gravíssima com multa 10 vezes maior?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     options: [
       { id: 'a', text: 'Ligar a seta antes de virar', whyWrong: 'Ligar a seta é o certo a fazer.' },
       { id: 'b', text: 'Arrancar de forma brusca, cantando os pneus, para se exibir' },
@@ -1351,6 +1386,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Recusa e racha',
     objective: 'Saber quem pode ser submetido ao teste de álcool',
     prompt: 'Quem pode ser submetido ao teste do bafômetro, a exame ou a perícia?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     options: [
       { id: 'a', text: 'Só quem causou um sinistro com vítima', whyWrong: 'Também quem é parado numa fiscalização.' },
       { id: 'b', text: 'Só quem está com sinais claros de embriaguez', whyWrong: 'A lei não exige sinais: basta ser fiscalizado ou se envolver num sinistro.' },
@@ -1373,6 +1409,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes com vítima',
     objective: 'Saber a pena do homicídio culposo no trânsito',
     prompt: 'Qual é a pena para o homicídio culposo na direção de veículo, sem agravantes?',
+    visual: { kind: 'scene', scene: 'sinistro-moto', alt: 'Sinistro com uma moto caída na avenida' },
     options: [
       { id: 'a', text: 'Só multa', whyWrong: 'É crime, com pena de detenção.' },
       { id: 'b', text: 'Detenção de 2 a 4 anos e suspensão ou proibição de dirigir' },
@@ -1414,6 +1451,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes com vítima',
     objective: 'Saber que fugir do local é crime',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'sinistro-moto', alt: 'Sinistro com uma moto caída na avenida' },
     statement: 'Fugir do local do sinistro para não ser responsabilizado é crime de trânsito.',
     answer: true,
     whyWrong: 'É verdadeiro: o art. 305 pune com detenção de 6 meses a 1 ano, ou multa.',
@@ -1429,6 +1467,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes com vítima',
     objective: 'Saber a pena do homicídio culposo com álcool',
     prompt: 'Um motorista sob efeito de álcool mata alguém no trânsito, sem querer. Qual é a pena prevista?',
+    visual: { kind: 'scene', scene: 'sinistro-moto', alt: 'Sinistro com uma moto caída na avenida' },
     options: [
       { id: 'a', text: 'Detenção de 2 a 4 anos', whyWrong: 'Essa é a pena sem álcool. Com álcool, a pena sobe.' },
       { id: 'b', text: 'Reclusão de 5 a 8 anos' },
@@ -1449,6 +1488,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes com vítima',
     objective: 'Saber que a omissão é crime mesmo com socorro de outros',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'sinistro-moto', alt: 'Sinistro com uma moto caída na avenida' },
     statement: 'Se outra pessoa já socorreu a vítima, o motorista envolvido que foi embora sem ajudar não comete crime.',
     answer: false,
     whyWrong: 'O art. 304, parágrafo único, diz que a omissão é crime mesmo que outra pessoa tenha socorrido.',
@@ -1464,6 +1504,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes com vítima',
     objective: 'Entender o que é crime culposo',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'sinistro-moto', alt: 'Sinistro com uma moto caída na avenida' },
     sentence: 'Ferir alguém no trânsito sem querer, por falta de cuidado, é lesão corporal ___.',
     bank: ['culposa', 'dolosa', 'permitida', 'leve'],
     answer: 'culposa',
@@ -1484,6 +1525,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes de perigo',
     objective: 'Saber o limite do crime de embriaguez ao volante',
     prompt: 'A partir de quanto álcool no bafômetro dirigir já é crime?',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Fiscalização de trânsito à noite' },
     options: [
       { id: 'a', text: 'Qualquer quantidade', whyWrong: 'Qualquer quantidade é infração. O crime começa em 0,3 mg/L de ar.' },
       { id: 'b', text: '0,3 miligrama por litro de ar ou mais' },
@@ -1504,6 +1546,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes de perigo',
     objective: 'Saber que entregar a direção a quem não pode é crime',
     prompt: 'Você empresta o carro a um amigo que não tem habilitação. Ele dirige e nada acontece. Isso é:',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas, calçadas e você de carro' },
     options: [
       { id: 'a', text: 'Permitido, porque não houve sinistro', whyWrong: 'O crime do art. 310 não exige sinistro.' },
       { id: 'b', text: 'Problema só do amigo', whyWrong: 'Quem entrega a direção também responde.' },
@@ -1524,6 +1567,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes de perigo',
     objective: 'Saber que o racha é crime mesmo sem vítima',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'racha', alt: 'Dois carros lado a lado à noite, numa avenida' },
     statement: 'Para o racha ser crime, é preciso que alguém se machuque.',
     answer: false,
     whyWrong: 'O art. 308 já pune o racha que gera risco. Se alguém se ferir gravemente ou morrer, a pena aumenta.',
@@ -1581,6 +1625,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Crimes de perigo',
     objective: 'Diferenciar infração e crime no álcool',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'blitz-noite', alt: 'Fiscalização de trânsito à noite' },
     statement: 'Se o bafômetro marcar menos de 0,3 miligrama por litro de ar, a pessoa pode dirigir sem problema.',
     answer: false,
     whyWrong: 'Abaixo de 0,3 não é crime, mas ainda é infração gravíssima (art. 165), porque a lei pune qualquer concentração.',
@@ -1598,6 +1643,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Auto e notificação',
     objective: 'Saber o prazo para indicar o condutor',
     prompt: 'Seu carro foi multado enquanto outra pessoa dirigia. Em quanto tempo você pode indicar quem era o condutor?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: 'Em 5 dias da infração', whyWrong: 'O prazo é de 30 dias, contados da notificação da autuação.' },
       { id: 'b', text: 'Em 30 dias da notificação da autuação' },
@@ -1618,6 +1664,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Auto e notificação',
     objective: 'Saber o prazo de expedição da notificação',
     prompt: 'A notificação da autuação foi expedida 45 dias depois da infração. O que acontece com o auto?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: 'Vale normalmente', whyWrong: 'Passado o prazo máximo de 30 dias, o auto é arquivado.' },
       { id: 'b', text: 'A multa dobra pelo atraso', whyWrong: 'O atraso é do órgão de trânsito, não do motorista.' },
@@ -1638,6 +1685,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Auto e notificação',
     objective: 'Saber o que é responsabilidade do proprietário',
     prompt: 'O carro de Lia foi multado por estar com o licenciamento vencido, enquanto um amigo dirigia. Quem responde?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: 'O amigo, porque estava dirigindo', whyWrong: 'Os documentos do veículo são responsabilidade do proprietário.' },
       { id: 'b', text: 'Lia, porque o proprietário responde pelos documentos do veículo' },
@@ -1658,6 +1706,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Auto e notificação',
     objective: 'Saber o que é responsabilidade do condutor',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'agente-autuando', alt: 'Agente de trânsito ao lado de um carro encostado no meio-fio' },
     statement: 'Quem dirige responde pelas infrações que comete ao volante, mesmo que o carro não seja seu.',
     answer: true,
     whyWrong: 'É verdadeiro: o art. 257, § 3º, põe no condutor a responsabilidade pelos atos praticados na direção.',
@@ -1673,6 +1722,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Auto e notificação',
     objective: 'Saber quem aplica a multa',
     prompt: 'Um motorista que mora no Recife comete uma infração numa avenida de Salvador. Quem aplica a multa?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     options: [
       { id: 'a', text: 'O órgão de trânsito do Recife, onde ele mora', whyWrong: 'O que conta é a via da infração, não o endereço do motorista.' },
       { id: 'b', text: 'O órgão de trânsito responsável por aquela avenida' },
@@ -1693,6 +1743,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Auto e notificação',
     objective: 'Saber que a infração vale sem abordagem',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     statement: 'Mesmo sem parar o carro, o agente pode registrar a infração no auto.',
     answer: true,
     whyWrong: 'É verdadeiro: o art. 280, § 3º, manda o agente relatar a infração no próprio auto quando não dá para abordar na hora.',
@@ -1708,6 +1759,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Defesa e desconto',
     objective: 'Saber o desconto de quem paga até o vencimento',
     prompt: 'Quem paga a multa até a data de vencimento paga quanto do valor?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: '100%, sem desconto', whyWrong: 'Até o vencimento, a lei dá desconto de 20%.' },
       { id: 'b', text: '80% do valor' },
@@ -1728,6 +1780,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Defesa e desconto',
     objective: 'Saber a condição do desconto de 40%',
     prompt: 'Quem pode pagar a multa por 60% do valor?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: 'Quem paga até o vencimento', whyWrong: 'Pagar até o vencimento dá 80%. Os 60% exigem mais condições.' },
       { id: 'b', text: 'Quem recorre à JARI e perde', whyWrong: 'Quem recorre não tem esse desconto: ele exige abrir mão do recurso.' },
@@ -1748,6 +1801,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Defesa e desconto',
     objective: 'Ordenar as etapas do processo da multa',
     prompt: 'Coloque as etapas do processo da multa na ordem:',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     items: [
       { id: 'jari', text: 'Recurso à JARI' },
       { id: 'autuacao', text: 'Notificação da autuação' },
@@ -1769,6 +1823,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Defesa e desconto',
     objective: 'Saber quem julga o primeiro recurso',
     prompt: 'Quem julga o primeiro recurso contra a multa?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: 'O próprio agente que fez a autuação', whyWrong: 'O agente não julga recurso.' },
       { id: 'b', text: 'A JARI' },
@@ -1789,6 +1844,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Defesa e desconto',
     objective: 'Saber que pagar não impede de recorrer',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     statement: 'Quem paga a multa com o desconto de 20% perde o direito de recorrer.',
     answer: false,
     whyWrong: 'Pagar não é desistir (art. 284, § 2º). Só quem escolheu o desconto de 40% abriu mão da defesa e do recurso.',
@@ -1804,6 +1860,7 @@ export const WORLD4_QUESTIONS: Question[] = [
     topic: 'Defesa e desconto',
     objective: 'Saber o prazo mínimo da defesa prévia',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     sentence: 'O prazo para apresentar a defesa prévia não pode ser menor que ___ dias.',
     bank: ['30', '10', '5', '60'],
     answer: '30',

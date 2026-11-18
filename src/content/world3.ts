@@ -449,6 +449,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Mão e faixas',
     objective: 'Saber o uso das faixas da esquerda',
     prompt: 'Numa pista com várias faixas no mesmo sentido, para que servem as faixas da esquerda?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     options: [
       { id: 'a', text: 'Para os veículos mais lentos e maiores', whyWrong: 'Lentos e maiores ficam nas faixas da direita.' },
       { id: 'b', text: 'Para parar em emergência', whyWrong: 'Emergência é no acostamento, não na faixa da esquerda.' },
@@ -490,6 +491,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Mão e faixas',
     objective: 'Entender a distância de segurança',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'rodovia-dupla', alt: 'Rodovia de pista dupla, com você de carro' },
     statement: 'A distância de segurança só precisa ser guardada em relação ao carro da frente.',
     answer: false,
     whyWrong:
@@ -506,6 +508,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Mão e faixas',
     objective: 'Lembrar o dever de ter domínio do veículo',
     prompt: 'Complete a regra:',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas, calçadas e você de carro' },
     sentence: 'O condutor deve, a todo momento, ter ___ do seu veículo, dirigindo com atenção.',
     bank: ['domínio', 'preferência', 'pressa', 'licença'],
     answer: 'domínio',
@@ -526,6 +529,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Calçada e acostamento',
     objective: 'Saber quando o veículo pode passar sobre a calçada',
     prompt: 'Quando um carro pode passar sobre a calçada?',
+    visual: { kind: 'scene', scene: 'cruzamento-aproximacao', alt: 'Você chega de carro a um cruzamento de bairro' },
     options: [
       { id: 'a', text: 'Quando a rua está congestionada', whyWrong: 'Congestionamento não autoriza. A calçada é dos pedestres.' },
       { id: 'b', text: 'Para entrar ou sair de uma garagem ou estacionamento' },
@@ -546,6 +550,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Calçada e acostamento',
     objective: 'Saber para que serve o acostamento',
     prompt: 'Para que serve o acostamento?',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples, com você de carro' },
     options: [
       { id: 'a', text: 'Para ultrapassar pela direita', whyWrong: 'Acostamento não é faixa de ultrapassagem.' },
       { id: 'b', text: 'Para os veículos lentos circularem', whyWrong: 'Os lentos usam as faixas da direita da pista, não o acostamento.' },
@@ -604,6 +609,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Calçada e acostamento',
     objective: 'Associar quem cuida de quem',
     prompt: 'Associe quem dirige a quem ele deve proteger:',
+    visual: { kind: 'scene', scene: 'carro-bicicleta', alt: 'Avenida com você de carro e uma bicicleta à frente' },
     pairs: [
       { id: 'caminhao', left: 'Caminhão', right: 'O carro, que é menor' },
       { id: 'carro', left: 'Carro', right: 'A bicicleta, que não tem motor' },
@@ -624,6 +630,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Ultrapassagem',
     objective: 'Saber o lado da ultrapassagem',
     prompt: 'Em regra, por qual lado se ultrapassa outro veículo em movimento?',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples, com você de carro' },
     options: [
       { id: 'a', text: 'Pela esquerda' },
       { id: 'b', text: 'Pela direita', whyWrong: 'Pela direita só quando o da frente sinalizou que vai entrar à esquerda.' },
@@ -644,6 +651,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Ultrapassagem',
     objective: 'Conhecer a exceção da ultrapassagem pela direita',
     prompt: 'Quando é correto ultrapassar pela direita?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     options: [
       { id: 'a', text: 'Quando o da frente está devagar na faixa da esquerda', whyWrong: 'Isso não abre exceção. Ele deve ir para a direita ao perceber você.' },
       { id: 'b', text: 'Quando você está com pressa', whyWrong: 'Pressa nunca é exceção prevista no CTB.' },
@@ -664,6 +672,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Ultrapassagem',
     objective: 'Ordenar os passos da ultrapassagem',
     prompt: 'Coloque os passos da ultrapassagem na ordem:',
+    visual: { kind: 'scene', scene: 'rodovia-dupla', alt: 'Rodovia de pista dupla, com você de carro' },
     items: [
       { id: 'voltar', text: 'Voltar à sua faixa, com a seta ligada' },
       { id: 'passar', text: 'Passar com distância para o lado' },
@@ -721,6 +730,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Onde não ultrapassar',
     objective: 'Reconhecer lugares proibidos para ultrapassar',
     prompt: 'Numa rodovia de mão dupla e pista única, sem sinalização permitindo, onde é proibido ultrapassar?',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples, com você de carro' },
     options: [
       { id: 'a', text: 'Numa reta longa, com boa visão', whyWrong: 'Na reta com visão e faixa livre, a ultrapassagem é possível, seguindo a sinalização.' },
       { id: 'b', text: 'Numa ponte' },
@@ -779,6 +789,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Onde não ultrapassar',
     objective: 'Entender por que não se ultrapassa em subidas',
     prompt: 'Complete a regra:',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples, com você de carro' },
     sentence: 'Em pista única de mão dupla, não se ultrapassa em curvas e subidas sem ___ suficiente.',
     bank: ['visibilidade', 'largura', 'iluminação', 'asfalto'],
     answer: 'visibilidade',
@@ -799,6 +810,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Onde não ultrapassar',
     objective: 'Saber o que é passagem de nível',
     prompt: 'O que é uma passagem de nível, onde não se pode ultrapassar?',
+    visual: { kind: 'scene', scene: 'estrada-terra', alt: 'Estrada de terra no campo' },
     options: [
       { id: 'a', text: 'Uma ponte sobre um rio', whyWrong: 'Ponte é outro caso da lista, não a passagem de nível.' },
       { id: 'b', text: 'O cruzamento da via com um trilho, no mesmo plano' },
@@ -821,6 +833,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Seta e manobras',
     objective: 'Saber quais manobras exigem seta',
     prompt: 'Quais manobras pedem o aviso com a seta?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     options: [
       { id: 'a', text: 'Só virar à esquerda', whyWrong: 'Virar à direita, mudar de faixa e fazer retorno também pedem seta.' },
       { id: 'b', text: 'Mudar de faixa, virar à direita ou à esquerda e fazer retorno' },
@@ -862,6 +875,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Seta e manobras',
     objective: 'Saber que o gesto de braço substitui a seta',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas, calçadas e você de carro' },
     statement: 'Se a seta não funciona, o condutor pode indicar a manobra com o gesto convencional de braço.',
     answer: true,
     whyWrong: 'É verdadeiro: o CTB aceita a seta ou o gesto convencional de braço.',
@@ -877,6 +891,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Seta e manobras',
     objective: 'Saber quando ligar a seta',
     prompt: 'Quando a seta deve ser ligada?',
+    visual: { kind: 'scene', scene: 'cruzamento-aproximacao', alt: 'Você chega de carro a um cruzamento de bairro' },
     options: [
       { id: 'a', text: 'Com antecedência, antes de começar a manobra' },
       { id: 'b', text: 'No meio da manobra', whyWrong: 'No meio já é tarde: os outros precisam saber antes.' },
@@ -897,6 +912,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Seta e manobras',
     objective: 'Lembrar o cuidado antes de qualquer manobra',
     prompt: 'Complete a regra:',
+    visual: { kind: 'scene', scene: 'faixa-esquerda-carro-atras', alt: 'Você na faixa da esquerda, com um carro logo atrás' },
     sentence: 'Antes de uma manobra, o condutor deve ter certeza de que pode fazê-la sem ___ para os outros.',
     bank: ['perigo', 'multa', 'barulho', 'demora'],
     answer: 'perigo',
@@ -917,6 +933,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Conversões',
     objective: 'Saber a posição para virar à direita',
     prompt: 'Você vai virar à direita para entrar em outra rua. Como se posicionar?',
+    visual: { kind: 'scene', scene: 'cruzamento-aproximacao', alt: 'Você chega de carro a um cruzamento de bairro' },
     options: [
       { id: 'a', text: 'Ir para o meio da pista e abrir a curva', whyWrong: 'Para a direita, encoste no lado direito e vire no menor espaço.' },
       { id: 'b', text: 'Encostar o máximo no lado direito e virar no menor espaço' },
@@ -937,6 +954,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Conversões',
     objective: 'Saber a posição para virar à esquerda em mão única',
     prompt: 'Numa rua de mão única, você vai virar à esquerda. Como se posicionar?',
+    visual: { kind: 'scene', scene: 'mao-unica', alt: 'Rua de mão única com duas faixas; todos vão no mesmo sentido' },
     options: [
       { id: 'a', text: 'Encostar no lado esquerdo da pista' },
       { id: 'b', text: 'Encostar no lado direito', whyWrong: 'Da direita você cruzaria a rua inteira para virar.' },
@@ -1096,6 +1114,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Faróis',
     objective: 'Saber a regra do farol da moto',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     statement: 'A moto só precisa do farol baixo aceso à noite.',
     answer: false,
     whyWrong: 'Motocicletas, motonetas e ciclomotores usam farol baixo de dia e de noite.',
@@ -1153,6 +1172,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Pisca, alerta e buzina',
     objective: 'Saber quando usar o pisca-alerta',
     prompt: 'Em qual situação o pisca-alerta deve ser usado?',
+    visual: { kind: 'scene', scene: 'rodovia-dupla', alt: 'Rodovia de pista dupla, com você de carro' },
     options: [
       { id: 'a', text: 'Para parar em fila dupla "só um minutinho"', whyWrong: 'O pisca-alerta não torna permitido o que é proibido.' },
       { id: 'b', text: 'Com o carro parado na via por uma pane' },
@@ -1173,6 +1193,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Pisca, alerta e buzina',
     objective: 'Saber quando usar a buzina',
     prompt: 'Quando o uso da buzina é permitido?',
+    visual: { kind: 'scene', scene: 'verde-fila-parada', alt: 'Semáforo verde, mas a fila adiante está parada' },
     options: [
       { id: 'a', text: 'Para apressar o carro da frente no sinal verde', whyWrong: 'Pressa não é motivo previsto para a buzina.' },
       { id: 'b', text: 'Em toque longo, para chamar alguém', whyWrong: 'A buzina só em toque breve, e não para chamar pessoas.' },
@@ -1193,6 +1214,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Pisca, alerta e buzina',
     objective: 'Saber onde a buzina avisa ultrapassagem',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     statement: 'Na cidade, a buzina pode ser usada para avisar que você vai ultrapassar.',
     answer: false,
     whyWrong: 'Avisar ultrapassagem com a buzina só vale fora das áreas urbanas.',
@@ -1208,6 +1230,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Pisca, alerta e buzina',
     objective: 'Associar cada aviso ao seu uso',
     prompt: 'Associe cada aviso ao momento certo de usar:',
+    visual: { kind: 'scene', scene: 'rodovia-simples', alt: 'Rodovia de pista simples, com você de carro' },
     pairs: [
       { id: 'piscar', left: 'Piscar o farol', right: 'Avisar que vai ultrapassar o da frente' },
       { id: 'alerta', left: 'Pisca-alerta', right: 'Veículo parado em emergência' },
@@ -1227,6 +1250,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Pisca, alerta e buzina',
     objective: 'Saber quando piscar o farol para quem vem de frente',
     prompt: 'Piscar o farol para um carro que vem no sentido contrário serve para:',
+    visual: { kind: 'scene', scene: 'luz-alta-carro-frente', alt: 'Estrada escura com um carro vindo no sentido contrário' },
     options: [
       { id: 'a', text: 'Avisar de um perigo na via' },
       { id: 'b', text: 'Avisar que há fiscalização à frente', whyWrong: 'O CTB só permite piscar para avisar ultrapassagem ou risco à segurança.' },
@@ -1307,6 +1331,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Parada e estacionamento',
     objective: 'Saber o limite da parada onde é proibido estacionar',
     prompt: 'Onde o estacionamento é proibido, a parada pode ser feita?',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas, calçadas e você de carro' },
     options: [
       { id: 'a', text: 'Não, nunca', whyWrong: 'A parada pode, pelo tempo de embarque ou desembarque, sem atrapalhar.' },
       { id: 'b', text: 'Sim, por até 10 minutos', whyWrong: 'O CTB não dá minutos: só o tempo de alguém subir ou descer.' },
@@ -1348,6 +1373,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Posição e portas',
     objective: 'Saber a posição do carro estacionado',
     prompt: 'Sem sinalização especial, como o carro deve ficar estacionado na rua?',
+    visual: { kind: 'scene', scene: 'cruzamento-aproximacao', alt: 'Você chega de carro a um cruzamento de bairro' },
     options: [
       { id: 'a', text: 'No sentido do trânsito, paralelo à pista e junto ao meio-fio' },
       { id: 'b', text: 'Contra o sentido do trânsito, junto ao meio-fio', whyWrong: 'O veículo fica no sentido do fluxo.' },
@@ -1368,6 +1394,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Posição e portas',
     objective: 'Saber como estacionar a moto',
     prompt: 'Sem sinalização especial, como a moto deve ser estacionada?',
+    visual: { kind: 'scene', scene: 'mao-unica', alt: 'Rua de mão única com duas faixas; todos vão no mesmo sentido' },
     options: [
       { id: 'a', text: 'Paralela ao meio-fio, como o carro', whyWrong: 'Para as motos a regra é perpendicular ao meio-fio.' },
       { id: 'b', text: 'Sobre a calçada', whyWrong: 'Calçada não é lugar de estacionar.' },
@@ -1388,6 +1415,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Posição e portas',
     objective: 'Saber o lado de embarque e desembarque',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'mao-unica', alt: 'Rua de mão única com duas faixas; todos vão no mesmo sentido' },
     statement: 'Os passageiros devem subir e descer do carro pelo lado da calçada.',
     answer: true,
     whyWrong: 'É verdadeiro: o embarque e o desembarque devem ocorrer sempre do lado da calçada, exceto para o condutor.',
@@ -1403,6 +1431,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Posição e portas',
     objective: 'Saber onde parar na via com acostamento',
     prompt: 'Numa rodovia com acostamento, você precisa parar. Onde o veículo deve ficar?',
+    visual: { kind: 'scene', scene: 'rodovia-dupla', alt: 'Rodovia de pista dupla, com você de carro' },
     options: [
       { id: 'a', text: 'Na faixa da direita, com o pisca-alerta', whyWrong: 'Com acostamento, o veículo parado fica fora da pista de rolamento.' },
       { id: 'b', text: 'Fora da pista, no acostamento' },
@@ -1423,6 +1452,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Posição e portas',
     objective: 'Abrir a porta com segurança',
     prompt: 'Complete a regra:',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas, calçadas e você de carro' },
     sentence: 'Antes de abrir a porta, veja se isso não é ___ para você e para os outros.',
     bank: ['perigo', 'proibido', 'demorado', 'barulhento'],
     answer: 'perigo',
@@ -1571,6 +1601,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Velocidade nas rodovias',
     objective: 'Associar o tipo de via ao limite',
     prompt: 'Sem placa, associe a via ao limite de um carro:',
+    visual: { kind: 'scene', scene: 'rodovia-dupla', alt: 'Rodovia de pista dupla, com você de carro' },
     pairs: [
       { id: 'dupla', left: 'Rodovia de pista dupla', right: '110 km/h' },
       { id: 'simples', left: 'Rodovia de pista simples', right: '100 km/h' },
@@ -1589,6 +1620,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Cinto e capacete',
     objective: 'Saber quem usa o cinto',
     prompt: 'Quem deve usar o cinto de segurança?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     options: [
       { id: 'a', text: 'Só o motorista e quem vai na frente', whyWrong: 'O cinto é obrigatório para todos os passageiros, também atrás.' },
       { id: 'b', text: 'Todos, só nas rodovias', whyWrong: 'O cinto é obrigatório em todas as vias, também na cidade.' },
@@ -1630,6 +1662,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Cinto e capacete',
     objective: 'Saber que o cinto vale no banco de trás',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'rua-local', alt: 'Rua de bairro com casas, calçadas e você de carro' },
     statement: 'Numa viagem curta pela cidade, quem vai no banco de trás pode ficar sem cinto.',
     answer: false,
     whyWrong: 'O cinto é obrigatório para todos os passageiros, em todas as vias, em qualquer distância.',
@@ -1645,6 +1678,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Cinto e capacete',
     objective: 'Saber o equipamento de quem pilota moto',
     prompt: 'O que o CTB exige de quem pilota uma moto?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     options: [
       { id: 'a', text: 'Capacete com viseira ou óculos, as duas mãos no guidão e roupa de proteção' },
       { id: 'b', text: 'Só o capacete, de qualquer tipo', whyWrong: 'O capacete precisa de viseira ou óculos, e há mais exigências.' },
@@ -1665,6 +1699,7 @@ export const WORLD3_QUESTIONS: Question[] = [
     topic: 'Cinto e capacete',
     objective: 'Saber as regras do passageiro da moto',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'avenida-cidade', alt: 'Avenida da cidade com carros nos dois sentidos' },
     statement: 'O passageiro da moto deve usar capacete e ir no assento atrás de quem pilota.',
     answer: true,
     whyWrong: 'É verdadeiro: o passageiro usa capacete e vai no assento suplementar atrás do condutor ou em carro lateral.',

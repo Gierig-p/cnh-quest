@@ -6,7 +6,7 @@ import { camLook, lines, type Obj, type Part, type V2 } from './engine';
 import { car, cyclist, person } from './models';
 import { campo, estrada } from './Mundo2';
 import { MOCA, RAPAZ, SENHORA } from './Mundo3';
-import { AMARELO, RA, VOCE, VERDE, XM, certo, ease, fazerVideo, janela, lerp, moto, pisca, rastro, ruaChao, ruaObjs, tag, type Quadro } from './videoBase';
+import { AMARELO, RA, VOCE, VERDE, XM, arco, caminho, certo, desvio, ease, freia, fazerVideo, janela, lerp, moto, pisca, rastro, ruaChao, ruaObjs, tag, type Quadro } from './videoBase';
 import tempos from '../../content/videos/portas.json';
 
 const CHAO = ruaChao();
@@ -23,22 +23,24 @@ const VAGAS: Part[] = ruaChao([
 ]);
 const XV = RA - 2.0;
 
-/** o carro chega pela faixa da direita e encosta paralelo ao meio-fio em `yp` */
+/** o carro chega pela faixa da direita e encosta paralelo ao meio-fio em `yp`, numa curva suave (aponta para onde anda) */
 function encosta(t: number, yp: number) {
-  const k = ease(t / 2.2);
-  const y = lerp(yp + 13, yp, k);
-  const x = lerp(1.75, XM, ease((t - 1.0) / 1.0));
-  const h = -0.18 * Math.sin(Math.PI * clamp01((t - 1.0) / 1.0)) * -1;
-  return { x, y, h, para: t > 1.8 };
+  const c = caminho([[1.75, yp + 13], ...desvio(1.75, yp + 6, XM, yp + 0.8), [XM, yp]]);
+  const p = c.em(c.total * freia(t / 2.2));
+  return { x: p.x, y: p.y, h: p.heading, para: t > 1.9 };
 }
 
-/** a moto chega e vira de frente para o meio-fio (em "L") em `yp` */
+/** a moto chega e vira de frente para o meio-fio (em "L") em `yp`, fazendo a curva */
+const XL = RA - 1.25;
 function motoL(t: number, yp: number) {
-  const k = ease(t / 2.0);
-  const y = lerp(yp + 10, yp, k);
-  const kv = ease((t - 1.2) / 1.0);
-  return { x: lerp(1.2, RA - 1.25, kv), y, face: lerp(0, Math.PI / 2, kv) };
+  const c = caminho([[XL - 1.5, yp + 10], ...arco(XL, yp + 1.5, 1.5, Math.PI, Math.PI * 1.5)]);
+  const p = c.em(c.total * freia(t / 2.2));
+  return { x: p.x, y: p.y, face: p.heading };
 }
+
+/** entrada na vaga a 45°: segue reto, faz a curva para a direita e entra de frente */
+const R45 = 3.5, X45 = XV - (1 - Math.SQRT1_2) * R45 - 0.8 * Math.SQRT1_2, Y45 = VY[2] + 4.3 + 0.8 * Math.SQRT1_2 + Math.SQRT1_2 * R45;
+const VAGA = caminho([[X45, 9], ...arco(X45 + R45, Y45, R45, Math.PI, Math.PI * 1.25), [XV, VY[2] + 4.3]]);
 
 function trecho(k: number, lt: number, d: number): Quadro {
   switch (k) {
@@ -96,13 +98,13 @@ function trecho(k: number, lt: number, d: number): Quadro {
     }
     // 3. isso vale quando a sinalização não mandar outra coisa
     case 3: {
-      const kc = ease((lt - 0.4) / 1.8);
-      const ent: V2 = [lerp(1.75, XV, kc), lerp(8, VY[2] + 4.3, kc)];
+      const pv = VAGA.em(VAGA.total * freia((lt - 0.2) / 2.0));
+      const ent: V2 = [pv.x, pv.y];
       const objs: Obj[] = [
         ...OBJS,
         car({ x: XV, y: VY[0] + 4.3, heading: Math.PI / 4, color: '#4f7fc4' }),
         car({ x: XV, y: VY[1] + 4.3, heading: Math.PI / 4, color: '#e0412f' }),
-        car({ x: ent[0], y: ent[1], heading: lerp(0, Math.PI / 4, kc), color: VOCE, brake: lt > 2.0 }),
+        car({ x: ent[0], y: ent[1], heading: pv.heading, color: VOCE, brake: lt > 1.6 }),
       ];
       return {
         cam: cam(-6),
@@ -119,13 +121,13 @@ function trecho(k: number, lt: number, d: number): Quadro {
     }
     // 4. na estrada com acostamento, pare fora da pista
     case 4: {
-      const k = ease(lt / 2.0);
-      const y = lerp(10, -2, k);
-      const x = lerp(1.75, 4.75, ease((lt - 0.5) / 1.3));
+      const ac = caminho([[1.75, 10], ...desvio(1.75, 6.5, 4.75, -0.6), [4.75, -2]]);
+      const pa = ac.em(ac.total * freia(lt / 2.0));
+      const { x, y } = pa;
       return {
         cam: camLook(2.6, -3, 0, 12, 38, 10),
         ground: ESTRADA,
-        objs: [...CAMPO, car({ x, y, heading: 0.15 * Math.sin(Math.PI * clamp01((lt - 0.5) / 1.3)), color: VOCE, brake: lt > 1.2, blink: pisca(lt, lt < 1.8 ? 'r' : 'lr') }), car({ x: 1.75, y: 24 - 6 * lt, color: '#8f98a3' })],
+        objs: [...CAMPO, car({ x, y, heading: pa.heading, color: VOCE, brake: lt > 1.2, blink: pisca(lt, lt < 1.8 ? 'r' : 'lr') }), car({ x: 1.75, y: 24 - 6 * lt, color: '#8f98a3' })],
         over: (pr) => (
           <>
             {tag(pr, [4.75, -6.5, 0.2], 'Acostamento', janela(lt, 0.2, 1.8, 0.2))}
@@ -157,8 +159,9 @@ function trecho(k: number, lt: number, d: number): Quadro {
     // 6. passageiros pelo lado da calçada; só o motorista usa o outro lado
     case 6: {
       const kp = clamp01((lt - 0.4) / 1.6);
-      const door = ease((lt - 2.6) / 0.5);
-      const km = clamp01((lt - 3.1) / 1.4);
+      // a porta abre, o motorista desce, a porta fecha e só então ele anda (não passa pela porta)
+      const door = ease((lt - 2.6) / 0.5) * (1 - ease((lt - 3.5) / 0.4));
+      const km = clamp01((lt - 3.9) / 1.3);
       return {
         cam: cam(-3, 10),
         ground: CHAO,
@@ -166,7 +169,7 @@ function trecho(k: number, lt: number, d: number): Quadro {
           ...OBJS,
           car({ x: XM, y: -2, color: VOCE, door }),
           ...(lt > 0.35 ? [person(lerp(XM + 1.0, RA + 1.8, kp), -2.6, MOCA, kp < 1 ? lt * 6 : 0, Math.PI / 2, 1.2), person(lerp(XM + 1.0, RA + 1.6, clamp01(kp - 0.15)), -1.2, SENHORA, kp < 1 ? lt * 6 : 0, Math.PI / 2, 1.2)] : []),
-          ...(km > 0 ? [person(lerp(XM - 1.4, XM - 1.2, km), lerp(-2.3, -5.8, km), RAPAZ, km < 1 ? lt * 6 : 0, 0, 1.2)] : []),
+          ...(lt > 3.1 ? [person(lerp(XM - 1.5, XM - 1.3, km), lerp(-1.8, -5.8, km), RAPAZ, km > 0 && km < 1 ? lt * 6 : 0, 0, 1.2)] : []),
         ],
         over: (pr) => (
           <>
@@ -181,13 +184,13 @@ function trecho(k: number, lt: number, d: number): Quadro {
       return {
         cam: cam(-4, 10),
         ground: CHAO,
-        objs: [...OBJS, car({ x: XM, y: -1, color: VOCE, door: ease((lt - 4.0) / 0.5) }), moto(RA - 1.25, -6, Math.PI / 2, '#e0412f'), ...(lt > 3 && lt < 4.2 ? [cyclist(0.4, 7 - 6 * (lt - 3), lt * 5, 0, '#ff8a3d')] : [])],
+        objs: [...OBJS, car({ x: XM, y: -1, color: VOCE, door: ease((lt - 4.8) / 0.5) }), moto(RA - 1.25, -6, Math.PI / 2, '#e0412f'), ...(lt > 2.0 ? [cyclist(0.4, 12 - 6 * (lt - 2.0), lt * 5, 0, '#ff8a3d')] : [])],
         over: (pr) => (
           <>
             {tag(pr, [XM, -0.6, 2.2], 'Carro paralelo', janela(lt, 0.2, d))}
             {tag(pr, [RA - 1.25, -6, 2.4], 'Moto em "L"', janela(lt, 1.5, d))}
             {tag(pr, [XM - 2.6, 3.0, 0.2], 'Porta: olhe antes', ease((lt - 3.0) / 0.3))}
-            {certo(pr, [XM + 1.8, -1, 0.6], ease((lt - 4.4) / 0.3))}
+            {certo(pr, [XM + 1.8, -1, 0.6], ease((lt - 5.2) / 0.3))}
           </>
         ),
       };

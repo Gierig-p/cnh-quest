@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores' | 'marcas-linhas' | 'marcas-transversais' | 'semaforo' | 'semaforo-pisca' | 'naturezas' | 'penalidades' | 'suspensao' | 'cassacao' | 'velocidade-sinal' | 'celular-cinto' | 'alcool' | 'recusa-racha' | 'crimes-vitima' | 'crimes-perigo' | 'auto-notificacao' | 'defesa-recurso' | 'defensiva' | 'fatores' | 'manutencao' | 'freios-luzes' | 'posicao' | 'retrovisores' | 'reacao' | 'distracao' | 'dois-segundos' | 'velocidade-via' | 'chuva' | 'neblina';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores' | 'marcas-linhas' | 'marcas-transversais' | 'semaforo' | 'semaforo-pisca' | 'naturezas' | 'penalidades' | 'suspensao' | 'cassacao' | 'velocidade-sinal' | 'celular-cinto' | 'alcool' | 'recusa-racha' | 'crimes-vitima' | 'crimes-perigo' | 'auto-notificacao' | 'defesa-recurso' | 'defensiva' | 'fatores' | 'manutencao' | 'freios-luzes' | 'posicao' | 'retrovisores' | 'reacao' | 'distracao' | 'dois-segundos' | 'velocidade-via' | 'chuva' | 'neblina' | 'sequencia' | 'calma' | 'telefones';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -827,6 +827,54 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Um exemplo: de manhã cedo, na serra, a neblina fecha. Rui acende a luz baixa, aumenta a distância e reduz.',
       'Quando quase não enxerga mais, ele para num posto e espera.',
       'Para guardar: neblina, luz baixa, nunca alta.',
+    ],
+  },
+  // cartão c6-sequencia (cartilha de primeiros socorros ABRAMET/DENATRAN 2005, p. 6, 8, 9 e 16)
+  sequencia: {
+    falas: [
+      'Primeiros socorros são as primeiras providências no local do sinistro: um atendimento inicial e temporário, até chegar o socorro profissional.',
+      'Sempre existe um tempo até o socorro chegar. Nesses minutos, só estão no local os envolvidos e quem passa por ali.',
+      'Cada sinistro é diferente, mas a ordem das ações é sempre a mesma.',
+      'Primeiro, manter a calma. Segundo, garantir a segurança.',
+      'Terceiro, pedir socorro. Quarto, controlar a situação.',
+      'Quinto, verificar as vítimas. Sexto, fazer algumas ações com as vítimas.',
+      'Uma ação pode começar antes de a outra terminar. Você pode começar a sinalizar, parar para pedir socorro e depois voltar a sinalizar.',
+      'Com várias pessoas, as ações acontecem ao mesmo tempo: uma telefona enquanto outra sinaliza.',
+      'Um exemplo: um carro bate num muro. Até a ambulância chegar, quem passa mantém a calma e sinaliza a pista.',
+      'Depois chama o socorro, e só então vai até a vítima.',
+      'Para guardar: calma, segurança, socorro, controle, vítimas, ações.',
+    ],
+  },
+  // cartão c6-calma (cartilha de primeiros socorros 2005, p. 11 e 12)
+  calma: {
+    falas: [
+      'Depois de um sinistro, o susto e o medo levam a atitudes desesperadas, que costumam piorar tudo.',
+      'Antes de agir, recupere a calma: pare e pense, sem agir por impulso. Respire fundo algumas vezes.',
+      'Veja se você se feriu, avalie a gravidade do sinistro e conforte quem está no seu veículo.',
+      'Depois, alguém precisa organizar a ajuda. Se alguém já tomou a frente, ofereça ajuda.',
+      'Se ninguém tomou, procure entre os presentes um médico, bombeiro, policial ou outro profissional acostumado com emergências.',
+      'Se não houver ninguém mais preparado, assuma: mostre firmeza, peça ajuda, distribua tarefas e não perca tempo discutindo.',
+      'Quem lidera também trabalha, e não fica só dando ordens. Agradeça e elogie cada ação.',
+      'Um exemplo: depois da batida, Lia para, respira fundo e vê que não se machucou.',
+      'Ela acalma o filho no banco de trás.',
+      'Só então sai do carro para ajudar.',
+      'Para guardar: pare, respire, confira você e só então aja.',
+    ],
+  },
+  // cartão c6-telefones (cartilha de primeiros socorros 2005, p. 13 e 14)
+  telefones: {
+    falas: [
+      'Quanto mais cedo o socorro profissional chega, melhor para as vítimas. Peça socorro o mais rápido possível.',
+      'Os serviços são gratuitos.',
+      'Cento e noventa e três, Corpo de Bombeiros: vítimas presas nas ferragens, fogo, fumaça, vazamento de combustível ou gás.',
+      'O cento e noventa e três atende também lugares instáveis, como ribanceiras.',
+      'Cento e noventa e dois, SAMU: qualquer tipo de sinistro e mal súbito na via pública ou na rodovia.',
+      'Cento e noventa, Polícia Militar: quando o lugar não tem serviço próprio de socorro.',
+      'Nas rodovias, o número muda de uma para outra: pode ser da Polícia Rodoviária, da concessionária ou de outro serviço.',
+      'Muitas rodovias têm telefones de emergência no acostamento.',
+      'Anote o número de emergência da rodovia assim que entrar nela. Não confie na memória.',
+      'Um exemplo: ao entrar na rodovia, Bruno vê a placa com o telefone de emergência da concessionária e salva o número no celular.',
+      'Para guardar: cento e noventa e três, Bombeiros. Cento e noventa e dois, SAMU. Cento e noventa, Polícia.',
     ],
   },
 };

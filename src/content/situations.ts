@@ -378,6 +378,7 @@ export const WORLD3_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'Pelo retrovisor, você vê um carro chegando rápido. Ele quer passar.' },
     ],
     prompt: 'O que você faz?',
+    visual: { kind: 'scene', scene: 'rodovia-esquerda-carro-atras', alt: 'Rodovia com duas faixas no mesmo sentido: você na faixa da esquerda e um carro vermelho chegando rápido logo atrás' },
     options: [
       { id: 'a', text: 'Acelero para ele não me passar', whyWrong: 'Quem está sendo ultrapassado não pode acelerar.' },
       { id: 'b', text: 'Fico na esquerda, porque estou no limite', whyWrong: 'Na faixa da esquerda, o CTB manda ir para a direita quando alguém quer ultrapassar.' },
@@ -405,6 +406,7 @@ export const WORLD3_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'A estrada começa a subir. Você não consegue ver o que vem do outro lado do morro.' },
     ],
     prompt: 'Você pode ultrapassar agora?',
+    visual: { kind: 'scene', scene: 'subida-caminhao', alt: 'Estrada de mão dupla e pista única: um caminhão devagar começa a subir o morro à sua frente, e não dá para ver o outro lado do topo' },
     options: [
       { id: 'a', text: 'Sim, se eu acelerar bastante', whyWrong: 'A velocidade não resolve: você não vê quem vem de frente.' },
       { id: 'b', text: 'Não. Espero um trecho com boa visão para passar' },
@@ -432,6 +434,7 @@ export const WORLD3_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'O sinal fica verde. Se você entrar agora, vai ficar parado no meio do cruzamento.' },
     ],
     prompt: 'O que você faz?',
+    visual: { kind: 'scene', scene: 'verde-fila-parada', alt: 'Semáforo verde para você, com uma fila de carros parada do outro lado do cruzamento' },
     options: [
       { id: 'a', text: 'Entro, porque o sinal está verde', whyWrong: 'Mesmo com o verde, não entre se você pode ficar parado no cruzamento.' },
       { id: 'b', text: 'Entro e ligo o pisca-alerta', whyWrong: 'O pisca-alerta não tira você do caminho de quem cruza.' },
@@ -459,6 +462,7 @@ export const WORLD3_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'De repente, começa uma chuva forte. Fica difícil ver os outros carros.' },
     ],
     prompt: 'Qual luz você acende?',
+    visual: { kind: 'scene', scene: 'chuva-cidade', alt: 'De dia, numa avenida da cidade, debaixo de chuva forte' },
     options: [
       { id: 'a', text: 'Nenhuma, porque ainda é dia', whyWrong: 'Com chuva, a luz baixa fica acesa mesmo de dia.' },
       { id: 'b', text: 'A luz alta, para ver melhor', whyWrong: 'A luz alta ofusca os outros motoristas. Na chuva, use a baixa.' },
@@ -514,6 +518,7 @@ export const WORLD3_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'A escola fica a três quadras. Ela pede para ir no banco da frente, do seu lado.' },
     ],
     prompt: 'Onde ela vai?',
+    visual: { kind: 'scene', scene: 'crianca-carro-menina', alt: 'Sua sobrinha de 7 anos e 1,20 m na calçada, perto do seu carro, com um adulto' },
     options: [
       { id: 'a', text: 'Na frente, de cinto, porque é perto', whyWrong: 'A distância não muda a regra: com menos de 10 anos e de 1,45 m, ela vai atrás.' },
       { id: 'b', text: 'No colo de alguém, no banco de trás', whyWrong: 'O colo não protege numa batida.' },
@@ -662,6 +667,7 @@ export const WORLD4_SITUATIONS: Question[] = [
       { kind: 'fala', text: 'Nesse dia, quem estava dirigindo era o seu irmão, que tem CNH.' },
     ],
     prompt: 'O que você faz?',
+    visual: { kind: 'scene', scene: 'notificacao-casa', alt: 'Uma carta chega na caixa de correio, na frente de casa' },
     options: [
       { id: 'a', text: 'Indico meu irmão como condutor, em até 30 dias da notificação' },
       { id: 'b', text: 'Não faço nada: a multa vai sozinha para ele', whyWrong: 'Sem indicação, a infração fica com o principal condutor cadastrado ou com o proprietário.' },
@@ -710,6 +716,8 @@ export const WORLD4_SITUATIONS: Question[] = [
 
 const V5 = '2026-11-16';
 const DD = (locator: string) => ({ sourceId: 'dd2005', locator });
+const V6 = '2026-11-18';
+const PS = (locator: string) => ({ sourceId: 'ps2005', locator });
 
 export const WORLD5_SITUATIONS: Question[] = [
   // base: w5-l6-q3 e w5-l6-q4
@@ -878,6 +886,177 @@ export const WORLD5_SITUATIONS: Question[] = [
     mnemonic: 'Bola na rua? Criança logo atrás.',
     sources: [DD('p. 12')],
     verifiedAt: V5,
+    review: 'verificado',
+  },
+];
+
+/* ---------------- Mundo 6 — Emergências e primeiros socorros ---------------- */
+
+export const WORLD6_SITUATIONS: Question[] = [
+  // base: w6-l3-q1, w6-l3-q4 e w6-l3-q10
+  {
+    id: 'w6-rua-1',
+    type: 'choice',
+    module: 'primeiros-socorros',
+    topic: 'Sinalização do local',
+    objective: 'Sinalizar um sinistro à noite, depois de uma curva',
+    situation: [
+      { kind: 'som', som: 'noite', label: 'noite na estrada' },
+      { kind: 'fala', text: 'É noite na rodovia. Logo depois de uma curva, você vê um carro batido na pista.' },
+      { kind: 'fala', text: 'Você é o primeiro a chegar. Ainda não há ninguém ajudando.' },
+    ],
+    prompt: 'O que você faz?',
+    visual: { kind: 'scene', scene: 'sinistro-curva-noite', alt: 'À noite, uma curva na estrada; logo depois dela, um carro batido' },
+    options: [
+      { id: 'a', text: 'Paro num lugar seguro, ligo o pisca-alerta e sinalizo antes da curva, com o dobro da distância' },
+      { id: 'b', text: 'Paro ao lado do carro batido, no meio da pista', whyWrong: 'Parado ali, sem sinalizar, você vira o próximo alvo de quem sai da curva.' },
+      { id: 'c', text: 'Coloco o triângulo logo depois da curva, perto do carro', whyWrong: 'Logo depois da curva ninguém vê o aviso a tempo. Sinalize antes dela.' },
+      { id: 'd', text: 'Corro direto até a vítima e deixo a sinalização para depois', whyWrong: 'Sem sinalização, pode haver uma nova colisão com você e a vítima.' },
+    ],
+    correct: 'a',
+    difficulty: 2,
+    explanation: 'Comece a sinalizar antes de os motoristas verem o sinistro. Com curva, recomece a contagem depois dela. À noite, dobre a distância e use luz.',
+    mnemonic: 'Avise antes da curva. Noite: o dobro.',
+    sources: [PS('p. 18'), PS('p. 19'), PS('p. 20'), PS('p. 21')],
+    verifiedAt: V6,
+    review: 'verificado',
+  },
+  // base: w6-l2-q7 e w6-l2-q10
+  {
+    id: 'w6-rua-2',
+    type: 'choice',
+    module: 'primeiros-socorros',
+    topic: 'Pedir socorro',
+    objective: 'Passar as informações certas ao pedir socorro',
+    situation: [
+      { kind: 'som', som: 'avenida', label: 'avenida' },
+      { kind: 'fala', text: 'Uma moto bateu num carro na avenida. O motociclista está caído e o motorista não consegue sair.' },
+      { kind: 'fala', text: 'Você liga para o 192. A atendente pergunta o que aconteceu.' },
+    ],
+    prompt: 'O que você diz?',
+    visual: { kind: 'scene', scene: 'sinistro-avenida', alt: 'Avenida com uma moto e um carro batidos e o motociclista no chão' },
+    options: [
+      { id: 'a', text: 'Digo que a culpa foi do motorista do carro', whyWrong: 'A culpa não ajuda a equipe a socorrer. Diga o local, as vítimas e os perigos.' },
+      { id: 'b', text: 'Moto e carro bateram, digo a rua e um número próximo, duas vítimas e uma presa no carro' },
+      { id: 'c', text: 'Peço que venham rápido e desligo', whyWrong: 'Sem o local e o número de vítimas, a equipe não sabe para onde ir nem o que levar.' },
+      { id: 'd', text: 'Descrevo a marca e a cor dos veículos', whyWrong: 'Isso não muda o socorro. Importam o local, as vítimas e se há alguém preso.' },
+    ],
+    correct: 'b',
+    difficulty: 1,
+    explanation: 'Informe o tipo do sinistro, o local com rua e número próximo, quantas vítimas há e se alguém está preso.',
+    mnemonic: 'O quê, onde, quantos e quais perigos.',
+    sources: [PS('p. 15')],
+    verifiedAt: V6,
+    review: 'verificado',
+  },
+  // base: w6-l6-q2 e w6-l5-q2
+  {
+    id: 'w6-rua-3',
+    type: 'choice',
+    module: 'primeiros-socorros',
+    topic: 'O que não fazer',
+    objective: 'Cuidar do motociclista caído sem tirar o capacete',
+    situation: [
+      { kind: 'som', som: 'cidade', label: 'rua da cidade' },
+      { kind: 'fala', text: 'Um motociclista caiu na rua. Ele está deitado, de capacete, e responde quando você fala.' },
+      { kind: 'fala', text: 'O socorro já foi chamado. Ele pede: tira o meu capacete, por favor.' },
+    ],
+    prompt: 'O que você faz?',
+    options: [
+      { id: 'a', text: 'Tiro o capacete com cuidado, porque ele pediu', whyWrong: 'Tirar o capacete mexe a cabeça e pode piorar lesões no pescoço.' },
+      { id: 'b', text: 'Ajudo ele a se sentar para respirar melhor', whyWrong: 'Mexer no tronco pode piorar uma lesão na coluna.' },
+      { id: 'c', text: 'Giro o capacete devagar para ver o rosto dele', whyWrong: 'Girar o capacete mexe o pescoço. Não mexa.' },
+      { id: 'd', text: 'Explico com calma que é melhor esperar o socorro e fico ao lado dele' },
+    ],
+    correct: 'd',
+    difficulty: 1,
+    explanation: 'Não tire o capacete do motociclista: isso mexe a cabeça. Converse com calma, informe o que está acontecendo e fique onde ele possa ver você.',
+    mnemonic: 'Capacete fica. Você fica junto.',
+    sources: [PS('p. 28'), PS('p. 32')],
+    verifiedAt: V6,
+    review: 'verificado',
+  },
+  // base: w6-l4-q9 e w6-l4-q10
+  {
+    id: 'w6-rua-4',
+    type: 'choice',
+    module: 'primeiros-socorros',
+    topic: 'Cabos elétricos',
+    objective: 'Agir com cabo de energia caído sobre o carro',
+    situation: [
+      { kind: 'som', som: 'bairro', label: 'rua de bairro' },
+      { kind: 'fala', text: 'Um carro bateu num poste. O cabo de energia caiu sobre o teto.' },
+      { kind: 'fala', text: 'Há duas pessoas dentro do carro. Os pneus estão inteiros. Um curioso se aproxima para puxar o cabo.' },
+    ],
+    prompt: 'O que você faz?',
+    visual: { kind: 'scene', scene: 'cabo-carro-curioso', alt: 'Carro batido num poste, com o cabo de energia sobre o teto e uma pessoa chegando perto' },
+    options: [
+      { id: 'a', text: 'Ajudo o curioso a puxar o cabo com um galho molhado', whyWrong: 'Madeira molhada conduz eletricidade. Ninguém deve tocar no cabo.' },
+      { id: 'b', text: 'Peço que as pessoas saiam correndo do carro', whyWrong: 'O choque acontece ao tocar o chão. Dentro do carro, com pneus inteiros, elas estão mais seguras.' },
+      { id: 'c', text: 'Afasto o curioso, isolo o local e peço, de longe, que as pessoas fiquem dentro do carro' },
+      { id: 'd', text: 'Encosto na lataria para ver se dá choque', whyWrong: 'Nunca toque no carro nem no cabo. Pode matar.' },
+    ],
+    correct: 'c',
+    difficulty: 2,
+    explanation: 'Nunca toque no cabo caído. Isole o local e afaste os curiosos. Com os pneus inteiros, quem está dentro fica seguro se não tocar o chão.',
+    mnemonic: 'Cabo caído: não toque e não deixe descer.',
+    sources: [PS('p. 25'), PS('p. 26')],
+    verifiedAt: V6,
+    review: 'verificado',
+  },
+  // base: w6-l6-q3 e w6-l5-q2
+  {
+    id: 'w6-rua-5',
+    type: 'choice',
+    module: 'primeiros-socorros',
+    topic: 'O que não fazer',
+    objective: 'Não dar água para a vítima',
+    situation: [
+      { kind: 'som', som: 'cidade', label: 'rua da cidade' },
+      { kind: 'fala', text: 'Uma motorista bateu o carro e está sentada ao volante, esperando o SAMU.' },
+      { kind: 'fala', text: 'Ela diz que está com muita sede e pede a garrafa de água que você tem no carro.' },
+    ],
+    prompt: 'O que você faz?',
+    options: [
+      { id: 'a', text: 'Dou só um gole, para não fazer mal', whyWrong: 'Nem um gole: nada deve ser dado para a vítima beber, nem água.' },
+      { id: 'b', text: 'Explico com calma que não posso dar nada e que o socorro já está vindo' },
+      { id: 'c', text: 'Molho um pano e ponho na boca dela', whyWrong: 'Também é dar líquido. A vítima não deve ingerir nada.' },
+      { id: 'd', text: 'Ignoro o pedido sem dizer nada', whyWrong: 'Ouvir e informar ajuda a vítima a se acalmar. Explique com calma.' },
+    ],
+    correct: 'b',
+    difficulty: 1,
+    explanation: 'Não dê nada para a vítima beber ou comer, nem água. Explique com calma, ouça e fique junto até o socorro chegar.',
+    mnemonic: 'Vítima não bebe nada. Explique e fique junto.',
+    sources: [PS('p. 28'), PS('p. 33')],
+    verifiedAt: V6,
+    review: 'verificado',
+  },
+  // base: w6-l4-q7 e w6-l4-q2
+  {
+    id: 'w6-rua-6',
+    type: 'choice',
+    module: 'primeiros-socorros',
+    topic: 'Incêndio',
+    objective: 'Agir com vazamento de combustível e curiosos',
+    situation: [
+      { kind: 'som', som: 'estrada', label: 'estrada' },
+      { kind: 'fala', text: 'Na estrada, um carro bateu e está vazando combustível. O motor continua ligado e não há ninguém dentro.' },
+      { kind: 'fala', text: 'Alguns curiosos se juntam em volta, e um deles acende um cigarro.' },
+    ],
+    prompt: 'O que você faz?',
+    visual: { kind: 'scene', scene: 'vazamento-curiosos', alt: 'Carro batido com combustível vazando e curiosos em volta, um deles com um cigarro' },
+    options: [
+      { id: 'a', text: 'Deixo os curiosos ali, porque podem ajudar', whyWrong: 'Gente perto do vazamento corre risco se houver incêndio.' },
+      { id: 'b', text: 'Jogo água no combustível para limpar a pista', whyWrong: 'Isso não está entre as medidas. Afaste as pessoas e evite qualquer chama.' },
+      { id: 'c', text: 'Peço que alguém ligue o carro de novo e o tire dali', whyWrong: 'O motor deve ser desligado, se for fácil e seguro, e não ligado.' },
+      { id: 'd', text: 'Afasto os curiosos, peço que apaguem o cigarro, desligo o motor se for fácil e seguro e deixo o extintor pronto de longe' },
+    ],
+    correct: 'd',
+    difficulty: 2,
+    explanation: 'Com vazamento, afaste os curiosos, não deixe ninguém fumar, desligue o motor se for fácil e seguro e deixe o extintor pronto a uma distância segura.',
+    mnemonic: 'Vazou combustível: longe, sem cigarro, extintor pronto.',
+    sources: [PS('p. 24')],
+    verifiedAt: V6,
     review: 'verificado',
   },
 ];

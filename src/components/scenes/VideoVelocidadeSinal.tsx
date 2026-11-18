@@ -6,8 +6,9 @@
  */
 import type { ReactNode } from 'react';
 import { utilitario } from './veiculos';
+import { car } from './models';
 import { NAT, TINTA, chip, item, quadro, ruaFundo, surge } from './infracoesUI';
-import { RA, clamp, ease, escuro, fazerVideo, lerp, placa, type Quadro } from './videoBase';
+import { RA, VOCE, clamp, ease, escuro, fazerVideo, lerp, placa, type Quadro } from './videoBase';
 import tempos from '../../content/videos/velocidade-sinal.json';
 
 const VM = NAT[3].cor;
@@ -151,9 +152,18 @@ function trecho(k: number, lt: number): Quadro {
       ) };
     // 7. ultrapassar pela contramão em lugares perigosos: gravíssima × 5
     case 7: {
-      const yv = 4 - 2.2 * lt;
-      const xv = lerp(XV, -1.75, ease((lt - 0.6) / 1.2));
-      const qq = ruaFundo(lt, [utilitario({ x: XV, y: yv - 7 + 1.2 * lt, tipo: 'caminhao' })], 4, xv);
+      // quem ultrapassa vai mais rápido (4 m/s na cena); a câmera acompanha
+      const V = 4;
+      const yv = 4 - V * lt;
+      // troca de faixa em curva suave, com o bico virando para onde o carro vai (sem deslizar de lado);
+      // o caminhão começa longe o bastante para o carro já estar na outra faixa quando chegar perto
+      const mude = (u: number) => lerp(XV, -1.75, ease((u - 0.3) / 2.6));
+      const xv = mude(lt);
+      const heading = Math.atan2((mude(lt + 0.02) - mude(lt - 0.02)) / 0.04, V);
+      const qq = ruaFundo((lt * V) / 2.2, [
+        utilitario({ x: XV, y: yv - 11 + 1.6 * lt, tipo: 'caminhao' }),
+        car({ x: xv, y: yv, color: VOCE, heading }),
+      ], 4, 99);
       return { ...qq, over: () => (
         <>
           {chip(160, 24, 'Contramão em lugar perigoso', TINTA, surge(lt, 1.8), 10)}

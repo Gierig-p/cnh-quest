@@ -386,6 +386,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Placas de regulamentação',
     objective: 'Diferenciar proibição de conversão e de retorno',
     prompt: 'Segundo o manual de sinalização, para proibir AO MESMO TEMPO a conversão e o retorno à esquerda, o que deve ser usado?',
+    visual: { kind: 'scene', scene: 'cruzamento-aproximacao', alt: 'Você chega de carro a um cruzamento de bairro' },
     options: [
       { id: 'a', text: 'Só a placa R-4a, que já proíbe os dois movimentos', whyWrong: 'O manual diz que a R-4a não implica proibição de retorno.' },
       { id: 'b', text: 'As placas R-4a e R-5a' },
@@ -522,6 +523,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Placas de advertência',
     objective: 'Reconhecer a exceção de cor da placa de obras',
     prompt: 'Qual é a cor de fundo da placa de advertência de OBRAS (A-24)?',
+    visual: { kind: 'scene', scene: 'obra-placa-costas', alt: 'Obra na rua com cavaletes e um operário; a placa de aviso aparece de costas' },
     options: [
       { id: 'a', text: 'Amarela', whyWrong: 'Amarela é o padrão das advertências, mas a placa de obras é uma exceção.' },
       { id: 'b', text: 'Laranja' },
@@ -570,6 +572,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Placas de advertência',
     objective: 'Diferenciar A-15 de R-1',
     prompt: 'A placa A-15 "Parada obrigatória à frente" serve para:',
+    visual: { kind: 'sign', sign: 'A-15', alt: 'Placa amarela A-15' },
     options: [
       { id: 'a', text: 'Mandar parar exatamente no ponto onde ela está', whyWrong: 'Quem manda parar é a R-1 (PARE). A A-15 é uma advertência.' },
       { id: 'b', text: 'Avisar que, adiante, há um semáforo', whyWrong: 'Esse aviso é o da A-14 "Semáforo à frente".' },
@@ -665,6 +668,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Placas de advertência',
     objective: 'Relacionar advertência e regulamentação',
     prompt: 'Complete a regra:',
+    visual: { kind: 'sign', sign: 'A-37', alt: 'Placa amarela A-37' },
     sentence: 'A placa amarela A-37 "Altura limitada" deve vir antes da placa de regulamentação ___ "Altura máxima permitida".',
     bank: ['R-15', 'R-1', 'R-26', 'R-33'],
     answer: 'R-15',
@@ -739,6 +743,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Placas de indicação',
     objective: 'Associar a cor marrom aos atrativos turísticos',
     prompt: 'Qual é a cor de fundo das placas que indicam atrativos turísticos?',
+    visual: { kind: 'scene', scene: 'estrada-placas-costas', alt: 'Estrada com placas de indicação vistas por trás' },
     options: [
       { id: 'a', text: 'Verde', whyWrong: 'Verde é das placas de orientação de destino.' },
       { id: 'b', text: 'Azul', whyWrong: 'Azul é das placas de identificação, serviços auxiliares e postos de fiscalização.' },
@@ -761,6 +766,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Placas de indicação',
     objective: 'Associar a cor azul aos serviços auxiliares',
     prompt: 'Qual é a cor de fundo das placas de serviços auxiliares, que mostram onde encontrar serviços?',
+    visual: { kind: 'scene', scene: 'estrada-placas-costas', alt: 'Estrada com placas de indicação vistas por trás' },
     options: [
       { id: 'a', text: 'Azul' },
       { id: 'b', text: 'Marrom', whyWrong: 'Marrom é das placas de atrativos turísticos.' },
@@ -783,6 +789,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Placas de indicação',
     objective: 'Ler a placa de distâncias',
     prompt: 'Numa placa de distâncias com três cidades, como elas aparecem?',
+    visual: { kind: 'scene', scene: 'estrada-placas-costas', alt: 'Estrada com placas de indicação vistas por trás' },
     options: [
       { id: 'a', text: 'Em ordem alfabética', whyWrong: 'O manual manda organizar pela distância, não pelo nome.' },
       { id: 'b', text: 'Da mais perto, em cima, para a mais longe, embaixo' },
@@ -807,6 +814,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Placas de indicação',
     objective: 'Reconhecer as placas educativas',
     prompt: 'Como são as cores das placas educativas?',
+    visual: { kind: 'scene', scene: 'estrada-placas-costas', alt: 'Estrada com placas de indicação vistas por trás' },
     options: [
       { id: 'a', text: 'Fundo azul e letras brancas', whyWrong: 'Azul com branco é das placas de identificação e de serviços.' },
       { id: 'b', text: 'Fundo verde e letras brancas', whyWrong: 'Verde com branco é das placas de orientação de destino.' },
@@ -831,6 +839,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Placas de indicação',
     objective: 'Associar cores de fundo aos grupos de indicação',
     prompt: 'Associe a cor de fundo ao grupo de placas de indicação:',
+    visual: { kind: 'scene', scene: 'estrada-placas-costas', alt: 'Estrada com placas de indicação vistas por trás' },
     pairs: [
       { id: 'verde', left: 'Verde', right: 'Orientação de destino' },
       { id: 'azul', left: 'Azul', right: 'Serviços auxiliares' },
@@ -854,6 +863,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Sinalização horizontal',
     objective: 'Associar a cor amarela à divisão de fluxos opostos',
     prompt: 'Qual é a cor da pintura no chão que separa os veículos que vão dos que vêm (fluxos opostos)?',
+    visual: { kind: 'scene', scene: 'cruzamento-sem-pintura', alt: 'Cruzamento ainda sem nenhuma pintura no chão, com carros nos dois sentidos' },
     options: [
       { id: 'a', text: 'Branca', whyWrong: 'A branca separa faixas de mesmo sentido.' },
       { id: 'b', text: 'Amarela' },
@@ -955,6 +965,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Sinalização horizontal',
     objective: 'Associar a cor vermelha às ciclovias',
     prompt: 'Na sinalização horizontal, para que é usada a cor vermelha?',
+    visual: { kind: 'scene', scene: 'cruzamento-sem-pintura', alt: 'Cruzamento ainda sem nenhuma pintura no chão, com carros e um ciclista' },
     options: [
       { id: 'a', text: 'Para demarcar ciclovias e ciclofaixas' },
       { id: 'b', text: 'Para mostrar onde é proibido ultrapassar', whyWrong: 'A proibição de ultrapassar é marcada por linhas contínuas, amarelas ou brancas.' },
@@ -1072,6 +1083,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Semáforo',
     objective: 'Conhecer a ordem das luzes',
     prompt: 'Num semáforo veicular vertical, qual é a ordem das luzes de cima para baixo?',
+    visual: { kind: 'scene', scene: 'semaforo-costas', alt: 'Cruzamento com semáforos vistos de trás, sem dar para ver as luzes' },
     options: [
       { id: 'a', text: 'Verde, amarelo, vermelho', whyWrong: 'Essa é a sequência em que as luzes acendem, não a posição delas.' },
       { id: 'b', text: 'Amarelo, vermelho, verde', whyWrong: 'O vermelho fica em cima, e o amarelo no meio.' },
@@ -1121,6 +1133,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Semáforo',
     objective: 'Ordenar a sequência de acionamento das luzes',
     prompt: 'Ordene as luzes do semáforo de veículos na sequência em que acendem, começando pelo verde:',
+    visual: { kind: 'scene', scene: 'semaforo-costas', alt: 'Cruzamento com semáforos vistos de trás, sem dar para ver as luzes' },
     items: [
       { id: 'vermelho', text: 'Vermelho' },
       { id: 'verde', text: 'Verde' },
@@ -1142,6 +1155,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Semáforo',
     objective: 'Relacionar semáforo e linha de retenção',
     prompt: 'Complete a regra:',
+    visual: { kind: 'scene', scene: 'cruzamento-sem-pintura-semaforo', alt: 'Cruzamento com semáforo, mas ainda sem pintura no chão' },
     sentence: 'Pelo manual, a sinalização semafórica deve vir acompanhada da linha de ___ em todas as aproximações.',
     bank: ['retenção', 'bordo', 'ultrapassagem'],
     answer: 'retenção',
@@ -1251,6 +1265,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Placas de indicação',
     objective: 'Lembrar o limite de destinos por placa',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'estrada-placas-costas', alt: 'Estrada com placas de indicação vistas por trás' },
     statement: 'Uma placa de distâncias pode mostrar, no máximo, três destinos.',
     answer: true,
     whyWrong: 'É verdadeiro: o manual limita a placa de distâncias a, no máximo, três mensagens.',
@@ -1292,6 +1307,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Placas de indicação',
     objective: 'Lembrar a ordem das distâncias',
     prompt: 'Complete:',
+    visual: { kind: 'scene', scene: 'estrada-placas-costas', alt: 'Estrada com placas de indicação vistas por trás' },
     sentence: 'Nas placas de distância, as cidades aparecem em ordem ___ das distâncias, de cima para baixo.',
     bank: ['crescente', 'decrescente', 'alfabética'],
     answer: 'crescente',
@@ -1313,6 +1329,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Sinalização horizontal',
     objective: 'Associar as cores do chão à função',
     prompt: 'Associe a cor da pintura no chão à sua função:',
+    visual: { kind: 'scene', scene: 'cruzamento-sem-pintura', alt: 'Cruzamento ainda sem nenhuma pintura no chão' },
     pairs: [
       { id: 'amarela', left: 'Amarela', right: 'Separar fluxos opostos' },
       { id: 'branca', left: 'Branca', right: 'Separar faixas do mesmo sentido' },
@@ -1334,6 +1351,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Sinalização horizontal',
     objective: 'Associar a cor branca à faixa de pedestres e à linha de retenção',
     prompt: 'Verdadeiro ou falso?',
+    visual: { kind: 'scene', scene: 'cruzamento-sem-pintura', alt: 'Cruzamento ainda sem nenhuma pintura no chão' },
     statement: 'A faixa de pedestres e a linha de retenção são pintadas de branco.',
     answer: true,
     whyWrong: 'É verdadeiro: pelo padrão de cores, a branca regulamenta as travessias de pedestres e demarca a linha de retenção.',
@@ -1393,6 +1411,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Sinalização horizontal',
     objective: 'Associar as marcas transversais ao significado',
     prompt: 'Associe cada pintura ao seu significado:',
+    visual: { kind: 'scene', scene: 'rua-sinais', alt: 'Cruzamento com pinturas no chão, placa, semáforo e agente' },
     pairs: [
       { id: 'lre', left: 'Linha de retenção', right: 'Local limite para parar o veículo' },
       { id: 'ftp', left: 'Faixa de pedestres', right: 'Travessia com prioridade dos pedestres' },
@@ -1417,6 +1436,7 @@ export const WORLD2_QUESTIONS: Question[] = [
     topic: 'Semáforo',
     objective: 'Ordenar a sequência do semáforo de pedestres',
     prompt: 'Ordene as luzes do semáforo de PEDESTRES na sequência em que aparecem, começando pelo verde:',
+    visual: { kind: 'scene', scene: 'semaforo-costas', alt: 'Cruzamento com semáforos vistos de trás, sem dar para ver as luzes' },
     items: [
       { id: 'vermelho', text: 'Vermelho fixo' },
       { id: 'verde', text: 'Verde' },

@@ -10,7 +10,7 @@ import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 // @ts-ignore: módulo .mjs sem tipos
 import { efeito, falaPausada, RAIZ } from './eleven.mjs';
-import { WORLD1_SITUATIONS, WORLD2_SITUATIONS, WORLD3_SITUATIONS, WORLD4_SITUATIONS, WORLD5_SITUATIONS } from '../../src/content/situations';
+import { WORLD1_SITUATIONS, WORLD2_SITUATIONS, WORLD3_SITUATIONS, WORLD4_SITUATIONS, WORLD5_SITUATIONS, WORLD6_SITUATIONS } from '../../src/content/situations';
 
 /** Voz escolhida pelo dono em 14/11/2026: Davi Andrei (pt-BR), a mesma dos cartões. */
 const VOZ = '2CECaLAGTS5NRGxgbcxr';
@@ -50,7 +50,7 @@ async function som(chave: string) {
   return efeito(s.prompt, s.segundos, join(TMP, `som_${chave}.mp3`)) as Promise<string>;
 }
 
-const todas = [...WORLD1_SITUATIONS, ...WORLD2_SITUATIONS, ...WORLD3_SITUATIONS, ...WORLD4_SITUATIONS, ...WORLD5_SITUATIONS];
+const todas = [...WORLD1_SITUATIONS, ...WORLD2_SITUATIONS, ...WORLD3_SITUATIONS, ...WORLD4_SITUATIONS, ...WORLD5_SITUATIONS, ...WORLD6_SITUATIONS];
 const pedidas = process.argv.slice(2);
 mkdirSync(TMP, { recursive: true });
 mkdirSync(OUT, { recursive: true });

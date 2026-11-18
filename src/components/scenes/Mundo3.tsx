@@ -5,7 +5,7 @@
  * posição do carro na pista é a própria resposta (w3-l3-q6 e q7).
  */
 import type { ReactNode } from 'react';
-import { box, camLook, circle, extrude, lines, rect, rng, scale, subq, type Dec, type Obj, type Part, type V2, type V3 } from './engine';
+import { box, camLook, chain, circle, extrude, flat, lines, rect, rng, Rx, scale, subq, T, tfObj, type Dec, type Obj, type Part, type V2, type V3 } from './engine';
 import { asphalt, bench, building, bush, car, cyclist, grassPatches, lampPost, person, sidewalk, tree, wall, zebra, type Look } from './models';
 import { utilitario } from './veiculos';
 import { SignCallout, signPost, signTop } from './signs';
@@ -20,6 +20,7 @@ const GLASS = '#3b5470';
 export const MOCA: Look = { skin: '#7a4e35', hair: '#2b2420', top: '#2fa36b', bottom: '#33415a', bag: '#e0a43a' };
 export const RAPAZ: Look = { skin: '#d7a77f', hair: '#5a3b25', top: '#f2a13a', bottom: '#3a4a66' };
 export const SENHORA: Look = { skin: '#c98a5e', hair: '#d9d9d9', top: '#8e5cc2', bottom: '#4a4a5a', skirt: true };
+export const MENINA: Look = { skin: '#c98a5e', hair: '#3a2a20', top: '#e86aa6', bottom: '#5a4fa0', bag: '#2fa36b', bun: true, skirt: true };
 export const MENINO: Look = { skin: '#b07a55', hair: '#2b2420', top: '#e05a5a', bottom: '#2f4f7f', bag: '#2f80ed' };
 type Pr = (p: V3) => V2;
 
@@ -702,9 +703,9 @@ export function CargaDescarga(p: CenaProps) {
 }
 
 /** uma criança de 7 anos e 1,20 m, com um adulto, vai entrar no seu carro */
-export function CriancaCarro(p: CenaProps) {
+export function CriancaCarro(p: CenaProps & { menina?: boolean }) {
   const r = ruaMeioFio(2);
-  const objs = [...r.objs, car({ x: 2.2, y: -3.2, color: VOCE }), person(4.4, -7.6, MENINO, 0, -Math.PI / 2, 0.82), person(5.3, -6.3, MOCA, 0, -Math.PI / 2, 1.25)];
+  const objs = [...r.objs, car({ x: 2.2, y: -3.2, color: VOCE }), person(4.4, -7.6, p.menina ? MENINA : MENINO, 0, -Math.PI / 2, 0.82), person(5.3, -6.3, MOCA, 0, -Math.PI / 2, 1.25)];
   return cena(CAM_MEIO_FIO, r.ground, objs, (pr) => {
     const [tx, ty] = pr([4.4, -7.6, 1.5]);
     return (
@@ -714,4 +715,107 @@ export function CriancaCarro(p: CenaProps) {
       </>
     );
   }, p);
+}
+
+
+/* ---------------- situações "Na rua" (18/11/2026): imagem para todas ---------------- */
+
+const suave = (v: number) => {
+  const k = Math.max(0, Math.min(1, v));
+  return k * k * (3 - 2 * k);
+};
+
+/** subida em estrada de mão dupla: a pista sobe até o topo e some do outro lado (também usada no vídeo "Onde não ultrapassar") */
+export const Y_PE = -6, Y_TOPO = -30, H = 4.2;
+export const altura = (y: number) => (y > Y_PE ? 0 : y > Y_TOPO ? H * suave((Y_PE - y) / (Y_PE - Y_TOPO)) : Math.max(0, H - (Y_TOPO - y) * 0.25));
+/** chão da subida; `tracejada` troca a linha amarela contínua do meio por uma tracejada */
+function chaoSubida(tracejada = false): Part[] {
+  const out: Part[] = [...grassPatches(-50, -70, 50, 40, 9)];
+  const tira = (ya: number, yb: number, x0: number, x1: number, c: string, z = 0) =>
+    ({ ...flat([[x0, ya], [x1, ya], [x1, yb], [x0, yb]], c), faces: [{ p: [[x0, ya, altura(ya) + z], [x1, ya, altura(ya) + z], [x1, yb, altura(yb) + z], [x0, yb, altura(yb) + z]] as V3[], c, n: [0, 0, 1] as V3 }] }) as Part;
+  // do fundo para a frente: o lado de lá do morro é pintado antes, e o topo o cobre
+  for (let y = -60; y < 40; y += 2) {
+    const y1 = y + 2;
+    const k = 1 + (altura(y) - altura(y1)) * 0.35;
+    const g = scale('#7fbf6a', k);
+    out.push(tira(y, y1, -14, -4.2, g));
+    out.push(tira(y, y1, 4.2, 14, g));
+    out.push(tira(y, y1, -4.2, 4.2, '#c9b48a', 0.01));
+    out.push(tira(y, y1, -3.5, 3.5, '#5b636e', 0.02));
+    if (!tracejada) out.push(tira(y, y1, -0.08, 0.08, '#f2c21b', 0.03));
+    else if (((y % 6) + 6) % 6 === 0) out.push(tira(y, y1, -0.08, 0.08, '#f2c21b', 0.03));
+  }
+  return out;
+}
+export const SUBIDA = chaoSubida();
+/** na cena parada a linha do meio é tracejada: quem decide é a falta de visão no topo, não a pintura */
+const SUBIDA_TRACEJADA = chaoSubida(true);
+/** veículo no morro, inclinado como a pista (`fazer` monta o veículo na origem) */
+export function noMorro(x: number, y: number, heading: number, cor: string, fazer?: () => Obj): Obj {
+  const z = altura(y);
+  const incl = Math.atan2(altura(y - 0.5) - altura(y + 0.5), 1);
+  const ang = heading === 0 ? -incl : incl;
+  return tfObj(fazer ? fazer() : car({ x: 0, y: 0, heading, color: cor }), chain(T(x, y, z), Rx(ang)));
+}
+
+/** w3-rua-2: estrada de mão dupla e pista única; um caminhão devagar começa a subir o morro na sua frente */
+export function SubidaCaminhao(p: CenaProps) {
+  const objs = [
+    tree(-7, 6, 1.1, 1), tree(-8.5, -4, 1.2, 2), tree(7.5, 2, 1.1, 3), tree(8, -12, 1.2, 4), bush(6, 9, 1, 2), bush(-6, -14, 1, 1),
+    noMorro(1.75, -9.5, 0, '', () => utilitario({ x: 0, y: 0, tipo: 'caminhao' })),
+    noMorro(1.75, 2.2, 0, VOCE),
+  ];
+  const cam = camLook(0.8, -10, 0, 12, 22, 8.2, 160, 118);
+  return cena(cam, SUBIDA_TRACEJADA, objs, (pr) => {
+    const [tx, ty] = pr([0, Y_TOPO, H + 0.4]);
+    return (
+      <>
+        <Tag x={tx} y={ty - 6} text="Topo do morro" />
+        {voce(pr, 1.75, 2.2)}
+      </>
+    );
+  }, p);
+}
+
+/** w3-rua-1: rodovia de pista dupla; você na faixa da esquerda e um carro chegando rápido atrás */
+export function RodoviaEsquerdaCarroAtras(p: CenaProps) {
+  const xe = DUPLA_E0 + (DUPLA_E1 - DUPLA_E0) / 4;
+  const yv = -2, yt = 6.4;
+  const objs: Obj[] = [
+    defensaY(0),
+    tree(-14, -6, 1.1, 1), tree(15, 4, 1.05, 2), tree(14, -24, 1.2, 3), tree(-15, -30, 1.1, 4), bush(12.5, -14, 0.9, 1),
+    car({ x: -2.75, y: -26, heading: Math.PI, color: '#8f98a3' }),
+    car({ x: xe, y: yv, color: VOCE }),
+    car({ x: xe, y: yt, color: '#e0412f' }),
+  ];
+  const cam = camLook(3.2, -4, 0, 12, 34, 10);
+  return cena(cam, DUPLA_CHAO, objs, (pr) => {
+    const [rx, ry] = pr([xe, yt + 2.4, 0.5]);
+    return (
+      <>
+        {/* riscos de velocidade atrás do carro que chega */}
+        {[-8, 0, 8].map((d) => (
+          <line key={d} x1={rx + d} y1={ry + 6} x2={rx + d * 1.3} y2={ry + 22} stroke="#ffffff" strokeWidth={2} strokeLinecap="round" opacity={0.8} />
+        ))}
+        {voce(pr, xe, yv)}
+      </>
+    );
+  }, p);
+}
+
+/** w3-rua-4: de dia, na cidade, começa uma chuva forte */
+export function ChuvaCidade(p: CenaProps) {
+  const cam = camLook(0, -4, 0, -16, 42, 10.5);
+  const objs = [
+    ...avenidaObjs(3),
+    car({ x: -1.8, y: -12, color: '#8f98a3' }),
+    car({ x: 1.8, y: -20, color: '#4f7fc4' }),
+    car({ x: 1.8, y: 1.5, color: VOCE }),
+  ];
+  return cena(cam, avenida(), objs, (pr) => (
+    <>
+      {chuva()}
+      {voce(pr, 1.8, 1.5)}
+    </>
+  ), p);
 }

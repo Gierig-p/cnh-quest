@@ -7,7 +7,7 @@ import { car, person } from './models';
 import { utilitario } from './veiculos';
 import { signPost } from './signs';
 import { MOCA, RAPAZ, SENHORA, fumaca } from './Mundo3';
-import { RA, VOCE, XM, certo, ease, fazerVideo, janela, lerp, pisca, relogio, ruaChao, ruaObjs, tag, triangulo, type Pr, type Quadro } from './videoBase';
+import { RA, VOCE, XM, caminho, certo, desvio, ease, freia, fazerVideo, janela, lerp, pisca, relogio, ruaChao, ruaObjs, tag, triangulo, type Pr, type Quadro } from './videoBase';
 import tempos from '../../content/videos/parada.json';
 
 const CHAO = ruaChao();
@@ -26,11 +26,13 @@ const relogioEm = (pr: Pr, x: number, y: number, z: number, voltas: number, o: n
  * `t` em segundos: chega até 1,4; a pessoa desce de 1,6 a 2,8; o carro sai a partir de `sai`.
  */
 function paradaRapida(t: number, yp: number, sai = 3.0, look = RAPAZ) {
-  const kc = ease(t / 1.4);
-  const yc = t < sai ? lerp(yp + 14, yp, kc) : yp - 3.2 * (t - sai) ** 1.5;
-  const xc = t < sai ? lerp(1.75, XM, ease((t - 0.6) / 0.8)) : lerp(XM, 1.75, ease((t - sai) / 0.9));
+  // chega pela faixa e encosta numa curva suave; sai de volta para a faixa (o carro aponta para onde anda)
+  const chegada = caminho([[1.75, yp + 14], ...desvio(1.75, yp + 6, XM, yp + 0.8), [XM, yp]]);
+  const saida = caminho([[XM, yp], ...desvio(XM, yp - 0.4, 1.75, yp - 6.4), [1.75, yp - 60]]);
+  const c = t < sai ? chegada.em(chegada.total * freia(t / 1.4)) : saida.em(3.2 * (t - sai) ** 1.5);
+  const xc = c.x, yc = c.y;
   const kp = clamp01((t - 1.6) / 1.2);
-  const objs: Obj[] = [car({ x: xc, y: yc, color: VOCE, brake: t > 0.8 && t < sai, blink: t > sai - 0.3 && t < sai + 0.9 ? pisca(t, 'l') : null })];
+  const objs: Obj[] = [car({ x: xc, y: yc, heading: c.heading, color: VOCE, brake: t > 0.8 && t < sai, blink: t > sai - 0.3 && t < sai + 0.9 ? pisca(t, 'l') : null })];
   if (t > 1.55) objs.push(person(lerp(XM + 1.1, RA + 1.8, kp), yp + 0.3 - kp * 1.2, look, kp < 1 ? t * 6 : 0, Math.PI / 2 - 0.4, 1.2));
   return { objs, xc, yc, pessoa: [lerp(XM + 1.1, RA + 1.8, kp), yp + 0.3 - kp * 1.2] as const };
 }
@@ -161,35 +163,37 @@ function trecho(k: number, lt: number, d: number): Quadro {
     }
     // 7. parado por emergência: sinalize o local na hora
     case 7: {
-      const kt = ease((lt - 1.4) / 0.9);
+      const kt = ease((lt - 1.0) / 2.6); // anda num passo normal até o lugar do triângulo
       return {
         cam: cam(-1),
         ground: CHAO,
-        objs: [...OBJS, car({ x: 1.75, y: -4, color: VOCE, blink: pisca(lt, 'lr') }), ...(kt > 0.01 ? [triangulo(1.75, lerp(-1, 6.5, kt))] : []), ...(lt > 0.6 && kt < 0.98 ? [person(1.0, lerp(-2.5, 5.8, kt), RAPAZ, lt * 6, Math.PI, 1.2)] : [])],
+        objs: [...OBJS, car({ x: 1.75, y: -4, color: VOCE, blink: pisca(lt, 'lr') }), ...(kt > 0.01 ? [triangulo(lerp(0.85, 1.75, kt), lerp(-1.3, 6.5, kt))] : []), ...(lt > 0.6 ? [person(lerp(0.1, 1.0, kt), lerp(-2.0, 5.8, kt), RAPAZ, kt > 0 && kt < 1 ? lt * 6 : 0, Math.PI, 1.2)] : [])],
         over: (pr) => {
           const [fx, fy] = pr([1.75, -5.6, 1.1]);
           return (
             <>
               {fumaca(fx, fy, 1.4)}
               {tag(pr, [1.75, -3.6, 2.2], 'Emergência', janela(lt, 0.2, 1.6, 0.2))}
-              {tag(pr, [1.75, 6.5, 1.2], 'Sinalize na hora', ease((lt - 2.3) / 0.3))}
+              {tag(pr, [1.75, 6.5, 1.2], 'Sinalize na hora', ease((lt - 3.5) / 0.3))}
             </>
           );
         },
       };
     }
     // 8. para guardar: subiu ou desceu e foi embora, é parada; ficou, é estacionamento
+    // (o carro estacionado fica atrás, para o seu carro sair pela frente sem passar por ele)
     default: {
-      const p = paradaRapida(lt, -3, 2.6, MOCA);
+      const p = paradaRapida(lt + 1.4, -3, 4.0, MOCA);
+      const YE = 4.6;
       return {
-        cam: cam(-6),
+        cam: cam(-2),
         ground: CHAO,
-        objs: [...OBJS, car({ x: XM, y: -11, color: '#4f7fc4' }), ...p.objs],
+        objs: [...OBJS, car({ x: XM, y: YE, color: '#4f7fc4' }), ...p.objs],
         over: (pr) => (
           <>
             {tag(pr, [XM, -6, 2.2], 'Desceu e foi: parada', janela(lt, 1.8, d))}
-            {tag(pr, [XM, -10.6, 2.2], 'Ficou: estacionamento', ease((lt - 3.4) / 0.3))}
-            {relogioEm(pr, XM, -14.2, 2.4, lt * 1.6, ease((lt - 3.4) / 0.3))}
+            {tag(pr, [XM, YE + 0.4, 2.2], 'Ficou: estacionamento', ease((lt - 3.4) / 0.3))}
+            {relogioEm(pr, XM, YE, 3.8, lt * 1.6, ease((lt - 3.4) / 0.3))}
           </>
         ),
       };

@@ -627,4 +627,140 @@ export const NARRATION: Record<string, string[]> = {
     'Um exemplo. De manhã cedo, na serra, a neblina fecha. Rui acende a luz baixa, aumenta a distância e reduz. Quando quase não enxerga mais, ele para num posto e espera.',
     'Para guardar: neblina pede luz baixa, nunca alta.',
   ],
+
+  /* ---------------- Mundo 6 ---------------- */
+
+  'c6-sequencia': [
+    'Bem-vindo ao mundo das emergências. Aqui você vai aprender o que fazer nos primeiros minutos depois de um sinistro.',
+    'Primeiros socorros são as primeiras providências no local do sinistro: um atendimento inicial e temporário, até chegar o socorro profissional.',
+    'Sempre existe um tempo até o socorro profissional chegar. Nesses minutos, só estão no local os envolvidos e quem passa por ali.',
+    'A sequência é: um, manter a calma. Dois, garantir a segurança. Três, pedir socorro. Quatro, controlar a situação. Cinco, verificar as vítimas. Seis, fazer algumas ações com as vítimas.',
+    'Uma ação pode começar antes de a outra terminar. Você pode começar a sinalizar, parar para pedir socorro e depois voltar a sinalizar.',
+    'Com várias pessoas, as ações acontecem ao mesmo tempo: uma telefona enquanto outra sinaliza.',
+    'Um exemplo. Um carro bate num muro. Até a ambulância chegar, quem passa mantém a calma, sinaliza a pista, chama o socorro e só então vai até a vítima.',
+    'Para guardar: calma, segurança, socorro, controle, vítimas, ações.',
+  ],
+
+  'c6-calma': [
+    'Depois de um sinistro, o susto e o medo levam a atitudes desesperadas, que costumam piorar tudo.',
+    'Para ter calma: pare e pense, sem agir por impulso. Respire fundo algumas vezes. Veja se você se feriu. Avalie a gravidade do sinistro. Conforte quem está no seu veículo.',
+    'Se alguém já tomou a frente, ofereça ajuda.',
+    'Se ninguém tomou, procure entre os presentes um médico, bombeiro, policial ou outro profissional acostumado com emergências.',
+    'Se não houver ninguém mais preparado, assuma: mostre firmeza, peça ajuda, distribua tarefas e não perca tempo discutindo.',
+    'Quem lidera também trabalha, e não fica só dando ordens. Agradeça e elogie cada ação.',
+    'Um exemplo. Depois da batida, Lia para, respira fundo, vê que não se machucou e acalma o filho no banco de trás. Só então sai do carro para ajudar.',
+    'Para guardar: pare, respire, confira você e só então aja.',
+  ],
+
+  'c6-telefones': [
+    'Quanto mais cedo o socorro profissional chega, melhor para as vítimas. Peça socorro o mais rápido possível. Os serviços são gratuitos.',
+    'Cento e noventa e três, Corpo de Bombeiros: vítimas presas nas ferragens, fogo, fumaça, vazamento de combustível ou gás, e lugares instáveis, como ribanceiras.',
+    'Cento e noventa e dois, SAMU: qualquer tipo de sinistro e mal súbito na via pública ou na rodovia.',
+    'Cento e noventa, Polícia Militar: quando o lugar não tem serviço próprio de socorro.',
+    'Nas rodovias, o número muda de uma para outra: pode ser da Polícia Rodoviária, da concessionária ou de outro serviço. Muitas têm telefones de emergência no acostamento.',
+    'Anote o número de emergência da rodovia assim que entrar nela. Não confie na memória.',
+    'Um exemplo. Ao entrar na rodovia, Bruno vê a placa com o telefone de emergência da concessionária e salva o número no celular.',
+    'Para guardar: cento e noventa e três, Bombeiros. Cento e noventa e dois, SAMU. Cento e noventa, Polícia.',
+  ],
+
+  'c6-ligacao': [
+    'Quem atende o chamado vai fazer perguntas. As respostas ajudam a mandar a equipe e o equipamento certos.',
+    'Diga o tipo do sinistro: carro, moto, colisão, atropelamento.',
+    'Diga a gravidade aparente e quantas vítimas, mais ou menos, existem.',
+    'Diga o local: nome da rua e um número próximo.',
+    'Avise se há pessoas presas nas ferragens, vazamento de combustível ou de produto químico, e se há ônibus ou caminhão envolvido.',
+    'Sem celular, use o de outra pessoa, um telefone do acostamento ou peça a alguém que vá até um telefone ou posto e chame o socorro.',
+    'Um exemplo. Uma moto bateu num carro na Rua das Flores, perto do número duzentos. Há duas vítimas, uma presa no carro, e não há vazamento.',
+    'Para guardar: o quê, onde, quantos e quais perigos.',
+  ],
+
+  'c6-sinalizar': [
+    'Um sinistro na pista atrapalha quem vem atrás. Sem sinalização, podem acontecer novas colisões e atropelamentos.',
+    'Comece a sinalizar num ponto em que os motoristas ainda não veem o sinistro. Se ele atrapalha os dois sentidos, sinalize os dois.',
+    'Marque todo o trecho, do início da sinalização até o sinistro, mostrando o desvio.',
+    'Mantenha o trânsito andando: uma parada de repente causa novas batidas e atrasa a chegada do socorro. Não deixe curiosos pararem na pista.',
+    'Use o triângulo e o que houver por perto: galhos, cavaletes, latas, panos. À noite ou com neblina, use luz: lanterna, pisca-alerta e faróis.',
+    'Pessoa sinalizando: roupa colorida, na lateral da pista, de frente para os veículos, agitando um pano. Nunca logo depois de uma curva.',
+    'Pelo Código de Trânsito, se o veículo precisar ficar parado na via numa emergência, a sinalização de advertência deve ser imediata.',
+    'Um exemplo. Numa estrada, o sinistro fica logo depois de uma curva. Cris coloca o triângulo antes da curva, onde os motoristas ainda não veem os carros batidos.',
+    'Para guardar: avise antes que eles vejam o sinistro.',
+  ],
+
+  'c6-passos': [
+    'Quanto maior a velocidade da via, mais longe do sinistro a sinalização deve começar. Para medir, use passos longos.',
+    'Um passo longo é um passo bem largo de um adulto. Vale mais ou menos um metro.',
+    'Conte um passo longo para cada quilômetro por hora da velocidade máxima da via.',
+    'Via local de quarenta quilômetros por hora: quarenta passos. Avenida de sessenta: sessenta passos. Via de fluxo rápido de oitenta: oitenta passos. Rodovia de cem: cem passos.',
+    'À noite, com chuva, neblina ou fumaça, dobre a distância. À noite, use também material que brilha ou acende.',
+    'Achou uma curva no caminho? Pare de contar, vá até o fim da curva e recomece do zero. Faça o mesmo quando o sinistro estiver no alto de uma lombada.',
+    'Um exemplo. Numa avenida de sessenta quilômetros por hora, à noite e com chuva, Davi conta cento e vinte passos longos antes de colocar o triângulo.',
+    'Para guardar: velocidade da via é igual a passos. Noite ou chuva: o dobro.',
+  ],
+
+  'c6-riscos': [
+    'O objetivo é evitar que o sinistro fique maior. Antes de se aproximar, pergunte: eu estou seguro? Minha família está segura? As vítimas estão seguras? Mais alguém pode se ferir?',
+    'Os riscos mais comuns: novas colisões, atropelamentos, incêndio, explosão, cabos elétricos, óleo e pedaços na pista, vazamento de produto perigoso e doenças.',
+    'Para evitar atropelamentos: isole o local, afaste os curiosos e não deixe pedestres andando pela pista.',
+    'Óleo na pista: jogue terra ou areia em cima. Tire da pista os pedaços dos veículos, se for seguro.',
+    'Evite tocar no sangue e nas secreções das vítimas. Tenha no veículo um par de luvas de borracha.',
+    'Terminado o atendimento, se não houver equipe no local, tire da pista a sinalização e os objetos que ficaram. Pelo Código de Trânsito, deixar esses objetos na via é infração média.',
+    'Um exemplo. Depois que a ambulância leva a vítima, Rui recolhe os galhos e o triângulo que usou para sinalizar. Na pista não fica nada.',
+    'Para guardar: primeiro a sua segurança, depois a dos outros.',
+  ],
+
+  'c6-fogo-cabos': [
+    'Vazamento de combustível aumenta muito o risco de incêndio. Cabo de energia caído pode matar. Nesses casos, cada detalhe conta.',
+    'Risco de incêndio: afaste os curiosos, desligue o motor do veículo batido se for fácil e seguro, não deixe ninguém fumar e deixe um extintor pronto a uma distância segura.',
+    'Para usar o extintor: mantenha-o em pé, mire na base das chamas, e não no meio do fogo, e faça movimentos de leque.',
+    'Caminhão de combustível ou de gás vazando ou pegando fogo, ou vazamento de produto perigoso: feche a pista toda e tire as pessoas do local.',
+    'Nunca toque em cabo elétrico caído, nem se achar que está sem energia. Isole o local.',
+    'Com o cabo sobre o carro, quem está dentro fica seguro se os pneus estiverem inteiros: é melhor não descer, porque o choque vem ao tocar o chão.',
+    'Um exemplo. Um carro bateu num poste e o fio caiu no capô. Ana pede, de longe, que a família fique dentro do carro e afasta os curiosos do fio.',
+    'Para guardar: cabo caído, não toque e não deixe descer.',
+  ],
+
+  'c6-contato': [
+    'Com o básico da segurança feito e o socorro chamado, é hora de falar com a vítima. Você não é um profissional: faça só o mínimo necessário até o socorro chegar.',
+    'Se a janela estiver aberta, fale com a vítima sem abrir a porta. Se for abrir, faça isso com muito cuidado, para não mexer nela.',
+    'Use quatro atitudes: informe o que você está fazendo, ouça, aceite as queixas e seja solidário, ficando onde a vítima possa ver você.',
+    'Responda com calma. Não minta e não comece conversa sobre de quem foi a culpa.',
+    'Se a vítima ficar agressiva e você correr risco, afaste-se.',
+    'Faça perguntas simples: você está bem? Qual é o seu nome? Sabe onde está? Elas mostram se a pessoa está consciente.',
+    'Se ela não responder, ligue de novo para o socorro, conte a novidade, siga as orientações e procure no local alguém com treinamento.',
+    'Um exemplo. A motorista pergunta se vai perder o carro. Léo responde com calma: a ambulância já está vindo, eu vou ficar aqui com você.',
+    'Para guardar: informe, ouça, aceite e seja solidário.',
+  ],
+
+  'c6-cuidados': [
+    'Alguns cuidados são simples e qualquer pessoa pode fazer, sempre sem mexer o corpo da vítima.',
+    'Solte o cinto de segurança só se ele estiver atrapalhando a respiração, e sem mexer o corpo da vítima.',
+    'Para a cabeça não se mexer, segure-a com as duas mãos, apertando de leve a região das orelhas.',
+    'Sangramento que continua: aperte em cima do ferimento com gaze ou pano limpo. Use luvas. Só faça isso se você se sentir seguro.',
+    'Quem saiu sozinho do veículo pode estar confuso. Junte essas pessoas num lugar sem perigo e peça que esperem sentadas.',
+    'Proteja a vítima do sol, da chuva e do frio com roupas ou panos. Ela não deve perder o calor do corpo, mas não precisa ser aquecida.',
+    'Um exemplo. Uma vítima sangra no braço. Edu põe as luvas e aperta um pano limpo sobre o corte, sem mexer a pessoa, até o socorro chegar.',
+    'Para guardar: cuide sem mexer. Cinto, cabeça, sangue e abrigo.',
+  ],
+
+  'c6-nao-fazer': [
+    'Querer ajudar não basta: algumas atitudes comuns pioram muito o estado da vítima.',
+    'Não mexa na vítima. Mexer a cabeça ou o tronco pode piorar uma lesão na coluna e causar paralisia.',
+    'Só tire a vítima do lugar antes do socorro se houver perigo imediato, como fogo ou risco de o veículo cair.',
+    'Não tire o capacete do motociclista. Isso mexe a cabeça e pode piorar lesões no pescoço e no crânio.',
+    'Não faça torniquete. Hoje ele é feito só por profissionais, e mesmo assim como exceção.',
+    'Não dê nada para a vítima beber ou comer, nem água. Exceção: o remédio que a pessoa com problema no coração já usa embaixo da língua.',
+    'Um exemplo. Um motociclista cai e pede para tirar o capacete. Gil explica com calma que é melhor esperar o socorro e fica ao lado dele.',
+    'Para guardar: não mexa, não tire o capacete, não amarre, não dê de beber.',
+  ],
+
+  'c6-lei': [
+    'O condutor envolvido em sinistro com vítima tem deveres. Deixar de cumpri-los é infração gravíssima. Não socorrer a vítima também é crime.',
+    'Os deveres são: prestar ou providenciar socorro, podendo fazê-lo; evitar perigo para o trânsito no local; preservar o local para a polícia e a perícia; remover o veículo quando o policial ou o agente mandar; identificar-se ao policial e dar as informações para o boletim de ocorrência.',
+    'Deixar de cumprir esses deveres: infração gravíssima, multa vezes cinco, suspensão do direito de dirigir e recolhimento da habilitação.',
+    'Deixar de socorrer a vítima quando a autoridade pede: infração grave.',
+    'Sinistro sem vítima: tire o veículo do local quando for preciso para a segurança e a fluidez do trânsito. Se não tirar, é infração média.',
+    'Não socorrer é crime, mesmo que outras pessoas tenham socorrido ou que os ferimentos sejam leves. Mexer no local para enganar a polícia ou o perito também é crime.',
+    'Um exemplo. Dois carros se encostam sem ninguém ferido e travam o cruzamento. Os motoristas tiram os carros do meio da via para não parar o trânsito.',
+    'Para guardar: socorrer, sinalizar, preservar e se identificar.',
+  ],
 };

@@ -71,13 +71,13 @@ export function motociclistaNoChao(x: number, y: number, face: number): Obj {
 }
 
 /** moto caída de lado, sem piloto */
-function motoCaida(x: number, y: number, ang: number, cor: string): Obj {
+export function motoCaida(x: number, y: number, ang: number, cor: string): Obj {
   const m = moto(0, 0, 0, cor, { piloto: false });
   return tfObj(m, chain(T(x, y), Rz(ang), T(0, 0, 0.16), Ry(Math.PI / 2)));
 }
 
 /** rua de mão dupla com calçadas e prédios dos dois lados */
-function rua(seed = 0, ladoEsq = true): { ground: Part[]; objs: Obj[] } {
+export function rua(seed = 0, ladoEsq = true): { ground: Part[]; objs: Obj[] } {
   const a = 3.4, c = 6.2;
   const ground: Part[] = [
     ...grassPatches(-40, -50, 40, 40, 8 + seed),

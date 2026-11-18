@@ -232,6 +232,19 @@ export function caminho(pts: V2[]) {
   return { em, total, pts };
 }
 
+/** curva em S suave (troca de faixa, encostar no meio-fio) de (x0, y0) até (x1, y1) */
+export const desvio = (x0: number, y0: number, x1: number, y1: number, n = 16): V2[] =>
+  Array.from({ length: n + 1 }, (_, i) => {
+    const k = i / n;
+    return [x0 + ((x1 - x0) * (1 - Math.cos(Math.PI * k))) / 2, y0 + (y1 - y0) * k];
+  });
+
+/** chegando e freando até parar: rápido no começo, devagar no fim (0 a 1) */
+export const freia = (v: number) => {
+  const k = clamp(v);
+  return 1 - (1 - k) * (1 - k);
+};
+
 /** linha tracejada no chão mostrando um caminho (seta de manobra), em pixels */
 export function rastro(pr: Pr, pts: V2[], cor: string, o = 1, ponta = true): ReactNode {
   if (o <= 0.01 || pts.length < 2) return null;

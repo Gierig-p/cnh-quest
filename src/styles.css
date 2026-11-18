@@ -471,19 +471,15 @@ html[data-motion='reduce'] *, html[data-motion='reduce'] *::before, html[data-mo
 .term.is-new:hover, .term.is-new.open { background: var(--purple-soft); }
 .term:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 .term-tip {
-  position: absolute; z-index: 30; top: calc(100% + 10px); left: 50%;
-  transform: translateX(calc(-50% + var(--shift, 0px)));
-  width: max-content; max-width: min(280px, calc(100vw - 32px));
+  position: fixed; z-index: 80;
+  width: max-content; max-width: min(280px, calc(100vw - 24px)); overflow-y: auto;
   display: block; padding: 10px 14px; border-radius: var(--radius-sm);
   background: var(--asphalt); color: #fff; box-shadow: 0 6px 18px rgb(0 0 0 / .18);
   font-size: var(--fs-small); font-weight: 700; line-height: 1.4; letter-spacing: 0; text-transform: none; text-align: left; white-space: normal;
+  overflow-wrap: anywhere; hyphens: auto;
   animation: tip-in var(--t-fast) var(--ease-out);
 }
 .term-tip strong { display: block; margin-bottom: 2px; font-weight: 900; color: var(--yellow); }
-.term-tip::before {
-  content: ''; position: absolute; top: -6px; left: calc(50% - 6px - var(--shift, 0px));
-  width: 12px; height: 12px; background: var(--asphalt); transform: rotate(45deg); border-radius: 2px;
-}
 /* placas: miniatura ao lado do código; no balão, a placa grande com o nome oficial */
 .term.is-sign, .sign-mini { white-space: nowrap; }
 .term.is-sign img, .term.is-sign svg, .sign-mini img, .sign-mini svg {
@@ -492,7 +488,7 @@ html[data-motion='reduce'] *, html[data-motion='reduce'] *::before, html[data-mo
 .term-tip.is-sign { text-align: center; max-width: min(220px, calc(100vw - 32px)); }
 .term-tip-sign { display: flex; justify-content: center; margin: 2px 0 8px; padding: 6px; background: #fff; border-radius: 10px; }
 .term-tip-sign img, .term-tip-sign svg { width: 88px; height: 88px; }
-@keyframes tip-in { from { opacity: 0; transform: translateX(calc(-50% + var(--shift, 0px))) translateY(-4px); } }
+@keyframes tip-in { from { opacity: 0; transform: translateY(-4px); } }
 .q-title { font-size: var(--fs-h1); margin-bottom: 22px; }
 /* o enunciado recebe foco por código a cada questão: sem moldura azul em volta do título */
 .q-title[tabindex="-1"]:focus { outline: none; }

@@ -27,10 +27,10 @@ describe('plano até a prova', () => {
     expect([1, 2, 3, 6, 7, 30].map(finalDaysFor)).toEqual([0, 0, 1, 1, 2, 2]);
   });
   it('divide as lições que faltam pelos dias de estudo', () => {
-    const p = studyPlan(initialProgress(), WORLDS, '2026-11-24', NOW); // 10 dias, 2 para simulados
+    const p = studyPlan(initialProgress(), WORLDS, '2026-12-04', NOW); // 20 dias, 2 para simulados
     expect(p.phase).toBe('study');
     expect(p.roundsLeft).toBe(totalRounds);
-    expect(p.roundsPerDay).toBe(Math.ceil(totalRounds / 8));
+    expect(p.roundsPerDay).toBe(Math.ceil(totalRounds / 18));
     expect(p.minutesPerDay).toBe(p.roundsPerDay * ROUND_MIN + REVIEW_MIN);
     expect(p.tight).toBe(false);
   });
