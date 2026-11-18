@@ -339,6 +339,15 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
     example:
       'Na serra, Marcos engata uma marcha reduzida antes da descida e usa o freio do motor junto com o pedal.',
     remember: 'Freie antes da curva e do buraco, não dentro deles.',
+    video: {
+      id: 'velocidade-via',
+      resumo: [
+        'A placa mostra o máximo; a via, o tempo e o trânsito pedem menos.',
+        'Freie antes da curva e gire o volante de forma suave dentro dela.',
+        'Descida forte: marcha reduzida engatada, nunca desengrenado.',
+        'Buraco ou lombada: freie antes, não em cima.',
+      ],
+    },
     sources: [...dd('p. 30', 'p. 31', 'p. 32', 'p. 35', 'p. 36'), ...ctb('art. 43', 'art. 231, IX')],
   },
 
@@ -370,6 +379,15 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
       'Na rodovia, debaixo de chuva, Carla vê uma poça grande na faixa. Ela reduz com o freio antes e passa por ela ' +
       'segurando firme o volante.',
     remember: 'Poça à frente: freie antes, segure firme em cima.',
+    video: {
+      id: 'chuva',
+      resumo: [
+        'O começo da chuva é o mais escorregadio.',
+        'Luz baixa, mais distância e velocidade menor.',
+        'Nada de freada brusca; com ABS, mantenha o pedal pressionado.',
+        'Poça: freie antes; em cima dela, não freie e segure firme o volante.',
+      ],
+    },
     sources: [...dd('p. 40', 'p. 41'), ...ctb('art. 40, I, b')],
   },
   neblina: {
@@ -393,6 +411,15 @@ export const CONCEPTS5: Record<string, ConceptCard> = {
       'De manhã cedo, na serra, a neblina fecha. Rui acende a luz baixa, aumenta a distância e reduz. Quando quase não ' +
       'enxerga mais, ele para num posto e espera.',
     remember: 'Neblina: luz baixa, nunca alta.',
+    video: {
+      id: 'neblina',
+      resumo: [
+        'Neblina: luz baixa, mais distância e menos velocidade.',
+        'Luz alta reflete na neblina: não use.',
+        'Difícil seguir? Pare num local seguro, como um posto.',
+        'Vento, fumaça, farol de frente e sol baixo também pedem cuidado.',
+      ],
+    },
     sources: [...dd('p. 42', 'p. 43', 'p. 44', 'p. 45'), ...ctb('art. 40, I, b', 'art. 40, V, a')],
   },
 };

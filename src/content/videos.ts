@@ -6,7 +6,7 @@
  * e os tempos de cada fala em src/content/videos/<id>.json. Mudou uma fala? Rode o script de novo.
  * Regra: diz o mesmo que o cartão, em linguagem simples, sem fato novo.
  */
-export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores' | 'marcas-linhas' | 'marcas-transversais' | 'semaforo' | 'semaforo-pisca' | 'naturezas' | 'penalidades' | 'suspensao' | 'cassacao' | 'velocidade-sinal' | 'celular-cinto' | 'alcool' | 'recusa-racha' | 'crimes-vitima' | 'crimes-perigo' | 'auto-notificacao' | 'defesa-recurso' | 'defensiva' | 'fatores' | 'manutencao' | 'freios-luzes' | 'posicao' | 'retrovisores' | 'reacao' | 'distracao' | 'dois-segundos';
+export type VideoId = 'faixas' | 'acostamento' | 'ultrapassar' | 'nao-ultrapassar' | 'seta' | 'conversao' | 'farois' | 'pisca-buzina' | 'parada' | 'portas' | 'velocidade-estrada' | 'cinto' | 'sinais' | 'hierarquia' | 'placa-escondida' | 'preferencia' | 'pedestre' | 'emergencia' | 'formas' | 'r1-r2' | 'proibicoes' | 'velocidade' | 'proibe-movimento' | 'obriga-movimento' | 'advertencia' | 'avisos' | 'indicacao' | 'distancias' | 'marcas-cores' | 'marcas-linhas' | 'marcas-transversais' | 'semaforo' | 'semaforo-pisca' | 'naturezas' | 'penalidades' | 'suspensao' | 'cassacao' | 'velocidade-sinal' | 'celular-cinto' | 'alcool' | 'recusa-racha' | 'crimes-vitima' | 'crimes-perigo' | 'auto-notificacao' | 'defesa-recurso' | 'defensiva' | 'fatores' | 'manutencao' | 'freios-luzes' | 'posicao' | 'retrovisores' | 'reacao' | 'distracao' | 'dois-segundos' | 'velocidade-via' | 'chuva' | 'neblina';
 
 export const VIDEOS: Record<VideoId, { falas: string[] }> = {
   // cartão c3-lado-direito (CTB art. 28 e art. 29, I, II e IV)
@@ -779,6 +779,54 @@ export const VIDEOS: Record<VideoId, { falas: string[] }> = {
       'Um exemplo: na rodovia, o carro da frente passa por uma placa.',
       'Ana conta cinquenta e um, cinquenta e dois, e só depois passa pela placa. A distância está boa.',
       'Para guardar: pista seca, dois segundos. Chuva ou veículo grande, três.',
+    ],
+  },
+  // cartão c5-velocidade-via (manual DENATRAN 2005, p. 30 a 32, 35 e 36; CTB art. 43 e 231, IX)
+  'velocidade-via': {
+    falas: [
+      'O número da placa é o máximo. A velocidade certa depende da via, do tempo e do trânsito daquele momento.',
+      'Trânsito pesado, chuva, obstáculos ou muita gente na via pedem velocidade menor e mais atenção.',
+      'Curva: freie e, se precisar, reduza a marcha antes de entrar. Dentro dela, gire o volante de forma suave.',
+      'Descida forte: teste os freios antes e desça com uma marcha reduzida engatada.',
+      'Nunca desça desengrenado nem com o motor desligado: os freios podem não segurar, e é infração média.',
+      'Buraco ou lombada à frente: freie antes. Em cima deles, não freie.',
+      'Pista com óleo, areia ou barro: evite freadas bruscas e mudanças rápidas de velocidade.',
+      'Correr compensa pouco: cinquenta quilômetros levam trinta e sete minutos a oitenta por hora, e trinta minutos a cem por hora.',
+      'Um exemplo: na serra, Marcos engata uma marcha reduzida antes da descida.',
+      'Ele usa o freio do motor junto com o pedal.',
+      'Para guardar: freie antes da curva e do buraco, não dentro deles.',
+    ],
+  },
+  // cartão c5-chuva (manual DENATRAN 2005, p. 40 e 41; CTB art. 40, I, b)
+  chuva: {
+    falas: [
+      'A chuva diminui a visão e deixa a pista escorregadia. Com água acumulada, o pneu pode até perder o contato com o chão.',
+      'O começo da chuva é perigoso: a água se mistura com óleo e areia, e a pista fica mais escorregadia.',
+      'Na chuva: luz baixa acesa, mais distância do veículo da frente e velocidade menor.',
+      'Não freie de forma brusca: as rodas travam e o veículo derrapa. Com ABS, pise e mantenha o pedal pressionado.',
+      'Viu uma poça? Reduza antes de chegar nela, usando o freio.',
+      'Já em cima da poça: não freie e segure firme o volante.',
+      'Granizo: pare em local seguro e espere passar.',
+      'Pneus em bom estado e com sulcos fundos ajudam a não perder aderência.',
+      'Um exemplo: na rodovia, debaixo de chuva, Carla vê uma poça grande na faixa.',
+      'Ela reduz com o freio antes e passa por ela segurando firme o volante.',
+      'Para guardar: poça à frente, freie antes e segure firme em cima.',
+    ],
+  },
+  // cartão c5-neblina (manual DENATRAN 2005, p. 42 a 45; CTB art. 40, I, b e V, a)
+  neblina: {
+    falas: [
+      'Quando fica difícil enxergar, a regra é ver e ser visto: menos velocidade e a luz certa.',
+      'Neblina: acenda a luz baixa, e o farol de neblina, se tiver. Aumente a distância e reduza.',
+      'Na neblina, não use a luz alta: ela reflete nas gotinhas de água e você enxerga ainda menos.',
+      'Se ficar difícil seguir, pare num local seguro, como um posto de combustível. Acostamento só em último caso, com o pisca-alerta.',
+      'Vento forte: observe a vegetação na beira da via e reduza. Caminhões passando e saídas de túnel também geram vento.',
+      'Fumaça de queimada: reduza, luz baixa acesa e não pare na pista.',
+      'Ofuscado por um farol de frente: olhe para a faixa da direita da pista.',
+      'Sol baixo no rosto: reduza e use o quebra-sol ou óculos de sol.',
+      'Um exemplo: de manhã cedo, na serra, a neblina fecha. Rui acende a luz baixa, aumenta a distância e reduz.',
+      'Quando quase não enxerga mais, ele para num posto e espera.',
+      'Para guardar: neblina, luz baixa, nunca alta.',
     ],
   },
 };

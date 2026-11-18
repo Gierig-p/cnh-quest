@@ -123,7 +123,7 @@ const CHAO = [...estrada('tracejada'), ...poca()];
 const CAMPO = campo(5);
 
 /** quadro do volante seguro com as duas mãos (pixels) */
-function volanteFirme(o: number): ReactNode {
+export function volanteFirme(o: number): ReactNode {
   if (o <= 0.01) return null;
   const cx = 272, cy = 84, r = 19;
   const mao = (a: number) => <circle cx={cx + Math.cos(a) * r} cy={cy + Math.sin(a) * r} r={5.4} fill="#c98a5e" stroke="#8a5a3a" strokeWidth={1} />;

@@ -88,7 +88,7 @@ interface Estado {
 const BASE = { x: X, rumo: 0, freio: false, seta: false, alta: 0, neblina: 1, seg: false, s: 0, r: RITMO_C };
 
 /** no posto (sp = tempo desde o corte): o posto começa em PR */
-const PR = 0;
+export const PR = 0;
 function noPosto(sp: number) {
   if (sp < RETO) return { sC: PR - V_LENTO * (RETO - sp), x: X, rumo: 0 };
   const tau = clamp((sp - RETO) / CURVA);
@@ -141,7 +141,7 @@ function estado(parte: Parte, t: number): Estado {
 
 /* ---------------- serra ---------------- */
 
-const CHAO: Part[] = [
+export const SERRA: Part[] = [
   ...estrada('continua').slice(0, -1),
   // lado do vale (à direita, depois do guard-rail): mato mais escuro
   rect(7.4, -70, 50, 40, '#5f7a4c'),
@@ -157,7 +157,7 @@ const sorte = (k: number) => {
 };
 
 /** paisagem que passa (sC = onde está o seu carro); `vao` = trecho da direita sem guard-rail (entrada do posto) */
-function paisagem(sC: number, vao: [number, number] | null) {
+export function paisagem(sC: number, vao: [number, number] | null) {
   const y = (s: number) => -(s - sC);
   const dentro = (s: number) => vao !== null && s > vao[0] - 0.5 && s < vao[1] + 0.5;
   const objs: Obj[] = [];
@@ -197,7 +197,7 @@ function paisagem(sC: number, vao: [number, number] | null) {
 }
 
 /** posto à direita: entrada entre PR + 1 e PR + 14 */
-function posto(y: (s: number) => number) {
+export function posto(y: (s: number) => number) {
   const chao: Part[] = [rect(7, y(PR + 16.5), 19, y(PR + 0.5), '#6a7077')];
   const cobertura = (f: string) => (f === 'top' ? '#eceeea' : f === 'bot' ? '#d9dcd6' : '#d93a35');
   const objs: Obj[] = [
@@ -220,11 +220,11 @@ function posto(y: (s: number) => number) {
 /* ---------------- neblina e luzes ---------------- */
 
 /** quanto a neblina esconde algo a `d` metros à frente do seu carro (0 a 1) */
-const vela = (d: number, n: number) => clamp(n * (0.14 + 0.86 * (1 - Math.exp(-Math.max(0, d) / 6.5))));
+export const vela = (d: number, n: number) => clamp(n * (0.14 + 0.86 * (1 - Math.exp(-Math.max(0, d) / 6.5))));
 
 /** camada de neblina: degradê de cima para baixo, com a opacidade de cada altura da tela
  *  igual à da distância que aparece ali; `alta` clareia a névoa logo à frente (luz refletida) */
-function neblina(id: string, pr: Pr, n: number, alta: number): ReactNode {
+export function neblina(id: string, pr: Pr, n: number, alta: number): ReactNode {
   const ds = [60, 40, 28, 20, 14, 10, 7, 4, 2, 0, -3, -8];
   const stops = ds.map((d) => ({ y: pr([X, -d, 0])[1], o: d < 0 ? n * 0.14 : vela(d, n) }));
   const [gx, gy] = pr([X, -6.5, 1.0]);
@@ -251,7 +251,7 @@ function neblina(id: string, pr: Pr, n: number, alta: number): ReactNode {
 }
 
 /** facho dos faróis no chão, virado para onde o carro aponta (curto = luz baixa) */
-function fachoRumo(pr: Pr, x: number, y: number, rumo: number, alcance: number, o: number): ReactNode {
+export function fachoRumo(pr: Pr, x: number, y: number, rumo: number, alcance: number, o: number): ReactNode {
   if (o <= 0.01) return null;
   const f = [Math.sin(rumo), -Math.cos(rumo)];
   const r = [Math.cos(rumo), Math.sin(rumo)];
@@ -276,7 +276,7 @@ function luzesCarro(pr: Pr, e: Estado, t: number): ReactNode {
 }
 
 /** chip do farol no canto de cima (símbolo do painel: verde = luz baixa, azul = luz alta) */
-function chipFarol(alta: boolean, o: number): ReactNode {
+export function chipFarol(alta: boolean, o: number): ReactNode {
   if (o <= 0.01) return null;
   const cor = alta ? '#3d8bff' : '#35c46a';
   const linhas = [0, 1, 2, 3].map((k) => {
@@ -294,7 +294,7 @@ function chipFarol(alta: boolean, o: number): ReactNode {
 }
 
 /** chip branco de texto no canto de cima (pixels) */
-function chipTexto(texto: string, o: number): ReactNode {
+export function chipTexto(texto: string, o: number): ReactNode {
   if (o <= 0.01) return null;
   const w = texto.length * 6.5 + 18;
   return (
@@ -342,7 +342,7 @@ export function Cena({ parte, t, id = 'enb' }: { parte: Parte; t: number; id?: s
     <Scene3D
       id={id}
       cam={cam}
-      ground={[...CHAO, ...(pst?.chao ?? [])]}
+      ground={[...SERRA, ...(pst?.chao ?? [])]}
       objs={objs}
       overlay={(pr) => (
         <>
